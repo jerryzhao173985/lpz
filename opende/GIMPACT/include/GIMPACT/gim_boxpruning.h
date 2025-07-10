@@ -66,14 +66,14 @@ struct GIM_AABB_SET
     aabb3f * m_boxes;
     GUINT32 * m_maxcoords;//!<Upper corners of the boxes, in integer representation
     GIM_RSORT_TOKEN * m_sorted_mincoords;//!< sorted min coords (lower corners), with their coord value as the m_key and m_value as the box index
-    char m_shared = nullptr;//!< if m_shared == 0 then the memory is allocated and the set must be destroyed, else the pointers are shared and the set should't be destroyed
+    char m_shared = 0;//!< if m_shared == 0 then the memory is allocated and the set must be destroyed, else the pointers are shared and the set should't be destroyed
 };
 //typedef  struct _GIM_AABB_SET GIM_AABB_SET;
 
 //! Function for creating  an overlapping pair set
-#define GIM_CREATE_PAIR_SETstatic_cast<dynarray>GIM_PAIR,dynarray,G_ARRAY_GROW_SIZE
+#define GIM_CREATE_PAIR_SET(array_data) GIM_DYNARRAY_CREATE(GIM_PAIR, array_data, G_ARRAY_GROW_SIZE)
 //! Function for destroying an overlapping pair set
-#define GIM_DESTROY_PAIR_SETstatic_cast<dynarray>dynarray
+#define GIM_DESTROY_PAIR_SET(array_data) GIM_DYNARRAY_DESTROY(array_data)
 
 //! Allocate memory for all aabb set.
 void gim_aabbset_alloc(GIM_AABB_SET * aabbset, GUINT32 count)
@@ -219,7 +219,7 @@ void gim_aabbset_bipartite_intersections(GIM_AABB_SET * aabbset1, GIM_AABB_SET *
 
 ///Function for create Box collision result set
 
-#define GIM_CREATE_BOXQUERY_LISTstatic_cast<dynarray>GUINT32,dynarray,G_ARRAY_GROW_SIZE
+#define GIM_CREATE_BOXQUERY_LIST(array_data) GIM_DYNARRAY_CREATE(GUINT32, array_data, G_ARRAY_GROW_SIZE)
 
 //! Finds intersections between a box and a set. Return the colliding boxes of the set
 /*!

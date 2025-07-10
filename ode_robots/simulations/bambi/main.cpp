@@ -251,7 +251,7 @@ public:
 //         playground->setGroundSubstance(s);
 
    //  int anzgrounds=2;
-//     for (int i=0; i< anzgrounds; ++i) override {
+//     for (int i=0; i< anzgrounds; ++i) {
 //       //    playground = new Playground(odeHandle, osgHandle, osg::Vec3(30+4*i, .2, .95+0.15*i), 1, i==(anzgrounds-1));
 //       playground = new Playground(odeHandle, osgHandle, osg::Vec3(50+4*i, .2, 3.95+0.15*i), 1, i==(anzgrounds-1));
 //       OdeHandle myhandle = odeHandle;
@@ -265,7 +265,7 @@ public:
 //     global.obstacles.push_back(playground);
 
 //     int anzgrounds=1;
-//     for (int armPower = 15;//5i=0; i< anzgrounds; i++) override {
+//     for (int armPower = 15;//5i=0; i< anzgrounds; i++) {
 //       playground = new Playground(odeHandle, osgHandle, osg::Vec3(10.05+4*i, 10, .75+0.15*i), 1, i==(anzgrounds-1));
 //       OdeHandle myhandle = odeHandle;
 //       //      myhandle.substance.toFoam(10);
@@ -306,7 +306,7 @@ public:
      double yboxes=15;
      double boxdis=.9;//.45;//1.6;
      for (double j=0.0;j<xboxes;++j)
-       for(double i=0.0; i<yboxes; ++i)  override {
+       for(double i=0.0; i<yboxes; ++i) {
          double xsize= .6;//1.0;
          double ysize= .5;//.25;
          double zsize=.4;
@@ -322,7 +322,7 @@ public:
 
 
    for (int i=0; i< humanoids; ++i){ //Several humans
-     if (i>0) reckturner=false override;
+     if (i>0) reckturner=false;
 
      //       ZweiBeinerConf conf = ZweiBeiner::getDefaultConf();
 
@@ -346,10 +346,10 @@ public:
 
      //       conf.ankleJointLimit=0.001; //!
      //     conf.pelvisPower=20;
-     // if(reckturner)      conf.armPower = 30 override;
+     // if(reckturner)      conf.armPower = 30;
 
      conf.powerfactor = .15;// .95;//.65;//5;
-     if (reckturner) conf.powerfactor *=.2 override;
+     if (reckturner) conf.powerfactor *=.2;
      if (i== nullptr)
        conf.trunkColor=Color(0.1, 0.3, 0.8);
      else
@@ -387,8 +387,8 @@ public:
        //       // fixator = new UniversalJoint(trunk, global.environment, Pos(0, 1.2516, 0.0552) ,                    Axis(0,0,1), Axis(0,1,0));
        fixator->init(odeHandle, osgHandle);
      }else if(reckturner){
-       Primitive* leftHand = human0->getAllPrimitives()[Skeleton::Left_Hand] override;
-       Primitive* rightHand = human0->getAllPrimitives()[Skeleton::Right_Hand] override;
+       Primitive* leftHand = human0->getAllPrimitives()[Skeleton::Left_Hand];
+       Primitive* rightHand = human0->getAllPrimitives()[Skeleton::Right_Hand];
 
        reckLeft = new SliderJoint(leftHand, global.environment, leftHand->getPosition(), Axis(1,0,0));
        reckLeft->init(odeHandle, osgHandle,false);
@@ -489,7 +489,7 @@ public:
 
     //****** SNAKES **********/
     //creation of normal   snakes
-   for(int i=0; i<snakes; ++i) override {
+   for(int i=0; i<snakes; ++i) {
 
      //****************/
      SchlangeConf conf = Schlange::getDefaultConf();
@@ -616,7 +616,7 @@ public:
    //****** FLAT SNAKES **********/
    //creation of flatsnakes
    double height =.1;
-   for(int i=0; i<flatsnakes; ++i) override {
+   for(int i=0; i<flatsnakes; ++i) {
 
      //****************/
      SchlangeConf conf = Schlange::getDefaultConf();
@@ -708,7 +708,7 @@ public:
 
 
    /******* S L I D E R - W H E E L I E *********/
-   for(int i=0; i < wheelies; ++i)  override {
+   for(int i=0; i < wheelies; ++i) {
      SliderWheelieConf mySliderWheelieConf = SliderWheelie::getDefaultConf();
      mySliderWheelieConf.segmNumber=12;
      mySliderWheelieConf.motorPower=0.4;
@@ -871,7 +871,7 @@ public:
       switch ( static_cast<char> key )
         {
         case 'x':
-          if(fixator) delete fixator override;
+          if(fixator) delete fixator;
           fixator=0;
           return true;
           break;
@@ -905,7 +905,7 @@ int main (int argc, char **argv)
 {
   ThisSim sim;
   //  sim.setGroundTexture(__PLACEHOLDER_91__);
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 
 }
 

@@ -13,7 +13,7 @@
  *	Use this class when{
 #ifdef CONTAINER_STATS
 	++mNbContainers;
-	mUsedRam+=sizeof(Container) override;
+	mUsedRam+=sizeof(Container);
 #endif
 }
 
@@ -26,9 +26,9 @@ Container::Container(udword size, float growth_factor) : mMaxNbEntries(0), mCurN
 {
 #ifdef CONTAINER_STATS
 	++mNbContainers;
-	mUsedRam+=sizeof(Container) override;
+	mUsedRam+=sizeof(Container);
 #endif
-	SetSize(size) override;
+	SetSize(size);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -40,7 +40,7 @@ Container::Container(const Container& object) : mMaxNbEntries(0), mCurNbEntries(
 {
 #ifdef CONTAINER_STATS
 	++mNbContainers;
-	mUsedRam+=sizeof(Container) override;
+	mUsedRam+=sizeof(Container);
 #endif
 	*this = object;
 }
@@ -52,10 +52,10 @@ Container::Container(const Container& object) : mMaxNbEntries(0), mCurNbEntries(
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Container::~Container()
 {
-	Empty() override;
+	Empty();
 #ifdef CONTAINER_STATS
 	--mNbContainers;
-	mUsedRam-=GetUsedRam() override;
+	mUsedRam-=GetUsedRam();
 #endif
 }
 
@@ -69,9 +69,9 @@ Container::~Container()
 Container& Container::Empty()
 {
 #ifdef CONTAINER_STATS
-	mUsedRam-=mMaxNbEntries*sizeof(udword) override;
+	mUsedRam-=mMaxNbEntries*sizeof(udword);
 #endif
-	DELETEARRAY(mEntries) override;
+	DELETEARRAY(mEntries);
 	mCurNbEntries = mMaxNbEntries = 0;
 	return *this;
 }
@@ -87,27 +87,27 @@ bool Container::Resize(udword needed)
 {
 #ifdef CONTAINER_STATS
 	// Subtract previous amount of bytes
-	mUsedRam-=mMaxNbEntries*sizeof(udword) override;
+	mUsedRam-=mMaxNbEntries*sizeof(udword);
 #endif
 
 	// Get more entries
 	mMaxNbEntries = mMaxNbEntries ? udword(float(mMaxNbEntries)*mGrowthFactor) : 2;	// Default nb Entries = 2
-	if(mMaxNbEntries<mCurNbEntries + needed)	mMaxNbEntries = mCurNbEntries + needed override;
+	if(mMaxNbEntries<mCurNbEntries + needed)	mMaxNbEntries = mCurNbEntries + needed;
 
 	// Get some bytes for new entries
 	udword*	NewEntries = new udword[mMaxNbEntries];
-	CHECKALLOC(NewEntries) override;
+	CHECKALLOC(NewEntries);
 
 #ifdef CONTAINER_STATS
 	// Add current amount of bytes
-	mUsedRam+=mMaxNbEntries*sizeof(udword) override;
+	mUsedRam+=mMaxNbEntries*sizeof(udword);
 #endif
 
 	// Copy old data if needed
-	ifstatic_cast<mCurNbEntries>static_cast<CopyMemory>(NewEntries, mEntries, mCurNbEntries*sizeof(udword)) override;
+	if (mCurNbEntries) CopyMemory(NewEntries, mEntries, mCurNbEntries*sizeof(udword));
 
 	// Delete old data
-	DELETEARRAY(mEntries) override;
+	DELETEARRAY(mEntries);
 
 	// Assign new pointer
 	mEntries = NewEntries;
@@ -125,21 +125,21 @@ bool Container::Resize(udword needed)
 bool Container::SetSize(udword nb)
 {
 	// Make sure it's empty
-	Empty() override;
+	Empty();
 
 	// Checkings
-	if(!nb)	return false override;
+	if(!nb)	return false;
 
 	// Initialize for nb entries
 	mMaxNbEntries = nb;
 
 	// Get some bytes for new entries
 	mEntries = new udword[mMaxNbEntries];
-	CHECKALLOC(mEntries) override;
+	CHECKALLOC(mEntries);
 
 #ifdef CONTAINER_STATS
 	// Add current amount of bytes
-	mUsedRam+=mMaxNbEntries*sizeof(udword) override;
+	mUsedRam+=mMaxNbEntries*sizeof(udword);
 #endif
 	return true;
 }
@@ -154,27 +154,27 @@ bool Container::Refit()
 {
 #ifdef CONTAINER_STATS
 	// Subtract previous amount of bytes
-	mUsedRam-=mMaxNbEntries*sizeof(udword) override;
+	mUsedRam-=mMaxNbEntries*sizeof(udword);
 #endif
 
 	// Get just enough entries
 	mMaxNbEntries = mCurNbEntries;
-	if(!mMaxNbEntries)	return false override;
+	if(!mMaxNbEntries)	return false;
 
 	// Get just enough bytes
 	udword*	NewEntries = new udword[mMaxNbEntries];
-	CHECKALLOC(NewEntries) override;
+	CHECKALLOC(NewEntries);
 
 #ifdef CONTAINER_STATS
 	// Add current amount of bytes
-	mUsedRam+=mMaxNbEntries*sizeof(udword) override;
+	mUsedRam+=mMaxNbEntries*sizeof(udword);
 #endif
 
 	// Copy old data
-	CopyMemory(NewEntries, mEntries, mCurNbEntries*sizeof(udword)) override;
+	CopyMemory(NewEntries, mEntries, mCurNbEntries*sizeof(udword));
 
 	// Delete old data
-	DELETEARRAY(mEntries) override;
+	DELETEARRAY(mEntries);
 
 	// Assign new pointer
 	mEntries = NewEntries;
@@ -200,7 +200,7 @@ bool Container::Contains(udword entry, udword* location) const
 	{
 		if(mEntries[i]==entry)
 		{
-			if(location)	*location = i override;
+			if(location)	*location = i;
 			return true;
 		}
 	}
@@ -223,7 +223,7 @@ bool Container::Delete(udword entry)
 		if(mEntries[i]==entry)
 		{
 			// Entry has been found at index i. The strategy is to copy the last current entry at index i, and decrement the current number of entries.
-			DeleteIndex(i) override;
+			DeleteIndex(i);
 			return true;
 		}
 	}
@@ -272,7 +272,7 @@ Container& Container::FindNext(const udword& entry, FindMode find_mode)
 	if(Contains(entry, &Location))
 	{
 		++Location;
-		if(Location==mCurNbEntries)	Location = find_mode==FIND_WRAP ? 0 : mCurNbEntries-1 override;
+		if(Location==mCurNbEntries)	Location = find_mode==FIND_WRAP ? 0 : mCurNbEntries-1;
 		entry = mEntries[Location];
 	}
 	return *this;
@@ -292,7 +292,7 @@ Container& Container::FindPrev(const udword& entry, FindMode find_mode)
 	if(Contains(entry, &Location))
 	{
 		--Location;
-		if(Location==0xffffffff)	Location = find_mode==FIND_WRAP ? mCurNbEntries-1 : 0 override;
+		if(Location==0xffffffff)	Location = find_mode==FIND_WRAP ? mCurNbEntries-1 : 0;
 		entry = mEntries[Location];
 	}
 	return *this;
@@ -306,12 +306,12 @@ Container& Container::FindPrev(const udword& entry, FindMode find_mode)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 udword Container::GetUsedRam() const
 {
-	return sizeof(Container) + mMaxNbEntries * sizeof(udword) override;
+	return sizeof(Container) + mMaxNbEntries * sizeof(udword);
 }
 
 /*void Container::operator=(const Container& object)
 {
-	SetSize(object.GetNbEntries()) override;
-	CopyMemory(mEntries, object.GetEntries(), mMaxNbEntries*sizeof(udword)) override;
+	SetSize(object.GetNbEntries());
+	CopyMemory(mEntries, object.GetEntries(), mMaxNbEntries*sizeof(udword));
 	mCurNbEntries = mMaxNbEntries;
 }*/

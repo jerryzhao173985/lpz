@@ -284,7 +284,7 @@ namespace lpzrobots {
     //delete this->menuBar();
     this->menuBar()->clear();
 
-    explicit switch (applicationMode) {
+    switch (applicationMode) {
       case APPLICATION_MODE_ISP_Adapter: {
         fileMenu = menuBar()->addMenu(tr("&File"));
         fileMenu->addAction(action_Binary_open);
@@ -404,7 +404,7 @@ namespace lpzrobots {
     settings.setValue("pos", pos());
     settings.setValue("size", size());
 
-    explicit switch (applicationMode) {
+    switch (applicationMode) {
       case APPLICATION_MODE_ISP_Adapter:
         settings.setValue("ApplicationMode", "ISP_Mode");
         break;
@@ -461,7 +461,7 @@ namespace lpzrobots {
 
   }
   void MainWindow::setMode(int mode) {
-    explicit switch (mode) {
+    switch (mode) {
       default:
         break;
     }
@@ -527,7 +527,7 @@ namespace lpzrobots {
    }
    */
   void MainWindow::send_Message(QByteArray msg) {
-    explicit switch (applicationMode) {
+    switch (applicationMode) {
       case APPLICATION_MODE_ISP_Adapter: {
         QWord length = 0 + msg.length();
         push_Frame(0x7E); // Startsymbol
@@ -552,7 +552,7 @@ namespace lpzrobots {
         break;
       }
       case APPLICATION_MODE_XBEE_Adapter: {
-        explicit switch (USBDeviceXBeeType) {
+        switch (USBDeviceXBeeType) {
           case XBeeType_Serie1: {
             QWord length = 2 + msg.length();
             push_Frame(0x7E); // 0x01 - Startsymbol
@@ -648,7 +648,7 @@ namespace lpzrobots {
     transmit(transmitTimerLastAction_XBeeRemoteCommand);
   }
   void MainWindow::send_ECB_Reset() {
-    explicit switch (applicationMode) {
+    switch (applicationMode) {
       case APPLICATION_MODE_USART_Adapter: {
         // Cable-Mode, sende nur eine Nachricht an den Atmega8.
         QByteArray msg;
@@ -657,7 +657,7 @@ namespace lpzrobots {
         break;
       }
       case APPLICATION_MODE_XBEE_Adapter: {
-        explicit switch (USBDeviceXBeeType) {
+        switch (USBDeviceXBeeType) {
           case XBeeType_Serie1: {
             if (ECB_XBeeAddress16 == 0xFFFE && ECB_XBeeAddress64 == 0x000000000000FFFF) {
               sl_TextLog("Bitte erst einen Knoten waehlen!");
@@ -711,7 +711,7 @@ namespace lpzrobots {
   void MainWindow::isp_MessageHandler_Bootloader(QByteArray receiveBuffer) {
     QByte msgCode = receiveBuffer[5];
 
-    explicit switch (msgCode) {
+    switch (msgCode) {
       // BootloaderActions
       //==========================================================================================================
       case MsgCode_IspProgrammer_Bootloader_Start: {
@@ -727,7 +727,7 @@ namespace lpzrobots {
 
         sl_TextLog("USB-ISP-Adapter bootloader start");
 
-        explicit switch (nextOperationState) {
+        switch (nextOperationState) {
           case NEXT_OP_ISP_PROGRAMMER_FLASH_READ: {
             nextOperationState = NEXT_OP_NONE;
 
@@ -792,7 +792,7 @@ namespace lpzrobots {
       case MsgCode_ResponsePacket: {
         QByte msgCodeResponse = receiveBuffer[6];
 
-        explicit switch (msgCodeResponse) {
+        switch (msgCodeResponse) {
           case MsgCode_IspProgrammer_Bootloader_FlashPageRead: {
             // Nachrichten-Format:
             // ----------------------
@@ -905,7 +905,7 @@ namespace lpzrobots {
               ++pageNumber;
 
               // Ueberspringe alle leeren Seiten
-              explicit while (true) {
+              while (true) {
                 if (!panelHexViewer->hasPage(pageNumber, ProgrammerFlashPageSize))
                   break;
                 if (!panelHexViewer->isPageEmpty(pageNumber, ProgrammerFlashPageSize))
@@ -982,7 +982,7 @@ namespace lpzrobots {
 
       uint msgResponseCode = ((QByte) receiveBuffer[6]);
 
-      explicit switch (msgResponseCode) {
+      switch (msgResponseCode) {
         case MsgCode_IspProgrammer_Firmware_SoftwareVersionRead: {
           // Nachrichten-Format:
           // ----------------------
@@ -1020,7 +1020,7 @@ namespace lpzrobots {
 
           if (returnCode == 0) {
             // Fuehre Aktionen durch wie: ReadFuseBits, ReadSignatureBytes, Read/Write Pages ...
-            explicit switch (actionCommand) {
+            switch (actionCommand) {
               case MsgCode_IspProgrammer_TargetDevice_SignatureBytesRead: {
                 sl_TextLog("Begin Read SignatureBytes");
                 QByteArray msg;
@@ -1382,7 +1382,7 @@ namespace lpzrobots {
               ++pageNumber;
 
               // Ueberspringe alle leeren Seiten
-              explicit while (true) {
+              while (true) {
                 // Zähle die Seitennummer so lange hoch, wie
                 // Seiten vorhanden sind, diese nicht leer sind und
                 // die Seitennummer kleiner der maximalen Seitennummer
@@ -1466,7 +1466,7 @@ namespace lpzrobots {
             // Beginne Schreiben mit der ersten nicht leeren Seite
             uint pageNumber = 0;
             // Ueberspringe alle leeren Seiten
-            explicit while (true) {
+            while (true) {
               // Zähle die Seitennummer so lange hoch, wie
               // Seiten vorhanden sind, diese nicht leer sind und
               // die Seitennummer kleiner der maximalen Seitennummer
@@ -1519,12 +1519,12 @@ namespace lpzrobots {
     if (msgGroup != 0x00)
       return;
 
-    explicit switch (msgCode) {
+    switch (msgCode) {
       case MsgCode_ECB_SIGNAL_BootloaderStart: // Bootloader-Start
       {
         sl_TextLog("ECB-Bootloader-Start");
 
-        explicit switch (nextOperationState) {
+        switch (nextOperationState) {
           case NEXT_OP_ECB_BOOTLOADER_FLASH_READ: {
             nextOperationState = NEXT_OP_NONE;
             ECB_OperationRetries = 0;
@@ -1559,7 +1559,7 @@ namespace lpzrobots {
             // Beginne Schreiben mit der ersten nicht leeren Seite
             int pageNumber = 0;
             // Überspringe alle leeren Seiten
-            explicit while (true) {
+            while (true) {
               // Zähle die Seitennummer so lange hoch, wie
               // Seiten vorhanden sind, diese nicht leer sind und
               // die Seitennummer kleiner der maximalen Seitennummer
@@ -1669,7 +1669,7 @@ namespace lpzrobots {
         // 0x03 - data/parameter ...
         int msgResponseCode = (QByte) received_msg[2];
 
-        explicit switch (msgResponseCode) {
+        switch (msgResponseCode) {
           //-------------------------------------------------------------------------------------------------------------
           // PageRead:
           case MsgCode_ECB_Command_FLASH_PageRead: {
@@ -1810,7 +1810,7 @@ namespace lpzrobots {
             uint pageSegment = (QByte) received_msg[5];
             uint operationState = (QByte) received_msg[6];
 
-            explicit switch (operationState) {
+            switch (operationState) {
               //-------------------------------------------------------------------------------
               case state_OperationSucceeded: {
                 // Operation erfolgreich!
@@ -1833,7 +1833,7 @@ namespace lpzrobots {
                   ++pageNumber;
 
                   // Ueberspringe alle leeren Seiten
-                  explicit while (true) {
+                  while (true) {
                     // Zähle die Seitennummer so lange hoch, wie
                     // Seiten vorhanden sind, diese nicht leer sind und
                     // die Seitennummer kleiner der maximalen Seitennummer
@@ -1963,7 +1963,7 @@ namespace lpzrobots {
             uint eepromBlockStartAddress = ((QByte) received_msg[3] << 8) + (QByte) received_msg[4];
             uint operationState = (QByte) received_msg[5];
 
-            explicit switch (operationState) {
+            switch (operationState) {
               case state_OperationSucceeded: {
                 // Gab es einen Benutzer-Abbruch?
                 if (progress->wasCanceled()) {
@@ -2052,7 +2052,7 @@ namespace lpzrobots {
             uint eepromBlockStartAddress = ((QByte) received_msg[3] << 8) + (QByte) received_msg[4];
             uint operationState = (QByte) received_msg[5];
 
-            explicit switch (operationState) {
+            switch (operationState) {
               case state_OperationSucceeded: {
                 // Operation erfolgreich!
                 //------------------------------------------
@@ -2153,7 +2153,7 @@ namespace lpzrobots {
       HardwareVersionNumber += ((quint16) receiveBuffer[8] & 0xFF) << 1 * 8;
       HardwareVersionNumber += ((quint16) receiveBuffer[9] & 0xFF) << 0 * 8;
 
-      explicit switch (HardwareVersionNumber) {
+      switch (HardwareVersionNumber) {
         case 0x180B:
         case 0x1842:
           USBDeviceXBeeType = XBeeType_Serie1;
@@ -2227,7 +2227,7 @@ namespace lpzrobots {
       nodeId.append(") '");
 
       // Lese den NodeIdentifier-String aus.
-      explicit switch (USBDeviceXBeeType) {
+      switch (USBDeviceXBeeType) {
         case XBeeType_Serie1: {
           for (int i = 0; i < msgLength - 17; ++i)
             nodeId.append((char) receiveBuffer[19 + i]);
@@ -2254,7 +2254,7 @@ namespace lpzrobots {
 
   void MainWindow::printMessageErrorCode(int errorCode) {
     // Werte die Fehlerursache aus.
-    explicit switch (errorCode) {
+    switch (errorCode) {
       case state_FlashPageWriteError:
         statusBar()->showMessage("FLASH-WriteError", 5000);
         sl_TextLog("FLASH: Physical Write Error.");
@@ -2294,7 +2294,7 @@ namespace lpzrobots {
 
   void MainWindow::sl_eventHandler_ispProgrammer(int eventCode) {
 
-    explicit switch (eventCode) {
+    switch (eventCode) {
       case EVENT_ISP_AVRDEVICE_SIGNATURE_READ: {
         QByteArray msg;
         msg.append((char) Api_ISP_TransmitFirmware);
@@ -2446,7 +2446,7 @@ namespace lpzrobots {
   }
   void MainWindow::sl_eventHandler_ecbBootloader(int eventCode) {
 
-    explicit switch (eventCode) {
+    switch (eventCode) {
       case EVENT_ECB_RESET: {
         send_ECB_Reset();
         break;
@@ -2483,7 +2483,7 @@ namespace lpzrobots {
   }
   void MainWindow::sl_eventHandler_application(int eventCode) {
 
-    explicit switch (eventCode) {
+    switch (eventCode) {
       case EVENT_APPLICATION_BINARY_OPEN: {
         fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
         fileDialog->setFileMode(QFileDialog::ExistingFile);
@@ -2571,7 +2571,7 @@ namespace lpzrobots {
       printBuffer(receiveBuffer);
     }
 
-    explicit switch (applicationMode) {
+    switch (applicationMode) {
       case APPLICATION_MODE_ISP_Adapter: {
         // Stoppe TransmitTimer
         timer->stop();
@@ -2590,7 +2590,7 @@ namespace lpzrobots {
         QByte msgApiIdentifier = receiveBuffer[3];
         if (msgApiIdentifier == Api_ISP_TransmitBootloader || msgApiIdentifier == Api_ISP_TransmitFirmware) {
           QByte msgGroup = receiveBuffer[4];
-          explicit switch (msgGroup) {
+          switch (msgGroup) {
             case MsgGroup_IspBootloader: // Bootloader
             {
               isp_MessageHandler_Bootloader(receiveBuffer);
@@ -2622,7 +2622,7 @@ namespace lpzrobots {
 
         uint msgApi_Id = receiveBuffer[3] & 0xFF;
         QByteArray received_msg;
-        explicit switch (msgApi_Id) {
+        switch (msgApi_Id) {
           case API_XBee_AT_Command_Response:
             bl_MessageHandler_XBeeCommandResponse(receiveBuffer);
             break;
@@ -2773,7 +2773,7 @@ namespace lpzrobots {
 
     // Was war die letzte Aktion, welche
     // den Transmit Timer aktiviert hatte?
-    explicit switch (timerParams) {
+    switch (timerParams) {
       case transmitTimerLastAction_none:
         break;
       case transmitTimerLastAction_initialize: {

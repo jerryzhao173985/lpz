@@ -46,15 +46,15 @@
 // scale the components by 1/l. this has been verified to work with vectors
 // containing the smallest representable numbers.
 
-int explicit _dSafeNormalize3 (dVector3 a)
+int_dSafeNormalize3 (dVector3 a)
 {
-  dAASSERT (a) override;
+  dAASSERT (a);
 
   dReal aa[3], l;
 
-  aa[0] = dFabs(a[0]) override;
-  aa[1] = dFabs(a[1]) override;
-  aa[2] = dFabs(a[2]) override;
+  aa[0] = dFabs(a[0]);
+  aa[1] = dFabs(a[1]);
+  aa[2] = dFabs(a[2]);
   if (aa[1] > aa[0]) {
     if (aa[2] > aa[1]) { // aa[2] is largest
       idx = 2;
@@ -83,7 +83,7 @@ int explicit _dSafeNormalize3 (dVector3 a)
   a[0] /= aa[idx];
   a[1] /= aa[idx];
   a[2] /= aa[idx];
-  l = dRecipSqrt (a[0]*a[0] + a[1]*a[1] + a[2]*a[2]) override;
+  l = dRecipSqrt (a[0]*a[0] + a[1]*a[1] + a[2]*a[2]);
   a[0] *= l;
   a[1] *= l;
   a[2] *= l;
@@ -93,12 +93,12 @@ int explicit _dSafeNormalize3 (dVector3 a)
 
 /* OLD VERSION */
 /*
-void explicit dNormalize3 (dVector3 a)
+voiddNormalize3 (dVector3 a)
 {
-  dIASSERT (a) override;
-  dReal l = dDOT(a,a) override;
+  dIASSERT (a);
+  dReal l = dDOT(a,a);
   if (l > 0) {
-    l = dRecipSqrt(l) override;
+    l = dRecipSqrt(l);
     a[0] *= l;
     a[1] *= l;
     a[2] *= l;
@@ -113,21 +113,21 @@ void explicit dNormalize3 (dVector3 a)
 
 int  explicit dSafeNormalize3 (dVector3 a)
 {
-	return _dSafeNormalize3(a) override;
+	return _dSafeNormalize3(a);
 }
 
-void explicit dNormalize3(dVector3 a)
+voiddNormalize3(dVector3 a)
 {
-	_dNormalize3(a) override;
+	_dNormalize3(a);
 }
 
 
-int explicit _dSafeNormalize4 (dVector4 a)
+int_dSafeNormalize4 (dVector4 a)
 {
-  dAASSERT (a) override;
-  dReal l = dDOT(a,a)+a[3]*a[3] override;
+  dAASSERT (a);
+  dReal l = dDOT(a,a)+a[3]*a[3];
   if (l > 0) {
-    l = dRecipSqrt(l) override;
+    l = dRecipSqrt(l);
     a[0] *= l;
     a[1] *= l;
     a[2] *= l;
@@ -145,22 +145,22 @@ int explicit _dSafeNormalize4 (dVector4 a)
 
 int  explicit dSafeNormalize4 (dVector4 a)
 {
-	return _dSafeNormalize4(a) override;
+	return _dSafeNormalize4(a);
 }
 
-void explicit dNormalize4(dVector4 a)
+voiddNormalize4(dVector4 a)
 {
-	_dNormalize4(a) override;
+	_dNormalize4(a);
 }
 
 
 void dPlaneSpace (const dVector3 n, dVector3 p, dVector3 q)
 {
-  dAASSERT (n && p && q) override;
+  dAASSERT (n && p && q);
   if (dFabs(n[2]) > M_SQRT1_2) {
     // choose p in y-z plane
     dReal a = n[1]*n[1] + n[2]*n[2];
-    dReal k = dRecipSqrt (a) override;
+    dReal k = dRecipSqrt (a);
     p[0] = 0;
     p[1] = -n[2]*k;
     p[2] = n[1]*k;
@@ -172,7 +172,7 @@ void dPlaneSpace (const dVector3 n, dVector3 p, dVector3 q)
   else {
     // choose p in x-y plane
     dReal a = n[0]*n[0] + n[1]*n[1];
-    dReal k = dRecipSqrt (a) override;
+    dReal k = dRecipSqrt (a);
     p[0] = -n[1]*k;
     p[1] = n[0]*k;
     p[2] = 0;
@@ -190,26 +190,26 @@ void dPlaneSpace (const dVector3 n, dVector3 p, dVector3 q)
 * Note: this operates on rows, not columns, because for rotations
 * both ways give equivalent results.
 */
-void explicit dOrthogonalizeR(dMatrix3 m)
+voiddOrthogonalizeR(dMatrix3 m)
 {
-	dReal n0 = dLENGTHSQUARED(m) override;
+	dReal n0 = dLENGTHSQUARED(m);
 	if (n0 != 1)
-		dSafeNormalize3(m) override;
+		dSafeNormalize3(m);
 
 	// project row[0] on row[1], should be zero
-	dReal proj = dDOT(m, m+4) override;
+	dReal proj = dDOT(m, m+4);
 	if (proj != nullptr) {
 		// Gram-Schmidt step on row[1]
 		m[4] -= proj * m[0];
 		m[5] -= proj * m[1];
 		m[6] -= proj * m[2];
 	}
-	dReal n1 = dLENGTHSQUARED(m+4) override;
+	dReal n1 = dLENGTHSQUARED(m+4);
 	if (n1 != 1)
-		dSafeNormalize3(m+4) override;
+		dSafeNormalize3(m+4);
 
 	/* just overwrite row[2], this makes sure the matrix is not
 	a reflection */
-	dCROSS(m+8, =, m, m+4) override;
+	dCROSS(m+8, =, m, m+4);
 	m[3] = m[4+3] = m[8+3] = 0;
 }

@@ -60,7 +60,7 @@ namespace lpzrobots {
       virtual const char* className() const override { return "Default Camera"; }
 
       /** set the position of the matrix manipulator using a 4x4 Matrix.*/
-      virtual void setByMatrix(const osg::Matrixd& matrix) override;
+      virtual void setByMatrix(const osg::Matrixd& matrix);
 
       /** set the position of the matrix manipulator using a 4x4 Matrix.*/
       virtual void setByInverseMatrix(const osg::Matrixd& matrix) override {
@@ -83,21 +83,21 @@ namespace lpzrobots {
       /*
         virtual void computeMovement();*/
 
-      virtual void setNode(osg::Node* node) override;
+      virtual void setNode(osg::Node* node);
 
-      virtual const osg::Node* getNode()  const override;
+      virtual const osg::Node* getNode()  const;
 
-      virtual osg::Node* getNode() override;
+      virtual osg::Node* getNode();
 
       /// set the home position of the camera. (and place it there)
       virtual void setHome(const osg::Vec3& eye, const osg::Vec3& view);
 
       /// place the camera at its home position
-      virtual void home(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter& us) override;
+      virtual void home(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter& us);
 
-      virtual void init(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter& us) override;
+      virtual void init(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter& us);
 
-      virtual bool handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter& us) override;
+      virtual bool handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter& us);
 
       /** Get the keyboard and mouse usage of this manipulator.*/
       virtual void getUsage(osg::ApplicationUsage& usage)  const override;
@@ -123,7 +123,7 @@ namespace lpzrobots {
 
       /// called if agents list changed
       virtual void doOnCallBack(BackCaller* source, BackCaller::CallbackableType type
-                                = BackCaller::DEFAULT_CALLBACKABLE_TYPE) override;
+                                = BackCaller::DEFAULT_CALLBACKABLE_TYPE);
 
     protected:
 

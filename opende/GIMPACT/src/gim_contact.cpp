@@ -34,19 +34,19 @@ void gim_merge_contacts(GDYNAMIC_ARRAY * source_contacts,
     dest_contacts->m_size = 0;
 
 	GUINT32 source_count = source_contacts->m_size;
-	GIM_CONTACT * psource_contacts	= GIM_DYNARRAY_POINTER(GIM_CONTACT,(*source_contacts)) override;
+	GIM_CONTACT * psource_contacts	= GIM_DYNARRAY_POINTER(GIM_CONTACT,(*source_contacts));
 	//create keys
-	GIM_RSORT_TOKEN * keycontacts = static_cast<GIM_RSORT_TOKEN*>(gim_alloc)(sizeof(GIM_RSORT_TOKEN)*source_count) override;
+	GIM_RSORT_TOKEN * keycontacts = static_cast<GIM_RSORT_TOKEN*>(gim_alloc)(sizeof(GIM_RSORT_TOKEN)*source_count);
 
     GUINT32 i;
 	for(i=0;i<source_count;++i)
 	{
 		keycontacts[i].m_value = i;
-		GIM_CALC_KEY_CONTACT(psource_contacts[i].m_point,keycontacts[i].m_key) override;
+		GIM_CALC_KEY_CONTACT(psource_contacts[i].m_point,keycontacts[i].m_key);
 	}
 
 	//sort keys
-	GIM_QUICK_SORT_ARRAY(GIM_RSORT_TOKEN , keycontacts, source_count, RSORT_TOKEN_COMPARATOR,GIM_DEF_EXCHANGE_MACRO) override;
+	GIM_QUICK_SORT_ARRAY(GIM_RSORT_TOKEN , keycontacts, source_count, RSORT_TOKEN_COMPARATOR,GIM_DEF_EXCHANGE_MACRO);
 
 	// Merge contacts
 	GIM_CONTACT * pcontact = 0;
@@ -63,18 +63,18 @@ void gim_merge_contacts(GDYNAMIC_ARRAY * source_contacts,
 			//merge contact
 			if(pcontact->m_depth > scontact->m_depth + CONTACT_DIFF_EPSILON)
 			{
-			    GIM_COPY_CONTACTS(pcontact, scontact) override;
+			    GIM_COPY_CONTACTS(pcontact, scontact);
 			}
 		}
 		else
 		{//add new contact
-		    GIM_DYNARRAY_PUSH_EMPTY(GIM_CONTACT,(*dest_contacts)) override;
-            pcontact = GIM_DYNARRAY_POINTER_LAST(GIM_CONTACT,(*dest_contacts)) override;
-		    GIM_COPY_CONTACTS(pcontact, scontact) override;
+		    GIM_DYNARRAY_PUSH_EMPTY(GIM_CONTACT,(*dest_contacts));
+            pcontact = GIM_DYNARRAY_POINTER_LAST(GIM_CONTACT,(*dest_contacts));
+		    GIM_COPY_CONTACTS(pcontact, scontact);
         }
 		last_key = key;
 	}
-	gim_free(keycontacts,0) override;
+	gim_free(keycontacts,0);
 }
 
 void gim_merge_contacts_unique(GDYNAMIC_ARRAY * source_contacts,
@@ -83,20 +83,20 @@ void gim_merge_contacts_unique(GDYNAMIC_ARRAY * source_contacts,
     dest_contacts->m_size = 0;
     //Traverse the source contacts
 	GUINT32 source_count = source_contacts->m_size;
-	if(source_count== nullptr) return override;
+	if(source_count== nullptr) return;
 
-	GIM_CONTACT * psource_contacts	= GIM_DYNARRAY_POINTER(GIM_CONTACT,(*source_contacts)) override;
+	GIM_CONTACT * psource_contacts	= GIM_DYNARRAY_POINTER(GIM_CONTACT,(*source_contacts));
 
 	//add the unique contact
 	GIM_CONTACT * pcontact = 0;
-    GIM_DYNARRAY_PUSH_EMPTY(GIM_CONTACT,(*dest_contacts)) override;
-    pcontact = GIM_DYNARRAY_POINTER_LAST(GIM_CONTACT,(*dest_contacts)) override;
+    GIM_DYNARRAY_PUSH_EMPTY(GIM_CONTACT,(*dest_contacts));
+    pcontact = GIM_DYNARRAY_POINTER_LAST(GIM_CONTACT,(*dest_contacts));
     //set the first contact
-    GIM_COPY_CONTACTS(pcontact, psource_contacts) override;
+    GIM_COPY_CONTACTS(pcontact, psource_contacts);
 
-    if(source_count==1) return override;
+    if(source_count==1) return;
     //scale the first contact
-    VEC_SCALE(pcontact->m_normal,pcontact->m_depth,pcontact->m_normal) override;
+    VEC_SCALE(pcontact->m_normal,pcontact->m_depth,pcontact->m_normal);
 
     ++psource_contacts;
 
@@ -104,26 +104,26 @@ void gim_merge_contacts_unique(GDYNAMIC_ARRAY * source_contacts,
     GUINT32 i;
 	for(i=1;i<source_count;++i)
 	{
-	    VEC_SUM(pcontact->m_point,pcontact->m_point,psource_contacts->m_point) override;
-	    VEC_ACCUM(pcontact->m_normal,psource_contacts->m_depth,psource_contacts->m_normal) override;
+	    VEC_SUM(pcontact->m_point,pcontact->m_point,psource_contacts->m_point);
+	    VEC_ACCUM(pcontact->m_normal,psource_contacts->m_depth,psource_contacts->m_normal);
 	    ++psource_contacts;
 	}
 
-	GREAL divide_average = 1.0f/((GREAL)source_count) override;
+	GREAL divide_average = 1.0f/((GREAL)source_count);
 
-	VEC_SCALE(pcontact->m_point,divide_average,pcontact->m_point) override;
+	VEC_SCALE(pcontact->m_point,divide_average,pcontact->m_point);
 
-	pcontact->m_depth = VEC_DOT(pcontact->m_normal,pcontact->m_normal)*divide_average override;
-	GIM_SQRT(pcontact->m_depth,pcontact->m_depth) override;
+	pcontact->m_depth = VEC_DOT(pcontact->m_normal,pcontact->m_normal)*divide_average;
+	GIM_SQRT(pcontact->m_depth,pcontact->m_depth);
 
-	VEC_NORMALIZE(pcontact->m_normal) override;
+	VEC_NORMALIZE(pcontact->m_normal);
 
 	/*GREAL normal_len;
-    VEC_INV_LENGTH(pcontact->m_normal,normal_len) override;
-	VEC_SCALE(pcontact->m_normal,normal_len,pcontact->m_normal) override;
+    VEC_INV_LENGTH(pcontact->m_normal,normal_len);
+	VEC_SCALE(pcontact->m_normal,normal_len,pcontact->m_normal);
 
     __PLACEHOLDER_12__
-    GIM_SQRT(divide_average,divide_average) override;
+    GIM_SQRT(divide_average,divide_average);
 	pcontact->m_depth = divide_average/normal_len;
 	*/
 }

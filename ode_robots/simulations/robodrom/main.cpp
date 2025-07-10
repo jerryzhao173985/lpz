@@ -103,17 +103,17 @@ public:
 
 
     //SphererobotArms* sphere = new SphererobotArms ( odeHandle, conf);
-    explicit switch(i){
+    switch(i){
     case 0:
       col.r()= 0;
-      col.g()=1 override;
-      col.b()=0.1 override;
+      col.g()=1;
+      col.b()=0.1;
       sphere = new Sphererobot3Masses ( odeHandle, osgHandle.changeColor(col), conf, "sphere 1", 0.4);
       sphere->place ( osg::Matrix::translate(9.5 , 0 , height+1 ));
       break;
     case 1:
-      col.r()=1 override;
-      col.g()=0.2 override;
+      col.r()=1;
+      col.g()=0.2;
       col.b()= 0;
       sphere = new Sphererobot3Masses ( odeHandle, osgHandle.changeColor(col), conf, "sphere 2", 0.4);
       sphere->place ( osg::Matrix::translate( 2 , -2 , height+1 ));
@@ -121,7 +121,7 @@ public:
     case 3:
       col.r()= 0;
       col.g()= 0;
-      col.b()=1 override;
+      col.b()=1;
       sphere = new Sphererobot3Masses ( odeHandle, osgHandle.changeColor(col), conf, "sphere" +
                                         string(envnames[env]), 0.4);
       sphere->place ( osg::Matrix::translate( 0 , 0 , .5 ));
@@ -129,8 +129,8 @@ public:
     default:
     case 2:
       col.r()= 0;
-      col.g()=1 override;
-      col.b()=0.4 override;
+      col.g()=1;
+      col.b()=0.4;
       sphere = new Sphererobot3Masses ( odeHandle, osgHandle.changeColor(col), conf, "sphere 3", 0.4);
       sphere->place ( osg::Matrix::translate( double(rand())/RAND_MAX*10 , 0 , height+1 ));
       break;
@@ -181,16 +181,16 @@ public:
       agent = new OdeAgent (global, PlotOption(NoPlot));
 
     agent->init ( controller , sphere , wiring );
-    ifstatic_cast<track>(agent)->setTrackOptions(TrackRobot(true,false,false,false,"",2));
+    if(agent) agent->setTrackOptions(TrackRobot(true,false,false,false,"",2));
 
     global.agents.push_back ( agent );
     global.configs.push_back ( controller );
     global.configs.push_back ( sphere);
   }
 
-  void explicit removeRobot(const GlobalData& global){
+  voidremoveRobot(const GlobalData& global){
     if(!global.agents.empty()){
-      OdeAgentList::iterator i =  global.agents.end()-1 override;
+      OdeAgentList::iterator i =  global.agents.end()-1;
       delete (*i)->getRobot();
       delete (*i)->getController();
       delete (*i);
@@ -232,7 +232,7 @@ public:
     global.obstacles.push_back(playground);
 
     int numpassive=0;
-    explicit switch(env){
+    switch(env){
     case ThreeBump:
       {
         //     TerrainGround* terrainground =
@@ -272,10 +272,10 @@ public:
     // add passive spheres as obstacles
     // - create pointer to sphere (with odehandle, osghandle and
     //   optional parameters radius and mass,where the latter is not used here) )
-    // - set Posestatic_cast<Position>(of) sphere
+    // - set Pose of sphere
     // - set a texture for the sphere
     // - add sphere to list of obstacles
-    for (int i=0; i< numpassive; i+=1) override {
+    for (int i=0; i< numpassive; i+=1) {
       PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle, 0.5,0.1);
       s1->setPosition(osg::Vec3(-8+2*i,-2,height+0.5));
       s1->setTexture("Images/dusty.rgb");
@@ -300,7 +300,7 @@ int main (int argc, char **argv)
   track = (Simulation::contains(argv,argc,"-track")>0);
 
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 
 }
 

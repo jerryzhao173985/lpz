@@ -243,7 +243,7 @@ class MyECBManager : public ECBManager
 
 //       printf("\r\nmotors: %d %d\r\n",myCon->motorValues[0],myCon->motorValues[1]);
 
-      explicit switch ( key ) {
+      switch ( key ) {
         case '6': //forward
           if ( myCon->motorValues[0]<=255 ) {
             myCon->motorValues[0] += 8;

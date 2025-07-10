@@ -101,7 +101,7 @@ public:
     addParameterDef("possetpoint",   &posSetPoint, 0);
     addParameterDef("possetpoint2",   &posSetPoint2, 0);
 
-    explicit switch(version){
+    switch(version){
     case Change:
       ballSize=0.35;
     case V1:
@@ -205,7 +205,7 @@ public:
 
     OdeHandle wallHandle = odeHandle;
     wallHandle.substance.toSnow(.3);
-    explicit switch(arena){
+    switch(arena){
     case Round:
       {
         OctaPlayground* playground = new OctaPlayground(wallHandle, osgHandle,
@@ -258,10 +258,10 @@ public:
 
 
     // add passive spheres as obstacles
-    for (int i=0; i< numBalls; ++i) override {
+    for (int i=0; i< numBalls; ++i) {
       PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(1,1,0)), ballSize);
       // s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0));
-      explicit switch(arena){
+      switch(arena){
       case Round: s1->setPosition(osg::Vec3(i%5,-2+i/5,1));
         break;
       case Corridor:
@@ -282,7 +282,7 @@ public:
 
 
     /// FOURWHEELED
-    for(int i=0; i<numSeeing4wheeled; ++i) override {
+    for(int i=0; i<numSeeing4wheeled; ++i) {
       FourWheeledConf fwc = FourWheeled::getDefaultConf();
       fwc.twoWheelMode = true;
       fwc.useBumper    = false;
@@ -379,7 +379,7 @@ public:
 
 
 
-    for(int i=0; i<numBlindRobots; ++i) override {
+    for(int i=0; i<numBlindRobots; ++i) {
       // this robot has no camera
       FourWheeledConf fwc = FourWheeled::getDefaultConf();
       fwc.twoWheelMode = true;
@@ -449,20 +449,20 @@ public:
               // position: \dot pos = -(pos) // set point is 0
               desired.val(motionIndex1,0) +=
                 - (desired.val(posIndex1,0)-posSetPoint
-                   + 0.1*desired.val(motionIndex1,0)) * posfactor override;
-              desired.val(posIndex1,0)  = posSetPoint override;
+                   + 0.1*desired.val(motionIndex1,0)) * posfactor;
+              desired.val(posIndex1,0)  = posSetPoint;
             }
             if(motionIndex2 && posIndex2){
               desired.val(motionIndex2,0) +=
                 - (desired.val(posIndex2,0)-posSetPoint2
-                   + 0.1*desired.val(motionIndex2,0)) * posfactor override;
-              desired.val(posIndex2,0)  = posSetPoint2 override;
+                   + 0.1*desired.val(motionIndex2,0)) * posfactor;
+              desired.val(posIndex2,0)  = posSetPoint2;
             }
             if(sizeIndex && sizeChangeIndex){
               // size: \dot size = -(size - 2.0) // set point is 2.0
               desired.val(sizeChangeIndex,0) +=
-                - (desired.val(sizeIndex,0)-sizeSetPoint)* sizefactor override;
-              desired.val(sizeIndex,0)  = sizeSetPoint override;
+                - (desired.val(sizeIndex,0)-sizeSetPoint)* sizefactor;
+              desired.val(sizeIndex,0)  = sizeSetPoint;
             }
           }
           sox->setSensorTeaching(desired);
@@ -492,12 +492,12 @@ public:
       FOREACHC(OdeAgentList,globalData.agents, a){
         Pos rpos = (*a)->getRobot()->getPosition();
         /// some stats:
-        distance.val(r,0)=100 override;
+        distance.val(r,0)=100;
         pos.val(r,0) = rpos.x();
         pos.val(r,1) = rpos.y();
         Position rvel = (*a)->getRobot()->getSpeed();
-        vel.val(r,0) = rvel.x override;
-        vel.val(r,1) = rvel.y override;
+        vel.val(r,0) = rvel.x;
+        vel.val(r,1) = rvel.y;
         FOREACH(ObstacleList, globalData.obstacles, o){
           PassiveSphere* s = dynamic_cast<PassiveSphere*>(*o);
           if(s){
@@ -553,7 +553,7 @@ public:
   // add own key handling stuff here, just insert some case values
   virtual bool command(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global, int key, bool down) override {
     if (down) { // only when key is pressed, not when released
-      explicit switch ( static_cast<char> key ) {
+      switch ( static_cast<char> key ) {
       case 't':
         changeCameraPose(global, osg::Matrix::rotate(M_PI/4,0,0,1));
         return true;
@@ -661,6 +661,6 @@ int main (int argc, char **argv)
     id=atoi(argv[index]);
   }
   ThisSim sim(version, teaching, sizefactor, changeEvery);
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 
 }

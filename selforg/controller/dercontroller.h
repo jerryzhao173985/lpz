@@ -52,7 +52,7 @@ class DerController : public InvertMotorController {
 
 public:
   explicit DerController(const DerControllerConf& conf = getDefaultConf());
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
 
   virtual ~DerController();
 
@@ -67,23 +67,23 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors);
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,
                               motor*,
-                              int number_motors) override;
+                              int number_motors);
 
   /**** STOREABLE ****/
   virtual bool store(FILE* f) const;
   virtual bool restore(FILE* f);
 
   /**** CONFIGURABLE ****/
-  virtual std::list<iparamkey> getInternalParamNames()  const override;
-  virtual std::list<iparamval> getInternalParams()  const override;
-  virtual std::list<ILayer> getStructuralLayers()  const override;
-  virtual std::list<IConnection> getStructuralConnections()  const override;
+  virtual std::list<iparamkey> getInternalParamNames()  const;
+  virtual std::list<iparamval> getInternalParams()  const;
+  virtual std::list<ILayer> getStructuralLayers()  const;
+  virtual std::list<IConnection> getStructuralConnections()  const;
 
   /**** TEACHING ****/
   virtual void setTeachingMode(bool onOff);

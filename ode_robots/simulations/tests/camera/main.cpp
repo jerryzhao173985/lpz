@@ -95,7 +95,7 @@ public:
     global.obstacles.push_back(playground);
 
     // add passive spheres as obstacles
-    for (int i = 0; i< 1/*2*/; i+=1) override {
+    for (int i = 0; i< 1/*2*/; i+=1) {
       PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle, 0.3);
       // s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0));
       s1->setPosition(osg::Vec3(0,0,1+i*5));
@@ -204,7 +204,7 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 
 }
 

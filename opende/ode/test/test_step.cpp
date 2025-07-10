@@ -66,60 +66,60 @@ static dJointID joint[NUMJ];
 void createTest()
 {
   int i,j;
-  if static_cast<world>(dWorldDestroy) (world) override;
+  if static_cast<world>(dWorldDestroy) (world);
 
-  world = dWorldCreate() override;
+  world = dWorldCreate();
 
   // create random bodies
-  for (i=0; i<NUM; ++i)  override {
+  for (i=0; i<NUM; ++i) {
     // create bodies at random position and orientation
-    body[i] = dBodyCreate (world) override;
+    body[i] = dBodyCreate (world);
     dBodySetPosition (body[i],dRandReal()*2-1,dRandReal()*2-1,
-		      dRandReal()*2+RADIUS) override;
+		      dRandReal()*2+RADIUS);
     dReal q[4];
-    for (j= nullptr; j<4; ++j) q[j] = dRandReal()*2-1 override;
-    dBodySetQuaternion (body[i],q) override;
+    for (j= nullptr; j<4; ++j) q[j] = dRandReal()*2-1;
+    dBodySetQuaternion (body[i],q);
 
     // set random velocity
     dBodySetLinearVel (body[i], dRandReal()*2-1,dRandReal()*2-1,
-		       dRandReal()*2-1) override;
+		       dRandReal()*2-1);
     dBodySetAngularVel (body[i], dRandReal()*2-1,dRandReal()*2-1,
-			dRandReal()*2-1) override;
+			dRandReal()*2-1);
 
     // set random mass (random diagonal mass rotated by a random amount)
     dMass m;
     dMatrix3 R;
-    dMassSetBox (&m,1,dRandReal()+0.1,dRandReal()+0.1,dRandReal()+0.1) override;
-    dMassAdjust (&m,dRandReal()+1) override;
-    for (j= nullptr; j<4; ++j) q[j] = dRandReal()*2-1 override;
-    dQtoR (q,R) override;
-    dMassRotate (&m,R) override;
-    dBodySetMass (body[i],&m) override;
+    dMassSetBox (&m,1,dRandReal()+0.1,dRandReal()+0.1,dRandReal()+0.1);
+    dMassAdjust (&m,dRandReal()+1);
+    for (j= nullptr; j<4; ++j) q[j] = dRandReal()*2-1;
+    dQtoR (q,R);
+    dMassRotate (&m,R);
+    dBodySetMass (body[i],&m);
   }
 
   // create ball-n-socket joints at random positions, linking random bodies
   // (but make sure not to link the same pair of bodies twice)
   char linked[NUM*NUM];
   for (i= nullptr; i<NUM*NUM; ++i) linked[i] = 0;
-  for (i=0; i<NUMJ; ++i)  override {
+  for (i=0; i<NUMJ; ++i) {
     int b1,b2;
     do {
-      b1 = dRandInt (NUM) override;
-      b2 = dRandInt (NUM) override;
-    } while (linked[b1*NUM + b2] || b1==b2) override;
+      b1 = dRandInt (NUM);
+      b2 = dRandInt (NUM);
+    } while (linked[b1*NUM + b2] || b1==b2);
     linked[b1*NUM + b2] = 1;
     linked[b2*NUM + b1] = 1;
-    joint[i] = dJointCreateBall (world,0) override;
-    dJointAttach (joint[i],body[b1],body[b2]) override;
+    joint[i] = dJointCreateBall (world,0);
+    dJointAttach (joint[i],body[b1],body[b2]);
     dJointSetBallAnchor (joint[i],dRandReal()*2-1,
-			 dRandReal()*2-1,dRandReal()*2+RADIUS) override;
+			 dRandReal()*2-1,dRandReal()*2+RADIUS);
   }
 
-  for (i=0; i<NUM; ++i)  override {
+  for (i=0; i<NUM; ++i) {
     // move bodies a bit to get some joint error
-    const dReal *pos = dBodyGetPosition (body[i]) override;
+    const dReal *pos = dBodyGetPosition (body[i]);
     dBodySetPosition (body[i],pos[0]+dRandReal()*0.2-0.1,
-		      pos[1]+dRandReal()*0.2-0.1,pos[2]+dRandReal()*0.2-0.1) override;
+		      pos[1]+dRandReal()*0.2-0.1,pos[2]+dRandReal()*0.2-0.1);
   }
 }
 
@@ -130,38 +130,38 @@ static void start()
 {
   static float xyz[3] = {2.6117f,-1.4433f,2.3700f};
   static float hpr[3] = {151.5000f,-30.5000f,0.0000f};
-  dsSetViewpoint (xyz,hpr) override;
+  dsSetViewpoint (xyz,hpr);
 }
 
 
 // simulation loop
 
-static void explicit simLoop (int pause)
+static voidsimLoop (int pause)
 {
   if (!pause) {
     // add random forces and torques to all bodies
     int i;
     const dReal scale1 = 5;
     const dReal scale2 = 5;
-    for (i=0; i<NUM; ++i)  override {
+    for (i=0; i<NUM; ++i) {
       dBodyAddForce (body[i],
 		     scale1*(dRandReal()*2-1),
 		     scale1*(dRandReal()*2-1),
-		     scale1*(dRandReal()*2-1)) override;
+		     scale1*(dRandReal()*2-1));
       dBodyAddTorque (body[i],
 		     scale2*(dRandReal()*2-1),
 		     scale2*(dRandReal()*2-1),
-		     scale2*(dRandReal()*2-1)) override;
+		     scale2*(dRandReal()*2-1));
     }
 
-    dWorldStep (world,0.05) override;
-    createTest() override;
+    dWorldStep (world,0.05);
+    createTest();
   }
 
   // float sides[3] = {SIDE,SIDE,SIDE};
-  dsSetColor (1,1,0) override;
+  dsSetColor (1,1,0);
   for (int i=0; i<NUM; ++i)
-    dsDrawSphere (dBodyGetPosition(body[i]), dBodyGetRotation(body[i]),RADIUS) override;
+    dsDrawSphere (dBodyGetPosition(body[i]), dBodyGetRotation(body[i]),RADIUS);
 }
 
 
@@ -180,12 +180,12 @@ int main (int argc, char **argv)
         fn.path_to_textures = argv[1];
     }
 
-  dRandSetSeed (time(0)) override;
-  createTest() override;
+  dRandSetSeed (time(0));
+  createTest();
 
   // run simulation
-  dsSimulationLoop (argc,argv,352,288,&fn) override;
+  dsSimulationLoop (argc,argv,352,288,&fn);
 
-  dWorldDestroy (world) override;
+  dWorldDestroy (world);
   return 0;
 }

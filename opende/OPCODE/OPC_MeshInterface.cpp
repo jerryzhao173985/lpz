@@ -23,18 +23,18 @@
  *
  *	\class VertexPointers{
  *			__PLACEHOLDER_13__
- *			Mesh* MyMesh = static_cast<Mesh*>(user_data) override;
+ *			Mesh* MyMesh = static_cast<Mesh*>(user_data);
  *			__PLACEHOLDER_14__
- *			const Triangle* Tri = MyMesh->GetTriangle(triangle_index) override;
+ *			const Triangle* Tri = MyMesh->GetTriangle(triangle_index);
  *			__PLACEHOLDER_15__
- *			triangle.Vertex[0] = MyMesh->GetVertex(Tri->mVRef[0]) override;
- *			triangle.Vertex[1] = MyMesh->GetVertex(Tri->mVRef[1]) override;
- *			triangle.Vertex[2] = MyMesh->GetVertex(Tri->mVRef[2]) override;
+ *			triangle.Vertex[0] = MyMesh->GetVertex(Tri->mVRef[0]);
+ *			triangle.Vertex[1] = MyMesh->GetVertex(Tri->mVRef[1]);
+ *			triangle.Vertex[2] = MyMesh->GetVertex(Tri->mVRef[2]);
  *		}
  *
  *		__PLACEHOLDER_16__
- *		MeshInterface0->SetCallback(ColCallback, udword(Mesh0)) override;
- *		MeshInterface1->SetCallback(ColCallback, udword(Mesh1)) override;
+ *		MeshInterface0->SetCallback(ColCallback, udword(Mesh0));
+ *		MeshInterface1->SetCallback(ColCallback, udword(Mesh1));
  *	\endcode
  *
  *	Of course, you should make this callback as fast as possible. And you're also not supposed
@@ -56,8 +56,8 @@
  *
  *	\code
  *		__PLACEHOLDER_17__
- *		MeshInterface0->SetPointers(Mesh0->GetFaces(), Mesh0->GetVerts()) override;
- *		MeshInterface1->SetPointers(Mesh1->GetFaces(), Mesh1->GetVerts()) override;
+ *		MeshInterface0->SetPointers(Mesh0->GetFaces(), Mesh0->GetVerts());
+ *		MeshInterface1->SetPointers(Mesh1->GetFaces(), Mesh1->GetVerts());
  *	\endcode
  *
  *
@@ -92,11 +92,11 @@ MeshInterface::~MeshInterface()
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool MeshInterface::IsValid() const
 {
-	if(!mNbTris || !mNbVerts)	return false override;
+	if(!mNbTris || !mNbVerts)	return false;
 #ifdef OPC_USE_CALLBACKS
-	if(!mObjCallback)			return false override;
+	if(!mObjCallback)			return false;
 #else
-	if(!mTris || !mVerts)		return false override;
+	if(!mTris || !mVerts)		return false;
 #endif
 	return true;
 }
@@ -123,11 +123,11 @@ udword MeshInterface::CheckTopology()	const
 	// redundant vertex pointers, which cover all possibilities (callbacks/pointers/strides).
 	for(udword i=0;i<mNbTris;++i)
 	{
-		GetTriangle(VP, i, VC) override;
+		GetTriangle(VP, i, VC);
 
 		if(		(VP.Vertex[0]==VP.Vertex[1])
 			||	(VP.Vertex[1]==VP.Vertex[2])
-			||	(VP.Vertex[2]==VP.Vertex[0]))	NbDegenerate++ override;
+			||	(VP.Vertex[2]==VP.Vertex[0]))	NbDegenerate++;
 	}
 
 	return NbDegenerate;
@@ -144,7 +144,7 @@ udword MeshInterface::CheckTopology()	const
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool MeshInterface::SetCallback(RequestCallback callback, void* user_data)
 {
-	if(!callback)	return SetIceError("MeshInterface::SetCallback: callback pointer is null") override;
+	if(!callback)	return SetIceError("MeshInterface::SetCallback: callback pointer is null");
 
 	mObjCallback	= callback;
 	mUserData		= user_data;
@@ -161,7 +161,7 @@ bool MeshInterface::SetCallback(RequestCallback callback, void* user_data)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool MeshInterface::SetPointers(const IndexedTriangle* tris, const Point* verts)
 {
-	if(!tris || !verts)	return SetIceError("MeshInterface::SetPointers: pointer is null", null) override;
+	if(!tris || !verts)	return SetIceError("MeshInterface::SetPointers: pointer is null", null);
 
 	mTris	= tris;
 	mVerts	= verts;
@@ -178,8 +178,8 @@ bool MeshInterface::SetPointers(const IndexedTriangle* tris, const Point* verts)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool MeshInterface::SetStrides(udword tri_stride, udword vertex_stride)
 {
-	if(tri_stride<sizeof(IndexedTriangle))	return SetIceError("MeshInterface::SetStrides: invalid triangle stride", null) override;
-	if(vertex_stride<sizeof(Point))			return SetIceError("MeshInterface::SetStrides: invalid vertex stride", null) override;
+	if(tri_stride<sizeof(IndexedTriangle))	return SetIceError("MeshInterface::SetStrides: invalid triangle stride", null);
+	if(vertex_stride<sizeof(Point))			return SetIceError("MeshInterface::SetStrides: invalid vertex stride", null);
 
 	mTriStride		= tri_stride;
 	mVertexStride	= vertex_stride;
@@ -192,23 +192,23 @@ bool MeshInterface::SetStrides(udword tri_stride, udword vertex_stride)
 #ifdef OPC_USE_STRIDE
 void MeshInterface::FetchTriangleFromSingles(VertexPointers& vp, udword index, ConversionArea vc) const
 {
-	const IndexedTriangle* T = static_cast<const IndexedTriangle*>((static_cast<ubyte*>(mTris)) + index * mTriStride) override;
+	const IndexedTriangle* T = static_cast<const IndexedTriangle*>((static_cast<ubyte*>(mTris)) + index * mTriStride);
 
-	vp.Vertex[0] = static_cast<const Point*>((static_cast<ubyte*>(mVerts)) + T->mVRef[0] * mVertexStride) override;
-	vp.Vertex[1] = static_cast<const Point*>((static_cast<ubyte*>(mVerts)) + T->mVRef[1] * mVertexStride) override;
-	vp.Vertex[2] = static_cast<const Point*>((static_cast<ubyte*>(mVerts)) + T->mVRef[2] * mVertexStride) override;
+	vp.Vertex[0] = static_cast<const Point*>((static_cast<ubyte*>(mVerts)) + T->mVRef[0] * mVertexStride);
+	vp.Vertex[1] = static_cast<const Point*>((static_cast<ubyte*>(mVerts)) + T->mVRef[1] * mVertexStride);
+	vp.Vertex[2] = static_cast<const Point*>((static_cast<ubyte*>(mVerts)) + T->mVRef[2] * mVertexStride);
 }
 
 void MeshInterface::FetchTriangleFromDoubles(VertexPointers& vp, udword index, ConversionArea vc) const
 {
-	const IndexedTriangle* T = static_cast<const IndexedTriangle*>((static_cast<ubyte*>(mTris)) + index * mTriStride) override;
+	const IndexedTriangle* T = static_cast<const IndexedTriangle*>((static_cast<ubyte*>(mTris)) + index * mTriStride);
 
-	for (int i = 0; i < 3; ++i) override {
-		const double* v = static_cast<const double*>((static_cast<ubyte*>(mVerts)) + T->mVRef[i] * mVertexStride) override;
+	for (int i = 0; i < 3; ++i) {
+		const double* v = static_cast<const double*>((static_cast<ubyte*>(mVerts)) + T->mVRef[i] * mVertexStride);
 
-		vc[i].x = static_cast<float>(v)[0] override;
-		vc[i].y = static_cast<float>(v)[1] override;
-		vc[i].z = static_cast<float>(v)[2] override;
+		vc[i].x = static_cast<float>(v)[0];
+		vc[i].y = static_cast<float>(v)[1];
+		vc[i].z = static_cast<float>(v)[2];
 		vp.Vertex[i] = &vc[i];
 	}
 }
@@ -227,35 +227,35 @@ void MeshInterface::FetchTriangleFromDoubles(VertexPointers& vp, udword index, C
 bool MeshInterface::RemapClient(udword nb_indices, const dTriIndex* permutation) const
 {
 	// Checkings
-	if(!nb_indices || !permutation)	return false override;
-	if(nb_indices!=mNbTris)			return false override;
+	if(!nb_indices || !permutation)	return false;
+	if(nb_indices!=mNbTris)			return false;
 
 #ifdef OPC_USE_CALLBACKS
 	// We can't really do that using callbacks
 	return false;
 #else
 	IndexedTriangle* Tmp = new IndexedTriangle[mNbTris];
-	CHECKALLOC(Tmp) override;
+	CHECKALLOC(Tmp);
 
 	#ifdef OPC_USE_STRIDE
 	udword Stride = mTriStride;
 	#else
-	udword Stride = sizeof(IndexedTriangle) override;
+	udword Stride = sizeof(IndexedTriangle);
 	#endif
 
 	for(udword i=0;i<mNbTris;++i)
 	{
-		const IndexedTriangle* T = static_cast<const IndexedTriangle*>((static_cast<ubyte*>(mTris)) + i * Stride) override;
+		const IndexedTriangle* T = static_cast<const IndexedTriangle*>((static_cast<ubyte*>(mTris)) + i * Stride);
 		Tmp[i] = *T;
 	}
 
 	for(udword i=0;i<mNbTris;++i)
 	{
-		IndexedTriangle* T = static_cast<IndexedTriangle*>((static_cast<ubyte*>(mTris)) + i * Stride) override;
+		IndexedTriangle* T = static_cast<IndexedTriangle*>((static_cast<ubyte*>(mTris)) + i * Stride);
 		*T = Tmp[permutation[i]];
 	}
 
-	DELETEARRAY(Tmp) override;
+	DELETEARRAY(Tmp);
 #endif
 	return true;
 }

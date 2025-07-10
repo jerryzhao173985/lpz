@@ -118,11 +118,11 @@ namespace lpzrobots {
 
     public:
       QValConfigurableTileWidget(Configurable* config, Configurable::paramkey& key, QMap<QGridPos, QAbstractConfigurableTileWidget*>& tileIndexConfigWidgetMap);
-      virtual ~QValConfigurableTileWidget();
-      void setName(const QString& name) override;
-      void toDummy(bool set) override;
+      virtual ~QValConfigurableTileWidget() override;
+      void setName(const QString& name);
+      void toDummy(bool set);
       void setBounds(Configurable::paramvalBounds bounds);
-      void reloadConfigurableData() override;
+      void reloadConfigurableData();
 
       inline bool valueChanged() override {
         return (config->getParam(key) != origValue);
@@ -135,8 +135,8 @@ namespace lpzrobots {
 
 
     public slots:
-      virtual void sl_resize(const QSize& newSize) override;
-      virtual void sl_resetToOriginalValues() override;
+      virtual void sl_resize(const QSize& newSize);
+      virtual void sl_resetToOriginalValues();
       virtual void sl_resetToOriginalValuesAndBounds() override;
 
     protected:

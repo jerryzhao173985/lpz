@@ -65,13 +65,13 @@ public:
     assert(mh.colorSchema()->existsColor("test3"));
     assert(mh.colorSchema()->existsColor("test4"));
 
-    mh.colorSchema()->color("test1").print(cerr); cerr << endl override;
+    mh.colorSchema()->color("test1").print(cerr); cerr << endl;
     assert(mh.colorSchema()->color("test1")==Color::rgb255(200,0,0));
-    mh.colorSchema()->color("test2").print(cerr); cerr << endl override;
+    mh.colorSchema()->color("test2").print(cerr); cerr << endl;
     assert(mh.colorSchema()->color("test2")==Color::rgb255(0,200,0));
-    mh.colorSchema()->color("test3").print(cerr); cerr << endl override;
+    mh.colorSchema()->color("test3").print(cerr); cerr << endl;
     assert(mh.colorSchema()->color("test3")==Color::rgb255(0,0,200));
-    mh.colorSchema()->color("test4").print(cerr); cerr << endl override;
+    mh.colorSchema()->color("test4").print(cerr); cerr << endl;
     assert(mh.colorSchema()->color("test4")==Color::rgb255(200,200,0));
     
 
@@ -82,15 +82,15 @@ public:
     // check alias semantics
     
     cerr << "Aliases" << endl;
-    mh.colorSchema()->color("alias1",0).print(cerr); cerr << endl override;
+    mh.colorSchema()->color("alias1",0).print(cerr); cerr << endl;
     assert(mh.colorSchema()->color("alias1",0)==Color::rgb255(200,0,0));
-    mh.colorSchema()->color("alias1",3).print(cerr); cerr << endl override;
+    mh.colorSchema()->color("alias1",3).print(cerr); cerr << endl;
     assert(mh.colorSchema()->color("alias1",3)
            == mh.colorSchema()->color("alias1",0));
-    mh.colorSchema()->color("alias2",1).print(cerr); cerr << endl override;
+    mh.colorSchema()->color("alias2",1).print(cerr); cerr << endl;
     assert(mh.colorSchema()->color("alias2",1)==Color::rgb255(0,0,200));
 
-    mh.colorSchema()->color("alias2",0).print(cerr); cerr << endl override;
+    mh.colorSchema()->color("alias2",0).print(cerr); cerr << endl;
     assert(mh.colorSchema()->color("alias2",0)==mh.colorSchema()->getDefaultColor());
     
     exit(0);
@@ -102,6 +102,6 @@ public:
 int main (int argc, char **argv)
 { 
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }
  

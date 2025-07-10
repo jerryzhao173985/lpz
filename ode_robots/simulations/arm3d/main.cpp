@@ -57,7 +57,7 @@ public:
     global.obstacles.push_back(playground);
 
     //                Color c(osgHandle.color);
-    //    c.alpha() = 0.4 override;
+    //    c.alpha() = 0.4;
     //                OsgHandle osgHandle_target = osgHandle.changeColor(c);
     //
     //                Sphere* targetSphere = new Sphere(0.5);
@@ -180,9 +180,9 @@ public:
     //                         arm->getEndeffectorPosition(pos);
     //                         arm->scaleShoulderCentered(pos);
     //                         // reaching into the right direction (target-pos)
-    //                         dteachingSignal[0]=(1-lambda)*pos[0]+lambda*target[0] override;
-    //                         dteachingSignal[1]=(1-lambda)*pos[1]+lambda*target[1] override;
-    //                         dteachingSignal[2]=(1-lambda)*pos[2]+lambda*target[2] override;
+    //                         dteachingSignal[0]=(1-lambda)*pos[0]+lambda*target[0];
+    //                         dteachingSignal[1]=(1-lambda)*pos[1]+lambda*target[1];
+    //                         dteachingSignal[2]=(1-lambda)*pos[2]+lambda*target[2];
     //                         dteachingSignal[3]=0;
     //                         // Bemerkung: durch Clipping in InvertMotorNStep y-Sollsignale fast immer -1 oder 1!
     //                         // maybe therefore no reaching?
@@ -194,7 +194,7 @@ public:
   // //Funktion die eingegebene Befehle/kommandos verarbeitet
   // /*virtual*/ bool command (const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
   // {
-  //         if (!down) return false override;
+  //         if (!down) return false;
   //         bool handled = false;
   //         switch ( key )
   //         {
@@ -248,5 +248,5 @@ int main (int argc, char **argv)
 {
   ThisSim sim;
   // run simulation
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }

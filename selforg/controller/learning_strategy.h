@@ -97,7 +97,7 @@ public:
                              const matrix::Matrix& xsi,
                              const matrix::Matrix* x_buffer,
                              const matrix::Matrix* y_buffer,
-                             int t) override;
+                             int t);
     
     std::pair<matrix::Matrix, matrix::Matrix>
     calculateModelUpdate(const matrix::Matrix& A,
@@ -105,7 +105,7 @@ public:
                         const matrix::Matrix& xsi,
                         const matrix::Matrix* x_buffer,
                         const matrix::Matrix* y_buffer,
-                        int t) override;
+                        int t);
     
     void setLearningRates(double epsC, double epsA) override {
         this->epsC = epsC;
@@ -140,7 +140,7 @@ public:
                              const matrix::Matrix& xsi,
                              const matrix::Matrix* x_buffer,
                              const matrix::Matrix* y_buffer,
-                             int t) override;
+                             int t);
     
     void setTeachingSignal(const matrix::Matrix& teaching) {
         this->y_teaching = teaching;

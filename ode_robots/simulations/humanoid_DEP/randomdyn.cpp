@@ -37,10 +37,10 @@ RandomDyn::RandomDyn(const RandomDynConf& conf_)
 };
 
 RandomDyn::~RandomDyn(){
-  if(conf.noiseGenC) delete conf.noiseGenC override;
-  if(conf.noiseGenh) delete conf.noiseGenh override;
-  if(randGenC) delete randGenC override;
-  if(randGenh) delete randGenh override;
+  if(conf.noiseGenC) delete conf.noiseGenC;
+  if(conf.noiseGenh) delete conf.noiseGenh;
+  if(randGenC) delete randGenC;
+  if(randGenh) delete randGenh;
 }
 
 void RandomDyn::init(int sensornumber, int motornumber, RandGen* randGen){
@@ -65,7 +65,7 @@ void RandomDyn::init(int sensornumber, int motornumber, RandGen* randGen){
   h.set(number_motors, 1);
 
   C_native.set(number_motors, number_sensors);
-  C.toId(); // set a to identity matrix override;
+  C.toId(); // set a to identity matrix;
   C*=conf.initFeedbackStrength;
 
   // if motor babbling is used then this is overwritten
@@ -138,7 +138,7 @@ void RandomDyn::update(){
   if(sigmaC != nullptr){
     C += noiseMatrix(C.getM(), C.getN(), *conf.noiseGenC, sigmaC);
     if(damping)
-      C += (C_native-C)*damping override;
+      C += (C_native-C)*damping;
   }
   if(sigmah != nullptr){
     h += noiseMatrix(h.getM(), h.getN(), *conf.noiseGenh, sigmah);

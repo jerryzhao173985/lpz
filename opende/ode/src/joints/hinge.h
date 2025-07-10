@@ -37,15 +37,15 @@ struct dxJointHinge : public dxJoint
     dQuaternion qrel;   // initial relative rotation body1 -> body2
     dxJointLimitMotor limot; // limit and motor information
 
-    dxJointHinge( dxWorld *w ) override;
-    virtual void getInfo1( Info1* info ) override;
-    virtual void getInfo2( Info2* info ) override;
+    dxJointHinge( dxWorld *w );
+    virtual void getInfo1( Info1* info );
+    virtual void getInfo2( Info2* info );
     virtual dJointType type() const override;
     virtual size_t size() const override;
 
-    virtual void setRelativeValues() override;
+    virtual void setRelativeValues();
 
-    void computeInitialRelativeRotation() override;
+    void computeInitialRelativeRotation();
 };
 
 

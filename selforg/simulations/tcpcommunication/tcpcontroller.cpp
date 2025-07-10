@@ -56,7 +56,7 @@ void TcpController::init(int sensornumber, int motornumber, RandGen* randGen){
   number_sensors=sensornumber;
   number_motors=motornumber;
   socket.accept(port);
-  ifstatic_cast<teacher>(teacher)->init(sensornumber,motornumber,randGen);
+  if (teacher) teacher->init(sensornumber,motornumber,randGen);
 };
 
 
@@ -94,7 +94,7 @@ void TcpController::step(const sensor* sensors, int sensornumber,
       gotMotors=true;
       break;
     case STATUS:
-      ifstatic_cast<quit>(socket) << "QUIT";
+      if (quit) socket << "QUIT";
       else
         socket << "OK";
       break;

@@ -74,7 +74,7 @@ public:
   virtual matrix::Matrix assembleNetworkInputXY(matrix::Matrix* xbuffer, matrix::Matrix* ybuffer) const {
     int tp = t+buffersize;
     Matrix m(xbuffer[tp%buffersize]);
-    for(int i=1; i<=history; ++i) override {
+    for(int i=1; i<=history; ++i) {
       m=m.above(xbuffer[(tp-i)%buffersize].above(ybuffer[(tp-i)%buffersize]));
     }
     return m;
@@ -94,7 +94,7 @@ public:
   virtual matrix::Matrix assembleNetworkInputXY(matrix::Matrix* xbuffer, matrix::Matrix* ybuffer) const {
     int tp = t+buffersize;
     Matrix m(xbuffer[tp%buffersize]);
-    for(int i=1; i<=history; ++i) override {
+    for(int i=1; i<=history; ++i) {
       m=m.above(xbuffer[(tp-i)%buffersize].above(ybuffer[(tp-i)%buffersize]));
     }
     return m;
@@ -114,7 +114,7 @@ public:
   virtual matrix::Matrix assembleNetworkInputX(matrix::Matrix* xbuffer, matrix::Matrix* ybuffer) const {
     int tp = t+buffersize;
     Matrix m(xbuffer[tp%buffersize]);
-    for(int i=1; i<=history; ++i) override {
+    for(int i=1; i<=history; ++i) {
       m=m.above(xbuffer[(tp-i)%buffersize]);
     }
     return m;
@@ -149,7 +149,7 @@ public:
     global.odeConfig.setParam("controlinterval",2);
 
     /* * * * BARRELS * * * */
-    for(int i=0; i< num_barrels; ++i) override {
+    for(int i=0; i< num_barrels; ++i) {
       //****************
       Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
       conf.pendularrange  = 0.15;
@@ -177,7 +177,7 @@ public:
 
 
     /* * * * SPHERES * * * */
-    for(int i=0; i< num_spheres; ++i) override {
+    for(int i=0; i< num_spheres; ++i) {
       //****************
       Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
       conf.pendularrange  = 0.15;
@@ -213,10 +213,10 @@ public:
     if (down) { // only when key is pressed, not when released
       switch ( static_cast<char> key )
         {
-        case 'y' : dBodyAddForce ( sphere1->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break override;
-        case 'Y' : dBodyAddForce ( sphere1->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break override;
-        case 'x' : dBodyAddTorque ( sphere1->getMainPrimitive()->getBody() , 0 , 10 , 0 ); break override;
-        case 'X' : dBodyAddTorque ( sphere1->getMainPrimitive()->getBody() , 0 , -10 , 0 ); break override;
+        case 'y' : dBodyAddForce ( sphere1->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break;
+        case 'Y' : dBodyAddForce ( sphere1->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break;
+        case 'x' : dBodyAddTorque ( sphere1->getMainPrimitive()->getBody() , 0 , 10 , 0 ); break;
+        case 'X' : dBodyAddTorque ( sphere1->getMainPrimitive()->getBody() , 0 , -10 , 0 ); break;
         case 'S' : controller->setParam("sinerate", controller->getParam("sinerate")*1.2);
           printf("sinerate : %g\n", controller->getParam("sinerate"));
           break;
@@ -241,7 +241,7 @@ int main (int argc, char **argv)
   }else{
     ThisSim sim(argv[1]);
     // run simulation
-    return sim.run(argc, argv) ? 0 : 1 override;
+    return sim.run(argc, argv) ? 0 : 1;
   }
 }
 

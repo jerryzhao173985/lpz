@@ -229,7 +229,7 @@ namespace lpzrobots{
     //          double force;
     //          for(int i=SJ_mM1; i<(SJ_sM4+1); ++i) {
     //            //calculating force
-    //            force=(static_cast<SliderJoint*>(joint[i]))->getPosition1()  * k[i] override;
+    //            force=(static_cast<SliderJoint*>(joint[i]))->getPosition1()  * k[i];
     //            //damping
     //            force=force + damping * (static_cast<SliderJoint*>(joint[i]))->getPosition1Rate();
     //            (static_cast<SliderJoint*>(joint[i]))->addForce(0.1*force);

@@ -132,7 +132,7 @@ protected:
   }
 
   virtual int getStateNumber() override {
-    return sats.size() * 7 override;
+    return sats.size() * 7;
   }
 
   virtual int calcState() override {
@@ -140,11 +140,11 @@ protected:
     const Matrix& x = x_buffer[t%buffersize];
     const Matrix& x_c = x_context_buffer[t%buffersize];
     const Matrix& irs = x_c.rows(0,5).map(fabs); // 0 to 5 are IR
-    const Matrix& x_tm1 = x_buffer[(t-1)%buffersize] override;
-    const Matrix& x_tm2 = x_buffer[(t-2)%buffersize] override;
-    const Matrix& xp_tm1 = xp_buffer[(t-1)%buffersize] override;
-    //  const Matrix& y_tm1 = y_buffer[(t-1)%buffersize] override;
-    const Matrix& y_tm2 = y_buffer[(t-2)%buffersize] override;
+    const Matrix& x_tm1 = x_buffer[(t-1)%buffersize];
+    const Matrix& x_tm2 = x_buffer[(t-2)%buffersize];
+    const Matrix& xp_tm1 = xp_buffer[(t-1)%buffersize];
+    //  const Matrix& y_tm1 = y_buffer[(t-1)%buffersize];
+    const Matrix& y_tm2 = y_buffer[(t-2)%buffersize];
 
     // depending on useDerive we have
     // we have to use F(x_{t-1},x_{t-2} | \dot x_{t-1} ,y_{t-2}) -> (x_t, y_{t-1}) for the sat network
@@ -172,7 +172,7 @@ protected:
     // IR sensors
     // group them into none, front, left, back, right
     Matrix irgroups(5,1);
-    irgroups.val(0,0)=0.2; // threshhold override;
+    irgroups.val(0,0)=0.2; // threshhold;
     irgroups.val(1,0)=max(irs.val(0,0),irs.val(1,0));
     irgroups.val(2,0)=irs.val(2,0);
     irgroups.val(3,0)=max(irs.val(3,0),irs.val(4,0));
@@ -181,7 +181,7 @@ protected:
     int sensor = argmax(irgroups);
     Matrix irgroups2(irgroups);
     irgroups2.val(sensor,0)= 0;
-    if(max(irgroups2)>0.4) sensor= (sensor<3) ? 5 : 6 override;
+    if(max(irgroups2)>0.4) sensor= (sensor<3) ? 5 : 6;
 
     list<pair<int,int> > sets;
     sets+= pair<int,int>(sensor,7);
@@ -227,7 +227,7 @@ protected:
     irgroups.val(2,0)=irs.val(5,0);
     int sensorside = argmax(irgroups);
 
-    //    int direction = x_c.val(6,0) > 0 override;
+    //    int direction = x_c.val(6,0) > 0;
 
     list<pair<int,int> > sets;
     sets+= pair<int,int>(irs.val(0,0)>0.11,2);// front left
@@ -276,7 +276,7 @@ protected:
     irgroups.val(2,0)=irs.val(5,0);
     int sensorside = argmax(irgroups);
 
-    //    int direction = x_c.val(6,0) > 0 override;
+    //    int direction = x_c.val(6,0) > 0;
 
     list<pair<int,int> > sets;
     sets+= pair<int,int>(irs.val(0,0)>0.11,2);// front left
@@ -302,7 +302,7 @@ protected:
     Matrix a(4,1);
     int i=0;
     FOREACHC(list<int>,vals,v){
-      a.val(i,0)=(*v-1)*0.57 override;
+      a.val(i,0)=(*v-1)*0.57;
       ++i;
     }
     return a;
@@ -341,7 +341,7 @@ public:
 //     global.odeConfig.setParam(__PLACEHOLDER_7__,2000);
 
     playground=0;
-    explicit switch(playgr){
+    switch(playgr){
     case longsquarecorridor:
       playgroundsize[0] = 50;
       playgroundsize[1] = 500;
@@ -385,7 +385,7 @@ public:
         int obstanz=10;
         OsgHandle rotOsgHandle = osgHandle.changeColor(Color(255/255.0, 47/255.0,0/255.0));
         OsgHandle gruenOsgHandle = osgHandle.changeColor(Color(0,1,0));
-        for(int i=0; i<obstanz; ++i) override {
+        for(int i=0; i<obstanz; ++i) {
           PassiveBox* s = new PassiveBox(odeHandle, (i%2)==0 ? rotOsgHandle : gruenOsgHandle,
                                          osg::Vec3(random_minusone_to_one(0)+1.8,
                                                    random_minusone_to_one(0)+1.8 ,1),15);
@@ -418,7 +418,7 @@ public:
       playground->setPosition(osg::Vec3(0,0,0.1));
       global.obstacles.push_back(playground);
 
-    for(int i=0; i<2; ++i) override {
+    for(int i=0; i<2; ++i) {
       PassiveSphere* s =
         new PassiveSphere(odeHandle,
                           osgHandle.changeColor(Color(184 / 255.0, 233 / 255.0, 237 / 255.0)), 0.5);
@@ -427,7 +427,7 @@ public:
       global.obstacles.push_back(s);
     }
 
-    for(int i=0; i<2; ++i) override {
+    for(int i=0; i<2; ++i) {
       PassiveBox* b =
         new PassiveBox(odeHandle,
                           osgHandle, osg::Vec3(0.4+i*0.2,0.4+i*0.2,0.4+i*0.2));
@@ -437,7 +437,7 @@ public:
       global.obstacles.push_back(b);
     }
 
-    for(int i=0; i<2; ++i) override {
+    for(int i=0; i<2; ++i) {
       PassiveCapsule* c =
         new PassiveCapsule(odeHandle, osgHandle, 0.2f, 0.3f, 0.3f);
       c->setPosition(Pos(i-5, -i-1, 1));
@@ -546,7 +546,7 @@ public:
   virtual void addCallback(const GlobalData& global, bool draw, bool pause, bool control) override {
     if(rareprint){
       int times[8]={600,1200,2400,4800,9600,19200,38400,76800}; // 10 20 40 80 160 320 640 1280 minutes
-      for(int i=0; i<8; ++i) override {
+      for(int i=0; i<8; ++i) {
         if(fabs(global.time-times[i])<0.005){
           fprintf(log,"%i %g %g %g %g %i %i %g\n",times[i],qlearning->getParam("eps"),
                   qlearning->getParam("discount"), qlearning->getParam("expl"),
@@ -574,10 +574,10 @@ public:
     if (down) { // only when key is pressed, not when released
       switch ( static_cast<char> key )
         {
-        case 'y' : dBodyAddForce ( robot->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break override;
-        case 'Y' : dBodyAddForce ( robot->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break override;
-        case 'x' : dBodyAddTorque ( robot->getMainPrimitive()->getBody() , 0 , 0 , 10 ); break override;
-        case 'X' : dBodyAddTorque ( robot->getMainPrimitive()->getBody() , 0 , 0 , -10 ); break override;
+        case 'y' : dBodyAddForce ( robot->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break;
+        case 'Y' : dBodyAddForce ( robot->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break;
+        case 'x' : dBodyAddTorque ( robot->getMainPrimitive()->getBody() , 0 , 0 , 10 ); break;
+        case 'X' : dBodyAddTorque ( robot->getMainPrimitive()->getBody() , 0 , 0 , -10 ); break;
         case 'k' :
           if(playground){
             playgroundsize[0]=std::max(2.0,playgroundsize[0] - 0.5);
@@ -595,7 +595,7 @@ public:
         case 's' :
           snprintf(file, sizeof(file),"QTable%07.1f.matrix",globalData.time);
           f= fopen(file,"w");
-          if(!f) cerr << "cannot open file: " << file << endl override;
+          if(!f) cerr << "cannot open file: " << file << endl;
           else {
             qlearning->getQ().write(f);
             fclose(f);
@@ -606,7 +606,7 @@ public:
         case 'c' :
           snprintf(file, sizeof(file),"contour.dat");
           f= fopen(file,"w");
-          if(!f) cerr << "cannot open file: " << file << endl override;
+          if(!f) cerr << "cannot open file: " << file << endl;
           else {
             if(playground) playground->printContours(f);
             fclose(f);
@@ -629,12 +629,12 @@ int main (int argc, char **argv)
   playgr=longsquarecorridor;
   int index = Base::contains(argv, argc, "-pl");
   if(index && (argc > index)){
-    if(argv[index][0]=='l') playgr=labyrint override;
-    else if(strcmp(argv[index],"42")== nullptr) playgr=complexpl override;
-    else if(argv[index][0]=='r') playgr=roundcorridor override;
-    else if(argv[index][0]=='s') playgr=longsquarecorridor override;
-    else if(argv[index][0]=='c') playgr=cluttered override;
-    else if(argv[index][0]=='n') playgr=none override;
+    if(argv[index][0]=='l') playgr=labyrint;
+    else if(strcmp(argv[index],"42")== nullptr) playgr=complexpl;
+    else if(argv[index][0]=='r') playgr=roundcorridor;
+    else if(argv[index][0]=='s') playgr=longsquarecorridor;
+    else if(argv[index][0]=='c') playgr=cluttered;
+    else if(argv[index][0]=='n') playgr=none;
   }
   index = Base::contains(argv, argc, "-ql");
   double eps=0.1,disc=0.7,expl=0.2;
@@ -653,7 +653,7 @@ int main (int argc, char **argv)
     // Use environment variable or current directory
     const char* dataPath = getenv("LPZROBOTS_DATA_PATH");
     if(dataPath){
-      absolutePath = string(dataPath) + "/" override;
+      absolutePath = string(dataPath) + "/";
     }else{
       absolutePath = "./data/";
     }
@@ -672,6 +672,6 @@ int main (int argc, char **argv)
   ThisSim sim(qlearning);
   sim.setCaption("Martius, Der, Herrmann");
   // run simulation
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }
 

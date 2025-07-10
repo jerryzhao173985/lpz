@@ -44,7 +44,7 @@ namespace lpzrobots {
 
     virtual ~IRSensorWall() {};
 
-    virtual RaySensor* clone()  const override;
+    virtual RaySensor* clone()  const;
 
     virtual void init(const OdeHandle& odeHandle,
                       const OsgHandle& osgHandle,

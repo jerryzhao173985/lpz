@@ -336,13 +336,13 @@ namespace lpzrobots {
       /**
        * updates the OSG nodes of the vehicle
        */
-      virtual void update() override;
+      virtual void update();
 
       /**
        * sets the pose of the vehicle
        * @param pose desired pose matrix
        */
-      virtual void placeIntern(const osg::Matrix& pose) override;
+      virtual void placeIntern(const osg::Matrix& pose);
 
       /**
        * returns actual sensorvalues
@@ -350,14 +350,14 @@ namespace lpzrobots {
        * @param sensornumber length of the sensor array
        * @return number of actually written sensors
        */
-      virtual int getSensorsIntern(double* sensors, int sensornumber) override;
+      virtual int getSensorsIntern(double* sensors, int sensornumber);
 
       /**
        * sets actual motorcommands
        * @param motors motors scaled to [-1,1]
        * @param motornumber length of the motor array
        */
-      virtual void setMotorsIntern(const double* motors, int motornumber) override;
+      virtual void setMotorsIntern(const double* motors, int motornumber);
 
       /**
        * returns number of sensors
@@ -376,22 +376,22 @@ namespace lpzrobots {
        * @param globalData structure that contains global data from the
        *                   simulation environment
        */
-      virtual void doInternalStuff(const GlobalData& globalData) override;
+      virtual void doInternalStuff(const GlobalData& globalData);
 
-      virtual void sense(const GlobalData& globalData) override;
+      virtual void sense(const GlobalData& globalData);
 
       virtual double getMassOfRobot();
 
       void setLegPosUsage(LegPos leg, LegPosUsage usage);
 
       // Configurable Interface
-      virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren = true) override;
+      virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren = true);
 
       /**
        * the main object of the robot, which is used for position and speed
        * tracking
        */
-      virtual Primitive* getMainPrimitive()  const override;
+      virtual Primitive* getMainPrimitive()  const;
 
       /**
        * returns the MotorName enum value for the given joint at the given

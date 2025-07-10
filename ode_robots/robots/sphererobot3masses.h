@@ -138,9 +138,9 @@ public:
 
   virtual void placeIntern(const osg::Matrix& pose);
 
-  virtual void doInternalStuff(const GlobalData& globalData) override;
+  virtual void doInternalStuff(const GlobalData& globalData);
 
-  virtual void sense(const GlobalData& globalData) override;
+  virtual void sense(const GlobalData& globalData);
 
   virtual int getSensorsIntern( sensor* sensors, int sensornumber );
 
@@ -151,7 +151,7 @@ public:
   virtual int getSensorNumberIntern() const;
 
   /******** CONFIGURABLE ***********/
-  virtual void notifyOnChange(const paramkey& key) override;
+  virtual void notifyOnChange(const paramkey& key);
 
 
 protected:

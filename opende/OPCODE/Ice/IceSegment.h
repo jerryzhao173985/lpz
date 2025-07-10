@@ -44,7 +44,7 @@
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		inline_			void	ComputePoint(Point& pt, float t)	const override {	pt = mP0 + t * (mP1 - mP0);		}
 
-						float	SquareDistance(const Point& point, float* t=null)	const override;
+						float	SquareDistance(const Point& point, float* t=null)	const;
 		inline_			float	Distance(const Point& point, float* t=null)			const override { return sqrtf(SquareDistance(point, t));	}
 
 						Point	mP0;		//!< Start of segment

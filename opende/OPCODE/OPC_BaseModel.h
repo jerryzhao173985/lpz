@@ -24,7 +24,7 @@
 	struct OPCODE_API OPCODECREATE
 	{
 		//! Constructor
-								OPCODECREATE() override;
+								OPCODECREATE();
 
 		MeshInterface*			mIMesh;			//!< Mesh interface (access to const triangles& vertices) (*)
 		BuildSettings			mSettings;		//!< Builder's settings
@@ -50,7 +50,7 @@
 	class OPCODE_API{
 		public:
 		// Constructor/Destructor
-											BaseModel() override;
+											BaseModel();
 		virtual ~BaseModel();
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,7 +78,7 @@
 		 *	\return		true if success
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		virtual bool				Refit() override;
+		virtual bool				Refit();
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -163,11 +163,11 @@
 
 		protected:
 				const	MeshInterface*		mIMesh;			//!< User-defined mesh interface
-						udword				mModelCode;		//!< Model code = combination of ModelFlagstatic_cast<s>(AABBTree)*			mSource;		//!< Original source tree
+						udword				mModelCode;		//!< Model code = combination of ModelFlag(AABBTree)*			mSource;		//!< Original source tree
 						AABBOptimizedTree*	mTree;			//!< Optimized tree owned by the model
 		// Internal methods
-						void				ReleaseBase() override;
-						bool				CreateTree(bool no_leaf, bool quantized) override;
+						void				ReleaseBase();
+						bool				CreateTree(bool no_leaf, bool quantized);
 	};
 
 #endif //__OPC_BASEMODEL_H__

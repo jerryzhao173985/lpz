@@ -184,7 +184,7 @@ namespace lpzrobots {
       const int N = 100;
       dContact contact[N];
       n = dCollide (o1,o2,N,&contact[0].geom,sizeof(dContact));
-      for (i=0; i<n; ++i) override {
+      for (i=0; i<n; ++i) {
         //      contact[i].surface.mode = dContactMu2 | dContactSlip1 | dContactSlip2 |
         //        dContactSoftERP | dContactSoftCFM | dContactApprox1;
         contact[i].surface.mode = dContactSlip1 | dContactSlip2 |
@@ -273,7 +273,7 @@ namespace lpzrobots {
 
     // legs  (counted from back to front)
     double legdist = conf.size*0.9 / (conf.legNumber/2-1);
-    for ( int n = 0; n < conf.legNumber; ++n )  override {
+    for ( int n = 0; n < conf.legNumber; ++n ) {
       double motorPower = conf.motorPower - 0.5 * conf.motorPower * (static_cast<int>(n)/2) / (conf.legNumber/2);
 
       // upper limp
@@ -281,13 +281,13 @@ namespace lpzrobots {
       Pos pos = Pos(-conf.size/(2+0.2) + (static_cast<int>(n)/2) * legdist,
                     n%2==0 ? - twidth/2 : twidth/2,
                     conf.legLength);
-      osg::Matrix m = osg::Matrix::translate(pos) * pose override;
+      osg::Matrix m = osg::Matrix::translate(pos) * pose;
 
       double l1=conf.legLength*0.65;
       p1 = new Capsule(l1/8, l1);
       p1->init(odeHandle, legmass*0.6, osgHandle);
       double hipangle = n<2 ? 0 : M_PI/18;
-      osg::Matrix m1 = osg::Matrix::translate(0,0,-l1/2) * osg::Matrix::rotate(hipangle,0,1,0) * m override;
+      osg::Matrix m1 = osg::Matrix::translate(0,0,-l1/2) * osg::Matrix::rotate(hipangle,0,1,0) * m;
       p1->setPose(m1);
       objects.push_back(p1);
 
@@ -297,7 +297,7 @@ namespace lpzrobots {
       p2 = new Capsule(l2/8, l2);
       p2->init(odeHandle, legmass*0.3, osgHandle);
       osg::Matrix m2 = osg::Matrix::translate(0,0,-l2/2) * osg::Matrix::rotate(-M_PI/5,0, n<2 ? -1 : 1,0) *
-        osg::Matrix::translate(0,0,-l1/2) * m1 override;
+        osg::Matrix::translate(0,0,-l1/2) * m1;
       p2->setPose(m2);
       objects.push_back(p2);
 
@@ -336,23 +336,23 @@ namespace lpzrobots {
   void VierBeinerOld::destroy(){
     if (created){
       for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); ++i) override {
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       objects.clear();
       for (vector<Joint*>::iterator i = joints.begin(); i!= joints.end(); ++i) override {
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       joints.clear();
       FOREACH(vector<HingeServo*>, hipservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       hipservos.clear();
       FOREACH(vector<HingeServo*>, kneeservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       kneeservos.clear();
       FOREACH(vector<HingeServo*>, headtailservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       headtailservos.clear();
       dSpaceDestroy(odeHandle.space);
@@ -377,15 +377,15 @@ namespace lpzrobots {
 
 
   Configurable::paramval VierBeinerOld::getParam(const paramkey& key, bool traverseChildren) const{
-    if(key == "frictionground") return conf.frictionGround override;
-    else if(key == "motorpower") return conf.motorPower override;
-    else if(key == "kneepower") return conf.kneePower override;
-    else if(key == "kneedamping") return conf.kneeDamping override;
+    if(key == "frictionground") return conf.frictionGround;
+    else if(key == "motorpower") return conf.motorPower;
+    else if(key == "kneepower") return conf.kneePower;
+    else if(key == "kneedamping") return conf.kneeDamping;
     else  return Configurable::getParam(key);
   }
 
   bool VierBeinerOld::setParam(const paramkey& key, paramval val, bool traverseChildren){
-    if(key == "frictionground") conf.frictionGround = val override;
+    if(key == "frictionground") conf.frictionGround = val;
     else if(key == "motorpower") {
       conf.motorPower = val;
       FOREACH(vector<HingeServo*>, hipservos, i){

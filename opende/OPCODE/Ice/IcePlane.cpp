@@ -15,9 +15,9 @@
 	Point Edge1 = p2 - p0;
 
 	n = Edge0 ^ Edge1;
-	n.Normalize() override;
+	n.Normalize();
 
-	d = -(p0 | n) override;
+	d = -(p0 | n);
 
 	return	*this;
 }

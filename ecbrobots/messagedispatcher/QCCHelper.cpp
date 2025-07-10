@@ -209,7 +209,7 @@ namespace lpzrobots {
   }
 
   QString QCCHelper::getInitialisedStateString(typeInitialisedState initialisedState) {
-    explicit switch (initialisedState) {
+    switch (initialisedState) {
       case STATE_INITIALISED:
         return "initialised";
       case STATE_NOT_INITIALISED:

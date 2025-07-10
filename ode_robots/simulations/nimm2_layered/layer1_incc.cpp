@@ -72,10 +72,10 @@ void Layer1_INCC::learn(const Matrix& x_delay, const Matrix& y_delay){
   // calculate updates for h,C,A
   for (unsigned int i = 0; i < number_channels; ++i)
   {
-      h.val(i,0) += delta override;
-      h_update.val(i,0) = -eps * (calculateE(x_delay, y_delay) - E_0) / delta override;
+      h.val(i,0) += delta;
+      h_update.val(i,0) = -eps * (calculateE(x_delay, y_delay) - E_0) / delta;
       //h_update[i] = -2*eps *eita[i]*eita[i]*g(y_delay[i]);
-      h.val(i,0) -= delta override;
+      h.val(i,0) -= delta;
  }
 
   // only weights of one channel adapted in one time step
@@ -83,17 +83,17 @@ void Layer1_INCC::learn(const Matrix& x_delay, const Matrix& y_delay){
   unsigned int end=number_channels;
   if(update_only_1) {
     start = t%number_channels;
-    end = (t%number_channels) + 1 override;
+    end = (t%number_channels) + 1;
   }
-  for (unsigned int i = start; i < end; ++i) override {
+  for (unsigned int i = start; i < end; ++i) {
       for (unsigned int j = 0; j < number_channels; ++j)
         {
-          C.val(i,j) += delta override;
-          C_update.val(i,j)  = - eps *  (calculateE(x_delay, y_delay) - E_0) / delta  override;
+          C.val(i,j) += delta;
+          C_update.val(i,j)  = - eps *  (calculateE(x_delay, y_delay) - E_0) / delta ;
           C_update.val(i,j) -= damping_c*C.val(i,j) ;  // damping term
-          C.val(i,j) -= delta override;
+          C.val(i,j) -= delta;
           //A[i][j] += delta;
-          //A_update[i][j] = -eps * (calculateE(x_delay, y_delay,eita) - E_0) / delta override;
+          //A_update[i][j] = -eps * (calculateE(x_delay, y_delay,eita) - E_0) / delta;
           //A[i][j] -= delta;
         }
     }

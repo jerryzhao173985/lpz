@@ -171,7 +171,7 @@ namespace lpzrobots {
 
 
     protected:
-      virtual void enterEvent(QEvent * event);
+      virtual void enterEvent(QEvent * event) override;
       virtual void leaveEvent(QEvent * event) override;
       virtual void mouseMoveEvent(QMouseEvent * event) override;
       virtual void mousePressEvent(QMouseEvent * event) override;

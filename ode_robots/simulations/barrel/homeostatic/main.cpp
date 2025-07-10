@@ -188,7 +188,7 @@ public:
 
 
     /* * * * BARRELS * * * */
-    for(int i=0; i< num_barrels; ++i) override {
+    for(int i=0; i< num_barrels; ++i) {
       //****************
       Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
       conf.pendularrange  = 0.15;
@@ -219,7 +219,7 @@ public:
 
 
     /* * * * TEST BARRELS * * * */
-    for(int i=0; i< num_barrels_test; ++i) override {
+    for(int i=0; i< num_barrels_test; ++i) {
       global.odeConfig.setParam("realtimefactor",1);
       //****************
       Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
@@ -262,10 +262,10 @@ public:
     if (down) { // only when key is pressed, not when released
       switch ( static_cast<char> key )
         {
-        case 'y' : dBodyAddForce ( sphere1->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break override;
-        case 'Y' : dBodyAddForce ( sphere1->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break override;
-        case 'x' : dBodyAddTorque ( sphere1->getMainPrimitive()->getBody() , 0 , 10 , 0 ); break override;
-        case 'X' : dBodyAddTorque ( sphere1->getMainPrimitive()->getBody() , 0 , -10 , 0 ); break override;
+        case 'y' : dBodyAddForce ( sphere1->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break;
+        case 'Y' : dBodyAddForce ( sphere1->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break;
+        case 'x' : dBodyAddTorque ( sphere1->getMainPrimitive()->getBody() , 0 , 10 , 0 ); break;
+        case 'X' : dBodyAddTorque ( sphere1->getMainPrimitive()->getBody() , 0 , -10 , 0 ); break;
         case 'S' : controller->setParam("sinerate", controller->getParam("sinerate")*1.2);
           printf("sinerate : %g\n", controller->getParam("sinerate"));
           break;
@@ -290,6 +290,6 @@ int main (int argc, char **argv)
   sim.setCaption("Spherical Robot (lpzrobots Simulator)   Martius,Der 2007");
   sim.setGroundTexture("Images/really_white.rgb");
   // run simulation
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }
 

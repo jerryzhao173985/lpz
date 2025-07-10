@@ -81,17 +81,17 @@ public:
   }
 
   void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) {
-    if(globalData.sim_step < 4) return override;
+    if(globalData.sim_step < 4) return;
     rs->update();
     if(control){
       rs->sense(globalData);
     }
     if(rs->getList().front()!=1.0)
-      cerr << "ERROR Ray: " << rs->getList().front() << "!= 1.0" <<endl override;
+      cerr << "ERROR Ray: " << rs->getList().front() << "!= 1.0" <<endl;
     if(control){ // second call in the same timestep
       rs->sense(globalData);
       if(rs->getList().front()!=1.0)
-      cerr << "ERROR Ray: " << rs->getList().front() << "!= 1.0 (second call)" <<endl override;
+      cerr << "ERROR Ray: " << rs->getList().front() << "!= 1.0 (second call)" <<endl;
     }
 
     ir->update();
@@ -100,7 +100,7 @@ public:
     }
     double p_last = sin(0.5*(globalData.time-(globalData.odeConfig.simStepSize*globalData.odeConfig.controlInterval)));
     double v = ir->getList().front();
-    double s = (2-(p_last+1))/2 override;
+    double s = (2-(p_last+1))/2;
     if(fabs(v - s) > 10e-4){
       cerr << "ERROR IR:  " << v << "!= " << s <<  endl;
     }
@@ -118,5 +118,5 @@ public:
 
 int main (int argc, char **argv){
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }

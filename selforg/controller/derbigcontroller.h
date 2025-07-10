@@ -67,7 +67,7 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors);
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor*,
@@ -88,7 +88,7 @@ public:
   virtual iconnectionlist getStructuralConnections() const override;
 
   /************** CONFIGURABLE ********************************/
-  virtual void notifyOnChange(const paramkey& key) override;
+  virtual void notifyOnChange(const paramkey& key);
 
   /**** TEACHING ****/
   /** The given motor teaching signal is used for this timestep.

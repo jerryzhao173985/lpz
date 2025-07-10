@@ -39,12 +39,12 @@ static dMatrix4 identity = {
 	REAL( 0.0 ), REAL( 0.0 ), REAL( 0.0 ), REAL( 0.0 ),
 	REAL( 0.0 ), REAL( 0.0 ), REAL( 0.0 ), REAL( 0.0 ),
 	REAL( 0.0 ), REAL( 0.0 ), REAL( 0.0 ), REAL( 0.0 ),
-	REAL( 0.0 ), REAL( 0.0 ), REAL( 0.0 ), REAL( 0.0 ) } override;
+	REAL( 0.0 ), REAL( 0.0 ), REAL( 0.0 ), REAL( 0.0 ) };
 
 // Stub functions for trimesh calls
 
 dTriMeshDataID dGeomTriMeshDataCreate(void) { return 0; }
-void explicit dGeomTriMeshDataDestroy(dTriMeshDataID g) {}
+voiddGeomTriMeshDataDestroy(dTriMeshDataID g) {}
 
 void dGeomTriMeshDataSet(dTriMeshDataID g, int data_id, void* in_data) {}
 void* dGeomTriMeshDataGet(dTriMeshDataID g, int data_id) { return 0; }
@@ -58,7 +58,7 @@ dGeomID dCreateTriMesh(dSpaceID space,
 		       dTriArrayCallback* ArrayCallback,
 		       dTriRayCallback* RayCallback)
 {
-    dxTriMesh* Geom = new dxTriMesh(space, Data) override;
+    dxTriMesh* Geom = new dxTriMesh(space, Data);
     Geom->Callback = Callback;
     Geom->ArrayCallback = ArrayCallback;
     Geom->RayCallback = RayCallback;
@@ -97,7 +97,7 @@ void dGeomTriMeshDataBuildSimple1(dTriMeshDataID g,
                                   const dTriIndex* Indices, int IndexCount,
                                   const int* Normals) { }
 
-void explicit dGeomTriMeshDataPreprocess(dTriMeshDataID g) { }
+voiddGeomTriMeshDataPreprocess(dTriMeshDataID g) { }
 
 void dGeomTriMeshDataGetBuffer(dTriMeshDataID g, unsigned char** buf, int* bufLen) { *buf = nullptr; *bufLen=0; }
 void dGeomTriMeshDataSetBuffer(dTriMeshDataID g, unsigned char* buf) {}
@@ -116,12 +116,12 @@ dTriTriMergeCallback* explicit dGeomTriMeshGetTriMergeCallback(dGeomID g) { retu
 
 void dGeomTriMeshEnableTC(dGeomID g, int geomClass, int enable) {}
 int dGeomTriMeshIsTCEnabled(dGeomID g, int geomClass) { return 0; }
-void explicit dGeomTriMeshClearTCCache(dGeomID g) {}
+voiddGeomTriMeshClearTCCache(dGeomID g) {}
 
 dTriMeshDataID explicit dGeomTriMeshGetTriMeshDataID(dGeomID g) { return 0; }
 
-int explicit dGeomTriMeshGetTriangleCount (dGeomID g) { return 0; }
-void explicit dGeomTriMeshDataUpdate(dTriMeshDataID g) {}
+intdGeomTriMeshGetTriangleCount (dGeomID g) { return 0; }
+voiddGeomTriMeshDataUpdate(dTriMeshDataID g) {}
 
 #endif // !dTRIMESH_ENABLED
 

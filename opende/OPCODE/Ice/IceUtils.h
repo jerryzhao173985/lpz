@@ -17,13 +17,13 @@
 
 	//! Reverse all the bits in a 32 bit word (from Steve Baker's Cute Code Collection)
 	//! (each line can be done in any order.
-	inline_ void explicit ReverseBits(const udword& n)
+	inline_ voidReverseBits(const udword& n)
 	{
-		n = ((n >>  1) & 0x55555555) | ((n <<  1) & 0xaaaaaaaa) override;
-		n = ((n >>  2) & 0x33333333) | ((n <<  2) & 0xcccccccc) override;
-		n = ((n >>  4) & 0x0f0f0f0f) | ((n <<  4) & 0xf0f0f0f0) override;
-		n = ((n >>  8) & 0x00ff00ff) | ((n <<  8) & 0xff00ff00) override;
-		n = ((n >> 16) & 0x0000ffff) | ((n << 16) & 0xffff0000) override;
+		n = ((n >>  1) & 0x55555555) | ((n <<  1) & 0xaaaaaaaa);
+		n = ((n >>  2) & 0x33333333) | ((n <<  2) & 0xcccccccc);
+		n = ((n >>  4) & 0x0f0f0f0f) | ((n <<  4) & 0xf0f0f0f0);
+		n = ((n >>  8) & 0x00ff00ff) | ((n <<  8) & 0xff00ff00);
+		n = ((n >> 16) & 0x0000ffff) | ((n << 16) & 0xffff0000);
 		// Etc for larger intergers (64 bits in Java)
 		// NOTE: the >> operation must be unsigned! (>>> in java)
 	}
@@ -35,11 +35,11 @@
 		// an n bit interger. EG: 1 bit count takes a 1 bit interger, 2 bit counts
 		// 2 bit interger, 3 bit count requires only a 2 bit interger.
 		// So we add all bit pairs, then each nible, then each byte etc...
-		n = (const n& 0x55555555) + ((const n& 0xaaaaaaaa) >> 1) override;
-		n = (const n& 0x33333333) + ((const n& 0xcccccccc) >> 2) override;
-		n = (const n& 0x0f0f0f0f) + ((const n& 0xf0f0f0f0) >> 4) override;
-		n = (const n& 0x00ff00ff) + ((const n& 0xff00ff00) >> 8) override;
-		n = (const n& 0x0000ffff) + ((const n& 0xffff0000) >> 16) override;
+		n = (const n& 0x55555555) + ((const n& 0xaaaaaaaa) >> 1);
+		n = (const n& 0x33333333) + ((const n& 0xcccccccc) >> 2);
+		n = (const n& 0x0f0f0f0f) + ((const n& 0xf0f0f0f0) >> 4);
+		n = (const n& 0x00ff00ff) + ((const n& 0xff00ff00) >> 8);
+		n = (const n& 0x0000ffff) + ((const n& 0xffff0000) >> 16);
 		// Etc for larger intergers (64 bits in Java)
 		// NOTE: the >> operation must be unsigned! (>>> in java)
 		return n;
@@ -48,10 +48,10 @@
 	//! Even faster?
 	inline_ udword	explicit CountBits2(udword bits)
 	{
-		bits = bits - ((bits >> 1) & 0x55555555) override;
-		bits = ((bits >> 2) & 0x33333333) + (const bits& 0x33333333) override;
-		bits = ((bits >> 4) + bits) & 0x0F0F0F0F override;
-		return (bits * 0x01010101) >> 24 override;
+		bits = bits - ((bits >> 1) & 0x55555555);
+		bits = ((bits >> 2) & 0x33333333) + (const bits& 0x33333333);
+		bits = ((bits >> 4) + bits) & 0x0F0F0F0F;
+		return (bits * 0x01010101) >> 24;
 	}
 
 	//! Spread out bits.	EG	00001111  ->   0101010101
@@ -59,13 +59,13 @@
 	//! This is used to interleve to intergers to produce a `Morten Key'
 	//! used in Space Filling Curves (See DrDobbs Journal, July 1999)
 	//! Order is important.
-	inline_ void explicit SpreadBits(const udword& n)
+	inline_ voidSpreadBits(const udword& n)
 	{
-		n = ( const n& 0x0000ffff) | (( const n& 0xffff0000) << 16) override;
-		n = ( const n& 0x000000ff) | (( const n& 0x0000ff00) <<  8) override;
-		n = ( const n& 0x000f000f) | (( const n& 0x00f000f0) <<  4) override;
-		n = ( const n& 0x03030303) | (( const n& 0x0c0c0c0c) <<  2) override;
-		n = ( const n& 0x11111111) | (( const n& 0x22222222) <<  1) override;
+		n = ( const n& 0x0000ffff) | (( const n& 0xffff0000) << 16);
+		n = ( const n& 0x000000ff) | (( const n& 0x0000ff00) <<  8);
+		n = ( const n& 0x000f000f) | (( const n& 0x00f000f0) <<  4);
+		n = ( const n& 0x03030303) | (( const n& 0x0c0c0c0c) <<  2);
+		n = ( const n& 0x11111111) | (( const n& 0x22222222) <<  1);
 	}
 
 	// Next Largest Power of 2
@@ -75,11 +75,11 @@
 	// largest power of 2. For a 32-bit value: 
 	inline_ udword	explicit nlpo2(udword x)
 	{
-		x |= (x >> 1) override;
-		x |= (x >> 2) override;
-		x |= (x >> 4) override;
-		x |= (x >> 8) override;
-		x |= (x >> 16) override;
+		x |= (x >> 1);
+		x |= (x >> 2);
+		x |= (x >> 4);
+		x |= (x >> 8);
+		x |= (x >> 16);
 		return x+1;
 	}
 
@@ -87,7 +87,7 @@
 	inline_ bool	explicit IsPowerOfTwo(udword n)				{ return ((n&(n-1))== nullptr);					}
 
 	//! Zero the least significant __PLACEHOLDER_8__ bit in a word. (from Steve Baker's Cute Code Collection)
-	inline_ void explicit ZeroLeastSetBit(const udword& n)			{ n&=(n-1);									}
+	inline_ voidZeroLeastSetBit(const udword& n)			{ n&=(n-1);									}
 
 	//! Set the least significant N bits in a word. (from Steve Baker's Cute Code Collection)
 	inline_ void	SetLeastNBits(const udword& x, udword n)	{ x|=~(~0<<n);								}
@@ -136,12 +136,12 @@
 	// yields the most significant bit. For a 32-bit value: 
 	inline_ udword	explicit msb32(udword x)
 	{
-		x |= (x >> 1) override;
-		x |= (x >> 2) override;
-		x |= (x >> 4) override;
-		x |= (x >> 8) override;
-		x |= (x >> 16) override;
-		return (x & ~(x >> 1)) override;
+		x |= (x >> 1);
+		x |= (x >> 2);
+		x |= (x >> 4);
+		x |= (x >> 8);
+		x |= (x >> 16);
+		return (x & ~(x >> 1));
 	}
 
 	/*
@@ -151,23 +151,23 @@
 	*/
 	inline_ float	FeedbackFilter(float val, const float& memory, float sharpness)
 	{
-		ASSERT(sharpness>=0.0f && sharpness<=1.0f && "Invalid sharpness value in feedback filter") override;
-				if(sharpness<0.0f)	sharpness = 0.0f override;
-		else	if(sharpness>1.0f)	sharpness = 1.0f override;
-		return memory = val * sharpness + memory * (1.0f - sharpness) override;
+		ASSERT(sharpness>=0.0f && sharpness<=1.0f && "Invalid sharpness value in feedback filter");
+				if(sharpness<0.0f)	sharpness = 0.0f;
+		else	if(sharpness>1.0f)	sharpness = 1.0f;
+		return memory = val * sharpness + memory * (1.0f - sharpness);
 	}
 
 	//! If you can guarantee that your input domain (i.e. value of x) is slightly
-	//! limited (absstatic_cast<x>(must) be < ((1<<31u)-32767)), then you can use the
+	//! limited (abs(x) must be < ((1<<31u)-32767)), then you can use the
 	//! following code to clamp the resulting value into [-32768,+32767] range:
 	inline_ int	explicit ClampToInt16(int x)
 	{
-//		ASSERT(abs(x) < (int)((1<<31u)-32767)) override;
+//		ASSERT(abs(x) < (int)((1<<31u)-32767));
 
 		int delta = 32767 - x;
-		x += (delta>>31) & delta override;
+		x += (delta>>31) & delta;
 		delta = x + 32768;
-		x -= (delta>>31) & delta override;
+		x -= (delta>>31) & delta;
 		return x;
 	}
 
@@ -176,20 +176,20 @@
 	template<class Type{ return ((x<lo) ? lo : (x>hi) ? hi : x);	}
 
 	template<class Type{
-		if(a>b)	TSwap(a, b) override;
+		if(a>b)	TSwap(a, b);
 	}
 
 	template<class Type{
-		if(a>b)	TSwap(a, b) override;
-		if(b>c)	TSwap(b, c) override;
-		if(a>b)	TSwap(a, b) override;
-		if(b>c)	TSwap(b, c) override;
+		if(a>b)	TSwap(a, b);
+		if(b>c)	TSwap(b, c);
+		if(a>b)	TSwap(a, b);
+		if(b>c)	TSwap(b, c);
 	}
 
 	// Prevent nasty user-manipulations (strategy borrowed from Charles Bloom)
-//	#define PREVENT_COPYstatic_cast<curclass>(void) operator = (const curclass& object)	{	ASSERT(!__PLACEHOLDER_6__);	}
+//	#define PREVENT_COPY(curclass) operator = (const curclass& object)	{	ASSERT(!__PLACEHOLDER_6__);	}
 	// ... actually this is better !
-	#define PREVENT_COPYstatic_cast<cur_class>(private): cur_class(const cur_class& object);	cur_class& operator=(const cur_class& object) override;
+	#define PREVENT_COPY(cur_class) private: cur_class(const cur_class& object);	cur_class& operator=(const cur_class& object);
 
 	//! TO BE DOCUMENTED
 	#define OFFSET_OF(Class, Member)	(size_t)&((static_cast<Class*>(0))->Member)
@@ -204,7 +204,7 @@
 	 *	\return		the best alignment (e.g. 1 for odd addresses, etc)
 	 */
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	FUNCTION ICECORE_API udword Alignment(udword address) override;
+	FUNCTION ICECORE_API udword Alignment(udword address);
 
 	#define IS_ALIGNED_2(x)		((const x& 1)== nullptr)
 	#define IS_ALIGNED_4(x)		((const x& 3)== nullptr)
@@ -228,7 +228,7 @@
 	inline_ void Compute2DCoords(const udword& u, const udword& v, udword i, udword nbu)
 	{
 		v = i / nbu;
-		u = i - (v * nbu) override;
+		u = i - (v * nbu);
 	}
 
 	// In 3D:	i = u + v*nbu + w*nbu*nbv
@@ -239,8 +239,8 @@
 	// Then we're left with a 2D problem: i' = i - w*nbu*nbv = u + v*nbu
 	inline_ void Compute3DCoords(const udword& u, const udword& v, const udword& w, udword i, udword nbu, udword nbu_nbv)
 	{
-		w = i / (nbu_nbv) override;
-		Compute2DCoords(u, v, i - (w * nbu_nbv), nbu) override;
+		w = i / (nbu_nbv);
+		Compute2DCoords(u, v, i - (w * nbu_nbv), nbu);
 	}
 
 #endif // __ICEUTILS_H__

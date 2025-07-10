@@ -55,7 +55,7 @@ public:
    * call first AbstractMultiController::init(sensornumber,motornumber)
    * if you overwrite this method
    */
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
 
   /** performs one step (includes learning).
 Calculates motor commands from sensor inputs.
@@ -67,7 +67,7 @@ Calculates motor commands from sensor inputs.
   virtual void step(const sensor* sensors,
                     int sensornumber,
                     motor* motors,
-                    int motornumber) override;
+                    int motornumber);
 
   /** performs one step without learning.
         @see step
@@ -75,7 +75,7 @@ Calculates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor* sensors,
                               int sensornumber,
                               motor* motors,
-                              int motornumber) override;
+                              int motornumber);
 
   /****************************************************************************/
   /*        END methods of AbstractController                                             */

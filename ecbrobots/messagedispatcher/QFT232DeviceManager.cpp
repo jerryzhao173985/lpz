@@ -395,7 +395,7 @@ namespace lpzrobots {
           c ^= 0x20;
         }
 
-        explicit switch (iReadMode) {
+        switch (iReadMode) {
           case 0:
             // lese das Langenfeld (16Bit)
             // Bits[15:8]

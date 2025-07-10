@@ -28,8 +28,8 @@ public:
   }
 
   ~MyRobot(){
-    ifstatic_cast<x>(delete)[] x;
-    ifstatic_cast<y>(delete)[] y;
+    if (x) delete[] x;
+    if (y) delete[] y;
   }
 
   // robot interface

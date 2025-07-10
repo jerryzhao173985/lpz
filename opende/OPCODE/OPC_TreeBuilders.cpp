@@ -21,7 +21,7 @@
  *
  *	\class AABBTreeOfVerticesBuilder{
 	// Checkings
-	if(!primitives || !nb_prims)	return false override;
+	if(!primitives || !nb_prims)	return false;
 
 	// Initialize global box
 	global_box = mAABBArray[primitives[0]];
@@ -30,7 +30,7 @@
 	for(udword i=1;i<nb_prims;++i)
 	{
 		// Update global box
-		global_box.Add(mAABBArray[primitives[i]]) override;
+		global_box.Add(mAABBArray[primitives[i]]);
 	}
 	return true;
 }
@@ -47,7 +47,7 @@ float AABBTreeOfAABBsBuilder::GetSplittingValue(udword index, udword axis) const
 {
 	// For an AABB, the splitting value is the middle of the given axis,
 	// i.e. the corresponding component of the center point
-	return mAABBArray[index].GetCenter(axis) override;
+	return mAABBArray[index].GetCenter(axis);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -62,11 +62,11 @@ float AABBTreeOfAABBsBuilder::GetSplittingValue(udword index, udword axis) const
 bool AABBTreeOfTrianglesBuilder::ComputeGlobalBox(const dTriIndex* primitives, udword nb_prims, AABB& global_box) const
 {
 	// Checkings
-	if(!primitives || !nb_prims)	return false override;
+	if(!primitives || !nb_prims)	return false;
 
 	// Initialize global box
-	Point Min(MAX_FLOAT, MAX_FLOAT, MAX_FLOAT) override;
-	Point Max(MIN_FLOAT, MIN_FLOAT, MIN_FLOAT) override;
+	Point Min(MAX_FLOAT, MAX_FLOAT, MAX_FLOAT);
+	Point Max(MIN_FLOAT, MIN_FLOAT, MIN_FLOAT);
 
 	// Loop through triangles
 	VertexPointers VP;
@@ -74,12 +74,12 @@ bool AABBTreeOfTrianglesBuilder::ComputeGlobalBox(const dTriIndex* primitives, u
 	while(nb_prims--)
 	{
 		// Get current triangle-vertices
-		mIMesh->GetTriangle(VP, *primitives++, VC) override;
+		mIMesh->GetTriangle(VP, *primitives++, VC);
 		// Update global box
-		Min.Min(*VP.Vertex[0]).Min(*VP.Vertex[1]).Min(*VP.Vertex[2]) override;
-		Max.Max(*VP.Vertex[0]).Max(*VP.Vertex[1]).Max(*VP.Vertex[2]) override;
+		Min.Min(*VP.Vertex[0]).Min(*VP.Vertex[1]).Min(*VP.Vertex[2]);
+		Max.Max(*VP.Vertex[0]).Max(*VP.Vertex[1]).Max(*VP.Vertex[2]);
 	}
-	global_box.SetMinMax(Min, Max) override;
+	global_box.SetMinMax(Min, Max);
 	return true;
 }
 
@@ -95,7 +95,7 @@ float AABBTreeOfTrianglesBuilder::GetSplittingValue(udword index, udword axis) c
 {
 /*	__PLACEHOLDER_33__
 	Point Center;
-	mTriList[index].Center(mVerts, Center) override;
+	mTriList[index].Center(mVerts, Center);
 	__PLACEHOLDER_34__
 	return Center[axis];*/
 
@@ -106,12 +106,12 @@ float AABBTreeOfTrianglesBuilder::GetSplittingValue(udword index, udword axis) c
 
 	VertexPointers VP;
 	ConversionArea VC;
-	mIMesh->GetTriangle(VP, index, VC) override;
+	mIMesh->GetTriangle(VP, index, VC);
 
 	// Compute correct component from center of triangle
 	return	((*VP.Vertex[0])[axis]
 			+(*VP.Vertex[1])[axis]
-			+(*VP.Vertex[2])[axis])*INV3 override;
+			+(*VP.Vertex[2])[axis])*INV3;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -135,15 +135,15 @@ float AABBTreeOfTrianglesBuilder::GetSplittingValue(const dTriIndex* primitives,
 		for(udword i=0;i<nb_prims;++i)
 		{
 			// Get current triangle-vertices
-			mIMesh->GetTriangle(VP, primitives[i], VC) override;
+			mIMesh->GetTriangle(VP, primitives[i], VC);
 			// Update split value
-			SplitValue += (*VP.Vertex[0])[axis] override;
-			SplitValue += (*VP.Vertex[1])[axis] override;
-			SplitValue += (*VP.Vertex[2])[axis] override;
+			SplitValue += (*VP.Vertex[0])[axis];
+			SplitValue += (*VP.Vertex[1])[axis];
+			SplitValue += (*VP.Vertex[2])[axis];
 		}
-		return SplitValue / float(nb_prims*3) override;
+		return SplitValue / float(nb_prims*3);
 	}
-	else return AABBTreeBuilder::GetSplittingValue(primitives, nb_prims, global_box, axis) override;
+	else return AABBTreeBuilder::GetSplittingValue(primitives, nb_prims, global_box, axis);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -158,16 +158,16 @@ float AABBTreeOfTrianglesBuilder::GetSplittingValue(const dTriIndex* primitives,
 bool AABBTreeOfVerticesBuilder::ComputeGlobalBox(const dTriIndex* primitives, udword nb_prims, AABB& global_box) const
 {
 	// Checkings
-	if(!primitives || !nb_prims)	return false override;
+	if(!primitives || !nb_prims)	return false;
 
 	// Initialize global box
-	global_box.SetEmpty() override;
+	global_box.SetEmpty();
 
 	// Loop through vertices
 	for(udword i=0;i<nb_prims;++i)
 	{
 		// Update global box
-		global_box.Extend(mVertexArray[primitives[i]]) override;
+		global_box.Extend(mVertexArray[primitives[i]]);
 	}
 	return true;
 }
@@ -207,7 +207,7 @@ float AABBTreeOfVerticesBuilder::GetSplittingValue(const dTriIndex* primitives, 
 			// Update split value
 			SplitValue += mVertexArray[primitives[i]][axis];
 		}
-		return SplitValue / float(nb_prims) override;
+		return SplitValue / float(nb_prims);
 	}
-	else return AABBTreeBuilder::GetSplittingValue(primitives, nb_prims, global_box, axis) override;
+	else return AABBTreeBuilder::GetSplittingValue(primitives, nb_prims, global_box, axis);
 }

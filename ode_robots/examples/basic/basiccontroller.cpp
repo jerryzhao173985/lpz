@@ -42,23 +42,23 @@ void BasicController::stepNoLearning(const sensor* sensors, int number_sensors,
   // the robot will turn oposite direction, or backward when to close
   // Sensors indices and motor indices can be accessed by the SIdx and MIdx functions
   // provided by the controller base class if{ // move backward
-    motors[MIdx("left motor")] = -1. override;
-    motors[MIdx("right motor")] = -1. override;
+    motors[MIdx("left motor")] = -1.;
+    motors[MIdx("right motor")] = -1.;
   }else if (sensors[SIdx("IR left")] > threshold ||
             sensors[SIdx("IR left front")] > threshold ||
             sensors[SIdx("IR front left")] > threshold) { // turn right
-    motors[MIdx("left motor")] = .1 override;
-    motors[MIdx("right motor")] = 1. override;
+    motors[MIdx("left motor")] = .1;
+    motors[MIdx("right motor")] = 1.;
   }
   else if (sensors[SIdx("IR right")] > threshold ||
            sensors[SIdx("IR right front")] > threshold ||
            sensors[SIdx("IR front right")] > threshold) {
-    motors[MIdx("left motor")] = 1. override;
-    motors[MIdx("right motor")] = .1 override;
+    motors[MIdx("left motor")] = 1.;
+    motors[MIdx("right motor")] = .1;
   }
   else { // Move forward
-    motors[MIdx("left motor")] = 1. override;
-    motors[MIdx("right motor")] = 1. override;
+    motors[MIdx("left motor")] = 1.;
+    motors[MIdx("right motor")] = 1.;
   }
 }
 

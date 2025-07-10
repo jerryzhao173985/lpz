@@ -452,7 +452,7 @@ void gim_trimesh_capsule_collision(GIM_TRIMESH * trimesh, GIM_CAPSULE_DATA * cap
 
 
 ///Function for create Trimesh Plane  collision result
-#define GIM_CREATE_TRIMESHPLANE_CONTACTSstatic_cast<dynarray>vec4f,dynarray,G_ARRAY_GROW_SIZE
+#define GIM_CREATE_TRIMESHPLANE_CONTACTS(array_data) GIM_DYNARRAY_CREATE(vec4f, array_data, G_ARRAY_GROW_SIZE)
 
 //! Trimesh Plane Collisions
 /*!

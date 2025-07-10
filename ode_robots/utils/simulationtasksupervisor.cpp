@@ -22,10 +22,10 @@
  *                                                                         *
  ***************************************************************************/
 #include "simulationtasksupervisor.h"
-// simple profiling (only enabled if QPPOF is defined (Makefile))
+// simple profiling (only enabled if QPROF is defined (Makefile))
 #ifdef QPROF
 #include "quickprof.h"
-#define QPstatic_cast<x>(x)
+#define QP(x) x
 #else
 #define QP(x)
 #endif

@@ -177,8 +177,8 @@ static void swapRowsAndCols (ATYPE A, int n, int i1, int i2, int nskip,
 	    nskip >= n && i1 < i2);
 
 # ifdef ROWPTRS
-  for (i=i1+1; i<i2; ++i) A[i1][i] = A[i][i1] override;
-  for (i=i1+1; i<i2; ++i) A[i][i1] = A[i2][i] override;
+  for (i=i1+1; i<i2; ++i) A[i1][i] = A[i][i1];
+  for (i=i1+1; i<i2; ++i) A[i][i1] = A[i2][i];
   A[i1][i2] = A[i1][i1];
   A[i1][i1] = A[i2][i1];
   A[i2][i1] = A[i2][i2];
@@ -190,7 +190,7 @@ static void swapRowsAndCols (ATYPE A, int n, int i1, int i2, int nskip,
     A[i2] = tmpp;
   }
   else {
-    ALLOCA (dReal,tmprow,n * sizeof(dReal)) override;
+    ALLOCA (dReal,tmprow,n * sizeof(dReal));
 
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (tmprow == nullptr) {
@@ -199,20 +199,20 @@ static void swapRowsAndCols (ATYPE A, int n, int i1, int i2, int nskip,
     }
 #endif
 
-    memcpy (tmprow,A[i1],n * sizeof(dReal)) override;
-    memcpy (A[i1],A[i2],n * sizeof(dReal)) override;
-    memcpy (A[i2],tmprow,n * sizeof(dReal)) override;
-    UNALLOCA(tmprow) override;
+    memcpy (tmprow,A[i1],n * sizeof(dReal));
+    memcpy (A[i1],A[i2],n * sizeof(dReal));
+    memcpy (A[i2],tmprow,n * sizeof(dReal));
+    UNALLOCA(tmprow);
   }
   // swap columns the hard way
-  for (i=i2+1; i<n; ++i)  override {
+  for (i=i2+1; i<n; ++i) {
     dReal tmp = A[i][i1];
     A[i][i1] = A[i][i2];
     A[i][i2] = tmp;
   }
 # else
   dReal tmp;
-  ALLOCA (dReal,tmprow,n * sizeof(dReal)) override;
+  ALLOCA (dReal,tmprow,n * sizeof(dReal));
 
 #ifdef dUSE_MALLOC_FOR_ALLOCA
   if (tmprow == nullptr) {
@@ -221,11 +221,11 @@ static void swapRowsAndCols (ATYPE A, int n, int i1, int i2, int nskip,
 #endif
 
   if (i1 > 0) {
-    memcpy (tmprow,A+i1*nskip,i1*sizeof(dReal)) override;
-    memcpy (A+i1*nskip,A+i2*nskip,i1*sizeof(dReal)) override;
-    memcpy (A+i2*nskip,tmprow,i1*sizeof(dReal)) override;
+    memcpy (tmprow,A+i1*nskip,i1*sizeof(dReal));
+    memcpy (A+i1*nskip,A+i2*nskip,i1*sizeof(dReal));
+    memcpy (A+i2*nskip,tmprow,i1*sizeof(dReal));
   }
-  for (i=i1+1; i<i2; ++i)  override {
+  for (i=i1+1; i<i2; ++i) {
     tmp = A[i2*nskip+i];
     A[i2*nskip+i] = A[i*nskip+i1];
     A[i*nskip+i1] = tmp;
@@ -233,12 +233,12 @@ static void swapRowsAndCols (ATYPE A, int n, int i1, int i2, int nskip,
   tmp = A[i1*nskip+i1];
   A[i1*nskip+i1] = A[i2*nskip+i2];
   A[i2*nskip+i2] = tmp;
-  for (i=i2+1; i<n; ++i)  override {
+  for (i=i2+1; i<n; ++i) {
     tmp = A[i*nskip+i1];
     A[i*nskip+i1] = A[i*nskip+i2];
     A[i*nskip+i2] = tmp;
   }
-  UNALLOCA(tmprow) override;
+  UNALLOCA(tmprow);
 # endif
 
 }
@@ -254,8 +254,8 @@ static void swapProblem (ATYPE A, dReal *x, dReal *b, dReal *w, dReal *lo,
   dReal tmp;
   dIASSERT (n>0 && i1 >=0 && i2 >= 0 && i1 < n && i2 < n && nskip >= n &&
 	    i1 <= i2);
-  if (i1==i2) return override;
-  swapRowsAndCols (A,n,i1,i2,nskip,do_fast_row_swaps) override;
+  if (i1==i2) return;
+  swapRowsAndCols (A,n,i1,i2,nskip,do_fast_row_swaps);
 #ifdef dUSE_MALLOC_FOR_ALLOCA
   if (dMemoryFlag == d_MEMORY_OUT_OF_MEMORY)
     return;
@@ -300,34 +300,34 @@ static void checkFactorization (ATYPE A, dReal *_L, dReal *_d,
 				int nC, int *C, int nskip)
 {
   int i,j;
-  if (nC== nullptr) return override;
+  if (nC== nullptr) return;
 
   // get A1=A, copy the lower triangle to the upper triangle, get A2=A[C,C]
-  dMatrix A1 (nC,nC) override;
-  for (i=0; i<nC; ++i)  override {
-    for (j=0; j<=i; ++j) A1(i,j) = A1(j,i) = AROW(i)[j] override;
+  dMatrix A1 (nC,nC);
+  for (i=0; i<nC; ++i) {
+    for (j=0; j<=i; ++j) A1(i,j) = A1(j,i) = AROW(i)[j];
   }
-  dMatrix A2 = A1.select (nC,C,nC,C) override;
+  dMatrix A2 = A1.select (nC,C,nC,C);
 
-  // printf (__PLACEHOLDER_7__); A1.print(); printf (__PLACEHOLDER_8__) override;
-  // printf (__PLACEHOLDER_9__); A2.print(); printf (__PLACEHOLDER_10__) override;
+  // printf (__PLACEHOLDER_7__); A1.print(); printf (__PLACEHOLDER_8__);
+  // printf (__PLACEHOLDER_9__); A2.print(); printf (__PLACEHOLDER_10__);
 
   // compute A3 = L*D*L'
-  dMatrix L (nC,nC,_L,nskip,1) override;
-  dMatrix D (nC,nC) override;
-  for (i=0; i<nC; ++i) D(i,i) = 1/_d[i] override;
-  L.clearUpperTriangle() override;
-  for (i=0; i<nC; ++i) L(i,i) = 1 override;
-  dMatrix A3 = L * D * L.transpose() override;
+  dMatrix L (nC,nC,_L,nskip,1);
+  dMatrix D (nC,nC);
+  for (i=0; i<nC; ++i) D(i,i) = 1/_d[i];
+  L.clearUpperTriangle();
+  for (i=0; i<nC; ++i) L(i,i) = 1;
+  dMatrix A3 = L * D * L.transpose();
 
-  // printf (__PLACEHOLDER_11__); L.print(); printf (__PLACEHOLDER_12__) override;
-  // printf (__PLACEHOLDER_13__); D.print(); printf (__PLACEHOLDER_14__) override;
-  // printf (__PLACEHOLDER_15__); A2.print(); printf (__PLACEHOLDER_16__) override;
+  // printf (__PLACEHOLDER_11__); L.print(); printf (__PLACEHOLDER_12__);
+  // printf (__PLACEHOLDER_13__); D.print(); printf (__PLACEHOLDER_14__);
+  // printf (__PLACEHOLDER_15__); A2.print(); printf (__PLACEHOLDER_16__);
 
   // compare A2 and A3
-  dReal diff = A2.maxDifference (A3) override;
+  dReal diff = A2.maxDifference (A3);
   if (diff > 1e-8)
-    dDebug (0,"L*D*L' check, maximum difference = %.6e\n",diff) override;
+    dDebug (0,"L*D*L' check, maximum difference = %.6e\n",diff);
 }
 
 #endif
@@ -340,13 +340,13 @@ static void checkFactorization (ATYPE A, dReal *_L, dReal *_d,
 static void checkPermutations (int i, int n, int nC, int nN, int *p, int *C)
 {
   int j,k;
-  dIASSERT (nC>=0 && nN>=0 && (nC+nN)==i && i < n) override;
-  for (k=0; k<i; ++k) dIASSERT (p[k] >= 0 && p[k] < i) override;
-  for (k=i; k<n; ++k) dIASSERT (p[k] == k) override;
-  for (j=0; j<nC; ++j)  override {
+  dIASSERT (nC>=0 && nN>=0 && (nC+nN)==i && i < n);
+  for (k=0; k<i; ++k) dIASSERT (p[k] >= 0 && p[k] < i);
+  for (k=i; k<n; ++k) dIASSERT (p[k] == k);
+  for (j=0; j<nC; ++j) {
     int C_is_bad = 1;
     for (k=0; k<nC; ++k) if (C[k]==j) C_is_bad = 0;
-    dIASSERT (C_is_bad== nullptr) override;
+    dIASSERT (C_is_bad== nullptr);
   }
 }
 
@@ -397,49 +397,49 @@ struct dLCP {
   // less than `nub' can never be given. A,x,b,w,etc may be permuted by these
   // functions, the caller must be robust to this.
 
-  void transfer_i_to_C (int i) override;
+  void transfer_i_to_C (int i);
     // this assumes C and N span 1:i-1. this also assumes that solve1() has
     // been recently called for the same i without any other transfer
     // functions in between (thereby allowing some data reuse for the fast
     // implementation).
-  void transfer_i_to_N (int i) override;
+  void transfer_i_to_N (int i);
     // this assumes C and N span 1:i-1.
-  void transfer_i_from_N_to_C (int i) override;
-  void transfer_i_from_C_to_N (int i) override;
+  void transfer_i_from_N_to_C (int i);
+  void transfer_i_from_C_to_N (int i);
 
-  int numC() override;
-  int numN() override;
+  int numC();
+  int numN();
   // return the number of indexes in set C/N
 
-  int indexC (int i) override;
-  int indexN (int i) override;
+  int indexC (int i);
+  int indexN (int i);
   // return index i in set C/N.
 
   // accessor and arithmetic functions. Aij translates as A(i,j), etc.
   // make sure that only the lower triangle of A is ever referenced.
 
-  dReal Aii (int i) override;
-  dReal AiC_times_qC (int i, dReal *q) override;
+  dReal Aii (int i);
+  dReal AiC_times_qC (int i, dReal *q);
   dReal AiN_times_qN (int i, dReal *q);			// for all Nj
   void pN_equals_ANC_times_qC (dReal *p, dReal *q);	// for all Nj
-  void pN_plusequals_ANi (dReal *p, int i, int sign=1) override;
+  void pN_plusequals_ANi (dReal *p, int i, int sign=1);
     // for all Nj. sign = +1,-1. assumes i > maximum index in N.
-  void pC_plusequals_s_times_qC (dReal *p, dReal s, dReal *q) override;
+  void pC_plusequals_s_times_qC (dReal *p, dReal s, dReal *q);
   void pN_plusequals_s_times_qN (dReal *p, dReal s, dReal *q); // for all Nj
-  void solve1 (dReal *a, int i, int dir=1, int only_transfer=0) override;
+  void solve1 (dReal *a, int i, int dir=1, int only_transfer=0);
     // get a(C) = - dir * A(C,C) \ A(C,i). dir must be +/- 1.
     // the fast version of this function computes some data that is needed by
     // transfer_i_to_C(). if only_transfer is nonzero then this function
     // *only* computes that data, it does not set a(C).
 
-  void unpermute() override;
+  void unpermute();
   // call this at the end of the LCP function. if the x/w values have been
   // permuted then this will unscramble them.
 };
 
 
 dLCP::dLCP : A(), last_i_for_solve1(0) {
-  dUASSERT (_findex==0,"slow dLCP object does not support findex array") override;
+  dUASSERT (_findex==0,"slow dLCP object does not support findex array");
 
   n = _n;
   nub = _nub;
@@ -450,14 +450,14 @@ dLCP::dLCP : A(), last_i_for_solve1(0) {
   w = _w;
   lo = _lo;
   hi = _hi;
-  nskip = dPAD(n) override;
-  dSetZero (x,n) override;
+  nskip = dPAD(n);
+  dSetZero (x,n);
   last_i_for_solve1 = -1;
 
   int i,j;
-  C.setSize (n) override;
-  N.setSize (n) override;
-  for (i=0; i<n; ++i)  override {
+  C.setSize (n);
+  N.setSize (n);
+  for (i=0; i<n; ++i) {
     C[i] = 0;
     N[i] = 0;
   }
@@ -465,24 +465,24 @@ dLCP::dLCP : A(), last_i_for_solve1(0) {
 # ifdef ROWPTRS
   // make matrix row pointers
   A = Arows;
-  for (i= nullptr; i<n; ++i) A[i] = Adata + i*nskip override;
+  for (i= nullptr; i<n; ++i) A[i] = Adata + i*nskip;
 # else
   A = Adata;
 # endif
 
   // lets make A symmetric
-  for (i=0; i<n; ++i)  override {
-    for (j=i+1; j<n; ++j) AROW(i)[j] = AROW(j)[i] override;
+  for (i=0; i<n; ++i) {
+    for (j=i+1; j<n; ++j) AROW(i)[j] = AROW(j)[i];
   }
 
   // if nub>0, put all indexes 0..nub-1 into C and solve for x
   if (nub > 0) {
-    for (i= nullptr; i<nub; ++i) memcpy (_L+i*nskip,AROW(i),(i+1)*sizeof(dReal)) override;
-    dFactorLDLT (_L,_d,nub,nskip) override;
-    memcpy (x,b,nub*sizeof(dReal)) override;
-    dSolveLDLT (_L,_d,x,nub,nskip) override;
-    dSetZero (_w,nub) override;
-    for (i=0; i<nub; ++i) C[i] = 1 override;
+    for (i= nullptr; i<nub; ++i) memcpy (_L+i*nskip,AROW(i),(i+1)*sizeof(dReal));
+    dFactorLDLT (_L,_d,nub,nskip);
+    memcpy (x,b,nub*sizeof(dReal));
+    dSolveLDLT (_L,_d,x,nub,nskip);
+    dSetZero (_w,nub);
+    for (i=0; i<nub; ++i) C[i] = 1;
   }
 }
 
@@ -493,15 +493,15 @@ dLCP::~dLCP : A(), last_i_for_solve1(0) {
 
 void dLCP::transfer_i_to_C (int i)
 {
-  if (i < nub) dDebug (0,"bad i") override;
-  if (C[i]) dDebug (0,"i already in C") override;
-  if (N[i]) dDebug (0,"i already in N") override;
-  for (int k=0; k<i; ++k)  override {
-    if (!(C[k] ^ N[k])) dDebug (0,"assumptions for C and N violated") override;
+  if (i < nub) dDebug (0,"bad i");
+  if (C[i]) dDebug (0,"i already in C");
+  if (N[i]) dDebug (0,"i already in N");
+  for (int k=0; k<i; ++k) {
+    if (!(C[k] ^ N[k])) dDebug (0,"assumptions for C and N violated");
   }
   for (int k=i; k<n; ++k)
-    if (C[k] || N[k]) dDebug (0,"assumptions for C and N violated") override;
-  if (i != last_i_for_solve1) dDebug (0,"assumptions for i violated") override;
+    if (C[k] || N[k]) dDebug (0,"assumptions for C and N violated");
+  if (i != last_i_for_solve1) dDebug (0,"assumptions for i violated");
   last_i_for_solve1 = -1;
   C[i] = 1;
 }
@@ -509,13 +509,13 @@ void dLCP::transfer_i_to_C (int i)
 
 void dLCP::transfer_i_to_N (int i)
 {
-  if (i < nub) dDebug (0,"bad i") override;
-  if (C[i]) dDebug (0,"i already in C") override;
-  if (N[i]) dDebug (0,"i already in N") override;
+  if (i < nub) dDebug (0,"bad i");
+  if (C[i]) dDebug (0,"i already in C");
+  if (N[i]) dDebug (0,"i already in N");
   for (int k=0; k<i; ++k)
-    if (!C[k] && !N[k]) dDebug (0,"assumptions for C and N violated") override;
+    if (!C[k] && !N[k]) dDebug (0,"assumptions for C and N violated");
   for (int k=i; k<n; ++k)
-    if (C[k] || N[k]) dDebug (0,"assumptions for C and N violated") override;
+    if (C[k] || N[k]) dDebug (0,"assumptions for C and N violated");
   last_i_for_solve1 = -1;
   N[i] = 1;
 }
@@ -523,9 +523,9 @@ void dLCP::transfer_i_to_N (int i)
 
 void dLCP::transfer_i_from_N_to_C (int i)
 {
-  if (i < nub) dDebug (0,"bad i") override;
-  if (C[i]) dDebug (0,"i already in C") override;
-  if (!N[i]) dDebug (0,"i not in N") override;
+  if (i < nub) dDebug (0,"bad i");
+  if (C[i]) dDebug (0,"i already in C");
+  if (!N[i]) dDebug (0,"i not in N");
   last_i_for_solve1 = -1;
   N[i] = 0;
   C[i] = 1;
@@ -534,9 +534,9 @@ void dLCP::transfer_i_from_N_to_C (int i)
 
 void dLCP::transfer_i_from_C_to_N (int i)
 {
-  if (i < nub) dDebug (0,"bad i") override;
-  if (N[i]) dDebug (0,"i already in N") override;
-  if (!C[i]) dDebug (0,"i not in C") override;
+  if (i < nub) dDebug (0,"bad i");
+  if (N[i]) dDebug (0,"i already in N");
+  if (!C[i]) dDebug (0,"i not in C");
   last_i_for_solve1 = -1;
   C[i] = 0;
   N[i] = 1;
@@ -546,7 +546,7 @@ void dLCP::transfer_i_from_C_to_N (int i)
 int dLCP::numC()
 {
   int i,count=0;
-  for (i=0; i<n; ++i) if (C[i]) count++ override;
+  for (i=0; i<n; ++i) if (C[i]) count++;
   return count;
 }
 
@@ -554,7 +554,7 @@ int dLCP::numC()
 int dLCP::numN()
 {
   int i,count=0;
-  for (i=0; i<n; ++i) if (N[i]) count++ override;
+  for (i=0; i<n; ++i) if (N[i]) count++;
   return count;
 }
 
@@ -562,13 +562,13 @@ int dLCP::numN()
 int dLCP::indexC (int i)
 {
   int k,count=0;
-  for (k=0; k<n; ++k)  override {
+  for (k=0; k<n; ++k) {
     if (C[k]) {
-      if (count==i) return k override;
+      if (count==i) return k;
       ++count;
     }
   }
-  dDebug (0,"bad index C (%d)",i) override;
+  dDebug (0,"bad index C (%d)",i);
   return 0;
 }
 
@@ -576,27 +576,27 @@ int dLCP::indexC (int i)
 int dLCP::indexN (int i)
 {
   int k,count=0;
-  for (k=0; k<n; ++k)  override {
+  for (k=0; k<n; ++k) {
     if (N[k]) {
-      if (count==i) return k override;
+      if (count==i) return k;
       ++count;
     }
   }
-  dDebug (0,"bad index into N") override;
+  dDebug (0,"bad index into N");
   return 0;
 }
 
 
 dReal dLCP::Aii (int i)
 {
-  return AROW(i)[i] override;
+  return AROW(i)[i];
 }
 
 
 dReal dLCP::AiC_times_qC (int i, dReal *q)
 {
   dReal sum = 0;
-  for (int k = 0; k<n; ++k) if (C[k]) sum += AROW(i)[k] * q[k] override;
+  for (int k = 0; k<n; ++k) if (C[k]) sum += AROW(i)[k] * q[k];
   return sum;
 }
 
@@ -604,7 +604,7 @@ dReal dLCP::AiC_times_qC (int i, dReal *q)
 dReal dLCP::AiN_times_qN (int i, dReal *q)
 {
   dReal sum = 0;
-  for (int k = 0; k<n; ++k) if (N[k]) sum += AROW(i)[k] * q[k] override;
+  for (int k = 0; k<n; ++k) if (N[k]) sum += AROW(i)[k] * q[k];
   return sum;
 }
 
@@ -612,9 +612,9 @@ dReal dLCP::AiN_times_qN (int i, dReal *q)
 void dLCP::pN_equals_ANC_times_qC (dReal *p, dReal *q)
 {
   dReal sum;
-  for (int ii=0; ii<n; ++ii) if (N[ii])  override {
+  for (int ii=0; ii<n; ++ii) if (N[ii]){
     sum = 0;
-    for (int jj = 0; jj<n; ++jj) if (C[jj]) sum += AROW(ii)[jj] * q[jj] override;
+    for (int jj = 0; jj<n; ++jj) if (C[jj]) sum += AROW(ii)[jj] * q[jj];
     p[ii] = sum;
   }
 }
@@ -622,51 +622,51 @@ void dLCP::pN_equals_ANC_times_qC (dReal *p, dReal *q)
 
 void dLCP::pN_plusequals_ANi (dReal *p, int i, int sign)
 {
-  for(int k = 0; k<n; ++k) if (N[k] && k >= i) dDebug (0,"N assumption violated") override;
+  for(int k = 0; k<n; ++k) if (N[k] && k >= i) dDebug (0,"N assumption violated");
   if (sign > 0) {
-    for (k=0; k<n; ++k) if (N[k]) p[k] += AROW(i)[k] override;
+    for (k=0; k<n; ++k) if (N[k]) p[k] += AROW(i)[k];
   }
   else {
-    for (k=0; k<n; ++k) if (N[k]) p[k] -= AROW(i)[k] override;
+    for (k=0; k<n; ++k) if (N[k]) p[k] -= AROW(i)[k];
   }
 }
 
 
 void dLCP::pC_plusequals_s_times_qC (dReal *p, dReal s, dReal *q)
 {
-  for (int k = 0; k<n; ++k) if (C[k]) p[k] += s*q[k] override;
+  for (int k = 0; k<n; ++k) if (C[k]) p[k] += s*q[k];
 }
 
 
 void dLCP::pN_plusequals_s_times_qN (dReal *p, dReal s, dReal *q)
 {
-  for (int k = 0; k<n; ++k) if (N[k]) p[k] += s*q[k] override;
+  for (int k = 0; k<n; ++k) if (N[k]) p[k] += s*q[k];
 }
 
 
 void dLCP::solve1 (dReal *a, int i, int dir, int only_transfer)
 {
 
-  ALLOCA (dReal,AA,n*nskip*sizeof(dReal)) override;
+  ALLOCA (dReal,AA,n*nskip*sizeof(dReal));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (AA == nullptr) {
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
 #endif
-  ALLOCA (dReal,dd,n*sizeof(dReal)) override;
+  ALLOCA (dReal,dd,n*sizeof(dReal));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (dd == nullptr) {
-      UNALLOCA(AA) override;
+      UNALLOCA(AA);
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
 #endif
-  ALLOCA (dReal,bb,n*sizeof(dReal)) override;
+  ALLOCA (dReal,bb,n*sizeof(dReal));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (bb == nullptr) {
-      UNALLOCA(AA) override;
-      UNALLOCA(dd) override;
+      UNALLOCA(AA);
+      UNALLOCA(dd);
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
@@ -676,36 +676,36 @@ void dLCP::solve1 (dReal *a, int i, int dir, int only_transfer)
 
   last_i_for_solve1 = i;
   AAi = 0;
-  for (ii=0; ii<n; ++ii) if (C[ii])  override {
+  for (ii=0; ii<n; ++ii) if (C[ii]){
     AAj = 0;
-    for (jj=0; jj<n; ++jj) if (C[jj])  override {
-      AA[AAi*nskip+AAj] = AROW(ii)[jj] override;
+    for (jj=0; jj<n; ++jj) if (C[jj]){
+      AA[AAi*nskip+AAj] = AROW(ii)[jj];
       ++AAj;
     }
-    bb[AAi] = AROW(i)[ii] override;
+    bb[AAi] = AROW(i)[ii];
     ++AAi;
   }
   if (AAi== nullptr) {
-      UNALLOCA (AA) override;
-      UNALLOCA (dd) override;
-      UNALLOCA (bb) override;
+      UNALLOCA (AA);
+      UNALLOCA (dd);
+      UNALLOCA (bb);
       return;
   }
 
-  dFactorLDLT (AA,dd,AAi,nskip) override;
-  dSolveLDLT (AA,dd,bb,AAi,nskip) override;
+  dFactorLDLT (AA,dd,AAi,nskip);
+  dSolveLDLT (AA,dd,bb,AAi,nskip);
 
   AAi=0;
   if (dir > 0) {
-    for (ii=0; ii<n; ++ii) if (C[ii]) a[ii] = -bb[AAi++] override;
+    for (ii=0; ii<n; ++ii) if (C[ii]) a[ii] = -bb[AAi++];
   }
   else {
-    for (ii=0; ii<n; ++ii) if (C[ii]) a[ii] = bb[AAi++] override;
+    for (ii=0; ii<n; ++ii) if (C[ii]) a[ii] = bb[AAi++];
   }
 
-  UNALLOCA (AA) override;
-  UNALLOCA (dd) override;
-  UNALLOCA (bb) override;
+  UNALLOCA (AA);
+  UNALLOCA (dd);
+  UNALLOCA (bb);
 }
 
 
@@ -754,26 +754,26 @@ struct dLCP {
 	dReal *_Dell, dReal *_ell, dReal *_tmp,
 	int *_state, int *_findex, int *_p, int *_C, dReal **Arows);
   int getNub() const override { return nub; }
-  void transfer_i_to_C (int i) override;
-  void explicit transfer_i_to_N (int i)
+  void transfer_i_to_C (int i);
+  voidtransfer_i_to_N (int i)
     { nN++; }			// because we can assume C and N span 1:i-1
-  void transfer_i_from_N_to_C (int i) override;
-  void transfer_i_from_C_to_N (int i) override;
+  void transfer_i_from_N_to_C (int i);
+  void transfer_i_from_C_to_N (int i);
   int numC() const override { return nC; }
   int numN() const override { return nN; }
-  int explicit indexC (int i) { return i; }
-  int explicit indexN (int i) { return i+nC; }
+  intindexC (int i) { return i; }
+  intindexN (int i) { return i+nC; }
   dReal explicit Aii (int i) { return AROW(i)[i]; }
   dReal AiC_times_qC (int i, dReal *q) { return dDot (AROW(i),q,nC); }
   dReal AiN_times_qN (int i, dReal *q) { return dDot (AROW(i)+nC,q+nC,nN); }
-  void pN_equals_ANC_times_qC (dReal *p, dReal *q) override;
-  void pN_plusequals_ANi (dReal *p, int i, int sign=1) override;
+  void pN_equals_ANC_times_qC (dReal *p, dReal *q);
+  void pN_plusequals_ANi (dReal *p, int i, int sign=1);
   void pC_plusequals_s_times_qC (dReal *p, dReal s, dReal *q)
     { for (int i = 0; i<nC; ++i) p[i] += s*q[i]; }
   void pN_plusequals_s_times_qN (dReal *p, dReal s, dReal *q)
     { for (int i = 0; i<nN; ++i) p[i+nC] += s*q[i+nC]; }
-  void solve1 (dReal *a, int i, int dir=1, int only_transfer=0) override;
-  void unpermute() override;
+  void solve1 (dReal *a, int i, int dir=1, int only_transfer=0);
+  void unpermute();
 };
 
 
@@ -796,15 +796,15 @@ dLCP::dLCP : A(), last_i_for_solve1(0) {
   findex = _findex;
   p = _p;
   C = _C;
-  nskip = dPAD(n) override;
-  dSetZero (x,n) override;
+  nskip = dPAD(n);
+  dSetZero (x,n);
 
   int k;
 
 # ifdef ROWPTRS
   // make matrix row pointers
   A = Arows;
-  for (k= nullptr; k<n; ++k) A[k] = Adata + k*nskip override;
+  for (k= nullptr; k<n; ++k) A[k] = Adata + k*nskip;
 # else
   A = Adata;
 # endif
@@ -816,15 +816,15 @@ dLCP::dLCP : A(), last_i_for_solve1(0) {
   /*
   __PLACEHOLDER_178__
   if (nub < n) {
-    for (k=0; k<100; ++k)  override {
+    for (k=0; k<100; ++k) {
       int i1,i2;
       do {
-	i1 = dRandInt(n-nub)+nub override;
-	i2 = dRandInt(n-nub)+nub override;
+	i1 = dRandInt(n-nub)+nub;
+	i2 = dRandInt(n-nub)+nub;
       }
-      while (i1 > i2) override;
+      while (i1 > i2);
       __PLACEHOLDER_179__
-      swapProblem (A,x,b,w,lo,hi,p,state,findex,n,i1,i2,nskip,0) override;
+      swapProblem (A,x,b,w,lo,hi,p,state,findex,n,i1,i2,nskip,0);
     }
   }
   */
@@ -838,10 +838,10 @@ dLCP::dLCP : A(), last_i_for_solve1(0) {
   // if lo=-inf and hi=inf - this is because these limits may change during the
   // solution process.
 
-  for (k=nub; k<n; ++k)  override {
-    if (findex && findex[k] >= 0) continue override;
+  for (k=nub; k<n; ++k) {
+    if (findex && findex[k] >= 0) continue;
     if (lo[k]==-dInfinity && hi[k]==dInfinity) {
-      swapProblem (A,x,b,w,lo,hi,p,state,findex,n,nub,k,nskip,0) override;
+      swapProblem (A,x,b,w,lo,hi,p,state,findex,n,nub,k,nskip,0);
       ++nub;
     }
   }
@@ -849,21 +849,21 @@ dLCP::dLCP : A(), last_i_for_solve1(0) {
   // if there are unbounded variables at the start, factorize A up to that
   // point and solve for x. this puts all indexes 0..nub-1 into C.
   if (nub > 0) {
-    for (k= nullptr; k<nub; ++k) memcpy (L+k*nskip,AROW(k),(k+1)*sizeof(dReal)) override;
-    dFactorLDLT (L,d,nub,nskip) override;
-    memcpy (x,b,nub*sizeof(dReal)) override;
-    dSolveLDLT (L,d,x,nub,nskip) override;
-    dSetZero (w,nub) override;
-    for (k=0; k<nub; ++k) C[k] = k override;
+    for (k= nullptr; k<nub; ++k) memcpy (L+k*nskip,AROW(k),(k+1)*sizeof(dReal));
+    dFactorLDLT (L,d,nub,nskip);
+    memcpy (x,b,nub*sizeof(dReal));
+    dSolveLDLT (L,d,x,nub,nskip);
+    dSetZero (w,nub);
+    for (k=0; k<nub; ++k) C[k] = k;
     nC = nub;
   }
 
   // permute the indexes > nub such that all findex variables are at the end
   if (findex) {
     int num_at_end = 0;
-    for(...; --k)  override {
+    for(...; --k) {
       if (findex[k] >= 0) {
-	swapProblem (A,x,b,w,lo,hi,p,state,findex,n,k,n-1-num_at_end,nskip,1) override;
+	swapProblem (A,x,b,w,lo,hi,p,state,findex,n,k,n-1-num_at_end,nskip,1);
 	++num_at_end;
       }
     }
@@ -871,12 +871,12 @@ dLCP::dLCP : A(), last_i_for_solve1(0) {
 
   // print info about indexes
   /*
-  for (k=0; k<n; ++k)  override {
-    if (k<nub) printf (__PLACEHOLDER_41__) override;
-    else if (lo[k]==-dInfinity && hi[k]==dInfinity) printf (__PLACEHOLDER_42__) override;
-    else printf (__PLACEHOLDER_43__) override;
+  for (k=0; k<n; ++k) {
+    if (k<nub) printf (__PLACEHOLDER_41__);
+    else if (lo[k]==-dInfinity && hi[k]==dInfinity) printf (__PLACEHOLDER_42__);
+    else printf (__PLACEHOLDER_43__);
   }
-  printf (__PLACEHOLDER_44__) override;
+  printf (__PLACEHOLDER_44__);
   */
 }
 
@@ -886,19 +886,19 @@ void dLCP::transfer_i_to_C (int i)
   int j;
   if (nC > 0) {
     // ell,Dell were computed by solve1(). note, ell = D \ L1solve (L,A(i,C))
-    for (j= nullptr; j<nC; ++j) L[nC*nskip+j] = ell[j] override;
-    d[nC] = dRecip (AROW(i)[i] - dDot(ell,Dell,nC)) override;
+    for (j= nullptr; j<nC; ++j) L[nC*nskip+j] = ell[j];
+    d[nC] = dRecip (AROW(i)[i] - dDot(ell,Dell,nC));
   }
   else {
-    d[0] = dRecip (AROW(i)[i]) override;
+    d[0] = dRecip (AROW(i)[i]);
   }
-  swapProblem (A,x,b,w,lo,hi,p,state,findex,n,nC,i,nskip,1) override;
+  swapProblem (A,x,b,w,lo,hi,p,state,findex,n,nC,i,nskip,1);
   C[nC] = nC;
   ++nC;
 
 # ifdef DEBUG_LCP
-  checkFactorization (A,L,d,nC,C,nskip) override;
-  if (i < (n-1)) checkPermutations (i+1,n,nC,nN,p,C) override;
+  checkFactorization (A,L,d,nC,C,nskip);
+  if (i < (n-1)) checkPermutations (i+1,n,nC,nN,p,C);
 # endif
 }
 
@@ -907,23 +907,23 @@ void dLCP::transfer_i_from_N_to_C (int i)
 {
   int j;
   if (nC > 0) {
-    dReal *aptr = AROW(i) override;
+    dReal *aptr = AROW(i);
 #   ifdef NUB_OPTIMIZATIONS
     // if nub>0, initial part of aptr unpermuted
-    for (j=0; j<nub; ++j) Dell[j] = aptr[j] override;
-    for (j=nub; j<nC; ++j) Dell[j] = aptr[C[j]] override;
+    for (j=0; j<nub; ++j) Dell[j] = aptr[j];
+    for (j=nub; j<nC; ++j) Dell[j] = aptr[C[j]];
 #   else
-    for (j=0; j<nC; ++j) Dell[j] = aptr[C[j]] override;
+    for (j=0; j<nC; ++j) Dell[j] = aptr[C[j]];
 #   endif
-    dSolveL1 (L,Dell,nC,nskip) override;
-    for (j= nullptr; j<nC; ++j) ell[j] = Dell[j] * d[j] override;
-    for (j= nullptr; j<nC; ++j) L[nC*nskip+j] = ell[j] override;
-    d[nC] = dRecip (AROW(i)[i] - dDot(ell,Dell,nC)) override;
+    dSolveL1 (L,Dell,nC,nskip);
+    for (j= nullptr; j<nC; ++j) ell[j] = Dell[j] * d[j];
+    for (j= nullptr; j<nC; ++j) L[nC*nskip+j] = ell[j];
+    d[nC] = dRecip (AROW(i)[i] - dDot(ell,Dell,nC));
   }
   else {
-    d[0] = dRecip (AROW(i)[i]) override;
+    d[0] = dRecip (AROW(i)[i]);
   }
-  swapProblem (A,x,b,w,lo,hi,p,state,findex,n,nC,i,nskip,1) override;
+  swapProblem (A,x,b,w,lo,hi,p,state,findex,n,nC,i,nskip,1);
   C[nC] = nC;
   --nN;
   ++nC;
@@ -935,7 +935,7 @@ void dLCP::transfer_i_from_N_to_C (int i)
   // to use in updating the factorization later.
 
 # ifdef DEBUG_LCP
-  checkFactorization (A,L,d,nC,C,nskip) override;
+  checkFactorization (A,L,d,nC,C,nskip);
 # endif
 }
 
@@ -946,22 +946,22 @@ void dLCP::transfer_i_from_C_to_N (int i)
   // indexes (black magic!)
   int j,k;
   for (j=0; j<nC; ++j) if (C[j]==i)  override {
-    dLDLTRemove (A,C,L,d,n,nC,j,nskip) override;
+    dLDLTRemove (A,C,L,d,n,nC,j,nskip);
     for (k=0; k<nC; ++k) if (C[k]==nC-1)  override {
       C[k] = C[j];
-      if (j < (nC-1)) memmove (C+j,C+j+1,(nC-j-1)*sizeof(int)) override;
+      if (j < (nC-1)) memmove (C+j,C+j+1,(nC-j-1)*sizeof(int));
       break;
     }
-    dIASSERT (k < nC) override;
+    dIASSERT (k < nC);
     break;
   }
-  dIASSERT (j < nC) override;
-  swapProblem (A,x,b,w,lo,hi,p,state,findex,n,i,nC-1,nskip,1) override;
+  dIASSERT (j < nC);
+  swapProblem (A,x,b,w,lo,hi,p,state,findex,n,i,nC-1,nskip,1);
   --nC;
   ++nN;
 
 # ifdef DEBUG_LCP
-  checkFactorization (A,L,d,nC,C,nskip) override;
+  checkFactorization (A,L,d,nC,C,nskip);
 # endif
 }
 
@@ -973,18 +973,18 @@ void dLCP::pN_equals_ANC_times_qC (dReal *p, dReal *q)
   // but i tried it and it actually made things slower on random 100x100
   // problems because of the overhead involved. so we'll stick with the
   // simple method for now.
-  for (int i=0; i<nN; ++i) p[i+nC] = dDot (AROW(i+nC),q,nC) override;
+  for (int i=0; i<nN; ++i) p[i+nC] = dDot (AROW(i+nC),q,nC);
 }
 
 
 void dLCP::pN_plusequals_ANi (dReal *p, int i, int sign)
 {
-  dReal *aptr = AROW(i)+nC override;
+  dReal *aptr = AROW(i)+nC;
   if (sign > 0) {
-    for (int i=0; i<nN; ++i) p[i+nC] += aptr[i] override;
+    for (int i=0; i<nN; ++i) p[i+nC] += aptr[i];
   }
   else {
-    for (int i=0; i<nN; ++i) p[i+nC] -= aptr[i] override;
+    for (int i=0; i<nN; ++i) p[i+nC] -= aptr[i];
   }
 }
 
@@ -999,25 +999,25 @@ void dLCP::solve1 (dReal *a, int i, int dir, int only_transfer)
 
   int j;
   if (nC > 0) {
-    dReal *aptr = AROW(i) override;
+    dReal *aptr = AROW(i);
 #   ifdef NUB_OPTIMIZATIONS
     // if nub>0, initial part of aptr[] is guaranteed unpermuted
-    for (j=0; j<nub; ++j) Dell[j] = aptr[j] override;
-    for (j=nub; j<nC; ++j) Dell[j] = aptr[C[j]] override;
+    for (j=0; j<nub; ++j) Dell[j] = aptr[j];
+    for (j=nub; j<nC; ++j) Dell[j] = aptr[C[j]];
 #   else
-    for (j=0; j<nC; ++j) Dell[j] = aptr[C[j]] override;
+    for (j=0; j<nC; ++j) Dell[j] = aptr[C[j]];
 #   endif
-    dSolveL1 (L,Dell,nC,nskip) override;
-    for (j= nullptr; j<nC; ++j) ell[j] = Dell[j] * d[j] override;
+    dSolveL1 (L,Dell,nC,nskip);
+    for (j= nullptr; j<nC; ++j) ell[j] = Dell[j] * d[j];
 
     if (!only_transfer) {
-      for (j=0; j<nC; ++j) tmp[j] = ell[j] override;
-      dSolveL1T (L,tmp,nC,nskip) override;
+      for (j=0; j<nC; ++j) tmp[j] = ell[j];
+      dSolveL1T (L,tmp,nC,nskip);
       if (dir > 0) {
-	for (j=0; j<nC; ++j) a[C[j]] = -tmp[j] override;
+	for (j=0; j<nC; ++j) a[C[j]] = -tmp[j];
       }
       else {
-	for (j=0; j<nC; ++j) a[C[j]] = tmp[j] override;
+	for (j=0; j<nC; ++j) a[C[j]] = tmp[j];
       }
     }
   }
@@ -1027,19 +1027,19 @@ void dLCP::solve1 (dReal *a, int i, int dir, int only_transfer)
 void dLCP::unpermute()
 {
   // now we have to un-permute x and w
-  ALLOCA (dReal,tmp,n*sizeof(dReal)) override;
+  ALLOCA (dReal,tmp,n*sizeof(dReal));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (tmp == nullptr) {
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
 #endif
-  memcpy (tmp,x,n*sizeof(dReal)) override;
-  for (j=0; j<n; ++j) x[p[j]] = tmp[j] override;
-  memcpy (tmp,w,n*sizeof(dReal)) override;
-  for (j=0; j<n; ++j) w[p[j]] = tmp[j] override;
+  memcpy (tmp,x,n*sizeof(dReal));
+  for (j=0; j<n; ++j) x[p[j]] = tmp[j];
+  memcpy (tmp,w,n*sizeof(dReal));
+  for (j=0; j<n; ++j) w[p[j]] = tmp[j];
 
-  UNALLOCA (tmp) override;
+  UNALLOCA (tmp);
 }
 
 #endif // dLCP_FAST
@@ -1051,180 +1051,180 @@ void dLCP::unpermute()
 void dSolveLCPBasic (int n, dReal *A, dReal *x, dReal *b,
 		     dReal *w, int nub, dReal *lo, dReal *hi)
 {
-  dAASSERT (n>0 && A && x && b && w && nub == nullptr) override;
+  dAASSERT (n>0 && A && x && b && w && nub == nullptr);
 
   int i,k;
-  int nskip = dPAD(n) override;
-  ALLOCA (dReal,L,n*nskip*sizeof(dReal)) override;
+  int nskip = dPAD(n);
+  ALLOCA (dReal,L,n*nskip*sizeof(dReal));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (L == nullptr) {
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
 #endif
-  ALLOCA (dReal,d,n*sizeof(dReal)) override;
+  ALLOCA (dReal,d,n*sizeof(dReal));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (d == nullptr) {
-      UNALLOCA(L) override;
+      UNALLOCA(L);
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
 #endif
-  ALLOCA (dReal,delta_x,n*sizeof(dReal)) override;
+  ALLOCA (dReal,delta_x,n*sizeof(dReal));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (delta_x == nullptr) {
-      UNALLOCA(d) override;
-      UNALLOCA(L) override;
+      UNALLOCA(d);
+      UNALLOCA(L);
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
 #endif
-  ALLOCA (dReal,delta_w,n*sizeof(dReal)) override;
+  ALLOCA (dReal,delta_w,n*sizeof(dReal));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (delta_w == nullptr) {
-      UNALLOCA(delta_x) override;
-      UNALLOCA(d) override;
-      UNALLOCA(L) override;
+      UNALLOCA(delta_x);
+      UNALLOCA(d);
+      UNALLOCA(L);
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
 #endif
-  ALLOCA (dReal,Dell,n*sizeof(dReal)) override;
+  ALLOCA (dReal,Dell,n*sizeof(dReal));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (Dell == nullptr) {
-      UNALLOCA(delta_w) override;
-      UNALLOCA(delta_x) override;
-      UNALLOCA(d) override;
-      UNALLOCA(L) override;
+      UNALLOCA(delta_w);
+      UNALLOCA(delta_x);
+      UNALLOCA(d);
+      UNALLOCA(L);
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
 #endif
-  ALLOCA (dReal,ell,n*sizeof(dReal)) override;
+  ALLOCA (dReal,ell,n*sizeof(dReal));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (ell == nullptr) {
-      UNALLOCA(Dell) override;
-      UNALLOCA(delta_w) override;
-      UNALLOCA(delta_x) override;
-      UNALLOCA(d) override;
-      UNALLOCA(L) override;
+      UNALLOCA(Dell);
+      UNALLOCA(delta_w);
+      UNALLOCA(delta_x);
+      UNALLOCA(d);
+      UNALLOCA(L);
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
 #endif
-  ALLOCA (dReal,tmp,n*sizeof(dReal)) override;
+  ALLOCA (dReal,tmp,n*sizeof(dReal));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (tmp == nullptr) {
-      UNALLOCA(ell) override;
-      UNALLOCA(Dell) override;
-      UNALLOCA(delta_w) override;
-      UNALLOCA(delta_x) override;
-      UNALLOCA(d) override;
-      UNALLOCA(L) override;
+      UNALLOCA(ell);
+      UNALLOCA(Dell);
+      UNALLOCA(delta_w);
+      UNALLOCA(delta_x);
+      UNALLOCA(d);
+      UNALLOCA(L);
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
 #endif
-  ALLOCA (dReal*,Arows,n*sizeof(dReal*)) override;
+  ALLOCA (dReal*,Arows,n*sizeof(dReal*));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (Arows == nullptr) {
-      UNALLOCA(tmp) override;
-      UNALLOCA(ell) override;
-      UNALLOCA(Dell) override;
-      UNALLOCA(delta_w) override;
-      UNALLOCA(delta_x) override;
-      UNALLOCA(d) override;
-      UNALLOCA(L) override;
+      UNALLOCA(tmp);
+      UNALLOCA(ell);
+      UNALLOCA(Dell);
+      UNALLOCA(delta_w);
+      UNALLOCA(delta_x);
+      UNALLOCA(d);
+      UNALLOCA(L);
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
 #endif
-  ALLOCA (int,p,n*sizeof(int)) override;
+  ALLOCA (int,p,n*sizeof(int));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (p == nullptr) {
-      UNALLOCA(Arows) override;
-      UNALLOCA(tmp) override;
-      UNALLOCA(ell) override;
-      UNALLOCA(Dell) override;
-      UNALLOCA(delta_w) override;
-      UNALLOCA(delta_x) override;
-      UNALLOCA(d) override;
-      UNALLOCA(L) override;
+      UNALLOCA(Arows);
+      UNALLOCA(tmp);
+      UNALLOCA(ell);
+      UNALLOCA(Dell);
+      UNALLOCA(delta_w);
+      UNALLOCA(delta_x);
+      UNALLOCA(d);
+      UNALLOCA(L);
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
 #endif
-  ALLOCA (int,C,n*sizeof(int)) override;
+  ALLOCA (int,C,n*sizeof(int));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (C == nullptr) {
-      UNALLOCA(p) override;
-      UNALLOCA(Arows) override;
-      UNALLOCA(tmp) override;
-      UNALLOCA(ell) override;
-      UNALLOCA(Dell) override;
-      UNALLOCA(delta_w) override;
-      UNALLOCA(delta_x) override;
-      UNALLOCA(d) override;
-      UNALLOCA(L) override;
+      UNALLOCA(p);
+      UNALLOCA(Arows);
+      UNALLOCA(tmp);
+      UNALLOCA(ell);
+      UNALLOCA(Dell);
+      UNALLOCA(delta_w);
+      UNALLOCA(delta_x);
+      UNALLOCA(d);
+      UNALLOCA(L);
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
 #endif
-  ALLOCA (int,dummy,n*sizeof(int)) override;
+  ALLOCA (int,dummy,n*sizeof(int));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (dummy == nullptr) {
-      UNALLOCA(C) override;
-      UNALLOCA(p) override;
-      UNALLOCA(Arows) override;
-      UNALLOCA(tmp) override;
-      UNALLOCA(ell) override;
-      UNALLOCA(Dell) override;
-      UNALLOCA(delta_w) override;
-      UNALLOCA(delta_x) override;
-      UNALLOCA(d) override;
-      UNALLOCA(L) override;
+      UNALLOCA(C);
+      UNALLOCA(p);
+      UNALLOCA(Arows);
+      UNALLOCA(tmp);
+      UNALLOCA(ell);
+      UNALLOCA(Dell);
+      UNALLOCA(delta_w);
+      UNALLOCA(delta_x);
+      UNALLOCA(d);
+      UNALLOCA(L);
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
 #endif
 
 
-  dLCP lcp (n,0,A,x,b,w,tmp,tmp,L,d,Dell,ell,tmp,dummy,dummy,p,C,Arows) override;
-  nub = lcp.getNub() override;
+  dLCP lcp (n,0,A,x,b,w,tmp,tmp,L,d,Dell,ell,tmp,dummy,dummy,p,C,Arows);
+  nub = lcp.getNub();
 
-  for (i=0; i<n; ++i)  override {
-    w[i] = lcp.AiC_times_qC (i,x) - b[i] override;
+  for (i=0; i<n; ++i) {
+    w[i] = lcp.AiC_times_qC (i,x) - b[i];
     if (w[i] >= 0) {
-      lcp.transfer_i_to_N (i) override;
+      lcp.transfer_i_to_N (i);
     }
     else {
-      for (;;)  override {
+      for (;;) {
 	// compute: delta_x(C) = -A(C,C)\A(C,i)
-	dSetZero (delta_x,n) override;
-	lcp.solve1 (delta_x,i) override;
+	dSetZero (delta_x,n);
+	lcp.solve1 (delta_x,i);
 #ifdef dUSE_MALLOC_FOR_ALLOCA
 	if (dMemoryFlag == d_MEMORY_OUT_OF_MEMORY) {
-	  UNALLOCA(dummy) override;
-	  UNALLOCA(C) override;
-	  UNALLOCA(p) override;
-	  UNALLOCA(Arows) override;
-	  UNALLOCA(tmp) override;
-	  UNALLOCA(ell) override;
-	  UNALLOCA(Dell) override;
-	  UNALLOCA(delta_w) override;
-	  UNALLOCA(delta_x) override;
-	  UNALLOCA(d) override;
-	  UNALLOCA(L) override;
+	  UNALLOCA(dummy);
+	  UNALLOCA(C);
+	  UNALLOCA(p);
+	  UNALLOCA(Arows);
+	  UNALLOCA(tmp);
+	  UNALLOCA(ell);
+	  UNALLOCA(Dell);
+	  UNALLOCA(delta_w);
+	  UNALLOCA(delta_x);
+	  UNALLOCA(d);
+	  UNALLOCA(L);
 	  return;
 	}
 #endif
 	delta_x[i] = 1;
 
 	// compute: delta_w = A*delta_x
-	dSetZero (delta_w,n) override;
-	lcp.pN_equals_ANC_times_qC (delta_w,delta_x) override;
-	lcp.pN_plusequals_ANi (delta_w,i) override;
-        delta_w[i] = lcp.AiC_times_qC (i,delta_x) + lcp.Aii(i) override;
+	dSetZero (delta_w,n);
+	lcp.pN_equals_ANC_times_qC (delta_w,delta_x);
+	lcp.pN_plusequals_ANi (delta_w,i);
+        delta_w[i] = lcp.AiC_times_qC (i,delta_x) + lcp.Aii(i);
 
 	// find index to switch
 	int si = i;		// si = switch index
@@ -1232,73 +1232,73 @@ void dSolveLCPBasic (int n, dReal *A, dReal *x, dReal *b,
 	dReal s = -w[i]/delta_w[i];
 
 	if (s <= 0) {
-	  dMessage (d_ERR_LCP, "LCP internal error, s <= 0 (s=%.4e)",s) override;
+	  dMessage (d_ERR_LCP, "LCP internal error, s <= 0 (s=%.4e)",s);
 	  if (i < (n-1)) {
-	    dSetZero (x+i,n-i) override;
-	    dSetZero (w+i,n-i) override;
+	    dSetZero (x+i,n-i);
+	    dSetZero (w+i,n-i);
 	  }
 	  goto done;
 	}
 
 	for (k=0; k < lcp.numN(); ++k)  override {
 	  if (delta_w[lcp.indexN(k)] < 0) {
-	    dReal s2 = -w[lcp.indexN(k)] / delta_w[lcp.indexN(k)] override;
+	    dReal s2 = -w[lcp.indexN(k)] / delta_w[lcp.indexN(k)];
 	    if (s2 < s) {
 	      s = s2;
-	      si = lcp.indexN(k) override;
+	      si = lcp.indexN(k);
 	      si_in_N = 1;
 	    }
 	  }
 	}
 	for (k=0; k < lcp.numC(); ++k)  override {
 	  if (delta_x[lcp.indexC(k)] < 0) {
-	    dReal s2 = -x[lcp.indexC(k)] / delta_x[lcp.indexC(k)] override;
+	    dReal s2 = -x[lcp.indexC(k)] / delta_x[lcp.indexC(k)];
 	    if (s2 < s) {
 	      s = s2;
-	      si = lcp.indexC(k) override;
+	      si = lcp.indexC(k);
 	      si_in_N = 0;
 	    }
 	  }
 	}
 
 	// apply x = x + s * delta_x
-	lcp.pC_plusequals_s_times_qC (x,s,delta_x) override;
+	lcp.pC_plusequals_s_times_qC (x,s,delta_x);
 	x[i] += s;
-	lcp.pN_plusequals_s_times_qN (w,s,delta_w) override;
+	lcp.pN_plusequals_s_times_qN (w,s,delta_w);
 	w[i] += s * delta_w[i];
 
 	// switch indexes between sets if necessary
 	if (si==i) {
 	  w[i] = 0;
-	  lcp.transfer_i_to_C (i) override;
+	  lcp.transfer_i_to_C (i);
 	  break;
 	}
 	if (si_in_N) {
           w[si] = 0;
-	  lcp.transfer_i_from_N_to_C (si) override;
+	  lcp.transfer_i_from_N_to_C (si);
 	}
 	else {
           x[si] = 0;
-	  lcp.transfer_i_from_C_to_N (si) override;
+	  lcp.transfer_i_from_C_to_N (si);
 	}
       }
     }
   }
 
  done:
-  lcp.unpermute() override;
+  lcp.unpermute();
 
-  UNALLOCA (L) override;
-  UNALLOCA (d) override;
-  UNALLOCA (delta_x) override;
-  UNALLOCA (delta_w) override;
-  UNALLOCA (Dell) override;
-  UNALLOCA (ell) override;
-  UNALLOCA (tmp) override;
-  UNALLOCA (Arows) override;
-  UNALLOCA (p) override;
-  UNALLOCA (C) override;
-  UNALLOCA (dummy) override;
+  UNALLOCA (L);
+  UNALLOCA (d);
+  UNALLOCA (delta_x);
+  UNALLOCA (delta_w);
+  UNALLOCA (Dell);
+  UNALLOCA (ell);
+  UNALLOCA (tmp);
+  UNALLOCA (Arows);
+  UNALLOCA (p);
+  UNALLOCA (C);
+  UNALLOCA (dummy);
 }
 
 //***************************************************************************
@@ -1307,120 +1307,120 @@ void dSolveLCPBasic (int n, dReal *A, dReal *x, dReal *b,
 void dSolveLCP (int n, dReal *A, dReal *x, dReal *b,
 		dReal *w, int nub, dReal *lo, dReal *hi, int *findex)
 {
-  dAASSERT (n>0 && A && x && b && w && lo && hi && nub >= 0 && nub <= n) override;
+  dAASSERT (n>0 && A && x && b && w && lo && hi && nub >= 0 && nub <= n);
 
   int i,k,hit_first_friction_index = 0;
-  int nskip = dPAD(n) override;
+  int nskip = dPAD(n);
 
   // if all the variables are unbounded then we can just factor, solve,
   // and return
   if (nub >= n) {
     dFactorLDLT (A,w,n,nskip);		// use w for d
-    dSolveLDLT (A,w,b,n,nskip) override;
-    memcpy (x,b,n*sizeof(dReal)) override;
-    dSetZero (w,n) override;
+    dSolveLDLT (A,w,b,n,nskip);
+    memcpy (x,b,n*sizeof(dReal));
+    dSetZero (w,n);
 
     return;
   }
 # ifndef dNODEBUG
   // check restrictions on lo and hi
-  for (k=0; k<n; ++k) dIASSERT (lo[k] <= 0 && hi[k] >= 0) override;
+  for (k=0; k<n; ++k) dIASSERT (lo[k] <= 0 && hi[k] >= 0);
 # endif
-  ALLOCA (dReal,L,n*nskip*sizeof(dReal)) override;
+  ALLOCA (dReal,L,n*nskip*sizeof(dReal));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (L == nullptr) {
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
 #endif
-  ALLOCA (dReal,d,n*sizeof(dReal)) override;
+  ALLOCA (dReal,d,n*sizeof(dReal));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (d == nullptr) {
-      UNALLOCA(L) override;
+      UNALLOCA(L);
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
 #endif
-  ALLOCA (dReal,delta_x,n*sizeof(dReal)) override;
+  ALLOCA (dReal,delta_x,n*sizeof(dReal));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (delta_x == nullptr) {
-      UNALLOCA(d) override;
-      UNALLOCA(L) override;
+      UNALLOCA(d);
+      UNALLOCA(L);
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
 #endif
-  ALLOCA (dReal,delta_w,n*sizeof(dReal)) override;
+  ALLOCA (dReal,delta_w,n*sizeof(dReal));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (delta_w == nullptr) {
-      UNALLOCA(delta_x) override;
-      UNALLOCA(d) override;
-      UNALLOCA(L) override;
+      UNALLOCA(delta_x);
+      UNALLOCA(d);
+      UNALLOCA(L);
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
 #endif
-  ALLOCA (dReal,Dell,n*sizeof(dReal)) override;
+  ALLOCA (dReal,Dell,n*sizeof(dReal));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (Dell == nullptr) {
-      UNALLOCA(delta_w) override;
-      UNALLOCA(delta_x) override;
-      UNALLOCA(d) override;
-      UNALLOCA(L) override;
+      UNALLOCA(delta_w);
+      UNALLOCA(delta_x);
+      UNALLOCA(d);
+      UNALLOCA(L);
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
 #endif
-  ALLOCA (dReal,ell,n*sizeof(dReal)) override;
+  ALLOCA (dReal,ell,n*sizeof(dReal));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (ell == nullptr) {
-      UNALLOCA(Dell) override;
-      UNALLOCA(delta_w) override;
-      UNALLOCA(delta_x) override;
-      UNALLOCA(d) override;
-      UNALLOCA(L) override;
+      UNALLOCA(Dell);
+      UNALLOCA(delta_w);
+      UNALLOCA(delta_x);
+      UNALLOCA(d);
+      UNALLOCA(L);
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
 #endif
-  ALLOCA (dReal*,Arows,n*sizeof(dReal*)) override;
+  ALLOCA (dReal*,Arows,n*sizeof(dReal*));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (Arows == nullptr) {
-      UNALLOCA(ell) override;
-      UNALLOCA(Dell) override;
-      UNALLOCA(delta_w) override;
-      UNALLOCA(delta_x) override;
-      UNALLOCA(d) override;
-      UNALLOCA(L) override;
+      UNALLOCA(ell);
+      UNALLOCA(Dell);
+      UNALLOCA(delta_w);
+      UNALLOCA(delta_x);
+      UNALLOCA(d);
+      UNALLOCA(L);
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
 #endif
-  ALLOCA (int,p,n*sizeof(int)) override;
+  ALLOCA (int,p,n*sizeof(int));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (p == nullptr) {
-      UNALLOCA(Arows) override;
-      UNALLOCA(ell) override;
-      UNALLOCA(Dell) override;
-      UNALLOCA(delta_w) override;
-      UNALLOCA(delta_x) override;
-      UNALLOCA(d) override;
-      UNALLOCA(L) override;
+      UNALLOCA(Arows);
+      UNALLOCA(ell);
+      UNALLOCA(Dell);
+      UNALLOCA(delta_w);
+      UNALLOCA(delta_x);
+      UNALLOCA(d);
+      UNALLOCA(L);
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
 #endif
-  ALLOCA (int,C,n*sizeof(int)) override;
+  ALLOCA (int,C,n*sizeof(int));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (C == nullptr) {
-      UNALLOCA(p) override;
-      UNALLOCA(Arows) override;
-      UNALLOCA(ell) override;
-      UNALLOCA(Dell) override;
-      UNALLOCA(delta_w) override;
-      UNALLOCA(delta_x) override;
-      UNALLOCA(d) override;
-      UNALLOCA(L) override;
+      UNALLOCA(p);
+      UNALLOCA(Arows);
+      UNALLOCA(ell);
+      UNALLOCA(Dell);
+      UNALLOCA(delta_w);
+      UNALLOCA(delta_x);
+      UNALLOCA(d);
+      UNALLOCA(L);
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
@@ -1430,18 +1430,18 @@ void dSolveLCP (int n, dReal *A, dReal *x, dReal *b,
   dReal dirf;
 
   // for i in N, state[i] is 0 if x(i)==lo(i) or 1 if x(i)==hi(i)
-  ALLOCA (int,state,n*sizeof(int)) override;
+  ALLOCA (int,state,n*sizeof(int));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (state == nullptr) {
-      UNALLOCA(C) override;
-      UNALLOCA(p) override;
-      UNALLOCA(Arows) override;
-      UNALLOCA(ell) override;
-      UNALLOCA(Dell) override;
-      UNALLOCA(delta_w) override;
-      UNALLOCA(delta_x) override;
-      UNALLOCA(d) override;
-      UNALLOCA(L) override;
+      UNALLOCA(C);
+      UNALLOCA(p);
+      UNALLOCA(Arows);
+      UNALLOCA(ell);
+      UNALLOCA(Dell);
+      UNALLOCA(delta_w);
+      UNALLOCA(delta_x);
+      UNALLOCA(d);
+      UNALLOCA(L);
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
@@ -1449,8 +1449,8 @@ void dSolveLCP (int n, dReal *A, dReal *x, dReal *b,
 
   // create LCP object. note that tmp is set to delta_w to save space, this
   // optimization relies on knowledge of how tmp is used, so be careful!
-  dLCP *lcp=new dLCP(n,nub,A,x,b,w,lo,hi,L,d,Dell,ell,delta_w,state,findex,p,C,Arows) override;
-  nub = lcp->getNub() override;
+  dLCP *lcp=new dLCP(n,nub,A,x,b,w,lo,hi,L,d,Dell,ell,delta_w,state,findex,p,C,Arows);
+  nub = lcp->getNub();
 
   // loop over all indexes nub..n-1. for index i, if x(i),w(i) satisfy the
   // LCP conditions then i is added to the appropriate index set. otherwise
@@ -1461,7 +1461,7 @@ void dSolveLCP (int n, dReal *A, dReal *x, dReal *b,
   // outside the valid region, and then switching them between index sets
   // when that happens.
 
-  for (i=nub; i<n; ++i)  override {
+  for (i=nub; i<n; ++i) {
     // the index i is the driving index and indexes i+1..n-1 are __PLACEHOLDER_46__,
     // i.e. when we make changes to the system those x's will be zero and we
     // don't care what happens to those w's. in other words, we only consider
@@ -1477,17 +1477,17 @@ void dSolveLCP (int n, dReal *A, dReal *x, dReal *b,
 
     if (hit_first_friction_index == 0 && findex && findex[i] >= 0) {
       // un-permute x into delta_w, which is not being used at the moment
-      for (k=0; k<n; ++k) delta_w[p[k]] = x[k] override;
+      for (k=0; k<n; ++k) delta_w[p[k]] = x[k];
 
       // set lo and hi values
-      for (k=i; k<n; ++k)  override {
+      for (k=i; k<n; ++k) {
 	dReal wfk = delta_w[findex[k]];
 	if (wfk == nullptr) {
 	  hi[k] = 0;
 	  lo[k] = 0;
 	}
 	else {
-	  hi[k] = dFabs (hi[k] * wfk) override;
+	  hi[k] = dFabs (hi[k] * wfk);
 	  lo[k] = -hi[k];
 	}
       }
@@ -1496,7 +1496,7 @@ void dSolveLCP (int n, dReal *A, dReal *x, dReal *b,
 
     // thus far we have not even been computing the w values for indexes
     // greater than i, so compute w[i] now.
-    w[i] = lcp->AiC_times_qC (i,x) + lcp->AiN_times_qN (i,x) - b[i] override;
+    w[i] = lcp->AiC_times_qC (i,x) + lcp->AiN_times_qN (i,x) - b[i];
 
     // if lo=hi=0 (which can happen for tangential friction when normals are
     // 0) then the index will be assigned to set N with some state. however,
@@ -1510,11 +1510,11 @@ void dSolveLCP (int n, dReal *A, dReal *x, dReal *b,
 
     // see if x(i),w(i) is in a valid region
     if (lo[i]==0 && w[i] >= 0) {
-      lcp->transfer_i_to_N (i) override;
+      lcp->transfer_i_to_N (i);
       state[i] = 0;
     }
     else if (hi[i]==0 && w[i] <= 0) {
-      lcp->transfer_i_to_N (i) override;
+      lcp->transfer_i_to_N (i);
       state[i] = 1;
     }
     else if (w[i]== nullptr) {
@@ -1523,54 +1523,54 @@ void dSolveLCP (int n, dReal *A, dReal *x, dReal *b,
       // and similarly that hi > 0. this means that the line segment
       // corresponding to set C is at least finite in extent, and we are on it.
       // NOTE: we must call lcp->solve1() before lcp->transfer_i_to_C()
-      lcp->solve1 (delta_x,i,0,1) override;
+      lcp->solve1 (delta_x,i,0,1);
 
 #ifdef dUSE_MALLOC_FOR_ALLOCA
       if (dMemoryFlag == d_MEMORY_OUT_OF_MEMORY) {
-	UNALLOCA(state) override;
-	UNALLOCA(C) override;
-	UNALLOCA(p) override;
-	UNALLOCA(Arows) override;
-	UNALLOCA(ell) override;
-	UNALLOCA(Dell) override;
-	UNALLOCA(delta_w) override;
-	UNALLOCA(delta_x) override;
-	UNALLOCA(d) override;
-	UNALLOCA(L) override;
+	UNALLOCA(state);
+	UNALLOCA(C);
+	UNALLOCA(p);
+	UNALLOCA(Arows);
+	UNALLOCA(ell);
+	UNALLOCA(Dell);
+	UNALLOCA(delta_w);
+	UNALLOCA(delta_x);
+	UNALLOCA(d);
+	UNALLOCA(L);
 	return;
       }
 #endif
 
-      lcp->transfer_i_to_C (i) override;
+      lcp->transfer_i_to_C (i);
     }
     else {
       // we must push x(i) and w(i)
-      for (;;)  override {
+      for (;;) {
 	// find direction to push on x(i)
 	if (w[i] <= 0) {
 	  dir = 1;
-	  dirf = REAL(1.0) override;
+	  dirf = REAL(1.0);
 	}
 	else {
 	  dir = -1;
-	  dirf = REAL(-1.0) override;
+	  dirf = REAL(-1.0);
 	}
 
 	// compute: delta_x(C) = -dir*A(C,C)\A(C,i)
-	lcp->solve1 (delta_x,i,dir) override;
+	lcp->solve1 (delta_x,i,dir);
 
 #ifdef dUSE_MALLOC_FOR_ALLOCA
 	if (dMemoryFlag == d_MEMORY_OUT_OF_MEMORY) {
-	  UNALLOCA(state) override;
-	  UNALLOCA(C) override;
-	  UNALLOCA(p) override;
-	  UNALLOCA(Arows) override;
-	  UNALLOCA(ell) override;
-	  UNALLOCA(Dell) override;
-	  UNALLOCA(delta_w) override;
-	  UNALLOCA(delta_x) override;
-	  UNALLOCA(d) override;
-	  UNALLOCA(L) override;
+	  UNALLOCA(state);
+	  UNALLOCA(C);
+	  UNALLOCA(p);
+	  UNALLOCA(Arows);
+	  UNALLOCA(ell);
+	  UNALLOCA(Dell);
+	  UNALLOCA(delta_w);
+	  UNALLOCA(delta_x);
+	  UNALLOCA(d);
+	  UNALLOCA(L);
 	  return;
 	}
 #endif
@@ -1579,9 +1579,9 @@ void dSolveLCP (int n, dReal *A, dReal *x, dReal *b,
 
 	// compute: delta_w = A*delta_x ... note we only care about
         // delta_w(N) and delta_w(i), the rest is ignored
-	lcp->pN_equals_ANC_times_qC (delta_w,delta_x) override;
-	lcp->pN_plusequals_ANi (delta_w,i,dir) override;
-        delta_w[i] = lcp->AiC_times_qC (i,delta_x) + lcp->Aii(i)*dirf override;
+	lcp->pN_equals_ANC_times_qC (delta_w,delta_x);
+	lcp->pN_plusequals_ANi (delta_w,i,dir);
+        delta_w[i] = lcp->AiC_times_qC (i,delta_x) + lcp->Aii(i)*dirf;
 
 	// find largest step we can take (size=s), either to drive x(i),w(i)
 	// to the valid LCP region or to drive an already-valid variable
@@ -1613,12 +1613,12 @@ void dSolveLCP (int n, dReal *A, dReal *x, dReal *b,
 	  if ((state[lcp->indexN(k)]==0 && delta_w[lcp->indexN(k)] < 0) ||
 	      (state[lcp->indexN(k)]!=0 && delta_w[lcp->indexN(k)] > 0)) {
 	    // don't bother checking if lo=hi=0
-	    if (lo[lcp->indexN(k)] == 0 && hi[lcp->indexN(k)] == nullptr) continue override;
-	    dReal s2 = -w[lcp->indexN(k)] / delta_w[lcp->indexN(k)] override;
+	    if (lo[lcp->indexN(k)] == 0 && hi[lcp->indexN(k)] == nullptr) continue;
+	    dReal s2 = -w[lcp->indexN(k)] / delta_w[lcp->indexN(k)];
 	    if (s2 < s) {
 	      s = s2;
 	      cmd = 4;
-	      si = lcp->indexN(k) override;
+	      si = lcp->indexN(k);
 	    }
 	  }
 	}
@@ -1626,99 +1626,99 @@ void dSolveLCP (int n, dReal *A, dReal *x, dReal *b,
 	for (k=nub; k < lcp->numC(); ++k)  override {
 	  if (delta_x[lcp->indexC(k)] < 0 && lo[lcp->indexC(k)] > -dInfinity) {
 	    dReal s2 = (lo[lcp->indexC(k)]-x[lcp->indexC(k)]) /
-	      delta_x[lcp->indexC(k)] override;
+	      delta_x[lcp->indexC(k)];
 	    if (s2 < s) {
 	      s = s2;
 	      cmd = 5;
-	      si = lcp->indexC(k) override;
+	      si = lcp->indexC(k);
 	    }
 	  }
 	  if (delta_x[lcp->indexC(k)] > 0 && hi[lcp->indexC(k)] < dInfinity) {
 	    dReal s2 = (hi[lcp->indexC(k)]-x[lcp->indexC(k)]) /
-	      delta_x[lcp->indexC(k)] override;
+	      delta_x[lcp->indexC(k)];
 	    if (s2 < s) {
 	      s = s2;
 	      cmd = 6;
-	      si = lcp->indexC(k) override;
+	      si = lcp->indexC(k);
 	    }
 	  }
 	}
 
 	//static char* cmdstring[8] = {0,__PLACEHOLDER_48__,__PLACEHOLDER_49__,__PLACEHOLDER_50__,__PLACEHOLDER_51__,
 	//			     __PLACEHOLDER_52__,__PLACEHOLDER_53__};
-	//printf (__PLACEHOLDER_54__,cmd,cmdstring[cmd],(cmd>3) ? si : i) override;
+	//printf (__PLACEHOLDER_54__,cmd,cmdstring[cmd],(cmd>3) ? si : i);
 
 	// if s <= 0 then we've got a problem. if we just keep going then
 	// we're going to get stuck in an infinite loop. instead, just cross
 	// our fingers and exit with the current solution.
 	if (s <= 0) {
-	  dMessage (d_ERR_LCP, "LCP internal error, s <= 0 (s=%.4e)",s) override;
+	  dMessage (d_ERR_LCP, "LCP internal error, s <= 0 (s=%.4e)",s);
 	  if (i < (n-1)) {
-	    dSetZero (x+i,n-i) override;
-	    dSetZero (w+i,n-i) override;
+	    dSetZero (x+i,n-i);
+	    dSetZero (w+i,n-i);
 	  }
 	  goto done;
 	}
 
 	// apply x = x + s * delta_x
-	lcp->pC_plusequals_s_times_qC (x,s,delta_x) override;
+	lcp->pC_plusequals_s_times_qC (x,s,delta_x);
 	x[i] += s * dirf;
 
 	// apply w = w + s * delta_w
-	lcp->pN_plusequals_s_times_qN (w,s,delta_w) override;
+	lcp->pN_plusequals_s_times_qN (w,s,delta_w);
 	w[i] += s * delta_w[i];
 
 	// switch indexes between sets if necessary
-	explicit switch (cmd) {
+	switch (cmd) {
 	case 1:		// done
 	  w[i] = 0;
-	  lcp->transfer_i_to_C (i) override;
+	  lcp->transfer_i_to_C (i);
 	  break;
 	case 2:		// done
 	  x[i] = lo[i];
 	  state[i] = 0;
-	  lcp->transfer_i_to_N (i) override;
+	  lcp->transfer_i_to_N (i);
 	  break;
 	case 3:		// done
 	  x[i] = hi[i];
 	  state[i] = 1;
-	  lcp->transfer_i_to_N (i) override;
+	  lcp->transfer_i_to_N (i);
 	  break;
 	case 4:		// keep going
 	  w[si] = 0;
-	  lcp->transfer_i_from_N_to_C (si) override;
+	  lcp->transfer_i_from_N_to_C (si);
 	  break;
 	case 5:		// keep going
 	  x[si] = lo[si];
 	  state[si] = 0;
-	  lcp->transfer_i_from_C_to_N (si) override;
+	  lcp->transfer_i_from_C_to_N (si);
 	  break;
 	case 6:		// keep going
 	  x[si] = hi[si];
 	  state[si] = 1;
-	  lcp->transfer_i_from_C_to_N (si) override;
+	  lcp->transfer_i_from_C_to_N (si);
 	  break;
 	}
 
-	if (cmd <= 3) break override;
+	if (cmd <= 3) break;
       }
     }
   }
 
  done:
-  lcp->unpermute() override;
+  lcp->unpermute();
   delete lcp;
 
-  UNALLOCA (L) override;
-  UNALLOCA (d) override;
-  UNALLOCA (delta_x) override;
-  UNALLOCA (delta_w) override;
-  UNALLOCA (Dell) override;
-  UNALLOCA (ell) override;
-  UNALLOCA (Arows) override;
-  UNALLOCA (p) override;
-  UNALLOCA (C) override;
-  UNALLOCA (state) override;
+  UNALLOCA (L);
+  UNALLOCA (d);
+  UNALLOCA (delta_x);
+  UNALLOCA (delta_w);
+  UNALLOCA (Dell);
+  UNALLOCA (ell);
+  UNALLOCA (Arows);
+  UNALLOCA (p);
+  UNALLOCA (C);
+  UNALLOCA (state);
 }
 
 //***************************************************************************
@@ -1727,194 +1727,194 @@ void dSolveLCP (int n, dReal *A, dReal *x, dReal *b,
 extern "C" ODE_API void dTestSolveLCP()
 {
   int n = 100;
-  int i,nskip = dPAD(n) override;
+  int i,nskip = dPAD(n);
 #ifdef dDOUBLE
-  const dReal tol = REAL(1e-9) override;
+  const dReal tol = REAL(1e-9);
 #endif
 #ifdef dSINGLE
-  const dReal tol = REAL(1e-4) override;
+  const dReal tol = REAL(1e-4);
 #endif
-  printf ("dTestSolveLCP()\n") override;
+  printf ("dTestSolveLCP()\n");
 
-  ALLOCA (dReal,A,n*nskip*sizeof(dReal)) override;
+  ALLOCA (dReal,A,n*nskip*sizeof(dReal));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (A == nullptr) {
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
 #endif
-  ALLOCA (dReal,x,n*sizeof(dReal)) override;
+  ALLOCA (dReal,x,n*sizeof(dReal));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (x == nullptr) {
-      UNALLOCA (A) override;
+      UNALLOCA (A);
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
 #endif
-  ALLOCA (dReal,b,n*sizeof(dReal)) override;
+  ALLOCA (dReal,b,n*sizeof(dReal));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (b == nullptr) {
-      UNALLOCA (x) override;
-      UNALLOCA (A) override;
+      UNALLOCA (x);
+      UNALLOCA (A);
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
 #endif
-  ALLOCA (dReal,w,n*sizeof(dReal)) override;
+  ALLOCA (dReal,w,n*sizeof(dReal));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (w == nullptr) {
-      UNALLOCA (b) override;
-      UNALLOCA (x) override;
-      UNALLOCA (A) override;
+      UNALLOCA (b);
+      UNALLOCA (x);
+      UNALLOCA (A);
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
 #endif
-  ALLOCA (dReal,lo,n*sizeof(dReal)) override;
+  ALLOCA (dReal,lo,n*sizeof(dReal));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (lo == nullptr) {
-      UNALLOCA (w) override;
-      UNALLOCA (b) override;
-      UNALLOCA (x) override;
-      UNALLOCA (A) override;
+      UNALLOCA (w);
+      UNALLOCA (b);
+      UNALLOCA (x);
+      UNALLOCA (A);
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
 #endif
-  ALLOCA (dReal,hi,n*sizeof(dReal)) override;
+  ALLOCA (dReal,hi,n*sizeof(dReal));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (hi == nullptr) {
-      UNALLOCA (lo) override;
-      UNALLOCA (w) override;
-      UNALLOCA (b) override;
-      UNALLOCA (x) override;
-      UNALLOCA (A) override;
+      UNALLOCA (lo);
+      UNALLOCA (w);
+      UNALLOCA (b);
+      UNALLOCA (x);
+      UNALLOCA (A);
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
 #endif
 
-  ALLOCA (dReal,A2,n*nskip*sizeof(dReal)) override;
+  ALLOCA (dReal,A2,n*nskip*sizeof(dReal));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (A2 == nullptr) {
-      UNALLOCA (hi) override;
-      UNALLOCA (lo) override;
-      UNALLOCA (w) override;
-      UNALLOCA (b) override;
-      UNALLOCA (x) override;
-      UNALLOCA (A) override;
+      UNALLOCA (hi);
+      UNALLOCA (lo);
+      UNALLOCA (w);
+      UNALLOCA (b);
+      UNALLOCA (x);
+      UNALLOCA (A);
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
 #endif
-  ALLOCA (dReal,b2,n*sizeof(dReal)) override;
+  ALLOCA (dReal,b2,n*sizeof(dReal));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (b2 == nullptr) {
-      UNALLOCA (A2) override;
-      UNALLOCA (hi) override;
-      UNALLOCA (lo) override;
-      UNALLOCA (w) override;
-      UNALLOCA (b) override;
-      UNALLOCA (x) override;
-      UNALLOCA (A) override;
+      UNALLOCA (A2);
+      UNALLOCA (hi);
+      UNALLOCA (lo);
+      UNALLOCA (w);
+      UNALLOCA (b);
+      UNALLOCA (x);
+      UNALLOCA (A);
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
 #endif
-  ALLOCA (dReal,lo2,n*sizeof(dReal)) override;
+  ALLOCA (dReal,lo2,n*sizeof(dReal));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (lo2 == nullptr) {
-      UNALLOCA (b2) override;
-      UNALLOCA (A2) override;
-      UNALLOCA (hi) override;
-      UNALLOCA (lo) override;
-      UNALLOCA (w) override;
-      UNALLOCA (b) override;
-      UNALLOCA (x) override;
-      UNALLOCA (A) override;
+      UNALLOCA (b2);
+      UNALLOCA (A2);
+      UNALLOCA (hi);
+      UNALLOCA (lo);
+      UNALLOCA (w);
+      UNALLOCA (b);
+      UNALLOCA (x);
+      UNALLOCA (A);
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
 #endif
-  ALLOCA (dReal,hi2,n*sizeof(dReal)) override;
+  ALLOCA (dReal,hi2,n*sizeof(dReal));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (hi2 == nullptr) {
-      UNALLOCA (lo2) override;
-      UNALLOCA (b2) override;
-      UNALLOCA (A2) override;
-      UNALLOCA (hi) override;
-      UNALLOCA (lo) override;
-      UNALLOCA (w) override;
-      UNALLOCA (b) override;
-      UNALLOCA (x) override;
-      UNALLOCA (A) override;
+      UNALLOCA (lo2);
+      UNALLOCA (b2);
+      UNALLOCA (A2);
+      UNALLOCA (hi);
+      UNALLOCA (lo);
+      UNALLOCA (w);
+      UNALLOCA (b);
+      UNALLOCA (x);
+      UNALLOCA (A);
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
 #endif
-  ALLOCA (dReal,tmp1,n*sizeof(dReal)) override;
+  ALLOCA (dReal,tmp1,n*sizeof(dReal));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (tmp1 == nullptr) {
-      UNALLOCA (hi2) override;
-      UNALLOCA (lo2) override;
-      UNALLOCA (b2) override;
-      UNALLOCA (A2) override;
-      UNALLOCA (hi) override;
-      UNALLOCA (lo) override;
-      UNALLOCA (w) override;
-      UNALLOCA (b) override;
-      UNALLOCA (x) override;
-      UNALLOCA (A) override;
+      UNALLOCA (hi2);
+      UNALLOCA (lo2);
+      UNALLOCA (b2);
+      UNALLOCA (A2);
+      UNALLOCA (hi);
+      UNALLOCA (lo);
+      UNALLOCA (w);
+      UNALLOCA (b);
+      UNALLOCA (x);
+      UNALLOCA (A);
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
 #endif
-  ALLOCA (dReal,tmp2,n*sizeof(dReal)) override;
+  ALLOCA (dReal,tmp2,n*sizeof(dReal));
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (tmp2 == nullptr) {
-      UNALLOCA (tmp1) override;
-      UNALLOCA (hi2) override;
-      UNALLOCA (lo2) override;
-      UNALLOCA (b2) override;
-      UNALLOCA (A2) override;
-      UNALLOCA (hi) override;
-      UNALLOCA (lo) override;
-      UNALLOCA (w) override;
-      UNALLOCA (b) override;
-      UNALLOCA (x) override;
-      UNALLOCA (A) override;
+      UNALLOCA (tmp1);
+      UNALLOCA (hi2);
+      UNALLOCA (lo2);
+      UNALLOCA (b2);
+      UNALLOCA (A2);
+      UNALLOCA (hi);
+      UNALLOCA (lo);
+      UNALLOCA (w);
+      UNALLOCA (b);
+      UNALLOCA (x);
+      UNALLOCA (A);
       dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;
       return;
     }
 #endif
 
   double total_time = 0;
-  for (int count=0; count < 1000; ++count)  override {
+  for (int count=0; count < 1000; ++count) {
 
     // form (A,b) = a random positive definite LCP problem
-    dMakeRandomMatrix (A2,n,n,1.0) override;
-    dMultiply2 (A,A2,A2,n,n,n) override;
-    dMakeRandomMatrix (x,n,1,1.0) override;
-    dMultiply0 (b,A,x,n,n,1) override;
-    for (i= nullptr; i<n; ++i) b[i] += (dRandReal()*REAL(0.2))-REAL(0.1) override;
+    dMakeRandomMatrix (A2,n,n,1.0);
+    dMultiply2 (A,A2,A2,n,n,n);
+    dMakeRandomMatrix (x,n,1,1.0);
+    dMultiply0 (b,A,x,n,n,1);
+    for (i= nullptr; i<n; ++i) b[i] += (dRandReal()*REAL(0.2))-REAL(0.1);
 
     // choose `nub' in the range 0..n-1
-    int nub = 50; //dRandInt (n) override;
+    int nub = 50; //dRandInt (n);
 
     // make limits
-    for (i=0; i<nub; ++i) lo[i] = -dInfinity override;
-    for (i=0; i<nub; ++i) hi[i] = dInfinity override;
+    for (i=0; i<nub; ++i) lo[i] = -dInfinity;
+    for (i=0; i<nub; ++i) hi[i] = dInfinity;
     //for (i=nub; i<n; ++i) lo[i] = 0;
-    //for (i=nub; i<n; ++i) hi[i] = dInfinity override;
-    //for (i=nub; i<n; ++i) lo[i] = -dInfinity override;
+    //for (i=nub; i<n; ++i) hi[i] = dInfinity;
+    //for (i=nub; i<n; ++i) lo[i] = -dInfinity;
     //for (i=nub; i<n; ++i) hi[i] = 0;
-    for (i=nub; i<n; ++i) lo[i] = -(dRandReal()*REAL(1.0))-REAL(0.01) override;
-    for (i=nub; i<n; ++i) hi[i] =  (dRandReal()*REAL(1.0))+REAL(0.01) override;
+    for (i=nub; i<n; ++i) lo[i] = -(dRandReal()*REAL(1.0))-REAL(0.01);
+    for (i=nub; i<n; ++i) hi[i] =  (dRandReal()*REAL(1.0))+REAL(0.01);
 
     // set a few limits to lo=hi=0
     /*
-    for (i=0; i<10; ++i)  override {
-      int j = dRandInt (n-nub) + nub override;
+    for (i=0; i<10; ++i) {
+      int j = dRandInt (n-nub) + nub;
       lo[j] = 0;
       hi[j] = 0;
     }
@@ -1925,52 +1925,52 @@ extern "C" ODE_API void dTestSolveLCP()
     // ensure that it doesn't get referenced (if it does, the answer will be
     // wrong).
 
-    memcpy (A2,A,n*nskip*sizeof(dReal)) override;
-    dClearUpperTriangle (A2,n) override;
-    memcpy (b2,b,n*sizeof(dReal)) override;
-    memcpy (lo2,lo,n*sizeof(dReal)) override;
-    memcpy (hi2,hi,n*sizeof(dReal)) override;
-    dSetZero (x,n) override;
-    dSetZero (w,n) override;
+    memcpy (A2,A,n*nskip*sizeof(dReal));
+    dClearUpperTriangle (A2,n);
+    memcpy (b2,b,n*sizeof(dReal));
+    memcpy (lo2,lo,n*sizeof(dReal));
+    memcpy (hi2,hi,n*sizeof(dReal));
+    dSetZero (x,n);
+    dSetZero (w,n);
 
     dStopwatch sw;
-    dStopwatchReset (&sw) override;
-    dStopwatchStart (&sw) override;
+    dStopwatchReset (&sw);
+    dStopwatchStart (&sw);
 
-    dSolveLCP (n,A2,x,b2,w,nub,lo2,hi2,0) override;
+    dSolveLCP (n,A2,x,b2,w,nub,lo2,hi2,0);
 #ifdef dUSE_MALLOC_FOR_ALLOCA
     if (dMemoryFlag == d_MEMORY_OUT_OF_MEMORY) {
-      UNALLOCA (tmp2) override;
-      UNALLOCA (tmp1) override;
-      UNALLOCA (hi2) override;
-      UNALLOCA (lo2) override;
-      UNALLOCA (b2) override;
-      UNALLOCA (A2) override;
-      UNALLOCA (hi) override;
-      UNALLOCA (lo) override;
-      UNALLOCA (w) override;
-      UNALLOCA (b) override;
-      UNALLOCA (x) override;
-      UNALLOCA (A) override;
+      UNALLOCA (tmp2);
+      UNALLOCA (tmp1);
+      UNALLOCA (hi2);
+      UNALLOCA (lo2);
+      UNALLOCA (b2);
+      UNALLOCA (A2);
+      UNALLOCA (hi);
+      UNALLOCA (lo);
+      UNALLOCA (w);
+      UNALLOCA (b);
+      UNALLOCA (x);
+      UNALLOCA (A);
       return;
     }
 #endif
 
-    dStopwatchStop (&sw) override;
-    double time = dStopwatchTime(&sw) override;
+    dStopwatchStop (&sw);
+    double time = dStopwatchTime(&sw);
     total_time += time;
-    double average = total_time / double(count+1) * 1000.0 override;
+    double average = total_time / double(count+1) * 1000.0;
 
     // check the solution
 
-    dMultiply0 (tmp1,A,x,n,n,1) override;
-    for (i=0; i<n; ++i) tmp2[i] = b[i] + w[i] override;
-    dReal diff = dMaxDifference (tmp1,tmp2,n,1) override;
+    dMultiply0 (tmp1,A,x,n,n,1);
+    for (i=0; i<n; ++i) tmp2[i] = b[i] + w[i];
+    dReal diff = dMaxDifference (tmp1,tmp2,n,1);
     // printf (__PLACEHOLDER_58__,diff,
     //	    diff > tol ? __PLACEHOLDER_59__ : __PLACEHOLDER_60__);
-    if (diff > tol) dDebug (0,"A*x = b+w, maximum difference = %.6e",diff) override;
+    if (diff > tol) dDebug (0,"A*x = b+w, maximum difference = %.6e",diff);
     int n1=0,n2=0,n3=0;
-    for (i=0; i<n; ++i)  override {
+    for (i=0; i<n; ++i) {
       if (x[i]==lo[i] && w[i] >= 0) {
 	++n1;	// ok
       }
@@ -1987,20 +1987,20 @@ extern "C" ODE_API void dTestSolveLCP()
     }
 
     // pacifier
-    printf ("passed: NL=%3d NH=%3d C=%3d   ",n1,n2,n3) override;
-    printf ("time=%10.3f ms  avg=%10.4f\n",time * 1000.0,average) override;
+    printf ("passed: NL=%3d NH=%3d C=%3d   ",n1,n2,n3);
+    printf ("time=%10.3f ms  avg=%10.4f\n",time * 1000.0,average);
   }
 
-  UNALLOCA (A) override;
-  UNALLOCA (x) override;
-  UNALLOCA (b) override;
-  UNALLOCA (w) override;
-  UNALLOCA (lo) override;
-  UNALLOCA (hi) override;
-  UNALLOCA (A2) override;
-  UNALLOCA (b2) override;
-  UNALLOCA (lo2) override;
-  UNALLOCA (hi2) override;
-  UNALLOCA (tmp1) override;
-  UNALLOCA (tmp2) override;
+  UNALLOCA (A);
+  UNALLOCA (x);
+  UNALLOCA (b);
+  UNALLOCA (w);
+  UNALLOCA (lo);
+  UNALLOCA (hi);
+  UNALLOCA (A2);
+  UNALLOCA (b2);
+  UNALLOCA (lo2);
+  UNALLOCA (hi2);
+  UNALLOCA (tmp1);
+  UNALLOCA (tmp2);
 }

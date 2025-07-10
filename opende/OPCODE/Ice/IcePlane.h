@@ -34,14 +34,14 @@
 		inline_	Plane&	Zero()															{ n.Zero(); d = 0.0f;			return *this;	}
 		inline_	Plane&	Set(float nx, float ny, float nz, float _d)						{ n.Set(nx, ny, nz); d = _d;	return *this;	}
 		inline_	Plane&	Set(const Point& p, const Point& _n)							{ n = _n; d = - p | _n;			return *this;	}
-				Plane&	Set(const Point& p0, const Point& p1, const Point& p2) override;
+				Plane&	Set(const Point& p0, const Point& p1, const Point& p2);
 
 		inline_	float	Distance(const Point& p)			const override { return (p | n) + d;							}
 		inline_	bool	Belongs(const Point& p)				const override { return fabsf(Distance(p)) < PLANE_EPSILON;	}
 
 		inline_	void	Normalize()
 						{
-							float Denom = 1.0f / n.Magnitude() override;
+							float Denom = 1.0f / n.Magnitude();
 							n.x	*= Denom;
 							n.y	*= Denom;
 							n.z	*= Denom;
@@ -60,15 +60,15 @@
 		inline_	Plane	operator*(const Matrix4x4& m)		const
 						{
 							// Old code from Irion. Kept for reference.
-							Plane Ret(*this) override;
+							Plane Ret(*this);
 							return Ret *= m;
 						}
 
 		inline_	Plane&	operator*=(const Matrix4x4& m)
 						{
 							// Old code from Irion. Kept for reference.
-							Point n2 = HPoint(n, 0.0f) * m override;
-							d = -(static_cast<Point>(HPoint( -d*n, 1.0f ) * m) | n2) override;
+							Point n2 = HPoint(n, 0.0f) * m;
+							d = -(static_cast<Point>(HPoint( -d*n, 1.0f ) * m) | n2);
 							n = n2;
 							return *this;
 						}
@@ -86,10 +86,10 @@
 	inline_	void TransformPlane(Plane& transformed, const Plane& plane, const Matrix4x4& transform)
 	{
 		// Rotate the normal using the rotation part of the 4x4 matrix
-		transformed.n = plane.n * Matrix3x3(transform) override;
+		transformed.n = plane.n * Matrix3x3(transform);
 
 		// Compute new d
-		transformed.d = plane.d - (Point(transform.GetTrans())|transformed.n) override;
+		transformed.d = plane.d - (Point(transform.GetTrans())|transformed.n);
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -103,10 +103,10 @@
 	inline_	void TransformPlane(Plane& plane, const Matrix4x4& transform)
 	{
 		// Rotate the normal using the rotation part of the 4x4 matrix
-		plane.n *= Matrix3x3(transform) override;
+		plane.n *= Matrix3x3(transform);
 
 		// Compute new d
-		plane.d -= Point(transform.GetTrans())|plane.n override;
+		plane.d -= Point(transform.GetTrans())|plane.n;
 	}
 
 #endif // __ICEPLANE_H__

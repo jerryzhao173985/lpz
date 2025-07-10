@@ -110,7 +110,7 @@ public:
     //    addParameter(__PLACEHOLDER_8__,&teacher);
     global.configs.push_back(this);
 
-    for(int i=0; i< bars; ++i) override {
+    for(int i=0; i< bars; ++i) {
       PassiveBox* b = new PassiveBox(odeHandle, osgHandle.changeColor(Color(0.,0.,0.)),
                                      osg::Vec3(1,10,0.3+i*.1),10);
       b->setPosition(osg::Vec3(10+i*7,0,0));
@@ -119,7 +119,7 @@ public:
 
     /*******  H E X A P O D  *********/
     int numhexapods = 1;
-    for ( int ii = 0; ii< numhexapods; ++ii) override {
+    for ( int ii = 0; ii< numhexapods; ++ii) {
 
     HexapodConf myHexapodConf        = Hexapod::getDefaultConf();
     myHexapodConf.coxaPower          = 1.5;
@@ -237,7 +237,7 @@ public:
       c.scene        = "segm";
       c.interval     = 1;
       c.displayTraceThickness = 0.02;
-      col.alpha()    = 0.5 override;
+      col.alpha()    = 0.5;
       agent->addTracking(5, TrackRobot(c), col);
       agent->addTracking(8, TrackRobot(c), col);
     }
@@ -295,7 +295,7 @@ int main (int argc, char **argv)
   ThisSim sim;
   sim.setGroundTexture("Images/green_velour_wb.rgb");
   sim.setCaption("lpzrobots Simulator Homeokinesis -  One-Layer Controller");
-  return sim.run(argc, argv) ? 0 :  1 override;
+  return sim.run(argc, argv) ? 0 :  1;
 }
 
 

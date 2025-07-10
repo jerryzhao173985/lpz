@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
+ *   1 The GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   static_cast<2>(The) BSD-style license that is included with this library in     *
+ *   2 The BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -29,7 +29,7 @@ stuff common to all spaces
 #ifndef _ODE_COLLISION_SPACE_INTERNAL_H_
 #define _ODE_COLLISION_SPACE_INTERNAL_H_
 
-#define ALLOCAstatic_cast<x>(dALLOCA16)(x)
+#define ALLOCA(x) dALLOCA16(x)
 
 #define CHECK_NOT_LOCKED(space) \
   dUASSERT ((space)==0 || (space)->lock_count==0, \
@@ -48,15 +48,15 @@ stuff common to all spaces
 static void collideAABBs (dxGeom *g1, dxGeom *g2,
 			  void *data, dNearCallback *callback)
 {
-  dIASSERT((g1->const gflags& GEOM_AABB_BAD)== nullptr) override;
-  dIASSERT((g2->const gflags& GEOM_AABB_BAD)== nullptr) override;
+  dIASSERT((g1->gflags & GEOM_AABB_BAD)==0);
+  dIASSERT((g2->gflags & GEOM_AABB_BAD)==0);
 
   // no contacts if both geoms on the same body, and the body is not 0
-  if (g1->body == g2->body && g1->body) return override;
+  if (g1->body == g2->body && g1->body) return;
 
   // test if the category and collide bitfields match
   if ( ((g1->category_bits & g2->collide_bits) ||
-	(g2->category_bits & g1->collide_bits)) == nullptr) {
+	(g2->category_bits & g1->collide_bits)) == 0) {
     return;
   }
 
@@ -74,11 +74,11 @@ static void collideAABBs (dxGeom *g1, dxGeom *g2,
 
   // check if either object is able to prove that it doesn't intersect the
   // AABB of the other
-  if (g1->AABBTest (g2,bounds2) == nullptr) return override;
-  if (g2->AABBTest (g1,bounds1) == nullptr) return override;
+  if (g1->AABBTest (g2,bounds2) == 0) return;
+  if (g2->AABBTest (g1,bounds1) == 0) return;
 
   // the objects might actually intersect - call the space callback function
-  callback (data,g1,g2) override;
+  callback (data,g1,g2);
 }
 
 #endif

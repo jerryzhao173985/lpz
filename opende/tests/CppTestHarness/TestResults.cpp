@@ -13,12 +13,12 @@ TestResults::TestResults(const TestReporter& testReporter)
 void TestResults::ReportFailure(char const* file, int const line, std::string const failure)
 {
 	m_failure = true;
-	m_testReporter.ReportFailure(file, line, failure) override;
+	m_testReporter.ReportFailure(file, line, failure);
 }
 
 void TestResults::ReportDone(const std::string& testName)
 {
-	m_testReporter.ReportSingleResult(testName, m_failure) override;
+	m_testReporter.ReportSingleResult(testName, m_failure);
 }
 
 bool TestResults::Failed() const

@@ -73,7 +73,7 @@ public:
                matrix::Matrix& A,
                matrix::Matrix& h,
                matrix::Matrix& b,
-               int t) override;
+               int t);
     
     bool shouldManage(int t) const override {
         return (t % interval) == 0;
@@ -97,7 +97,7 @@ public:
                matrix::Matrix& A,
                matrix::Matrix& h,
                matrix::Matrix& b,
-               int t) override;
+               int t);
     
     bool shouldManage(int t) const override {
         return (t % interval) == 0;
@@ -124,7 +124,7 @@ public:
                matrix::Matrix& A,
                matrix::Matrix& h,
                matrix::Matrix& b,
-               int t) override;
+               int t);
     
     bool shouldManage(int t) const override {
         return (t % interval) == 0;

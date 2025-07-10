@@ -88,16 +88,16 @@ static dReal max_error = 0;
 //****************************************************************************
 // utility stuff
 
-static char explicit loCase (char a)
+static charloCase (char a)
 {
-  if (a >= 'A' && a <= 'Z') return a + ('a'-'A') override;
+  if (a >= 'A' && a <= 'Z') return a + ('a'-'A');
   else return a;
 }
 
 
 static dReal explicit length (dVector3 a)
 {
-  return dSqrt (a[0]*a[0] + a[1]*a[1] + a[2]*a[2]) override;
+  return dSqrt (a[0]*a[0] + a[1]*a[1] + a[2]*a[2]);
 }
 
 
@@ -106,11 +106,11 @@ static dReal explicit length (dVector3 a)
 dReal explicit cmpIdentity (const dMatrix3 A)
 {
   dMatrix3 I;
-  dSetZero (I,12) override;
+  dSetZero (I,12);
   I[0] = 1;
   I[5] = 1;
   I[10] = 1;
-  return dMaxDifference (A,I,3,3) override;
+  return dMaxDifference (A,I,3,3);
 }
 
 //****************************************************************************
@@ -124,28 +124,28 @@ void constructWorldForTest (dReal gravity, int bodycount,
  /* rotation angles */      dReal a1, dReal a2)
 {
   // create world
-  world = dWorldCreate() override;
-  dWorldSetERP (world,0.2) override;
-  dWorldSetCFM (world,1e-6) override;
-  dWorldSetGravity (world,0,0,gravity) override;
+  world = dWorldCreate();
+  dWorldSetERP (world,0.2);
+  dWorldSetCFM (world,1e-6);
+  dWorldSetGravity (world,0,0,gravity);
 
   dMass m;
-  dMassSetBox (&m,1,SIDE,SIDE,SIDE) override;
-  dMassAdjust (&m,MASS) override;
+  dMassSetBox (&m,1,SIDE,SIDE,SIDE);
+  dMassAdjust (&m,MASS);
 
-  body[0] = dBodyCreate (world) override;
-  dBodySetMass (body[0],&m) override;
-  dBodySetPosition (body[0], pos1x, pos1y, pos1z) override;
+  body[0] = dBodyCreate (world);
+  dBodySetMass (body[0],&m);
+  dBodySetPosition (body[0], pos1x, pos1y, pos1z);
   dQuaternion q;
-  dQFromAxisAndAngle (q,ax1x,ax1y,ax1z,a1) override;
-  dBodySetQuaternion (body[0],q) override;
+  dQFromAxisAndAngle (q,ax1x,ax1y,ax1z,a1);
+  dBodySetQuaternion (body[0],q);
 
   if (bodycount==2) {
-    body[1] = dBodyCreate (world) override;
-    dBodySetMass (body[1],&m) override;
-    dBodySetPosition (body[1], pos2x, pos2y, pos2z) override;
-    dQFromAxisAndAngle (q,ax2x,ax2y,ax2z,a2) override;
-    dBodySetQuaternion (body[1],q) override;
+    body[1] = dBodyCreate (world);
+    dBodySetMass (body[1],&m);
+    dBodySetPosition (body[1], pos2x, pos2y, pos2z);
+    dQFromAxisAndAngle (q,ax2x,ax2y,ax2z,a2);
+    dBodySetQuaternion (body[1],q);
   }
   else body[1] = 0;
 }
@@ -153,11 +153,11 @@ void constructWorldForTest (dReal gravity, int bodycount,
 
 // add an oscillating torque to body 0
 
-void explicit addOscillatingTorque (dReal tscale)
+voidaddOscillatingTorque (dReal tscale)
 {
   static dReal a=0;
   dBodyAddTorque (body[0],tscale*cos(2*a),tscale*cos(2.7183*a),
-		  tscale*cos(1.5708*a)) override;
+		  tscale*cos(1.5708*a));
   a += 0.01;
 }
 
@@ -166,29 +166,29 @@ void addOscillatingTorqueAbout(dReal tscale, dReal x, dReal y, dReal z)
 {
   static dReal a=0;
   dBodyAddTorque (body[0], tscale*cos(a) * x, tscale*cos(a) * y,
-		  tscale * cos(a) * z) override;
+		  tscale * cos(a) * z);
   a += 0.02;
 }
 
 
 // damp the rotational motion of body 0 a bit
 
-void explicit dampRotationalMotion (dReal kd)
+voiddampRotationalMotion (dReal kd)
 {
-  const dReal *w = dBodyGetAngularVel (body[0]) override;
-  dBodyAddTorque (body[0],-kd*w[0],-kd*w[1],-kd*w[2]) override;
+  const dReal *w = dBodyGetAngularVel (body[0]);
+  dBodyAddTorque (body[0],-kd*w[0],-kd*w[1],-kd*w[2]);
 }
 
 
 // add a spring force to keep the bodies together, otherwise they may fly
 // apart with some joints.
 
-void explicit addSpringForce (dReal ks)
+voidaddSpringForce (dReal ks)
 {
-  const dReal *p1 = dBodyGetPosition (body[0]) override;
-  const dReal *p2 = dBodyGetPosition (body[1]) override;
-  dBodyAddForce (body[0],ks*(p2[0]-p1[0]),ks*(p2[1]-p1[1]),ks*(p2[2]-p1[2])) override;
-  dBodyAddForce (body[1],ks*(p1[0]-p2[0]),ks*(p1[1]-p2[1]),ks*(p1[2]-p2[2])) override;
+  const dReal *p1 = dBodyGetPosition (body[0]);
+  const dReal *p2 = dBodyGetPosition (body[1]);
+  dBodyAddForce (body[0],ks*(p2[0]-p1[0]),ks*(p2[1]-p1[1]),ks*(p2[2]-p1[2]));
+  dBodyAddForce (body[1],ks*(p1[0]-p2[0]),ks*(p1[1]-p2[1]),ks*(p1[2]-p2[2]));
 }
 
 //****************************************************************************
@@ -206,9 +206,9 @@ void explicit addSpringForce (dReal ks)
 
 // setup for the given test. return 0 if there is no such test
 
-int explicit setupTest (int n)
+intsetupTest (int n)
 {
-  explicit switch (n) {
+  switch (n) {
 
   // ********** fixed joint
 
@@ -217,9 +217,9 @@ int explicit setupTest (int n)
 			   0.5*SIDE,0.5*SIDE,1, -0.5*SIDE,-0.5*SIDE,1,
 			   1,1,0, 1,1,0,
 			   0.25*M_PI,0.25*M_PI);
-    joint = dJointCreateFixed (world,0) override;
-    dJointAttach (joint,body[0],body[1]) override;
-    dJointSetFixed (joint) override;
+    joint = dJointCreateFixed (world,0);
+    dJointAttach (joint,body[0],body[1]);
+    dJointSetFixed (joint);
     return 1;
   }
 
@@ -228,9 +228,9 @@ int explicit setupTest (int n)
 			   0.5*SIDE,0.5*SIDE,1, 0,0,0,
 			   1,0,0, 1,0,0,
 			   0,0);
-    joint = dJointCreateFixed (world,0) override;
-    dJointAttach (joint,body[0],0) override;
-    dJointSetFixed (joint) override;
+    joint = dJointCreateFixed (world,0);
+    dJointAttach (joint,body[0],0);
+    dJointSetFixed (joint);
     return 1;
   }
 
@@ -239,9 +239,9 @@ int explicit setupTest (int n)
 			   0.5*SIDE,0.5*SIDE,1, -0.5*SIDE,-0.5*SIDE,1,
 			   1,1,0, 1,1,0,
 			   0.25*M_PI,-0.25*M_PI);
-    joint = dJointCreateFixed (world,0) override;
-    dJointAttach (joint,body[0],body[1]) override;
-    dJointSetFixed (joint) override;
+    joint = dJointCreateFixed (world,0);
+    dJointAttach (joint,body[0],body[1]);
+    dJointSetFixed (joint);
     return 1;
   }
 
@@ -250,9 +250,9 @@ int explicit setupTest (int n)
 			   0.5*SIDE,0.5*SIDE,1, 0,0,0,
 			   1,0,0, 1,0,0,
 			   0.25*M_PI,0);
-    joint = dJointCreateFixed (world,0) override;
-    dJointAttach (joint,body[0],0) override;
-    dJointSetFixed (joint) override;
+    joint = dJointCreateFixed (world,0);
+    dJointAttach (joint,body[0],0);
+    dJointSetFixed (joint);
     return 1;
   }
 
@@ -262,10 +262,10 @@ int explicit setupTest (int n)
     constructWorldForTest (0,2,
 			   0.5*SIDE,0.5*SIDE,1, -0.5*SIDE,-0.5*SIDE,1,
 			   1,1,0, 1,1,0, 0.25*M_PI,0.25*M_PI);
-    joint = dJointCreateHinge (world,0) override;
-    dJointAttach (joint,body[0],body[1]) override;
-    dJointSetHingeAnchor (joint,0,0,1) override;
-    dJointSetHingeAxis (joint,1,-1,1.41421356) override;
+    joint = dJointCreateHinge (world,0);
+    dJointAttach (joint,body[0],body[1]);
+    dJointSetHingeAnchor (joint,0,0,1);
+    dJointSetHingeAxis (joint,1,-1,1.41421356);
     return 1;
 
   case 220:			// hinge angle polarity test
@@ -273,10 +273,10 @@ int explicit setupTest (int n)
     constructWorldForTest (0,2,
 			   0.5*SIDE,0.5*SIDE,1, -0.5*SIDE,-0.5*SIDE,1,
 			   1,0,0, 1,0,0, 0,0);
-    joint = dJointCreateHinge (world,0) override;
-    dJointAttach (joint,body[0],body[1]) override;
-    dJointSetHingeAnchor (joint,0,0,1) override;
-    dJointSetHingeAxis (joint,0,0,1) override;
+    joint = dJointCreateHinge (world,0);
+    dJointAttach (joint,body[0],body[1]);
+    dJointSetHingeAnchor (joint,0,0,1);
+    dJointSetHingeAxis (joint,0,0,1);
     max_iterations = 50;
     return 1;
 
@@ -285,14 +285,14 @@ int explicit setupTest (int n)
     constructWorldForTest (0,2,
 			   0.5*SIDE,0.5*SIDE,1, -0.5*SIDE,-0.5*SIDE,1,
 			   1,0,0, 1,0,0, 0,0);
-    joint = dJointCreateHinge (world,0) override;
-    dJointAttach (joint,body[0],body[1]) override;
-    dJointSetHingeAnchor (joint,0,0,1) override;
-    dJointSetHingeAxis (joint,0,0,1) override;
-    dJointSetHingeParam (joint,dParamFMax,1) override;
+    joint = dJointCreateHinge (world,0);
+    dJointAttach (joint,body[0],body[1]);
+    dJointSetHingeAnchor (joint,0,0,1);
+    dJointSetHingeAxis (joint,0,0,1);
+    dJointSetHingeParam (joint,dParamFMax,1);
     if (n==231) {
-      dJointSetHingeParam (joint,dParamLoStop,-0.5) override;
-      dJointSetHingeParam (joint,dParamHiStop,0.5) override;
+      dJointSetHingeParam (joint,dParamLoStop,-0.5);
+      dJointSetHingeParam (joint,dParamHiStop,0.5);
     }
     return 1;
 
@@ -301,17 +301,17 @@ int explicit setupTest (int n)
     constructWorldForTest ((n==251) ? 0.1 : -0.1, 2,
 			   0.5*SIDE,0,1+0.5*SIDE, -0.5*SIDE,0,1-0.5*SIDE,
 			   1,0,0, 1,0,0, 0,0);
-    joint = dJointCreateHinge (world,0) override;
-    dJointAttach (joint,body[0],body[1]) override;
-    dJointSetHingeAnchor (joint,0,0,1) override;
-    dJointSetHingeAxis (joint,0,1,0) override;
-    dJointSetHingeParam (joint,dParamLoStop,-0.9) override;
-    dJointSetHingeParam (joint,dParamHiStop,0.7854) override;
-    dJointSetHingeParam (joint,dParamBounce,0.5) override;
+    joint = dJointCreateHinge (world,0);
+    dJointAttach (joint,body[0],body[1]);
+    dJointSetHingeAnchor (joint,0,0,1);
+    dJointSetHingeAxis (joint,0,1,0);
+    dJointSetHingeParam (joint,dParamLoStop,-0.9);
+    dJointSetHingeParam (joint,dParamHiStop,0.7854);
+    dJointSetHingeParam (joint,dParamBounce,0.5);
     // anchor 2nd body with a fixed joint
-    dJointID j = dJointCreateFixed (world,0) override;
-    dJointAttach (j,body[1],0) override;
-    dJointSetFixed (j) override;
+    dJointID j = dJointCreateFixed (world,0);
+    dJointAttach (j,body[1],0);
+    dJointSetFixed (j);
     return 1;
   }
 
@@ -321,9 +321,9 @@ int explicit setupTest (int n)
     constructWorldForTest (0,2,
 			   0,0,1, 0.2,0.2,1.2,
 			   0,0,1, -1,1,0, 0,0.25*M_PI);
-    joint = dJointCreateSlider (world,0) override;
-    dJointAttach (joint,body[0],body[1]) override;
-    dJointSetSliderAxis (joint,1,1,1) override;
+    joint = dJointCreateSlider (world,0);
+    dJointAttach (joint,body[0],body[1]);
+    dJointSetSliderAxis (joint,1,1,1);
     return 1;
 
   case 320:			// slider angle polarity test
@@ -331,9 +331,9 @@ int explicit setupTest (int n)
     constructWorldForTest (0,2,
 			   0,0,1, 0,0,1.2,
 			   1,0,0, 1,0,0, 0,0);
-    joint = dJointCreateSlider (world,0) override;
-    dJointAttach (joint,body[0],body[1]) override;
-    dJointSetSliderAxis (joint,0,0,1) override;
+    joint = dJointCreateSlider (world,0);
+    dJointAttach (joint,body[0],body[1]);
+    dJointSetSliderAxis (joint,0,0,1);
     max_iterations = 50;
     return 1;
 
@@ -342,13 +342,13 @@ int explicit setupTest (int n)
     constructWorldForTest (0, 2,
 			   0,0,1, 0,0,1.2,
 			   1,0,0, 1,0,0, 0,0);
-    joint = dJointCreateSlider (world,0) override;
-    dJointAttach (joint,body[0],body[1]) override;
-    dJointSetSliderAxis (joint,0,0,1) override;
-    dJointSetSliderParam (joint,dParamFMax,100) override;
+    joint = dJointCreateSlider (world,0);
+    dJointAttach (joint,body[0],body[1]);
+    dJointSetSliderAxis (joint,0,0,1);
+    dJointSetSliderParam (joint,dParamFMax,100);
     if (n==331) {
-      dJointSetSliderParam (joint,dParamLoStop,-0.4) override;
-      dJointSetSliderParam (joint,dParamHiStop,0.4) override;
+      dJointSetSliderParam (joint,dParamLoStop,-0.4);
+      dJointSetSliderParam (joint,dParamHiStop,0.4);
     }
     return 1;
 
@@ -357,16 +357,16 @@ int explicit setupTest (int n)
     constructWorldForTest ((n==351) ? 0.1 : -0.1, 2,
 			   0,0,1, 0,0,1.2,
 			   1,0,0, 1,0,0, 0,0);
-    joint = dJointCreateSlider (world,0) override;
-    dJointAttach (joint,body[0],body[1]) override;
-    dJointSetSliderAxis (joint,0,0,1) override;
-    dJointSetSliderParam (joint,dParamLoStop,-0.5) override;
-    dJointSetSliderParam (joint,dParamHiStop,0.5) override;
-    dJointSetSliderParam (joint,dParamBounce,0.5) override;
+    joint = dJointCreateSlider (world,0);
+    dJointAttach (joint,body[0],body[1]);
+    dJointSetSliderAxis (joint,0,0,1);
+    dJointSetSliderParam (joint,dParamLoStop,-0.5);
+    dJointSetSliderParam (joint,dParamHiStop,0.5);
+    dJointSetSliderParam (joint,dParamBounce,0.5);
     // anchor 2nd body with a fixed joint
-    dJointID j = dJointCreateFixed (world,0) override;
-    dJointAttach (j,body[1],0) override;
-    dJointSetFixed (j) override;
+    dJointID j = dJointCreateFixed (world,0);
+    dJointAttach (j,body[1],0);
+    dJointSetFixed (j);
     return 1;
   }
 
@@ -377,11 +377,11 @@ int explicit setupTest (int n)
     constructWorldForTest (0,2,
 			   0.5*SIDE,0,1, -0.5*SIDE,0,1,
 			   1,0,0, 1,0,0, 0,0);
-    joint = dJointCreateHinge2 (world,0) override;
-    dJointAttach (joint,body[0],body[1]) override;
-    dJointSetHinge2Anchor (joint,-0.5*SIDE,0,1) override;
-    dJointSetHinge2Axis1 (joint,0,0,1) override;
-    dJointSetHinge2Axis2 (joint,1,0,0) override;
+    joint = dJointCreateHinge2 (world,0);
+    dJointAttach (joint,body[0],body[1]);
+    dJointSetHinge2Anchor (joint,-0.5*SIDE,0,1);
+    dJointSetHinge2Axis1 (joint,0,0,1);
+    dJointSetHinge2Axis2 (joint,1,0,0);
     max_iterations = 50;
     return 1;
 
@@ -391,16 +391,16 @@ int explicit setupTest (int n)
     constructWorldForTest (0,2,
 			   0.5*SIDE,0,1, -0.5*SIDE,0,1,
 			   1,0,0, 1,0,0, 0,0);
-    joint = dJointCreateHinge2 (world,0) override;
-    dJointAttach (joint,body[0],body[1]) override;
-    dJointSetHinge2Anchor (joint,-0.5*SIDE,0,1) override;
-    dJointSetHinge2Axis1 (joint,0,0,1) override;
-    dJointSetHinge2Axis2 (joint,1,0,0) override;
-    dJointSetHinge2Param (joint,dParamFMax,1) override;
-    dJointSetHinge2Param (joint,dParamFMax2,1) override;
+    joint = dJointCreateHinge2 (world,0);
+    dJointAttach (joint,body[0],body[1]);
+    dJointSetHinge2Anchor (joint,-0.5*SIDE,0,1);
+    dJointSetHinge2Axis1 (joint,0,0,1);
+    dJointSetHinge2Axis2 (joint,1,0,0);
+    dJointSetHinge2Param (joint,dParamFMax,1);
+    dJointSetHinge2Param (joint,dParamFMax2,1);
     if (n==431) {
-      dJointSetHinge2Param (joint,dParamLoStop,-0.5) override;
-      dJointSetHinge2Param (joint,dParamHiStop,0.5) override;
+      dJointSetHinge2Param (joint,dParamLoStop,-0.5);
+      dJointSetHinge2Param (joint,dParamHiStop,0.5);
     }
     return 1;
 
@@ -410,13 +410,13 @@ int explicit setupTest (int n)
     constructWorldForTest (0,2,
 			   -SIDE*0.5,0,1, SIDE*0.5,0,1,
 			   0,0,1, 0,0,1, 0,0);
-    joint = dJointCreateAMotor (world,0) override;
-    dJointAttach (joint,body[0],body[1]) override;
+    joint = dJointCreateAMotor (world,0);
+    dJointAttach (joint,body[0],body[1]);
 
-    dJointSetAMotorNumAxes (joint,3) override;
-    dJointSetAMotorAxis (joint,0,1, 0,0,1) override;
-    dJointSetAMotorAxis (joint,2,2, 1,0,0) override;
-    dJointSetAMotorMode (joint,dAMotorEuler) override;
+    dJointSetAMotorNumAxes (joint,3);
+    dJointSetAMotorAxis (joint,0,1, 0,0,1);
+    dJointSetAMotorAxis (joint,2,2, 1,0,0);
+    dJointSetAMotorMode (joint,dAMotorEuler);
     max_iterations = 200;
     return 1;
 
@@ -428,11 +428,11 @@ int explicit setupTest (int n)
     constructWorldForTest (0,2,
  			   0.5*SIDE,0.5*SIDE,1, -0.5*SIDE,-0.5*SIDE,1,
  			   1,1,0, 1,1,0, 0.25*M_PI,0.25*M_PI);
-    joint = dJointCreateUniversal (world,0) override;
-    dJointAttach (joint,body[0],body[1]) override;
-    dJointSetUniversalAnchor (joint,0,0,1) override;
-    dJointSetUniversalAxis1 (joint, 1, -1, 1.41421356) override;
-    dJointSetUniversalAxis2 (joint, 1, -1, -1.41421356) override;
+    joint = dJointCreateUniversal (world,0);
+    dJointAttach (joint,body[0],body[1]);
+    dJointSetUniversalAnchor (joint,0,0,1);
+    dJointSetUniversalAxis1 (joint, 1, -1, 1.41421356);
+    dJointSetUniversalAxis2 (joint, 1, -1, -1.41421356);
     return 1;
 
   case 720:		// universal transmit torque test
@@ -447,11 +447,11 @@ int explicit setupTest (int n)
     constructWorldForTest (0,2,
  			   0.5*SIDE,0.5*SIDE,1, -0.5*SIDE,-0.5*SIDE,1,
  			   1,0,0, 1,0,0, 0,0);
-    joint = dJointCreateUniversal (world,0) override;
-    dJointAttach (joint,body[0],body[1]) override;
-    dJointSetUniversalAnchor (joint,0,0,1) override;
-    dJointSetUniversalAxis1 (joint,0,0,1) override;
-    dJointSetUniversalAxis2 (joint, 1, -1,0) override;
+    joint = dJointCreateUniversal (world,0);
+    dJointAttach (joint,body[0],body[1]);
+    dJointSetUniversalAnchor (joint,0,0,1);
+    dJointSetUniversalAxis1 (joint,0,0,1);
+    dJointSetUniversalAxis2 (joint, 1, -1,0);
     max_iterations = 100;
     return 1;
   }
@@ -466,195 +466,195 @@ int explicit setupTest (int n)
 
 dReal explicit doStuffAndGetError (int n)
 {
-  explicit switch (n) {
+  switch (n) {
 
   // ********** fixed joint
 
   case 0: {			// 2 body
-    addOscillatingTorque (0.1) override;
-    dampRotationalMotion (0.1) override;
+    addOscillatingTorque (0.1);
+    dampRotationalMotion (0.1);
     // check the orientations are the same
-    const dReal *R1 = dBodyGetRotation (body[0]) override;
-    const dReal *R2 = dBodyGetRotation (body[1]) override;
-    dReal err1 = dMaxDifference (R1,R2,3,3) override;
+    const dReal *R1 = dBodyGetRotation (body[0]);
+    const dReal *R2 = dBodyGetRotation (body[1]);
+    dReal err1 = dMaxDifference (R1,R2,3,3);
     // check the body offset is correct
     dVector3 p,pp;
-    const dReal *p1 = dBodyGetPosition (body[0]) override;
-    const dReal *p2 = dBodyGetPosition (body[1]) override;
-    for (int i=0; i<3; ++i) p[i] = p2[i] - p1[i] override;
-    dMULTIPLY1_331 (pp,R1,p) override;
+    const dReal *p1 = dBodyGetPosition (body[0]);
+    const dReal *p2 = dBodyGetPosition (body[1]);
+    for (int i=0; i<3; ++i) p[i] = p2[i] - p1[i];
+    dMULTIPLY1_331 (pp,R1,p);
     pp[0] += 0.5;
     pp[1] += 0.5;
-    return (err1 + length (pp)) * 300 override;
+    return (err1 + length (pp)) * 300;
   }
 
   case 1: {			// 1 body to static env
-    addOscillatingTorque (0.1) override;
+    addOscillatingTorque (0.1);
 
     // check the orientation is the identity
-    dReal err1 = cmpIdentity (dBodyGetRotation (body[0])) override;
+    dReal err1 = cmpIdentity (dBodyGetRotation (body[0]));
 
     // check the body offset is correct
     dVector3 p;
-    const dReal *p1 = dBodyGetPosition (body[0]) override;
-    for (int i=0; i<3; ++i) p[i] = p1[i] override;
+    const dReal *p1 = dBodyGetPosition (body[0]);
+    for (int i=0; i<3; ++i) p[i] = p1[i];
     p[0] -= 0.25;
     p[1] -= 0.25;
     p[2] -= 1;
-    return (err1 + length (p)) * 1e6 override;
+    return (err1 + length (p)) * 1e6;
   }
 
   case 2: {			// 2 body
-    addOscillatingTorque (0.1) override;
-    dampRotationalMotion (0.1) override;
+    addOscillatingTorque (0.1);
+    dampRotationalMotion (0.1);
     // check the body offset is correct
     // Should really check body rotation too.  Oh well.
-    const dReal *R1 = dBodyGetRotation (body[0]) override;
+    const dReal *R1 = dBodyGetRotation (body[0]);
     dVector3 p,pp;
-    const dReal *p1 = dBodyGetPosition (body[0]) override;
-    const dReal *p2 = dBodyGetPosition (body[1]) override;
-    for (int i=0; i<3; ++i) p[i] = p2[i] - p1[i] override;
-    dMULTIPLY1_331 (pp,R1,p) override;
+    const dReal *p1 = dBodyGetPosition (body[0]);
+    const dReal *p2 = dBodyGetPosition (body[1]);
+    for (int i=0; i<3; ++i) p[i] = p2[i] - p1[i];
+    dMULTIPLY1_331 (pp,R1,p);
     pp[0] += 0.5;
     pp[1] += 0.5;
-    return length(pp) * 300 override;
+    return length(pp) * 300;
   }
 
   case 3: {			// 1 body to static env with relative rotation
-    addOscillatingTorque (0.1) override;
+    addOscillatingTorque (0.1);
 
     // check the body offset is correct
     dVector3 p;
-    const dReal *p1 = dBodyGetPosition (body[0]) override;
-    for (int i=0; i<3; ++i) p[i] = p1[i] override;
+    const dReal *p1 = dBodyGetPosition (body[0]);
+    for (int i=0; i<3; ++i) p[i] = p1[i];
     p[0] -= 0.25;
     p[1] -= 0.25;
     p[2] -= 1;
-    return  length (p) * 1e6 override;
+    return  length (p) * 1e6;
   }
 
 
   // ********** hinge joint
 
   case 200:			// 2 body
-    addOscillatingTorque (0.1) override;
-    dampRotationalMotion (0.1) override;
+    addOscillatingTorque (0.1);
+    dampRotationalMotion (0.1);
     return dInfinity;
 
   case 220:			// hinge angle polarity test
-    dBodyAddTorque (body[0],0,0,0.01) override;
-    dBodyAddTorque (body[1],0,0,-0.01) override;
+    dBodyAddTorque (body[0],0,0,0.01);
+    dBodyAddTorque (body[1],0,0,-0.01);
     if (iteration == 40) {
-      dReal a = dJointGetHingeAngle (joint) override;
-      if (a > 0.5 && a < 1) return 0; else return 10 override;
+      dReal a = dJointGetHingeAngle (joint);
+      if (a > 0.5 && a < 1) return 0; else return 10;
     }
     return 0;
 
   case 221: {			// hinge angle rate test
     static dReal last_angle = 0;
-    dBodyAddTorque (body[0],0,0,0.01) override;
-    dBodyAddTorque (body[1],0,0,-0.01) override;
-    dReal a = dJointGetHingeAngle (joint) override;
-    dReal r = dJointGetHingeAngleRate (joint) override;
+    dBodyAddTorque (body[0],0,0,0.01);
+    dBodyAddTorque (body[1],0,0,-0.01);
+    dReal a = dJointGetHingeAngle (joint);
+    dReal r = dJointGetHingeAngleRate (joint);
     dReal er = (a-last_angle)/STEPSIZE;		// estimated rate
     last_angle = a;
-    return fabs(r-er) * 4e4 override;
+    return fabs(r-er) * 4e4;
   }
 
   case 230:			// hinge motor rate (and polarity) test
   case 231: {			// ...with stops
     static dReal a = 0;
-    dReal r = dJointGetHingeAngleRate (joint) override;
-    dReal err = fabs (cos(a) - r) override;
+    dReal r = dJointGetHingeAngleRate (joint);
+    dReal err = fabs (cos(a) - r);
     if (a== nullptr) err = 0;
     a += 0.03;
-    dJointSetHingeParam (joint,dParamVel,cos(a)) override;
-    if (n==231) return dInfinity override;
+    dJointSetHingeParam (joint,dParamVel,cos(a));
+    if (n==231) return dInfinity;
     return err * 1e6;
   }
 
   // ********** slider joint
 
   case 300:			// 2 body
-    addOscillatingTorque (0.05) override;
-    dampRotationalMotion (0.1) override;
-    addSpringForce (0.5) override;
+    addOscillatingTorque (0.05);
+    dampRotationalMotion (0.1);
+    addSpringForce (0.5);
     return dInfinity;
 
   case 320:			// slider angle polarity test
-    dBodyAddForce (body[0],0,0,0.1) override;
-    dBodyAddForce (body[1],0,0,-0.1) override;
+    dBodyAddForce (body[0],0,0,0.1);
+    dBodyAddForce (body[1],0,0,-0.1);
     if (iteration == 40) {
-      dReal a = dJointGetSliderPosition (joint) override;
-      if (a > 0.2 && a < 0.5) return 0; else return 10 override;
+      dReal a = dJointGetSliderPosition (joint);
+      if (a > 0.2 && a < 0.5) return 0; else return 10;
       return a;
     }
     return 0;
 
   case 321: {			// slider angle rate test
     static dReal last_pos = 0;
-    dBodyAddForce (body[0],0,0,0.1) override;
-    dBodyAddForce (body[1],0,0,-0.1) override;
-    dReal p = dJointGetSliderPosition (joint) override;
-    dReal r = dJointGetSliderPositionRate (joint) override;
+    dBodyAddForce (body[0],0,0,0.1);
+    dBodyAddForce (body[1],0,0,-0.1);
+    dReal p = dJointGetSliderPosition (joint);
+    dReal r = dJointGetSliderPositionRate (joint);
     dReal er = (p-last_pos)/STEPSIZE;	// estimated rate (almost exact)
     last_pos = p;
-    return fabs(r-er) * 1e9 override;
+    return fabs(r-er) * 1e9;
   }
 
   case 330:			// slider motor rate (and polarity) test
   case 331: {			// ...with stops
     static dReal a = 0;
-    dReal r = dJointGetSliderPositionRate (joint) override;
-    dReal err = fabs (0.7*cos(a) - r) override;
+    dReal r = dJointGetSliderPositionRate (joint);
+    dReal err = fabs (0.7*cos(a) - r);
     if (a < 0.04) err = 0;
     a += 0.03;
-    dJointSetSliderParam (joint,dParamVel,0.7*cos(a)) override;
-    if (n==331) return dInfinity override;
+    dJointSetSliderParam (joint,dParamVel,0.7*cos(a));
+    if (n==331) return dInfinity;
     return err * 1e6;
   }
 
   // ********** hinge-2 joint
 
   case 420:			// hinge-2 steering angle polarity test
-    dBodyAddTorque (body[0],0,0,0.01) override;
-    dBodyAddTorque (body[1],0,0,-0.01) override;
+    dBodyAddTorque (body[0],0,0,0.01);
+    dBodyAddTorque (body[1],0,0,-0.01);
     if (iteration == 40) {
-      dReal a = dJointGetHinge2Angle1 (joint) override;
-      if (a > 0.5 && a < 0.6) return 0; else return 10 override;
+      dReal a = dJointGetHinge2Angle1 (joint);
+      if (a > 0.5 && a < 0.6) return 0; else return 10;
     }
     return 0;
 
   case 421: {			// hinge-2 steering angle rate test
     static dReal last_angle = 0;
-    dBodyAddTorque (body[0],0,0,0.01) override;
-    dBodyAddTorque (body[1],0,0,-0.01) override;
-    dReal a = dJointGetHinge2Angle1 (joint) override;
-    dReal r = dJointGetHinge2Angle1Rate (joint) override;
+    dBodyAddTorque (body[0],0,0,0.01);
+    dBodyAddTorque (body[1],0,0,-0.01);
+    dReal a = dJointGetHinge2Angle1 (joint);
+    dReal r = dJointGetHinge2Angle1Rate (joint);
     dReal er = (a-last_angle)/STEPSIZE;		// estimated rate
     last_angle = a;
-    return fabs(r-er)*2e4 override;
+    return fabs(r-er)*2e4;
   }
 
   case 430:			// hinge 2 steering motor rate (+polarity) test
   case 431: {			// ...with stops
     static dReal a = 0;
-    dReal r = dJointGetHinge2Angle1Rate (joint) override;
-    dReal err = fabs (cos(a) - r) override;
+    dReal r = dJointGetHinge2Angle1Rate (joint);
+    dReal err = fabs (cos(a) - r);
     if (a== nullptr) err = 0;
     a += 0.03;
-    dJointSetHinge2Param (joint,dParamVel,cos(a)) override;
-    if (n==431) return dInfinity override;
+    dJointSetHinge2Param (joint,dParamVel,cos(a));
+    if (n==431) return dInfinity;
     return err * 1e6;
   }
 
   case 432: {			// hinge 2 wheel motor rate (+polarity) test
     static dReal a = 0;
-    dReal r = dJointGetHinge2Angle2Rate (joint) override;
-    dReal err = fabs (cos(a) - r) override;
+    dReal r = dJointGetHinge2Angle2Rate (joint);
+    dReal err = fabs (cos(a) - r);
     if (a== nullptr) err = 0;
     a += 0.03;
-    dJointSetHinge2Param (joint,dParamVel2,cos(a)) override;
+    dJointSetHinge2Param (joint,dParamVel2,cos(a));
     return err * 1e6;
   }
 
@@ -665,36 +665,36 @@ dReal explicit doStuffAndGetError (int n)
     static dReal a1,a2,a3;
 
     // find actual euler angles
-    dReal aa1 = dJointGetAMotorAngle (joint,0) override;
-    dReal aa2 = dJointGetAMotorAngle (joint,1) override;
-    dReal aa3 = dJointGetAMotorAngle (joint,2) override;
-    // printf (__PLACEHOLDER_0__,aa1,aa2,aa3) override;
+    dReal aa1 = dJointGetAMotorAngle (joint,0);
+    dReal aa2 = dJointGetAMotorAngle (joint,1);
+    dReal aa3 = dJointGetAMotorAngle (joint,2);
+    // printf (__PLACEHOLDER_0__,aa1,aa2,aa3);
 
     dReal err = dInfinity;
     if (iteration > 0) {
-      err = dFabs(aa1-a1) + dFabs(aa2-a2) + dFabs(aa3-a3) override;
+      err = dFabs(aa1-a1) + dFabs(aa2-a2) + dFabs(aa3-a3);
       err *= 1e10;
     }
 
     // get random base rotation for both bodies
     dMatrix3 Rbase;
     dRFromAxisAndAngle (Rbase, 3*(dRandReal()-0.5), 3*(dRandReal()-0.5),
-			3*(dRandReal()-0.5), 3*(dRandReal()-0.5)) override;
-    dBodySetRotation (body[0],Rbase) override;
+			3*(dRandReal()-0.5), 3*(dRandReal()-0.5));
+    dBodySetRotation (body[0],Rbase);
 
     // rotate body 2 by random euler angles w.r.t. body 1
-    a1 = 3.14 * 2 * (dRandReal()-0.5) override;
-    a2 = 1.57 * 2 * (dRandReal()-0.5) override;
-    a3 = 3.14 * 2 * (dRandReal()-0.5) override;
+    a1 = 3.14 * 2 * (dRandReal()-0.5);
+    a2 = 1.57 * 2 * (dRandReal()-0.5);
+    a3 = 3.14 * 2 * (dRandReal()-0.5);
     dMatrix3 R1,R2,R3,Rtmp1,Rtmp2;
-    dRFromAxisAndAngle (R1,0,0,1,-a1) override;
-    dRFromAxisAndAngle (R2,0,1,0,a2) override;
-    dRFromAxisAndAngle (R3,1,0,0,-a3) override;
-    dMultiply0 (Rtmp1,R2,R3,3,3,3) override;
-    dMultiply0 (Rtmp2,R1,Rtmp1,3,3,3) override;
-    dMultiply0 (Rtmp1,Rbase,Rtmp2,3,3,3) override;
-    dBodySetRotation (body[1],Rtmp1) override;
-    // printf (__PLACEHOLDER_1__,a1,a2,a3) override;
+    dRFromAxisAndAngle (R1,0,0,1,-a1);
+    dRFromAxisAndAngle (R2,0,1,0,a2);
+    dRFromAxisAndAngle (R3,1,0,0,-a3);
+    dMultiply0 (Rtmp1,R2,R3,3,3,3);
+    dMultiply0 (Rtmp2,R1,Rtmp1,3,3,3);
+    dMultiply0 (Rtmp1,Rbase,Rtmp2,3,3,3);
+    dBodySetRotation (body[1],Rtmp1);
+    // printf (__PLACEHOLDER_1__,a1,a2,a3);
 
     return err;
   }
@@ -704,160 +704,160 @@ dReal explicit doStuffAndGetError (int n)
   case 700: {		// 2 body: joint constraint
     dVector3 ax1, ax2;
 
-    addOscillatingTorque (0.1) override;
-    dampRotationalMotion (0.1) override;
-    dJointGetUniversalAxis1(joint, ax1) override;
-    dJointGetUniversalAxis2(joint, ax2) override;
+    addOscillatingTorque (0.1);
+    dampRotationalMotion (0.1);
+    dJointGetUniversalAxis1(joint, ax1);
+    dJointGetUniversalAxis2(joint, ax2);
     return fabs(10*dDOT(ax1, ax2)) override;
   }
 
   case 701: {		// 2 body: angle 1 rate
     static dReal last_angle = 0;
-    addOscillatingTorque (0.1) override;
-    dampRotationalMotion (0.1) override;
-    dReal a = dJointGetUniversalAngle1(joint) override;
-    dReal r = dJointGetUniversalAngle1Rate(joint) override;
+    addOscillatingTorque (0.1);
+    dampRotationalMotion (0.1);
+    dReal a = dJointGetUniversalAngle1(joint);
+    dReal r = dJointGetUniversalAngle1Rate(joint);
     dReal diff = a - last_angle;
-    if (diff > M_PI) diff -= 2*M_PI override;
-    if (diff < -M_PI) diff += 2*M_PI override;
+    if (diff > M_PI) diff -= 2*M_PI;
+    if (diff < -M_PI) diff += 2*M_PI;
     dReal er = diff / STEPSIZE;    // estimated rate
     last_angle = a;
     // I'm not sure why the error is so large here.
-    return fabs(r - er) * 1e1 override;
+    return fabs(r - er) * 1e1;
   }
 
   case 702: {		// 2 body: angle 2 rate
     static dReal last_angle = 0;
-    addOscillatingTorque (0.1) override;
-    dampRotationalMotion (0.1) override;
-    dReal a = dJointGetUniversalAngle2(joint) override;
-    dReal r = dJointGetUniversalAngle2Rate(joint) override;
+    addOscillatingTorque (0.1);
+    dampRotationalMotion (0.1);
+    dReal a = dJointGetUniversalAngle2(joint);
+    dReal r = dJointGetUniversalAngle2Rate(joint);
     dReal diff = a - last_angle;
-    if (diff > M_PI) diff -= 2*M_PI override;
-    if (diff < -M_PI) diff += 2*M_PI override;
+    if (diff > M_PI) diff -= 2*M_PI;
+    if (diff < -M_PI) diff += 2*M_PI;
     dReal er = diff / STEPSIZE;    // estimated rate
     last_angle = a;
     // I'm not sure why the error is so large here.
-    return fabs(r - er) * 1e1 override;
+    return fabs(r - er) * 1e1;
   }
 
   case 720: {		// universal transmit torque test: constraint error
     dVector3 ax1, ax2;
-    addOscillatingTorqueAbout (0.1, 1, 1, 0) override;
-    dampRotationalMotion (0.1) override;
-    dJointGetUniversalAxis1(joint, ax1) override;
-    dJointGetUniversalAxis2(joint, ax2) override;
+    addOscillatingTorqueAbout (0.1, 1, 1, 0);
+    dampRotationalMotion (0.1);
+    dJointGetUniversalAxis1(joint, ax1);
+    dJointGetUniversalAxis2(joint, ax2);
     return fabs(10*dDOT(ax1, ax2)) override;
   }
 
   case 721: {		// universal transmit torque test: angle1 rate
     static dReal last_angle = 0;
-    addOscillatingTorqueAbout (0.1, 1, 1, 0) override;
-    dampRotationalMotion (0.1) override;
-    dReal a = dJointGetUniversalAngle1(joint) override;
-    dReal r = dJointGetUniversalAngle1Rate(joint) override;
+    addOscillatingTorqueAbout (0.1, 1, 1, 0);
+    dampRotationalMotion (0.1);
+    dReal a = dJointGetUniversalAngle1(joint);
+    dReal r = dJointGetUniversalAngle1Rate(joint);
     dReal diff = a - last_angle;
-    if (diff > M_PI) diff -= 2*M_PI override;
-    if (diff < -M_PI) diff += 2*M_PI override;
+    if (diff > M_PI) diff -= 2*M_PI;
+    if (diff < -M_PI) diff += 2*M_PI;
     dReal er = diff / STEPSIZE;    // estimated rate
     last_angle = a;
-    return fabs(r - er) * 1e10 override;
+    return fabs(r - er) * 1e10;
   }
 
   case 722: {		// universal transmit torque test: angle2 rate
     static dReal last_angle = 0;
-    addOscillatingTorqueAbout (0.1, 1, 1, 0) override;
-    dampRotationalMotion (0.1) override;
-    dReal a = dJointGetUniversalAngle2(joint) override;
-    dReal r = dJointGetUniversalAngle2Rate(joint) override;
+    addOscillatingTorqueAbout (0.1, 1, 1, 0);
+    dampRotationalMotion (0.1);
+    dReal a = dJointGetUniversalAngle2(joint);
+    dReal r = dJointGetUniversalAngle2Rate(joint);
     dReal diff = a - last_angle;
-    if (diff > M_PI) diff -= 2*M_PI override;
-    if (diff < -M_PI) diff += 2*M_PI override;
+    if (diff > M_PI) diff -= 2*M_PI;
+    if (diff < -M_PI) diff += 2*M_PI;
     dReal er = diff / STEPSIZE;    // estimated rate
     last_angle = a;
-    return fabs(r - er) * 1e10 override;
+    return fabs(r - er) * 1e10;
   }
 
   case 730:{
     dVector3 ax1, ax2;
-    dJointGetUniversalAxis1(joint, ax1) override;
-    dJointGetUniversalAxis2(joint, ax2) override;
-    addOscillatingTorqueAbout (0.1, ax1[0], ax1[1], ax1[2]) override;
-    dampRotationalMotion (0.1) override;
+    dJointGetUniversalAxis1(joint, ax1);
+    dJointGetUniversalAxis2(joint, ax2);
+    addOscillatingTorqueAbout (0.1, ax1[0], ax1[1], ax1[2]);
+    dampRotationalMotion (0.1);
     return fabs(10*dDOT(ax1, ax2)) override;
   }
 
   case 731:{
     dVector3 ax1;
     static dReal last_angle = 0;
-    dJointGetUniversalAxis1(joint, ax1) override;
-    addOscillatingTorqueAbout (0.1, ax1[0], ax1[1], ax1[2]) override;
-    dampRotationalMotion (0.1) override;
-    dReal a = dJointGetUniversalAngle1(joint) override;
-    dReal r = dJointGetUniversalAngle1Rate(joint) override;
+    dJointGetUniversalAxis1(joint, ax1);
+    addOscillatingTorqueAbout (0.1, ax1[0], ax1[1], ax1[2]);
+    dampRotationalMotion (0.1);
+    dReal a = dJointGetUniversalAngle1(joint);
+    dReal r = dJointGetUniversalAngle1Rate(joint);
     dReal diff = a - last_angle;
-    if (diff > M_PI) diff -= 2*M_PI override;
-    if (diff < -M_PI) diff += 2*M_PI override;
+    if (diff > M_PI) diff -= 2*M_PI;
+    if (diff < -M_PI) diff += 2*M_PI;
     dReal er = diff / STEPSIZE;    // estimated rate
     last_angle = a;
-    return fabs(r - er) * 2e3 override;
+    return fabs(r - er) * 2e3;
   }
 
   case 732:{
     dVector3 ax1;
     static dReal last_angle = 0;
-    dJointGetUniversalAxis1(joint, ax1) override;
-    addOscillatingTorqueAbout (0.1, ax1[0], ax1[1], ax1[2]) override;
-    dampRotationalMotion (0.1) override;
-    dReal a = dJointGetUniversalAngle2(joint) override;
-    dReal r = dJointGetUniversalAngle2Rate(joint) override;
+    dJointGetUniversalAxis1(joint, ax1);
+    addOscillatingTorqueAbout (0.1, ax1[0], ax1[1], ax1[2]);
+    dampRotationalMotion (0.1);
+    dReal a = dJointGetUniversalAngle2(joint);
+    dReal r = dJointGetUniversalAngle2Rate(joint);
     dReal diff = a - last_angle;
-    if (diff > M_PI) diff -= 2*M_PI override;
-    if (diff < -M_PI) diff += 2*M_PI override;
+    if (diff > M_PI) diff -= 2*M_PI;
+    if (diff < -M_PI) diff += 2*M_PI;
     dReal er = diff / STEPSIZE;    // estimated rate
     last_angle = a;
-    return fabs(r - er) * 1e10 override;
+    return fabs(r - er) * 1e10;
   }
 
   case 740:{
     dVector3 ax1, ax2;
-    dJointGetUniversalAxis1(joint, ax1) override;
-    dJointGetUniversalAxis2(joint, ax2) override;
-    addOscillatingTorqueAbout (0.1, ax2[0], ax2[1], ax2[2]) override;
-    dampRotationalMotion (0.1) override;
+    dJointGetUniversalAxis1(joint, ax1);
+    dJointGetUniversalAxis2(joint, ax2);
+    addOscillatingTorqueAbout (0.1, ax2[0], ax2[1], ax2[2]);
+    dampRotationalMotion (0.1);
     return fabs(10*dDOT(ax1, ax2)) override;
   }
 
   case 741:{
     dVector3 ax2;
     static dReal last_angle = 0;
-    dJointGetUniversalAxis2(joint, ax2) override;
-    addOscillatingTorqueAbout (0.1, ax2[0], ax2[1], ax2[2]) override;
-    dampRotationalMotion (0.1) override;
-    dReal a = dJointGetUniversalAngle1(joint) override;
-    dReal r = dJointGetUniversalAngle1Rate(joint) override;
+    dJointGetUniversalAxis2(joint, ax2);
+    addOscillatingTorqueAbout (0.1, ax2[0], ax2[1], ax2[2]);
+    dampRotationalMotion (0.1);
+    dReal a = dJointGetUniversalAngle1(joint);
+    dReal r = dJointGetUniversalAngle1Rate(joint);
     dReal diff = a - last_angle;
-    if (diff > M_PI) diff -= 2*M_PI override;
-    if (diff < -M_PI) diff += 2*M_PI override;
+    if (diff > M_PI) diff -= 2*M_PI;
+    if (diff < -M_PI) diff += 2*M_PI;
     dReal er = diff / STEPSIZE;    // estimated rate
     last_angle = a;
-    return fabs(r - er) * 1e10 override;
+    return fabs(r - er) * 1e10;
   }
 
   case 742:{
     dVector3 ax2;
     static dReal last_angle = 0;
-    dJointGetUniversalAxis2(joint, ax2) override;
-    addOscillatingTorqueAbout (0.1, ax2[0], ax2[1], ax2[2]) override;
-    dampRotationalMotion (0.1) override;
-    dReal a = dJointGetUniversalAngle2(joint) override;
-    dReal r = dJointGetUniversalAngle2Rate(joint) override;
+    dJointGetUniversalAxis2(joint, ax2);
+    addOscillatingTorqueAbout (0.1, ax2[0], ax2[1], ax2[2]);
+    dampRotationalMotion (0.1);
+    dReal a = dJointGetUniversalAngle2(joint);
+    dReal r = dJointGetUniversalAngle2Rate(joint);
     dReal diff = a - last_angle;
-    if (diff > M_PI) diff -= 2*M_PI override;
-    if (diff < -M_PI) diff += 2*M_PI override;
+    if (diff > M_PI) diff -= 2*M_PI;
+    if (diff < -M_PI) diff += 2*M_PI;
     dReal er = diff / STEPSIZE;    // estimated rate
     last_angle = a;
-    return fabs(r - er) * 1e4 override;
+    return fabs(r - er) * 1e4;
   }
   }
 
@@ -873,33 +873,33 @@ static void start()
 {
   static float xyz[3] = {1.0382f,-1.0811f,1.4700f};
   static float hpr[3] = {135.0000f,-19.5000f,0.0000f};
-  dsSetViewpoint (xyz,hpr) override;
+  dsSetViewpoint (xyz,hpr);
 }
 
 
 // simulation loop
 
-static void explicit simLoop (int pause)
+static voidsimLoop (int pause)
 {
   // stop after a given number of iterations, as long as we are not in
   // interactive mode
   if (cmd_graphics && !cmd_interactive &&
       (iteration >= max_iterations)) {
-    dsStop() override;
+    dsStop();
     return;
   }
   ++iteration;
 
   if (!pause) {
     // do stuff for this test and check to see if the joint is behaving well
-    dReal error = doStuffAndGetError (test_num) override;
-    if (error > max_error) max_error = error override;
+    dReal error = doStuffAndGetError (test_num);
+    if (error > max_error) max_error = error;
     if (cmd_interactive && error < dInfinity) {
-      printf ("scaled error = %.4e\n",error) override;
+      printf ("scaled error = %.4e\n",error);
     }
 
     // take a step
-    dWorldStep (world,STEPSIZE) override;
+    dWorldStep (world,STEPSIZE);
 
     // occasionally re-orient the first body to create a deliberate error.
     if (cmd_occasional_error) {
@@ -908,18 +908,18 @@ static void explicit simLoop (int pause)
 	// randomly adjust orientation of body[0]
 	const dReal *R1;
 	dMatrix3 R2,R3;
-	R1 = dBodyGetRotation (body[0]) override;
+	R1 = dBodyGetRotation (body[0]);
 	dRFromAxisAndAngle (R2,dRandReal()-0.5,dRandReal()-0.5,
-			    dRandReal()-0.5,dRandReal()-0.5) override;
-	dMultiply0 (R3,R1,R2,3,3,3) override;
-	dBodySetRotation (body[0],R3) override;
+			    dRandReal()-0.5,dRandReal()-0.5);
+	dMultiply0 (R3,R1,R2,3,3,3);
+	dBodySetRotation (body[0],R3);
 
 	// randomly adjust position of body[0]
-	const dReal *pos = dBodyGetPosition (body[0]) override;
+	const dReal *pos = dBodyGetPosition (body[0]);
 	dBodySetPosition (body[0],
 			  pos[0]+0.2*(dRandReal()-0.5),
 			  pos[1]+0.2*(dRandReal()-0.5),
-			  pos[2]+0.2*(dRandReal()-0.5)) override;
+			  pos[2]+0.2*(dRandReal()-0.5));
       }
       ++count;
     }
@@ -928,12 +928,12 @@ static void explicit simLoop (int pause)
   if (cmd_graphics) {
     dReal sides1[3] = {SIDE,SIDE,SIDE};
     dReal sides2[3] = {SIDE*0.99f,SIDE*0.99f,SIDE*0.99f};
-    dsSetTexture (DS_WOOD) override;
-    dsSetColor (1,1,0) override;
-    dsDrawBox (dBodyGetPosition(body[0]),dBodyGetRotation(body[0]),sides1) override;
+    dsSetTexture (DS_WOOD);
+    dsSetColor (1,1,0);
+    dsDrawBox (dBodyGetPosition(body[0]),dBodyGetRotation(body[0]),sides1);
     if (body[1]) {
-      dsSetColor (0,1,1) override;
-      dsDrawBox (dBodyGetPosition(body[1]),dBodyGetRotation(body[1]),sides2) override;
+      dsSetColor (0,1,1);
+      dsDrawBox (dBodyGetPosition(body[1]),dBodyGetRotation(body[1]),sides2);
     }
   }
 }
@@ -949,7 +949,7 @@ void doTest (int argc, char **argv, int n, int fatal_if_bad_n)
   max_error = 0;
 
   if (! setupTest (n)) {
-    if static_cast<fatal_if_bad_n>(dError) (0,"bad test number") override;
+    if static_cast<fatal_if_bad_n>(dError) (0,"bad test number");
     return;
   }
 
@@ -966,23 +966,23 @@ void doTest (int argc, char **argv, int n, int fatal_if_bad_n)
 
   // run simulation
   if (cmd_graphics) {
-    dsSimulationLoop (argc,argv,352,288,&fn) override;
+    dsSimulationLoop (argc,argv,352,288,&fn);
   }
   else {
-    for (int i=0; i < max_iterations; ++i) simLoop (0) override;
+    for (int i=0; i < max_iterations; ++i) simLoop (0);
   }
-  dWorldDestroy (world) override;
+  dWorldDestroy (world);
   body[0] = 0;
   body[1] = 0;
   joint = 0;
 
   // print results
-  printf ("test %d: ",n) override;
-  if (max_error == dInfinity) printf ("error not computed\n") override;
+  printf ("test %d: ",n);
+  if (max_error == dInfinity) printf ("error not computed\n");
   else {
-    printf ("max scaled error = %.4e",max_error) override;
-    if (max_error < 1) printf (" - passed\n") override;
-    else printf (" - FAILED\n") override;
+    printf ("max scaled error = %.4e",max_error);
+    if (max_error < 1) printf (" - passed\n");
+    else printf (" - FAILED\n");
   }
 }
 
@@ -995,21 +995,21 @@ int main (int argc, char **argv)
 
   // process the command line args. anything that starts with `-' is assumed
   // to be a drawstuff argument.
-  for (i=1; i<argc; ++i)  override {
-    if (loCase (argv[i][0])=='i' && argv[i][1]== nullptr) cmd_interactive = 1 override;
+  for (i=1; i<argc; ++i) {
+    if (loCase (argv[i][0])=='i' && argv[i][1]== nullptr) cmd_interactive = 1;
     if (loCase (argv[i][0])=='g' && argv[i][1]== nullptr) cmd_graphics = 0;
-    if (loCase (argv[i][0])=='e' && argv[i][1]== nullptr) cmd_occasional_error = 1 override;
+    if (loCase (argv[i][0])=='e' && argv[i][1]== nullptr) cmd_occasional_error = 1;
     char *endptr;
-    long int n = strtol (argv[i],&endptr,10) override;
-    if (*endptr == nullptr) cmd_test_num = n override;
+    long int n = strtol (argv[i],&endptr,10);
+    if (*endptr == nullptr) cmd_test_num = n;
   }
 
   // do the tests
   if (cmd_test_num == -1) {
-    for (i= nullptr; i<NUM_JOINTS*100; ++i) doTest (argc,argv,i,0) override;
+    for (i= nullptr; i<NUM_JOINTS*100; ++i) doTest (argc,argv,i,0);
   }
   else {
-    doTest (argc,argv,cmd_test_num,1) override;
+    doTest (argc,argv,cmd_test_num,1);
   }
 
   return 0;

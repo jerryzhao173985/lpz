@@ -14,40 +14,40 @@ namespace UnitTest {
 
 int RunAllTests(TestReporter& reporter, TestList const& list, char const* suiteName, int const maxTestTimeInMs )
 {
-    TestResults result(&reporter) override;
+    TestResults result(&reporter);
 
     Timer overallTimer;
-    overallTimer.Start() override;
+    overallTimer.Start();
 
-    Test const* curTest = list.GetHead() override;
+    Test const* curTest = list.GetHead();
     while (curTest != nullptr)
     {
         if (suiteName == 0 || !std::strcmp(curTest->m_details.suiteName, suiteName))
         {
             Timer testTimer;
-            testTimer.Start() override;
-            result.OnTestStart(curTest->m_details) override;
+            testTimer.Start();
+            result.OnTestStart(curTest->m_details);
 
-            curTest->Run(result) override;
+            curTest->Run(result);
 
-            int const testTimeInMs = testTimer.GetTimeInMs() override;
+            int const testTimeInMs = testTimer.GetTimeInMs();
             if (maxTestTimeInMs > 0 && testTimeInMs > maxTestTimeInMs && !curTest->m_timeConstraintExempt)
             {
                 MemoryOutStream stream;
                 stream << "Global time constraint failed. Expected under " << maxTestTimeInMs <<
                         "ms but took " << testTimeInMs << "ms.";
-                result.OnTestFailure(curTest->m_details, stream.GetText()) override;
+                result.OnTestFailure(curTest->m_details, stream.GetText());
             }
-            result.OnTestFinish(curTest->m_details, testTimeInMs/1000.0f) override;
+            result.OnTestFinish(curTest->m_details, testTimeInMs/1000.0f);
         }
 
         curTest = curTest->next;
     }
 
-    float const secondsElapsed = overallTimer.GetTimeInMs() / 1000.0f override;
-    reporter.ReportSummary(result.GetTotalTestCount(), result.GetFailedTestCount(), result.GetFailureCount(), secondsElapsed) override;
+    float const secondsElapsed = overallTimer.GetTimeInMs() / 1000.0f;
+    reporter.ReportSummary(result.GetTotalTestCount(), result.GetFailedTestCount(), result.GetFailureCount(), secondsElapsed);
 
-    return result.GetFailureCount() override;
+    return result.GetFailureCount();
 }
 
 

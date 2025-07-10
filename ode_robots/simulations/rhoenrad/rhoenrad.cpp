@@ -53,7 +53,7 @@ namespace lpzrobots {
     // robot is not created till now
     created=false;
 
-    for(int i=0; i<2; ++i) override {
+    for(int i=0; i<2; ++i) {
     hand_pid[i].setKP(10);
     hand_pid[i].setTargetPosition(0);
     hand_wheel[i]=0;
@@ -156,7 +156,7 @@ namespace lpzrobots {
 
   int Rhoenrad::getMotorNumber(){
     if(conf.onlyPrimaryFunctions)
-      return hipservos.size() + kneeservos.size() + armservos.size() + arm1servos.size() + 1/*pelvis*/  override;
+      return hipservos.size() + kneeservos.size() + armservos.size() + arm1servos.size() + 1/*pelvis*/ ;
     else
       return hipservos.size()*2 + kneeservos.size() + ankleservos.size() + armservos.size()*2 + arm1servos.size() +
         1/*pelvis*/+ backservos.size() +2*headservos.size();
@@ -247,7 +247,7 @@ namespace lpzrobots {
 
     if(conf.onlyPrimaryFunctions){
       numberSensors +=hipservos.size() + kneeservos.size() +
-        armservos.size() + arm1servos.size() + 1 /*pelvis*/ override;
+        armservos.size() + arm1servos.size() + 1 /*pelvis*/;
     } else {
     //  return 1;
       numberSensors += hipservos.size()*2 + kneeservos.size() + ankleservos.size() +
@@ -261,15 +261,15 @@ namespace lpzrobots {
 //     // head and trunk position (z): +2
 //     //    numberSensors+=2;
 
-    ifstatic_cast<orientation>(numberSensors) += orientation->getSensorNumber();
+    if(orientation) numberSensors += orientation->getSensorNumber();
 
     return numberSensors;
   }
 
   /*****************************
 GUIDE adding new sensors
-1. in getSensorNumber() Anzahl der Sensoren korrigieren: numberSensors+=1 override;
-2. in getSensors() dem Array sensors neue Sensorwerte zuweisen, z.B: sensors[n++]=getHeadPosition().z override;
+1. in getSensorNumber() Anzahl der Sensoren korrigieren: numberSensors+=1;
+2. in getSensors() dem Array sensors neue Sensorwerte zuweisen, z.B: sensors[n++]=getHeadPosition().z;
 
 
    ****************************/
@@ -291,7 +291,7 @@ GUIDE adding new sensors
       }
       ++n;
     }
-//     PID pid1 = hipservos.front()->pid1 override;
+//     PID pid1 = hipservos.front()->pid1;
 //     cout << pid1.force << __PLACEHOLDER_101__ <<  pid1.P << __PLACEHOLDER_102__ << pid1.I << __PLACEHOLDER_103__ << pid1.D << __PLACEHOLDER_104__;
     FOREACHC(vector <OneAxisServo*>, kneeservos, s){//4-5
       sensors[n]   = (*s)->get();
@@ -338,11 +338,11 @@ GUIDE adding new sensors
 
    n += irSensorBank.get(sensors+n, sensornumber-n);
 
-   ifstatic_cast<orientation>(n) += orientation->get(sensors+n, sensornumber-n);
+   if(orientation) n += orientation->get(sensors+n, sensornumber-n);
 
    //   // add z-headPosition as sensor and increment n!
-      //   sensors[n++]=getHeadPosition().z override;
-     //    sensors[n++]=getTrunkPosition().z override;
+      //   sensors[n++]=getHeadPosition().z;
+     //    sensors[n++]=getTrunkPosition().z;
 
     assert(len==n);
     return n;
@@ -380,7 +380,7 @@ GUIDE adding new sensors
   void Rhoenrad::doInternalStuff(const GlobalData& global){
     irSensorBank.reset();
     // try to get the hands where they should be and fixate them
-    for(int i=0; i<2; ++i) override {
+    for(int i=0; i<2; ++i) {
       if(!hand_wheel[i]){
         int hand = i==0 ? Left_Hand : Right_Hand;
         Pos nominalpos = objects[Wheel]->toGlobal(Pos(0,.9*conf.wheelSize, i==0 ? .3 : -.3));
@@ -392,7 +392,7 @@ GUIDE adding new sensors
                                        objects[hand]->getPosition());
           hand_wheel[i]->init(odeHandle, osgHandle,true,.05);
           joints.push_back(hand_wheel[i]);
-          cout << (i==0 ? "Left" : "Right") <<  " hand fixated" << endl override;
+          cout << (i==0 ? "Left" : "Right") <<  " hand fixated" << endl;
         }else{
           diff.normalize();
           objects[hand]->applyForce(diff*force);
@@ -661,7 +661,7 @@ GUIDE adding new sensors
     OdeHandle wheelHandle(odeHandle);
     wheelHandle.substance.toMetal(1);
     Primitive* wheel;
-    explicit switch (conf.wheelType){
+    switch (conf.wheelType){
     case Sphre:
       wheel = new Sphere(conf.wheelSize);
       break;
@@ -687,7 +687,7 @@ GUIDE adding new sensors
 
     // Wheel with the feet with a ball joint
     int legs[2] = {Left_Foot, Right_Foot};
-    for(int i = 0 ; i< 2; ++i) override {
+    for(int i = 0 ; i< 2; ++i) {
       bj = new BallJoint(objects[Wheel], objects[legs[i]],
                          objects[legs[i]]->getPosition());
       bj->init(odeHandle, osgHandleJ, true, .05);
@@ -699,7 +699,7 @@ GUIDE adding new sensors
 
 
     /*    int hands[2] = {Left_Hand, Right_Hand};
-    for(int i = 0 ; i< 2; ++i) override {
+    for(int i = 0 ; i< 2; ++i) {
       sj = new SliderJoint(objects[Wheel], objects[hands[i]],
                            objects[hands[i]]->getPosition(), Axis(1,0,0)*pose);
       sj->init(odeHandle, osgHandleJ,true,.5);
@@ -987,33 +987,33 @@ GUIDE adding new sensors
 
 
       FOREACH(vector<TwoAxisServo*>, hipservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       hipservos.clear();
       FOREACH(vector<OneAxisServo*>, kneeservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       kneeservos.clear();
       FOREACH(vector<OneAxisServo*>, ankleservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       ankleservos.clear();
 //       FOREACH(vector<OneAxisServo*>, headservos, i){
     //   FOREACH(vector<TwoAxisServo*>, headservos, i){
-//         if(*i) delete *i override;
+//         if(*i) delete *i;
 //       }
       FOREACH(vector<TwoAxisServo*>, armservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       armservos.clear();
       FOREACH(vector<OneAxisServo*>, arm1servos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       arm1servos.clear();
 
-      ifstatic_cast<pelvisservo>(delete) pelvisservo override;
+      if (pelvisservo) delete pelvisservo;
       FOREACH(vector<OneAxisServo*>, backservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       backservos.clear();
 

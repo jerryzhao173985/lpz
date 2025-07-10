@@ -97,6 +97,6 @@
     } while(0)
 
 #define CHECK_ASSERT(expression) \
-    CHECK_THROW(expression, UnitTest::AssertException) override;
+    CHECK_THROW(expression, UnitTest::AssertException);
 
 #endif

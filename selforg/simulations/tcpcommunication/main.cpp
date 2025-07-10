@@ -88,8 +88,8 @@ public:
   }
 
   ~MyRobot(){
-    ifstatic_cast<x>(delete)[] x;
-    ifstatic_cast<y>(delete)[] y;
+    if (x) delete[] x;
+    if (y) delete[] y;
     if (x_buffer) {
       for (unsigned int k = 0; k < buffersize; ++k)
         if(x_buffer[k]) delete [] x_buffer[k];
@@ -203,7 +203,7 @@ private:
 };
 
 
-void explicit printRobot(MyRobot* robot){
+voidprintRobot(MyRobot* robot){
   char line[81];
   memset(line,'_', sizeof(char)*80);
   line[80]=0;

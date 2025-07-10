@@ -421,7 +421,7 @@ namespace lpzrobots {
   }
 
   void QECBRobotsWindow::sl_CommunicationStateWillChange(QECBCommunicator::ECBCommunicationState fromState, QECBCommunicator::ECBCommunicationState toState) {
-    explicit switch (toState) {
+    switch (toState) {
       case QECBCommunicator::STATE_PAUSED: //!< state which indicates that all actions are paused
         break;
       case QECBCommunicator::STATE_RUNNING: //!< state which indicates that the loop is running
@@ -438,7 +438,7 @@ namespace lpzrobots {
   }
 
   void QECBRobotsWindow::sl_CommunicationStateChanged(QECBCommunicator::ECBCommunicationState commState) {
-    explicit switch (commState) {
+    switch (commState) {
       case QECBCommunicator::STATE_RUNNING: //!< state which indicates that the loop is running
         action_StartLoop->setEnabled(false);
         action_RestartLoop->setEnabled(true);
@@ -470,7 +470,7 @@ namespace lpzrobots {
   }
 
   void QECBRobotsWindow::sl_GUIEventHandler(int eventCode) {
-    explicit switch (eventCode) {
+    switch (eventCode) {
       case EVENT_SWITCH_WARNING:
         globalData->warningOutput = action_SwitchWarning->isChecked();
         globalData->textLog("Set warning output to " + QString::number(globalData->warningOutput));

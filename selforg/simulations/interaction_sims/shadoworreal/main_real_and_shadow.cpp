@@ -33,7 +33,7 @@ bool stop=0;
 double sleep_=10000;
 double shadowdist = 0.6;
 
-double explicit toEnv(double pos){
+doubletoEnv(double pos){
   // environment is cyclic
   if(pos>1) pos-=2;
   if(pos<-1) pos+=2;
@@ -150,7 +150,7 @@ public:
     matrix::Matrix m(3,3); m.toId();  return m;
   };
 
-  virtual void explicit addOtherRobot(const MyRobot* otherRobot) {
+  virtual voidaddOtherRobot(const MyRobot* otherRobot) {
     if(otherRobot!=this)
       otherRobots.push_back(otherRobot);
   }
@@ -196,7 +196,7 @@ public:
 };
 
 
-int explicit coord(double x){ return int((x+1.0)/2*80);}
+intcoord(double x){ return int((x+1.0)/2*80);}
 
 void printRobots(const list<MyRobot*>& robots){
   char line[81];
@@ -234,7 +234,7 @@ void printRobots(const list<MyRobot*>& robots){
 
 }
 
-void explicit reinforce(Agent* a){
+voidreinforce(Agent* a){
   MyRobot* r = static_cast<MyRobot*>(a)->getRobot();
   InvertMotorNStep* c = dynamic_cast<InvertMotorNStep*>(a->getController());
   if(c)

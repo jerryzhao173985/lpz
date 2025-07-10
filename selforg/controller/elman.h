@@ -82,12 +82,12 @@ public:
   virtual void init(unsigned int inputDim,
                     unsigned int outputDim,
                     double unit_map = 0.0,
-                    RandGen* randGen = nullptr) override;
+                    RandGen* randGen = nullptr);
 
   /** passive processing of the input
       (this will be different for every input, since it is a recurrent network)
   */
-  virtual const matrix::Matrix process(const matrix::Matrix& input) override;
+  virtual const matrix::Matrix process(const matrix::Matrix& input);
 
   /// performs learning and returns the network output before learning
   virtual const matrix::Matrix learn(const matrix::Matrix& input,
@@ -117,13 +117,13 @@ public:
      virtual const matrix::Matrix response(const matrix::Matrix& input) const override;
    */
 
-  void damp(double damping) override;
+  void damp(double damping);
 
   /**************  STOREABLE **********************************/
   /// stores the layer binary into file stream
-  bool store(FILE* f)  const override;
+  bool store(FILE* f)  const;
   /// restores the layer binary from file stream
-  bool restore(FILE* f) override;
+  bool restore(FILE* f);
 
   /************** CONFIGURABLE INTERFACE ************************/
   virtual std::string getName() const noexcept override {
@@ -131,10 +131,10 @@ public:
   }
 
   /************** Inspectable INTERFACE ************************/
-  virtual std::list<iparamkey> getInternalParamNames()  const override;
-  virtual std::list<iparamval> getInternalParams()  const override;
-  virtual std::list<ILayer> getStructuralLayers()  const override;
-  virtual std::list<IConnection> getStructuralConnections()  const override;
+  virtual std::list<iparamkey> getInternalParamNames()  const;
+  virtual std::list<iparamval> getInternalParams()  const;
+  virtual std::list<ILayer> getStructuralLayers()  const;
+  virtual std::list<IConnection> getStructuralConnections()  const;
 
 protected:
   matrix::Matrix elmanWeights;

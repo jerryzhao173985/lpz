@@ -32,12 +32,12 @@ struct dxJointLMotor : public dxJoint
     dVector3 axis[3];
     dxJointLimitMotor limot[3];
 
-    void computeGlobalAxes( dVector3 ax[3] ) override;
+    void computeGlobalAxes( dVector3 ax[3] );
 
 
-    dxJointLMotor( dxWorld *w ) override;
-    virtual void getInfo1( Info1* info ) override;
-    virtual void getInfo2( Info2* info ) override;
+    dxJointLMotor( dxWorld *w );
+    virtual void getInfo1( Info1* info );
+    virtual void getInfo2( Info2* info );
     virtual dJointType type() const override;
     virtual size_t size() const override;
 };

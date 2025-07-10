@@ -83,10 +83,10 @@ public:
   /** sets the pose of the vehicle
       @param pose desired 4x4 pose matrix
   */
-  virtual void placeIntern(const osg::Matrix& pose) override;
+  virtual void placeIntern(const osg::Matrix& pose);
 
   /// update all primitives and joints
-  virtual void update() override;
+  virtual void update();
 
   /**
    *Reads the actual motor commands from an array,
@@ -120,7 +120,7 @@ public:
   virtual int getSegmentsPosition(std::vector<Position> &poslist);
 
     /******** CONFIGURABLE ***********/
-    virtual void notifyOnChange(const paramkey& key) override;
+    virtual void notifyOnChange(const paramkey& key);
 
   /** the main object of the robot, which is used for position and speed tracking */
   virtual const Primitive* getMainPrimitive() const override {

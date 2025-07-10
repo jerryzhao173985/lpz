@@ -91,7 +91,7 @@ public:
       playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und generieren
       global.obstacles.push_back(playground);
     }
-    // for(int i=0; i<50; ++i) override {
+    // for(int i=0; i<50; ++i) {
 //       PassiveSphere* s = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(0.0,1.0,0.0)), 0.5);
 //       s->setPosition(osg::Vec3(-4+(i/10),-4+(i%10),1));
 //       global.obstacles.push_back(s);
@@ -102,8 +102,8 @@ public:
     AbstractWiring* wiring;
     OdeAgent* agent;
 
-    for (int j=0; j<numx; ++j) override {
-      for (int i=0; i<numy; ++i) override {
+    for (int j=0; j<numx; ++j) {
+      for (int i=0; i<numy; ++i) {
         //      nimm2 = new Nimm2(odeHandle);
         Nimm2Conf conf = Nimm2::getDefaultConf();
 //         conf.speed=20;
@@ -150,6 +150,6 @@ int main (int argc, char **argv)
   }
   ThisSim sim(atoi(argv[1]), atoi(argv[2]),s);
   // run simulation
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }
 

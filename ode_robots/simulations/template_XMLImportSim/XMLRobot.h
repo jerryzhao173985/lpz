@@ -35,7 +35,7 @@ public:
             virtual void doInternalStuff(lpzrobots::const GlobalData& globalData);
 
             /// return the primitive of the robot that is used for tracking and camera following
-            virtual lpzrobots::Primitive* getMainPrimitive()  const override;
+            virtual lpzrobots::Primitive* getMainPrimitive()  const;
 
 };
 

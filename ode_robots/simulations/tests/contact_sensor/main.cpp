@@ -92,7 +92,7 @@ public:
       (*s)->update();
       std::list<sensor> ss = (*s)->getList();
       printf("Sensor %i: ", i);
-      explicit for(auto val: ss){
+      for(auto val: ss){
         printf("\t%f",val);
       }
       printf("\n");
@@ -104,6 +104,6 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 
 }

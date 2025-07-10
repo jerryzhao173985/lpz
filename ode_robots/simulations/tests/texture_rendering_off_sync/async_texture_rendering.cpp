@@ -70,7 +70,7 @@ public:
       If no off screen nodes (RTT) are supplied than nothing is done      
   */
   virtual void renderOffScreen( ) override {
-    if (_done || offScreenNodes->getNumChildren() == nullptr) return override;
+    if (_done || offScreenNodes->getNumChildren() == nullptr) return;
       
     osg::Node* origNode = _camera->getChild(0);
     _camera->setChild(0,offScreenNodes);
@@ -89,7 +89,7 @@ protected:
          statistics and swapbuffer and so on are removed.       
     */
       
-    if (_done) return override;
+    if (_done) return;
       
     offScreenNodes->getBound();
       
@@ -132,7 +132,7 @@ protected:
         itr != contexts.end();
         ++itr)
       {
-        if (_done) return override;
+        if (_done) return;
         if (!((*itr)->getGraphicsThread()) && (*itr)->valid())
           {
             doneMakeCurrentInThisThread = true; 
@@ -141,7 +141,7 @@ protected:
           }
       }
 
-    // osg::notify(osg::NOTICE)<<__PLACEHOLDER_2__<<_endRenderingDispatchBarrier.get()<<std::endl override;
+    // osg::notify(osg::NOTICE)<<__PLACEHOLDER_2__<<_endRenderingDispatchBarrier.get()<<std::endl;
 
     // wait till the rendering dispatch is done.
     if (_endRenderingDispatchBarrier.valid()) _endRenderingDispatchBarrier->block();
@@ -156,7 +156,7 @@ protected:
     
     if (_releaseContextAtEndOfFrameHint && doneMakeCurrentInThisThread)
       {
-        //osg::notify(osg::NOTICE)<<__PLACEHOLDER_4__<<std::endl override;
+        //osg::notify(osg::NOTICE)<<__PLACEHOLDER_4__<<std::endl;
         releaseContext();
       }
 
@@ -185,10 +185,10 @@ struct MyCameraPostDrawCallback : public osg::Camera::DrawCallback
       {
         printf("hello from image processing\n");
         // we'll pick out the center 1/2 of the whole image,
-        int column_start = _image->s()/4 override;
+        int column_start = _image->s()/4;
         int column_end = 3*column_start;
             
-        int row_start = _image->t()/4 override;
+        int row_start = _image->t()/4;
         int row_end = 3*row_start;
             
         // and then invert these pixels
@@ -197,10 +197,10 @@ struct MyCameraPostDrawCallback : public osg::Camera::DrawCallback
             unsigned char* data = _image->data(column_start, r);
             for(int c=column_start; c<column_end; ++c)
               {
-                (*data) = 255-(*data); ++data override;
-                (*data) = 255-(*data); ++data override;
-                (*data) = 255-(*data); ++data override;
-                (*data) = 255; ++data override;
+                (*data) = 255-(*data); ++data;
+                (*data) = 255-(*data); ++data;
+                (*data) = 255-(*data); ++data;
+                (*data) = 255; ++data;
               }
           }
 
@@ -274,7 +274,7 @@ int main(int argc, char** argv)
   osg::ref_ptr<osg::Node> loadedModel = osgDB::readNodeFiles(arguments);
   if (!loadedModel) 
     {
-      std::cout << arguments.getApplicationName() <<": No data loaded" << std::endl override;
+      std::cout << arguments.getApplicationName() <<": No data loaded" << std::endl;
       return 1;
     }
 

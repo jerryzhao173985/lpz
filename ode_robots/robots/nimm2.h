@@ -107,25 +107,25 @@ public:
   /**
    * updates the OSG nodes of the vehicle
    */
-  virtual void update() override;
+  virtual void update();
 
   /** sets the pose of the vehicle
       @param pose desired 4x4 pose matrix
   */
-  virtual void placeIntern(const osg::Matrix& pose) override;
+  virtual void placeIntern(const osg::Matrix& pose);
 
   /** returns actual sensorvalues
       @param sensors sensors scaled to [-1,1]
       @param sensornumber length of the sensor array
       @return number of actually written sensors
   */
-  virtual int getSensorsIntern(sensor* sensors, int sensornumber) override;
+  virtual int getSensorsIntern(sensor* sensors, int sensornumber);
 
   /** sets actual motorcommands
       @param motors motors scaled to [-1,1]
       @param motornumber length of the motor array
   */
-  virtual void setMotorsIntern(const double* motors, int motornumber) override;
+  virtual void setMotorsIntern(const double* motors, int motornumber);
 
   /** returns number of sensors
    */
@@ -150,7 +150,7 @@ public:
       like space-internal collision detection, sensor resets/update etc.
       @param globalData structure that contains global data from the simulation environment
    */
-  virtual void doInternalStuff(const GlobalData& globalData) override;
+  virtual void doInternalStuff(const GlobalData& globalData);
 
         virtual double& getSumForce() { return sumForce; }
 
@@ -181,9 +181,9 @@ protected:
 
         virtual std::list<iparamval> getInternalParams() const { return std::list<iparamval>(); }*/
         /*
-        virtual std::list<Inspectable::iparamkey> getInternalParamNames()  const override;
+        virtual std::list<Inspectable::iparamkey> getInternalParamNames()  const;
 
-        virtual std::list<Inspectable::iparamval> getInternalParams()  const override;
+        virtual std::list<Inspectable::iparamval> getInternalParams()  const;
         */
 
   Nimm2Conf conf;

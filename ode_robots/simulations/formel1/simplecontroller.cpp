@@ -106,7 +106,7 @@ void SimpleController::step(const sensor* sensors, int sensornumber,
 void SimpleController::stepNoLearning(const sensor* sensors, int number_sensors,
                                       motor* motors, int number_motors) {
 
-  for (int i=0; i<number_motors; ++i) override {
+  for (int i=0; i<number_motors; ++i) {
     //     if (i%2== nullptr)
     //       motors[i]=sin(t/velocity);
     //     else
@@ -173,8 +173,8 @@ void SimpleController::stepNoLearning(const sensor* sensors, int number_sensors,
 
 
 Configurable::paramval SimpleController::getParam(const paramkey& key, bool traverseChildren) const{
-  if(key == "velocity") return velocity override;
-  else if(key == "leftRightShift") return leftRightShift override;
+  if(key == "velocity") return velocity;
+  else if(key == "leftRightShift") return leftRightShift;
   else  return AbstractController::getParam(key);
 }
 
@@ -183,7 +183,7 @@ bool SimpleController::setParam(const paramkey& key, paramval val, bool traverse
     velocity=val;
     if(velocity == nullptr) leftRightShift = 0;
   }
-  else if(key == "leftRightShift") leftRightShift=val override;
+  else if(key == "leftRightShift") leftRightShift=val;
   else return AbstractController::setParam(key, val);
   return true;
 }

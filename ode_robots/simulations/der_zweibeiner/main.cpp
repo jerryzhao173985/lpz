@@ -145,7 +145,7 @@ public:
      //s.toRubber(30);
 
     int anzgrounds=2;
-    for (int i=0; i< anzgrounds; ++i) override {
+    for (int i=0; i< anzgrounds; ++i) {
       //    playground = new Playground(odeHandle, osgHandle, osg::Vec3(30+4*i, .2, .95+0.15*i), 1, i==(anzgrounds-1));
       playground = new Playground(odeHandle, osgHandle, osg::Vec3(50.3+4*i, .9, 1.95+0.15*i), 1, i==(anzgrounds-1));
       OdeHandle myhandle = odeHandle;
@@ -271,7 +271,7 @@ public:
 
  double height = 0.5;
 
-    for(int i=0; i<0; ++i) override {
+    for(int i=0; i<0; ++i) {
 
       PassiveBox* b =
         new  PassiveBox(odeHandle,
@@ -283,7 +283,7 @@ public:
     }
     // Creation of passive spheres
     //****** PASSIVE SPHERES **********/
-   for(int i=0; i<0; ++i) override {
+   for(int i=0; i<0; ++i) {
 
       PassiveSphere* s =
         new PassiveSphere(odeHandle,
@@ -296,7 +296,7 @@ public:
 
     //******Creation of  SNAKES **********/
     //creation of normal   snakes
-    for(int i=0; i<snakes; ++i) override {
+    for(int i=0; i<snakes; ++i) {
 
       //****************/
       SchlangeConf conf = Schlange::getDefaultConf();
@@ -387,7 +387,7 @@ public:
 
     // Creation of spherical robots:
     //****** SPHERICALS IR **********/
-    for(int i=0; i<sphericalsIR; ++i) override {
+    for(int i=0; i<sphericalsIR; ++i) {
       OdeRobot* sphere1;
       //Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
       Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
@@ -435,7 +435,7 @@ public:
 
 
       /******* S L I D E R - W H E E L I E *********/
-    for(int i=0; i < wheelies; ++i)  override {
+    for(int i=0; i < wheelies; ++i) {
       SliderWheelieConf mySliderWheelieConf = SliderWheelie::getDefaultConf();
       mySliderWheelieConf.segmNumber=12;
       mySliderWheelieConf.jointLimit=M_PI/2;
@@ -494,7 +494,7 @@ public:
       switch ( static_cast<char> key )
         {
         case 'x':
-          if(fixator) delete fixator override;
+          if(fixator) delete fixator;
           fixator=0;
           return true;
           break;
@@ -527,7 +527,7 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 
 }
 

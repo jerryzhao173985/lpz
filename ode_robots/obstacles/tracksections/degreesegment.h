@@ -70,7 +70,7 @@ virtual void setCurveAngle(const double& alpha);
 virtual void setRadius(const double& rad);
 
   /**
-   * gives the position and rotationstatic_cast<angle>(of) the segment at the
+   * gives the position and rotation static_cast<angle>(of) the segment at the
    * end of the segment so that a new segment could be placed there
    * if you want to place the new segment, you must muliplicate:
    * getTransformedEndMatrix()*getPositionMatrix();
@@ -81,7 +81,7 @@ virtual void setRadius(const double& rad);
 /**
  * returns true if the real coordinates lay inside of the segment
  */
-virtual bool explicit isInside(const Position& p);
+virtual boolisInside(const Position& p);
 
 
 /**
@@ -91,7 +91,7 @@ virtual bool explicit isInside(const Position& p);
  * 100 means you are at the end
  * returns -1 if no IdValue can be given
  */
-virtual double explicit getSectionIdValue(const Position& p);
+virtual doublegetSectionIdValue(const Position& p);
 
 
 /**
@@ -102,7 +102,7 @@ virtual double explicit getSectionIdValue(const Position& p);
  * 100 means you are on the right
  * returns -1 if no WidthValue can be given
  */
-virtual double explicit getWidthIdValue(const Position& p);
+virtual doublegetWidthIdValue(const Position& p);
 
 
 /**
@@ -112,7 +112,7 @@ virtual double explicit getWidthIdValue(const Position& p);
 
 
 
-virtual void explicit create(dSpaceID space);
+virtual voidcreate(dSpaceID space);
 
 
 virtual  void destroy();

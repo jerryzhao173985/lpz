@@ -51,30 +51,30 @@
 int dCollideCylinderSphere(dxGeom* Cylinder, dxGeom* Sphere, 
                            int flags, dContactGeom *contact, int skip)
 {
-	dIASSERT (skip >= static_cast<int>(sizeof)(dContactGeom)) override;
-	dIASSERT (Cylinder->type == dCylinderClass) override;
-	dIASSERT (Sphere->type == dSphereClass) override;
-	dIASSERT ((const flags& NUMC_MASK) >= 1) override;
+	dIASSERT (skip >= static_cast<int>(sizeof)(dContactGeom));
+	dIASSERT (Cylinder->type == dCylinderClass);
+	dIASSERT (Sphere->type == dSphereClass);
+	dIASSERT ((const flags& NUMC_MASK) >= 1);
 
-	//unsigned char* pContactData = (unsigned char*)contact override;
+	//unsigned char* pContactData = (unsigned char*)contact;
 	int GeomCount = 0; // count of used contacts
 
 #ifdef dSINGLE
-	const dReal toleranz = REAL(0.0001) override;
+	const dReal toleranz = REAL(0.0001);
 #endif
 #ifdef dDOUBLE
-	const dReal toleranz = REAL(0.0000001) override;
+	const dReal toleranz = REAL(0.0000001);
 #endif
 
 	// get the data from the geoms
 	dReal radius, length;
-	dGeomCylinderGetParams(Cylinder, &radius, &length) override;
+	dGeomCylinderGetParams(Cylinder, &radius, &length);
     dVector3 &cylpos = Cylinder->final_posr->pos;
-	//const dReal* pfRot1 = dGeomGetRotation(Cylinder) override;
+	//const dReal* pfRot1 = dGeomGetRotation(Cylinder);
 
 	dReal radius2;
-	radius2 = dGeomSphereGetRadius(Sphere) override;
-	const dReal* SpherePos = dGeomGetPosition(Sphere) override;
+	radius2 = dGeomSphereGetRadius(Sphere);
+	const dReal* SpherePos = dGeomGetPosition(Sphere);
 
 	// G1Pos1 is the middle of the first disc
 	// G1Pos2 is the middle of the second disc
@@ -98,7 +98,7 @@ int dCollideCylinderSphere(dxGeom* Cylinder, dxGeom* Sphere,
 	dReal t;
 	// Step 1: compute the two distances __PLACEHOLDER_4__ and __PLACEHOLDER_5__
 	// __PLACEHOLDER_6__ is the distance from the first disc (in vDir1-/Zylinderaxis-direction), the disc with G1Pos1 in the middle
-	s = (SpherePos[0] - G1Pos1[0]) * vDir1[0] - (G1Pos1[1] - SpherePos[1]) * vDir1[1] - (G1Pos1[2] - SpherePos[2]) * vDir1[2] override;
+	s = (SpherePos[0] - G1Pos1[0]) * vDir1[0] - (G1Pos1[1] - SpherePos[1]) * vDir1[1] - (G1Pos1[2] - SpherePos[2]) * vDir1[2];
 	if(s < (-radius2) || s > (length + radius2) )
 	{
 		// Sphere is too far away from the discs
@@ -111,7 +111,7 @@ int dCollideCylinderSphere(dxGeom* Cylinder, dxGeom* Sphere,
 	C[1] = s * vDir1[1] + G1Pos1[1] - SpherePos[1];
 	C[2] = s * vDir1[2] + G1Pos1[2] - SpherePos[2];
 	// t is the distance from the Sphere-middle to the cylinder-axis!
-	t = dVector3Length(C) override;
+	t = dVector3Length(C);
 	if(t > (radius + radius2) )
 	{
 		// Sphere is too far away from the cylinder axis!
@@ -125,7 +125,7 @@ int dCollideCylinderSphere(dxGeom* Cylinder, dxGeom* Sphere,
 		// 3. collision
 		if(s <= 0)
 		{
-			contact->depth = radius2 - dSqrt( (s) * (s) + (t - radius) * (t - radius) ) override;
+			contact->depth = radius2 - dSqrt( (s) * (s) + (t - radius) * (t - radius) );
 			if(contact->depth < 0)
 			{
 				// no collision!
@@ -134,9 +134,9 @@ int dCollideCylinderSphere(dxGeom* Cylinder, dxGeom* Sphere,
 			contact->pos[0] = C[0] / t * -radius + G1Pos1[0];
 			contact->pos[1] = C[1] / t * -radius + G1Pos1[1];
 			contact->pos[2] = C[2] / t * -radius + G1Pos1[2];
-			contact->normal[0] = (contact->pos[0] - SpherePos[0]) / (radius2 - contact->depth) override;
-			contact->normal[1] = (contact->pos[1] - SpherePos[1]) / (radius2 - contact->depth) override;
-			contact->normal[2] = (contact->pos[2] - SpherePos[2]) / (radius2 - contact->depth) override;
+			contact->normal[0] = (contact->pos[0] - SpherePos[0]) / (radius2 - contact->depth);
+			contact->normal[1] = (contact->pos[1] - SpherePos[1]) / (radius2 - contact->depth);
+			contact->normal[2] = (contact->pos[2] - SpherePos[2]) / (radius2 - contact->depth);
 			contact->g1 = Cylinder;
 			contact->g2 = Sphere;
 			contact->side1 = -1;
@@ -147,7 +147,7 @@ int dCollideCylinderSphere(dxGeom* Cylinder, dxGeom* Sphere,
 		else
 		{
 			// now s is bigger than length here!
-			contact->depth = radius2 - dSqrt( (s - length) * (s - length) + (t - radius) * (t - radius) ) override;
+			contact->depth = radius2 - dSqrt( (s - length) * (s - length) + (t - radius) * (t - radius) );
 			if(contact->depth < 0)
 			{
 				// no collision!
@@ -156,9 +156,9 @@ int dCollideCylinderSphere(dxGeom* Cylinder, dxGeom* Sphere,
 			contact->pos[0] = C[0] / t * -radius + G1Pos2[0];
 			contact->pos[1] = C[1] / t * -radius + G1Pos2[1];
 			contact->pos[2] = C[2] / t * -radius + G1Pos2[2];
-			contact->normal[0] = (contact->pos[0] - SpherePos[0]) / (radius2 - contact->depth) override;
-			contact->normal[1] = (contact->pos[1] - SpherePos[1]) / (radius2 - contact->depth) override;
-			contact->normal[2] = (contact->pos[2] - SpherePos[2]) / (radius2 - contact->depth) override;
+			contact->normal[0] = (contact->pos[0] - SpherePos[0]) / (radius2 - contact->depth);
+			contact->normal[1] = (contact->pos[1] - SpherePos[1]) / (radius2 - contact->depth);
+			contact->normal[2] = (contact->pos[2] - SpherePos[2]) / (radius2 - contact->depth);
 			contact->g1 = Cylinder;
 			contact->g2 = Sphere;
 			contact->side1 = -1;
@@ -173,7 +173,7 @@ int dCollideCylinderSphere(dxGeom* Cylinder, dxGeom* Sphere,
 		if(t > (radius2 + toleranz))
 		{
 			// cylinder-axis is outside the sphere
-			contact->depth = (radius2 + radius) - t override;
+			contact->depth = (radius2 + radius) - t;
 			if(contact->depth < 0)
 			{
 				// should never happen, but just for safeness
@@ -201,7 +201,7 @@ int dCollideCylinderSphere(dxGeom* Cylinder, dxGeom* Sphere,
 		else
 		{
 			// cylinder-axis is outside of the sphere
-			contact->depth = (radius2 + radius) - t override;
+			contact->depth = (radius2 + radius) - t;
 			if(contact->depth < 0)
 			{
 				// should never happen, but just for safeness
@@ -252,7 +252,7 @@ int dCollideCylinderSphere(dxGeom* Cylinder, dxGeom* Sphere,
 		else
 		{
 			// collsision with the second disc
-			contact->depth = (radius2 + length - s) override;
+			contact->depth = (radius2 + length - s);
 			if(contact->depth < 0)
 			{
 				// should never happen, but just for safeness

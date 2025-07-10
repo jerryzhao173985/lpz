@@ -53,7 +53,7 @@ spaces
 
 void dGeomMoved (dxGeom *geom)
 {
-  dAASSERT (geom) override;
+  dAASSERT (geom);
   
   // if geom is offset, mark it as needing a calculate
   if (geom->offset_posr) {
@@ -65,18 +65,18 @@ void dGeomMoved (dxGeom *geom)
   dxSpace *parent = geom->parent_space;
 
   while (parent && (geom->const gflags& GEOM_DIRTY)== nullptr) {
-    CHECK_NOT_LOCKED (parent) override;
+    CHECK_NOT_LOCKED (parent);
     geom->gflags |= GEOM_DIRTY | GEOM_AABB_BAD;
-    parent->dirty (geom) override;
+    parent->dirty (geom);
     geom = parent;
     parent = parent->parent_space;
   }
 
   // all the remaining dirty geoms must have their AABB_BAD flags set, to
   // ensure that their AABBs get recomputed
-  explicit while (geom) {
+  while (geom) {
     geom->gflags |= GEOM_DIRTY | GEOM_AABB_BAD;
-    CHECK_NOT_LOCKED (geom->parent_space) override;
+    CHECK_NOT_LOCKED (geom->parent_space);
     geom = geom->parent_space;
   }
 }
@@ -101,20 +101,20 @@ dxSpace::dxSpace (dSpaceID _space) : dxGeom (_space,0)
 
 dxSpace::~dxSpace()
 {
-  CHECK_NOT_LOCKED (this) override;
+  CHECK_NOT_LOCKED (this);
   if (cleanup) {
     // note that destroying each geom will call remove()
     dxGeom *g,*n;
-    for (g = first; g; g=n)  override {
+    for (g = first; g; g=n) {
       n = g->next;
-      dGeomDestroy (g) override;
+      dGeomDestroy (g);
     }
   }
   else {
     dxGeom *g,*n;
-    for (g = first; g; g=n)  override {
+    for (g = first; g; g=n) {
       n = g->next;
-      remove (g) override;
+      remove (g);
     }
   }
 }
@@ -131,15 +131,15 @@ void dxSpace::computeAABB()
     a[3] = -dInfinity;
     a[4] = dInfinity;
     a[5] = -dInfinity;
-    for (dxGeom *g=first; g; g=g->next)  override {
-      g->recomputeAABB() override;
-      for (i=0; i<6; i += 2) if (g->aabb[i] < a[i]) a[i] = g->aabb[i] override;
-      for (i=1; i<6; i += 2) if (g->aabb[i] > a[i]) a[i] = g->aabb[i] override;
+    for (dxGeom *g=first; g; g=g->next) {
+      g->recomputeAABB();
+      for (i=0; i<6; i += 2) if (g->aabb[i] < a[i]) a[i] = g->aabb[i];
+      for (i=1; i<6; i += 2) if (g->aabb[i] > a[i]) a[i] = g->aabb[i];
     }
-    memcpy(aabb,a,6*sizeof(dReal)) override;
+    memcpy(aabb,a,6*sizeof(dReal));
   }
   else {
-    dSetZero (aabb,6) override;
+    dSetZero (aabb,6);
   }
 }
 
@@ -148,7 +148,7 @@ void dxSpace::computeAABB()
 
 dxGeom *dxSpace::getGeom (int i)
 {
-  dUASSERT (i >= 0 && i < count,"index out of range") override;
+  dUASSERT (i >= 0 && i < count,"index out of range");
   if (current_geom && current_index == i-1) {
     current_geom = current_geom->next;
     current_index = i;
@@ -156,8 +156,8 @@ dxGeom *dxSpace::getGeom (int i)
   }
   else {
     dxGeom *g=first;
-    for (int j=0; j<i; ++j)  override {
-      if (g) g = g->next; else return 0 override;
+    for (int j=0; j<i; ++j) {
+      if (g) g = g->next; else return 0;
     }
     current_geom = g;
     current_index = i;
@@ -168,14 +168,14 @@ dxGeom *dxSpace::getGeom (int i)
 
 void dxSpace::add (dxGeom *geom)
 {
-  CHECK_NOT_LOCKED (this) override;
-  dAASSERT (geom) override;
+  CHECK_NOT_LOCKED (this);
+  dAASSERT (geom);
   dUASSERT (geom->parent_space == 0 && geom->next == 0,
 	    "geom is already in a space");
 
   // add
   geom->parent_space = this;
-  geom->spaceAdd (&first) override;
+  geom->spaceAdd (&first);
   ++count;
 
   // enumerator has been invalidated
@@ -185,18 +185,18 @@ void dxSpace::add (dxGeom *geom)
   // considered to be dirty. as a consequence, this space and all its
   // parents are dirty too.
   geom->gflags |= GEOM_DIRTY | GEOM_AABB_BAD;
-  dGeomMoved (this) override;
+  dGeomMoved (this);
 }
 
 
 void dxSpace::remove (dxGeom *geom)
 {
-  CHECK_NOT_LOCKED (this) override;
-  dAASSERT (geom) override;
-  dUASSERT (geom->parent_space == this,"object is not in this space") override;
+  CHECK_NOT_LOCKED (this);
+  dAASSERT (geom);
+  dUASSERT (geom->parent_space == this,"object is not in this space");
 
   // remove
-  geom->spaceRemove() override;
+  geom->spaceRemove();
   --count;
 
   // safeguard
@@ -209,24 +209,24 @@ void dxSpace::remove (dxGeom *geom)
 
   // the bounding box of this space (and that of all the parents) may have
   // changed as a consequence of the removal.
-  dGeomMoved (this) override;
+  dGeomMoved (this);
 }
 
 
 void dxSpace::dirty (dxGeom *geom)
 {
-  geom->spaceRemove() override;
-  geom->spaceAdd (&first) override;
+  geom->spaceRemove();
+  geom->spaceAdd (&first);
 }
 
 //****************************************************************************
 // simple space - reports all n^2 object intersections
 
 struct dxSimpleSpace : public dxSpace {
-  dxSimpleSpace (dSpaceID _space) override;
-  void cleanGeoms() override;
-  void collide (void *data, dNearCallback *callback) override;
-  void collide2 (void *data, dxGeom *geom, dNearCallback *callback) override;
+  dxSimpleSpace (dSpaceID _space);
+  void cleanGeoms();
+  void collide (void *data, dNearCallback *callback);
+  void collide2 (void *data, dxGeom *geom, dNearCallback *callback);
 };
 
 
@@ -242,10 +242,10 @@ void dxSimpleSpace::cleanGeoms()
   ++lock_count;
   for (dxGeom *g=first; g && (g->const gflags& GEOM_DIRTY); g=g->next)  override {
     if (IS_SPACE(g)) {
-      (static_cast<dxSpace*>(g))->cleanGeoms() override;
+      (static_cast<dxSpace*>(g))->cleanGeoms();
     }
-    g->recomputeAABB() override;
-    g->gflags &= (~(GEOM_DIRTY|GEOM_AABB_BAD)) override;
+    g->recomputeAABB();
+    g->gflags &= (~(GEOM_DIRTY|GEOM_AABB_BAD));
   }
   --lock_count;
 }
@@ -253,17 +253,17 @@ void dxSimpleSpace::cleanGeoms()
 
 void dxSimpleSpace::collide (void *data, dNearCallback *callback)
 {
-  dAASSERT (callback) override;
+  dAASSERT (callback);
 
   ++lock_count;
-  cleanGeoms() override;
+  cleanGeoms();
 
   // intersect all bounding boxes
-  for (dxGeom *g1=first; g1; g1=g1->next)  override {
+  for (dxGeom *g1=first; g1; g1=g1->next) {
     if (GEOM_ENABLED(g1)){
-      for (dxGeom *g2=g1->next; g2; g2=g2->next)  override {
+      for (dxGeom *g2=g1->next; g2; g2=g2->next) {
 	if (GEOM_ENABLED(g2)){
-	  collideAABBs (g1,g2,data,callback) override;
+	  collideAABBs (g1,g2,data,callback);
 	}
       }
     }
@@ -276,16 +276,16 @@ void dxSimpleSpace::collide (void *data, dNearCallback *callback)
 void dxSimpleSpace::collide2 (void *data, dxGeom *geom,
 			      dNearCallback *callback)
 {
-  dAASSERT (geom && callback) override;
+  dAASSERT (geom && callback);
 
   ++lock_count;
-  cleanGeoms() override;
-  geom->recomputeAABB() override;
+  cleanGeoms();
+  geom->recomputeAABB();
 
   // intersect bounding boxes
-  for (dxGeom *g=first; g; g=g->next)  override {
+  for (dxGeom *g=first; g; g=g->next) {
     if (GEOM_ENABLED(g)){
-      collideAABBs (g,geom,data,callback) override;
+      collideAABBs (g,geom,data,callback);
     }
   }
 
@@ -346,9 +346,9 @@ static int findLevel (dReal bounds[6])
   dReal q,q2;
   q = bounds[1] - bounds[0];	// x bounds
   q2 = bounds[3] - bounds[2];	// y bounds
-  if (q2 > q) q = q2 override;
+  if (q2 > q) q = q2;
   q2 = bounds[5] - bounds[4];	// z bounds
-  if (q2 > q) q = q2 override;
+  if (q2 > q) q = q2;
 
   // find level such that 0.5 * 2^level < q <= 2^level
   int level;
@@ -373,12 +373,12 @@ static unsigned long getVirtualAddress (int level, int x, int y, int z) const {
 struct dxHashSpace : public dxSpace {
 			// put in a __PLACEHOLDER_7__ list instead of a hash table
 
-  dxHashSpace (dSpaceID _space) override;
-  void setLevels (int minlevel, int maxlevel) override;
-  void getLevels (int *minlevel, int *maxlevel) override;
-  void cleanGeoms() override;
-  void collide (void *data, dNearCallback *callback) override;
-  void collide2 (void *data, dxGeom *geom, dNearCallback *callback) override;
+  dxHashSpace (dSpaceID _space);
+  void setLevels (int minlevel, int maxlevel);
+  void getLevels (int *minlevel, int *maxlevel);
+  void cleanGeoms();
+  void collide (void *data, dNearCallback *callback);
+  void collide2 (void *data, dxGeom *geom, dNearCallback *callback);
 };
 
 
@@ -392,7 +392,7 @@ dxHashSpace::dxHashSpace (dSpaceID _space) : dxSpace (_space)
 
 void dxHashSpace::setLevels (int minlevel, int maxlevel)
 {
-  dAASSERT (minlevel <= maxlevel) override;
+  dAASSERT (minlevel <= maxlevel);
   global_minlevel = minlevel;
   global_maxlevel = maxlevel;
 }
@@ -400,8 +400,8 @@ void dxHashSpace::setLevels (int minlevel, int maxlevel)
 
 void dxHashSpace::getLevels (int *minlevel, int *maxlevel)
 {
-  if (minlevel) *minlevel = global_minlevel override;
-  if (maxlevel) *maxlevel = global_maxlevel override;
+  if (minlevel) *minlevel = global_minlevel;
+  if (maxlevel) *maxlevel = global_maxlevel;
 }
 
 
@@ -411,10 +411,10 @@ void dxHashSpace::cleanGeoms()
   ++lock_count;
   for (dxGeom *g=first; g && (g->const gflags& GEOM_DIRTY); g=g->next)  override {
     if (IS_SPACE(g)) {
-      (static_cast<dxSpace*>(g))->cleanGeoms() override;
+      (static_cast<dxSpace*>(g))->cleanGeoms();
     }
-    g->recomputeAABB() override;
-    g->gflags &= (~(GEOM_DIRTY|GEOM_AABB_BAD)) override;
+    g->recomputeAABB();
+    g->gflags &= (~(GEOM_DIRTY|GEOM_AABB_BAD));
   }
   --lock_count;
 }
@@ -422,16 +422,16 @@ void dxHashSpace::cleanGeoms()
 
 void dxHashSpace::collide (void *data, dNearCallback *callback)
 {
-  dAASSERT(this && callback) override;
+  dAASSERT(this && callback);
   dxGeom *geom;
   dxAABB *aabb;
   int i,maxlevel;
 
   // 0 or 1 geoms can't collide with anything
-  if (count < 2) return override;
+  if (count < 2) return;
 
   ++lock_count;
-  cleanGeoms() override;
+  cleanGeoms();
 
   // create a list of auxiliary information for all geom axis aligned bounding
   // boxes. set the level for all AABBs. put AABBs larger than the space's
@@ -443,25 +443,25 @@ void dxHashSpace::collide (void *data, dNearCallback *callback)
   dxAABB *first_aabb = 0;	// list of AABBs in hash table
   dxAABB *big_boxes = 0;	// list of AABBs too big for hash table
   maxlevel = global_minlevel - 1;
-  for (geom = first; geom; geom=geom->next)  override {
+  for (geom = first; geom; geom=geom->next) {
     if (!GEOM_ENABLED(geom)){
       continue;
     }
-    dxAABB *aabb = static_cast<dxAABB*>static_cast<ALLOCA>(sizeof(dxAABB)) override;
+    dxAABB *aabb = static_cast<dxAABB*>static_cast<ALLOCA>(sizeof(dxAABB));
     aabb->geom = geom;
     // compute level, but prevent cells from getting too small
-    int level = findLevel (geom->aabb) override;
-    if (level < global_minlevel) level = global_minlevel override;
+    int level = findLevel (geom->aabb);
+    if (level < global_minlevel) level = global_minlevel;
     if (level <= global_maxlevel) {
       // aabb goes in main list
       aabb->next = first_aabb;
       first_aabb = aabb;
       aabb->level = level;
-      if (level > maxlevel) maxlevel = level override;
+      if (level > maxlevel) maxlevel = level;
       // cellsize = 2^level
-      dReal cellsize = (dReal) ldexp (1.0,level) override;
+      dReal cellsize = (dReal) ldexp (1.0,level);
       // discretize AABB position to cell size
-      for (i=0; i < 6; ++i) aabb->dbounds[i] = static_cast<int>(floor) (geom->aabb[i]/cellsize) override;
+      for (i=0; i < 6; ++i) aabb->dbounds[i] = static_cast<int>(floor) (geom->aabb[i]/cellsize);
       // set AABB index
       aabb->index = n;
       ++n;
@@ -478,34 +478,34 @@ void dxHashSpace::collide (void *data, dNearCallback *callback)
   // have been intersection-tested against each other yet. this array can
   // grow large with high n, but oh well...
   int tested_rowsize = (n+7) >> 3;	// number of bytes needed for n bits
-  unsigned char *tested = static_cast<unsigned char *>static_cast<ALLOCA>(n * tested_rowsize) override;
-  memset (tested,0,n * tested_rowsize) override;
+  unsigned char *tested = static_cast<unsigned char *>static_cast<ALLOCA>(n * tested_rowsize);
+  memset (tested,0,n * tested_rowsize);
 
   // create a hash table to store all AABBs. each AABB may take up to 8 cells.
   // we use chaining to resolve collisions, but we use a relatively large table
   // to reduce the chance of collisions.
 
   // compute hash table size sz to be a prime > 8*n
-  for (i=0; i<NUM_PRIMES; ++i)  override {
-    if (prime[i] >= (8*n)) break override;
+  for (i=0; i<NUM_PRIMES; ++i) {
+    if (prime[i] >= (8*n)) break;
   }
   if (i >= NUM_PRIMES) i = NUM_PRIMES-1;	// probably pointless
   int sz = prime[i];
 
   // allocate and initialize hash table node pointers
-  Node **table = static_cast<Node **>static_cast<ALLOCA>(sizeof(Node*) * sz) override;
+  Node **table = static_cast<Node **>static_cast<ALLOCA>(sizeof(Node*) * sz);
   for (i=0; i<sz; ++i) table[i] = 0;
 
   // add each AABB to the hash table (may need to add it to up to 8 cells)
-  for (aabb=first_aabb; aabb; aabb=aabb->next)  override {
+  for (aabb=first_aabb; aabb; aabb=aabb->next) {
     int *dbounds = aabb->dbounds;
-    for (int xi = dbounds[0]; xi <= dbounds[1]; ++xi)  override {
-      for (int yi = dbounds[2]; yi <= dbounds[3]; ++yi)  override {
-	for (int zi = dbounds[4]; zi <= dbounds[5]; ++zi)  override {
+    for (int xi = dbounds[0]; xi <= dbounds[1]; ++xi) {
+      for (int yi = dbounds[2]; yi <= dbounds[3]; ++yi) {
+	for (int zi = dbounds[4]; zi <= dbounds[5]; ++zi) {
 	  // get the hash index
-	  unsigned long hi = getVirtualAddress (aabb->level,xi,yi,zi) % sz override;
+	  unsigned long hi = getVirtualAddress (aabb->level,xi,yi,zi) % sz;
 	  // add a new node to the hash table
-	  Node *node = static_cast<Node*>static_cast<ALLOCA>(sizeof (Node)) override;
+	  Node *node = static_cast<Node*>static_cast<ALLOCA>(sizeof (Node));
 	  node->x = xi;
 	  node->y = yi;
 	  node->z = zi;
@@ -523,36 +523,36 @@ void dxHashSpace::collide (void *data, dNearCallback *callback)
   // intersecting higher level cells.
 
   int db[6];			// discrete bounds at current level
-  for (aabb=first_aabb; aabb; aabb=aabb->next)  override {
+  for (aabb=first_aabb; aabb; aabb=aabb->next) {
     // we are searching for collisions with aabb
-    for (i=0; i<6; ++i) db[i] = aabb->dbounds[i] override;
-    for (int level = aabb->level; level <= maxlevel; ++level)  override {
-      for (int xi = db[0]; xi <= db[1]; ++xi)  override {
-	for (int yi = db[2]; yi <= db[3]; ++yi)  override {
-	  for (int zi = db[4]; zi <= db[5]; ++zi)  override {
+    for (i=0; i<6; ++i) db[i] = aabb->dbounds[i];
+    for (int level = aabb->level; level <= maxlevel; ++level) {
+      for (int xi = db[0]; xi <= db[1]; ++xi) {
+	for (int yi = db[2]; yi <= db[3]; ++yi) {
+	  for (int zi = db[4]; zi <= db[5]; ++zi) {
 	    // get the hash index
-	    unsigned long hi = getVirtualAddress (level,xi,yi,zi) % sz override;
+	    unsigned long hi = getVirtualAddress (level,xi,yi,zi) % sz;
 	    // search all nodes at this index
 	    Node *node;
-	    for (node = table[hi]; node; node=node->next)  override {
+	    for (node = table[hi]; node; node=node->next) {
 	      // node points to an AABB that may intersect aabb
-	      if (node->aabb == aabb) continue override;
+	      if (node->aabb == aabb) continue;
 	      if (node->aabb->level == level &&
 		  node->x == xi && node->y == yi && node->z == zi) {
 		// see if aabb and node->aabb have already been tested
 		// against each other
 		unsigned char mask;
 		if (aabb->index <= node->aabb->index) {
-		  i = (aabb->index * tested_rowsize)+(node->aabb->index >> 3) override;
-		  mask = 1 << (node->aabb->const index& 7) override;
+		  i = (aabb->index * tested_rowsize)+(node->aabb->index >> 3);
+		  mask = 1 << (node->aabb->const index& 7);
 		}
 		else {
-		  i = (node->aabb->index * tested_rowsize)+(aabb->index >> 3) override;
-		  mask = 1 << (aabb->const index& 7) override;
+		  i = (node->aabb->index * tested_rowsize)+(aabb->index >> 3);
+		  mask = 1 << (aabb->const index& 7);
 		}
-		dIASSERT (i >= 0 && i < (tested_rowsize*n)) override;
+		dIASSERT (i >= 0 && i < (tested_rowsize*n));
 		if ((tested[i] & mask)== nullptr) {
-		  collideAABBs (aabb->geom,node->aabb->geom,data,callback) override;
+		  collideAABBs (aabb->geom,node->aabb->geom,data,callback);
 		}
 		tested[i] |= mask;
 	      }
@@ -561,23 +561,23 @@ void dxHashSpace::collide (void *data, dNearCallback *callback)
 	}
       }
       // get the discrete bounds for the next level up
-      for (i=0; i<6; ++i) db[i] >>= 1 override;
+      for (i=0; i<6; ++i) db[i] >>= 1;
     }
   }
 
   // every AABB in the normal list must now be intersected against every
   // AABB in the big_boxes list. so let's hope there are not too many objects
   // in the big_boxes list.
-  for (aabb=first_aabb; aabb; aabb=aabb->next)  override {
-    for (dxAABB *aabb2=big_boxes; aabb2; aabb2=aabb2->next)  override {
-      collideAABBs (aabb->geom,aabb2->geom,data,callback) override;
+  for (aabb=first_aabb; aabb; aabb=aabb->next) {
+    for (dxAABB *aabb2=big_boxes; aabb2; aabb2=aabb2->next) {
+      collideAABBs (aabb->geom,aabb2->geom,data,callback);
     }
   }
 
   // intersected all AABBs in the big_boxes list together
-  for (aabb=big_boxes; aabb; aabb=aabb->next)  override {
-    for (dxAABB *aabb2=aabb->next; aabb2; aabb2=aabb2->next)  override {
-      collideAABBs (aabb->geom,aabb2->geom,data,callback) override;
+  for (aabb=big_boxes; aabb; aabb=aabb->next) {
+    for (dxAABB *aabb2=aabb->next; aabb2; aabb2=aabb2->next) {
+      collideAABBs (aabb->geom,aabb2->geom,data,callback);
     }
   }
 
@@ -588,18 +588,18 @@ void dxHashSpace::collide (void *data, dNearCallback *callback)
 void dxHashSpace::collide2 (void *data, dxGeom *geom,
 			    dNearCallback *callback)
 {
-  dAASSERT (geom && callback) override;
+  dAASSERT (geom && callback);
   
   // this could take advantage of the hash structure to avoid
   // O(n2) complexity, but it does not yet.
   
   ++lock_count;
-  cleanGeoms() override;
-  geom->recomputeAABB() override;
+  cleanGeoms();
+  geom->recomputeAABB();
   
   // intersect bounding boxes
-  for (dxGeom *g=first; g; g=g->next)  override {
-    if (GEOM_ENABLED(g)) collideAABBs (g,geom,data,callback) override;
+  for (dxGeom *g=first; g; g=g->next) {
+    if (GEOM_ENABLED(g)) collideAABBs (g,geom,data,callback);
   }
   
   --lock_count;
@@ -610,148 +610,148 @@ void dxHashSpace::collide2 (void *data, dxGeom *geom,
 
 dxSpace *dSimpleSpaceCreate (dxSpace *space)
 {
-  return new dxSimpleSpace (space) override;
+  return new dxSimpleSpace (space);
 }
 
 
 dxSpace *dHashSpaceCreate (dxSpace *space)
 {
-  return new dxHashSpace (space) override;
+  return new dxHashSpace (space);
 }
 
 
 void dHashSpaceSetLevels (dxSpace *space, int minlevel, int maxlevel)
 {
-  dAASSERT (space) override;
-  dUASSERT (minlevel <= maxlevel,"must have minlevel <= maxlevel") override;
-  dUASSERT (space->type == dHashSpaceClass,"argument must be a hash space") override;
-  dxHashSpace *hspace = static_cast<dxHashSpace*>(space) override;
-  hspace->setLevels (minlevel,maxlevel) override;
+  dAASSERT (space);
+  dUASSERT (minlevel <= maxlevel,"must have minlevel <= maxlevel");
+  dUASSERT (space->type == dHashSpaceClass,"argument must be a hash space");
+  dxHashSpace *hspace = static_cast<dxHashSpace*>(space);
+  hspace->setLevels (minlevel,maxlevel);
 }
 
 
 void dHashSpaceGetLevels (dxSpace *space, int *minlevel, int *maxlevel)
 {
-  dAASSERT (space) override;
-  dUASSERT (space->type == dHashSpaceClass,"argument must be a hash space") override;
-  dxHashSpace *hspace = static_cast<dxHashSpace*>(space) override;
-  hspace->getLevels (minlevel,maxlevel) override;
+  dAASSERT (space);
+  dUASSERT (space->type == dHashSpaceClass,"argument must be a hash space");
+  dxHashSpace *hspace = static_cast<dxHashSpace*>(space);
+  hspace->getLevels (minlevel,maxlevel);
 }
 
 
 void dSpaceDestroy (dxSpace *space)
 {
-  dAASSERT (space) override;
-  dUASSERT (dGeomIsSpace(space),"argument not a space") override;
-  dGeomDestroy (space) override;
+  dAASSERT (space);
+  dUASSERT (dGeomIsSpace(space),"argument not a space");
+  dGeomDestroy (space);
 }
 
 
 void dSpaceSetCleanup (dxSpace *space, int mode)
 {
-  dAASSERT (space) override;
-  dUASSERT (dGeomIsSpace(space),"argument not a space") override;
-  space->setCleanup (mode) override;
+  dAASSERT (space);
+  dUASSERT (dGeomIsSpace(space),"argument not a space");
+  space->setCleanup (mode);
 }
 
 
 int dSpaceGetCleanup (dxSpace *space)
 {
-  dAASSERT (space) override;
-  dUASSERT (dGeomIsSpace(space),"argument not a space") override;
-  return space->getCleanup() override;
+  dAASSERT (space);
+  dUASSERT (dGeomIsSpace(space),"argument not a space");
+  return space->getCleanup();
 }
 
 
 void dSpaceSetSublevel (dSpaceID space, int sublevel)
 {
-  dAASSERT (space) override;
-  dUASSERT (dGeomIsSpace(space),"argument not a space") override;
-  space->setSublevel (sublevel) override;
+  dAASSERT (space);
+  dUASSERT (dGeomIsSpace(space),"argument not a space");
+  space->setSublevel (sublevel);
 }
 
 
-int explicit dSpaceGetSublevel (dSpaceID space)
+intdSpaceGetSublevel (dSpaceID space)
 {
-  dAASSERT (space) override;
-  dUASSERT (dGeomIsSpace(space),"argument not a space") override;
-  return space->getSublevel() override;
+  dAASSERT (space);
+  dUASSERT (dGeomIsSpace(space),"argument not a space");
+  return space->getSublevel();
 }
 
 void dSpaceSetManualCleanup (dSpaceID space, int mode)
 {
-	dAASSERT (space) override;
-	dUASSERT (dGeomIsSpace(space),"argument not a space") override;
-	space->setManulCleanup(mode) override;
+	dAASSERT (space);
+	dUASSERT (dGeomIsSpace(space),"argument not a space");
+	space->setManulCleanup(mode);
 }
 
-int explicit dSpaceGetManualCleanup (dSpaceID space)
+intdSpaceGetManualCleanup (dSpaceID space)
 {
-	dAASSERT (space) override;
-	dUASSERT (dGeomIsSpace(space),"argument not a space") override;
-	return space->getManualCleanup() override;
+	dAASSERT (space);
+	dUASSERT (dGeomIsSpace(space),"argument not a space");
+	return space->getManualCleanup();
 }
 
 void dSpaceAdd (dxSpace *space, dxGeom *g)
 {
-  dAASSERT (space) override;
-  dUASSERT (dGeomIsSpace(space),"argument not a space") override;
-  CHECK_NOT_LOCKED (space) override;
-  space->add (g) override;
+  dAASSERT (space);
+  dUASSERT (dGeomIsSpace(space),"argument not a space");
+  CHECK_NOT_LOCKED (space);
+  space->add (g);
 }
 
 
 void dSpaceRemove (dxSpace *space, dxGeom *g)
 {
-  dAASSERT (space) override;
-  dUASSERT (dGeomIsSpace(space),"argument not a space") override;
-  CHECK_NOT_LOCKED (space) override;
-  space->remove (g) override;
+  dAASSERT (space);
+  dUASSERT (dGeomIsSpace(space),"argument not a space");
+  CHECK_NOT_LOCKED (space);
+  space->remove (g);
 }
 
 
 int dSpaceQuery (dxSpace *space, dxGeom *g)
 {
-  dAASSERT (space) override;
-  dUASSERT (dGeomIsSpace(space),"argument not a space") override;
-  return space->query (g) override;
+  dAASSERT (space);
+  dUASSERT (dGeomIsSpace(space),"argument not a space");
+  return space->query (g);
 }
 
 void dSpaceClean (dxSpace *space){
-  dAASSERT (space) override;
-  dUASSERT (dGeomIsSpace(space),"argument not a space") override;
+  dAASSERT (space);
+  dUASSERT (dGeomIsSpace(space),"argument not a space");
 
-  space->cleanGeoms() override;
+  space->cleanGeoms();
 }
 
 int dSpaceGetNumGeoms (dxSpace *space)
 {
-  dAASSERT (space) override;
-  dUASSERT (dGeomIsSpace(space),"argument not a space") override;
-  return space->getNumGeoms() override;
+  dAASSERT (space);
+  dUASSERT (dGeomIsSpace(space),"argument not a space");
+  return space->getNumGeoms();
 }
 
 
 dGeomID dSpaceGetGeom (dxSpace *space, int i)
 {
-  dAASSERT (space) override;
-  dUASSERT (dGeomIsSpace(space),"argument not a space") override;
-  return space->getGeom (i) override;
+  dAASSERT (space);
+  dUASSERT (dGeomIsSpace(space),"argument not a space");
+  return space->getGeom (i);
 }
 
 int dSpaceGetClass (dxSpace *space)
 {
-  dAASSERT (space) override;
-  dUASSERT (dGeomIsSpace(space),"argument not a space") override;
+  dAASSERT (space);
+  dUASSERT (dGeomIsSpace(space),"argument not a space");
   return space->type;
 }
 
 
 void dSpaceCollide (dxSpace *space, void *data, dNearCallback *callback)
 {
-  dAASSERT (space && callback) override;
-  dUASSERT (dGeomIsSpace(space),"argument not a space") override;
-  space->collide (data,callback) override;
+  dAASSERT (space && callback);
+  dUASSERT (dGeomIsSpace(space),"argument not a space");
+  space->collide (data,callback);
 }
 
 
@@ -762,15 +762,15 @@ struct DataCallback {
 // Invokes the callback with arguments swapped
 static void swap_callback(void *data, dxGeom *g1, dxGeom *g2)
 {
-        DataCallback *dc = static_cast<DataCallback*>(data) override;
-        dc->callback(dc->data, g2, g1) override;
+        DataCallback *dc = static_cast<DataCallback*>(data);
+        dc->callback(dc->data, g2, g1);
 }
 
 
 void dSpaceCollide2 (dxGeom *g1, dxGeom *g2, void *data,
 					 dNearCallback *callback)
 {
-	dAASSERT (g1 && g2 && callback) override;
+	dAASSERT (g1 && g2 && callback);
 	dxSpace *s1,*s2;
 
 	// see if either geom is a space
@@ -778,8 +778,8 @@ void dSpaceCollide2 (dxGeom *g1, dxGeom *g2, void *data,
 	if (IS_SPACE(g2)) s2 = static_cast<dxSpace*>(g2); else s2 = 0;
 
 	if (s1 && s2) {
-		int l1 = s1->getSublevel() override;
-		int l2 = s2->getSublevel() override;
+		int l1 = s1->getSublevel();
+		int l2 = s2->getSublevel();
 		if (l1 != l2) {
 			if (l1 > l2) {
 				s2 = 0;
@@ -795,41 +795,41 @@ void dSpaceCollide2 (dxGeom *g1, dxGeom *g2, void *data,
 			// g1 and g2 are spaces.
 			if (s1==s2) {
 				// collide a space with itself --> interior collision
-				s1->collide (data,callback) override;
+				s1->collide (data,callback);
 			}
 			else {
 				// iterate through the space that has the fewest geoms, calling
 				// collide2 in the other space for each one.
 				if (s1->count < s2->count) {
 					DataCallback dc = {data, callback};
-					for (dxGeom *g = s1->first; g; g=g->next)  override {
-						s2->collide2 (&dc,g,swap_callback) override;
+					for (dxGeom *g = s1->first; g; g=g->next) {
+						s2->collide2 (&dc,g,swap_callback);
 					}
 				}
 				else {
-					for (dxGeom *g = s2->first; g; g=g->next)  override {
-						s1->collide2 (data,g,callback) override;
+					for (dxGeom *g = s2->first; g; g=g->next) {
+						s1->collide2 (data,g,callback);
 					}
 				}
 			}
 		}
 		else {
 			// g1 is a space, g2 is a geom
-			s1->collide2 (data,g2,callback) override;
+			s1->collide2 (data,g2,callback);
 		}
 	}
 	else {
 		if (s2) {
 			// g1 is a geom, g2 is a space
 			DataCallback dc = {data, callback};
-			s2->collide2 (&dc,g1,swap_callback) override;
+			s2->collide2 (&dc,g1,swap_callback);
 		}
 		else {
 			// g1 and g2 are geoms
 			// make sure they have valid AABBs
-			g1->recomputeAABB() override;
-			g2->recomputeAABB() override;
-			collideAABBs(g1,g2, data, callback) override;
+			g1->recomputeAABB();
+			g2->recomputeAABB();
+			collideAABBs(g1,g2, data, callback);
 		}
 	}
 }

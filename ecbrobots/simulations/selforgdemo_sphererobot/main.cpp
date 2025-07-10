@@ -253,7 +253,7 @@ class MyECBManager : public ECBManager
       
       myCon->axes_position = false;
 
-      explicit switch ( key ) {
+      switch ( key ) {
         case '6': //forward
           if ( myCon->motorValues[0]<=255 ) {
             myCon->motorValues[0] += 8;

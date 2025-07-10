@@ -304,7 +304,7 @@ namespace lpzrobots {
 
     // legs  (counted from back to front)
     double legdist = conf.size*0.9;
-    for ( int n = 0; n < 2; ++n )  override {
+    for ( int n = 0; n < 2; ++n ) {
       double l1 =       n<2 ? conf.legLength*0.45 : conf.legLength*0.5;
       double t1       = conf.legLength/10;
       double hipangle = n<2 ? -M_PI/18 : -M_PI/18;
@@ -326,11 +326,11 @@ namespace lpzrobots {
       Pos pos = Pos(-conf.size/(2+0.2) + (static_cast<int>(n)/2) * legdist,
                     n%2==0 ? - twidth/2 : twidth/2,
                     n<2 ? conf.legLength  : conf.legLength - theight/3);
-      osg::Matrix m = osg::Matrix::translate(pos) * pose override;
+      osg::Matrix m = osg::Matrix::translate(pos) * pose;
 
       p1 = new Capsule(t1, l1);
       p1->init(odeHandle, legmass*0.6, osgHandle);
-      osg::Matrix m1 = osg::Matrix::translate(0,0,-l1/2) * osg::Matrix::rotate(hipangle,0,1,0) * m override;
+      osg::Matrix m1 = osg::Matrix::translate(0,0,-l1/2) * osg::Matrix::rotate(hipangle,0,1,0) * m;
       p1->setPose(m1);
       objects.push_back(p1);
       // powered hip joint
@@ -347,7 +347,7 @@ namespace lpzrobots {
       p2 = new Capsule(t2, l2);
       p2->init(odeHandle, legmass*0.3, osgHandle);
       osg::Matrix m2 = osg::Matrix::translate(0,0,-l2/2) * osg::Matrix::rotate(kneeangle,0, 1,0) *
-        osg::Matrix::translate(0,0,-l1/2) * m1 override;
+        osg::Matrix::translate(0,0,-l1/2) * m1;
       p2->setPose(m2);
       objects.push_back(p2);
       // powered knee joint
@@ -370,7 +370,7 @@ namespace lpzrobots {
         p3 = new Capsule(t3, l3);
         p3->init(odeHandle, legmass*0.2, osgHandle);
         osg::Matrix m3 = osg::Matrix::translate(0,0,-l3/2) * osg::Matrix::rotate(ankleangle,0, 1,0) *
-          osg::Matrix::translate(0,0,-l2/2) * m2 override;
+          osg::Matrix::translate(0,0,-l2/2) * m2;
         p3->setPose(m3);
         objects.push_back(p3);
         // powered ankle joint
@@ -403,27 +403,27 @@ namespace lpzrobots {
 
 
       for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); ++i) override {
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       objects.clear();
       for (vector<Joint*>::iterator i = joints.begin(); i!= joints.end(); ++i) override {
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       joints.clear();
       FOREACH(vector<HingeServo*>, hipservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       hipservos.clear();
       FOREACH(vector<HingeServo*>, kneeservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       kneeservos.clear();
       FOREACH(vector<HingeServo*>, ankleservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       ankleservos.clear();
       FOREACH(vector<HingeServo*>, headtailservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       headtailservos.clear();
       odeHandle.removeSpace(odeHandle.space);
@@ -464,24 +464,24 @@ namespace lpzrobots {
 
 
   Configurable::paramval ZweiBeiner::getParam(const paramkey& key, bool traverseChildren) const{
-    if(key == "hippower") return conf.hipPower override;
-    else if(key == "hipdamping") return conf.hipDamping override;
-    else if(key == "hipjointlimit") return conf.hipJointLimit override;
-    else if(key == "kneepower") return conf.kneePower override;
-    else if(key == "kneedamping") return conf.kneeDamping override;
-    else if(key == "kneejointlimit") return conf.kneeJointLimit override;
-    else if(key == "anklepower") return conf.anklePower override;
-    else if(key == "ankledamping") return conf.ankleDamping override;
-    else if(key == "anklejointlimit") return conf.ankleJointLimit override;
-    else if(key == "armpower") return conf.armPower override;
-    else if(key == "armdamping") return conf.armDamping override;
-    else if(key == "armjointlimit") return conf.armJointLimit override;
-    else if(key == "hip2power") return conf.hip2Power override;
-    else if(key == "hip2damping") return conf.hip2Damping override;
-    else if(key == "hip2jointlimit") return conf.hip2JointLimit override;
-    else if(key == "pelvispower") return conf.pelvisPower override;
-    else if(key == "pelvisdamping") return conf.pelvisDamping override;
-    else if(key == "pelvisjointlimit") return conf.pelvisJointLimit override;
+    if(key == "hippower") return conf.hipPower;
+    else if(key == "hipdamping") return conf.hipDamping;
+    else if(key == "hipjointlimit") return conf.hipJointLimit;
+    else if(key == "kneepower") return conf.kneePower;
+    else if(key == "kneedamping") return conf.kneeDamping;
+    else if(key == "kneejointlimit") return conf.kneeJointLimit;
+    else if(key == "anklepower") return conf.anklePower;
+    else if(key == "ankledamping") return conf.ankleDamping;
+    else if(key == "anklejointlimit") return conf.ankleJointLimit;
+    else if(key == "armpower") return conf.armPower;
+    else if(key == "armdamping") return conf.armDamping;
+    else if(key == "armjointlimit") return conf.armJointLimit;
+    else if(key == "hip2power") return conf.hip2Power;
+    else if(key == "hip2damping") return conf.hip2Damping;
+    else if(key == "hip2jointlimit") return conf.hip2JointLimit;
+    else if(key == "pelvispower") return conf.pelvisPower;
+    else if(key == "pelvisdamping") return conf.pelvisDamping;
+    else if(key == "pelvisjointlimit") return conf.pelvisJointLimit;
 
     else  return Configurable::getParam(key);
   }
@@ -490,7 +490,7 @@ namespace lpzrobots {
     if(key == "hippower") {
       conf.hipPower = val;
       FOREACH(vector<TwoAxisServo*>, hipservos, i){
-        if(*i) (*i)->power1() = conf.hipPower override;
+        if(*i) (*i)->power1() = conf.hipPower;
       }
     } else if(key == "hipdamping") {
       conf.hipDamping = val;
@@ -505,7 +505,7 @@ namespace lpzrobots {
     } else if(key == "kneepower") {
       conf.kneePower = val;
       FOREACH(vector<OneAxisServo*>, kneeservos, i){
-        if(*i) (*i)->power() = conf.kneePower override;
+        if(*i) (*i)->power() = conf.kneePower;
       }
     } else if(key == "kneedamping") {
       conf.kneeDamping = val;
@@ -520,7 +520,7 @@ namespace lpzrobots {
     } else if(key == "anklepower") {
       conf.anklePower = val;
       FOREACH(vector<OneAxisServo*>, ankleservos, i){
-        if(*i) (*i)->power() = conf.kneePower override;
+        if(*i) (*i)->power() = conf.kneePower;
       }
     } else if(key == "ankledamping") {
       conf.ankleDamping = val;

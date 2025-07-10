@@ -7,12 +7,12 @@ namespace UnitTest {
 
 class TestResults{
 public:
-    TimeConstraint(int ms, TestResults& result, TestDetails const& details) override;
+    TimeConstraint(int ms, TestResults& result, TestDetails const& details);
     ~TimeConstraint();
 
 private:
-    void operator=(TimeConstraint const&) override;
-	TimeConstraint(TimeConstraint const&) override;
+    void operator=(TimeConstraint const&);
+	TimeConstraint(TimeConstraint const&);
 
 	Timer m_timer;
     TestResults& m_result;

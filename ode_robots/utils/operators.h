@@ -45,7 +45,7 @@ namespace lpzrobots {
       if(this->minAngle<0) this->minAngle=maxAngle/2;
     }
 
-    virtual ManipType observe(OdeAgent* agent, const GlobalData& global, const ManipDescr& descr) override;
+    virtual ManipType observe(OdeAgent* agent, const GlobalData& global, const ManipDescr& descr);
   protected:
     Axis robotAxis;
     Axis globalAxis;
@@ -102,7 +102,7 @@ namespace lpzrobots {
       return c;
     }
 
-    virtual ManipType observe(OdeAgent* agent, const GlobalData& global, const ManipDescr& descr) override;
+    virtual ManipType observe(OdeAgent* agent, const GlobalData& global, const ManipDescr& descr);
   protected:
     LiftUpOperatorConf conf;
 
@@ -145,7 +145,7 @@ namespace lpzrobots {
       }
     }
 
-    virtual ManipType observe(OdeAgent* agent, const GlobalData& global, const ManipDescr& descr) override;
+    virtual ManipType observe(OdeAgent* agent, const GlobalData& global, const ManipDescr& descr);
 
     virtual void notifyOnChange(const paramkey& key);
 
@@ -181,7 +181,7 @@ namespace lpzrobots {
                    "size of boxring/spherical arena (in radius or half-length)");
     }
 
-    virtual ManipType observe(OdeAgent* agent, const GlobalData& global, const ManipDescr& descr) override;
+    virtual ManipType observe(OdeAgent* agent, const GlobalData& global, const ManipDescr& descr);
 
   protected:
 

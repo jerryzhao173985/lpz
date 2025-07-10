@@ -46,7 +46,7 @@ namespace lpzrobots {
 
     virtual void createGround(bool create);
 
-    virtual Primitive* getMainPrimitive()  const override;
+    virtual Primitive* getMainPrimitive()  const;
 
     virtual void changeGeometry(double length, double width, double height, double factorxy);
 

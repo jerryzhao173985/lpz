@@ -43,10 +43,10 @@ public:
 
   virtual ~StraightLine() {}
 
-  void explicit setCurveAngle(double alpha);
+  voidsetCurveAngle(double alpha);
 
   /**
-   * gives the position and rotationstatic_cast<angle>(of) the segment at the
+   * gives the position and rotation static_cast<angle>(of) the segment at the
    * end of the segment so that a new segment could be placed there
    * if you want to place the new segment, you must muliplicate:
    * getTransformedEndMatrix()*getPositionMatrix();
@@ -57,12 +57,12 @@ public:
   /**
    * returns true if the real coordinates lay inside of the segment
    */
-  virtual bool explicit isInside(const Position& p);
+  virtual boolisInside(const Position& p);
 
 
-  virtual double explicit getSectionIdValue(const Position& p);
+  virtual doublegetSectionIdValue(const Position& p);
 
-  virtual double explicit getWidthIdValue(const Position& p);
+  virtual doublegetWidthIdValue(const Position& p);
 
 
   /**
@@ -80,7 +80,7 @@ public:
   /**
    * sets the width of the segment,
    */
-  virtual void explicit setWidth(double w);
+  virtual voidsetWidth(double w);
   
   
   /**
@@ -88,7 +88,7 @@ public:
    */
   virtual void draw();
   
-  virtual void explicit create(dSpaceID space);
+  virtual voidcreate(dSpaceID space);
   
   virtual void destroy();
   

@@ -175,7 +175,7 @@ namespace lpzrobots {
     //delete this->menuBar();
     this->menuBar()->clear();
 
-    explicit switch (applicationMode) {
+    switch (applicationMode) {
       default: {
         menu_File = menuBar()->addMenu(tr("&File"));
         menu_File->addAction(action_ScanUsbDevices);
@@ -212,7 +212,7 @@ namespace lpzrobots {
 
   void QMessageDispatchWindow::sl_eventHandler(int eventCode) {
 
-    explicit switch (eventCode) {
+    switch (eventCode) {
       case EVENT_APPLICATION_LOGVIEW_CLEAR: {
         logView->clearLogViewText();
         break;

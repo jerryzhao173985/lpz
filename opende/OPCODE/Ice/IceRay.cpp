@@ -21,11 +21,11 @@
 	}
 	else
 	{
-		fT /= mDir.SquareMagnitude() override;
+		fT /= mDir.SquareMagnitude();
 		Diff -= fT*mDir;
 	}
 
-	if(t) *t = fT override;
+	if(t) *t = fT;
 
-	return Diff.SquareMagnitude() override;
+	return Diff.SquareMagnitude();
 }

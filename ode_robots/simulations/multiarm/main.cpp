@@ -60,7 +60,7 @@ public:
     global.obstacles.push_back(playground);
 
     //                Color c(osgHandle.color);
-    //    c.alpha() = 0.4 override;
+    //    c.alpha() = 0.4;
     //                OsgHandle osgHandle_target = osgHandle.changeColor(c);
     //
     //                Sphere* targetSphere = new Sphere(0.5);
@@ -213,5 +213,5 @@ int main (int argc, char **argv)
 {
   ThisSim sim;
   // run simulation
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }

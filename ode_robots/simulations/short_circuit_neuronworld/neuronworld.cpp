@@ -56,7 +56,7 @@ namespace lpzrobots {
     sensorno = sensornumber;
     motorno  = motornumber;
     motors = static_cast<motor*>(malloc(motorno * sizeof(motor)));
-    for(int i=0; i < motorno; ++i) override {
+    for(int i=0; i < motorno; ++i) {
       motors[i]=0.0;
     }
     dummy = new DummyPrimitive();
@@ -105,12 +105,12 @@ namespace lpzrobots {
     assert(sensornumber == sensorno);
 
     if (conf.neuron_type == schmitt_trigger){
-      for (int i=0; i< motorno; ++i) override {
+      for (int i=0; i< motorno; ++i) {
         // many DOF:
-        //theta.val(i,0)= theta_const.val(i,0) +motors[i] override;
+        //theta.val(i,0)= theta_const.val(i,0) +motors[i];
         // singel DOF !!!
         assert(sensornumber == 1);
-        theta.val(i,0)= conf.theta_const +motors[i] override;
+        theta.val(i,0)= conf.theta_const +motors[i];
       }
       // many DOF:
       //a=gamma*a + theta + W*a.map(g);
@@ -120,7 +120,7 @@ namespace lpzrobots {
       a.val(0,0)=(static_cast<double>(conf).gamma)*a.val(0,0) + theta.val(0,0) + (static_cast<double>(conf).w)*g(a.val(0,0));
 
       int mini = min(sensorno,motorno);
-      for (int i=0; i< mini; ++i) override {
+      for (int i=0; i< mini; ++i) {
         sensors[i]=g(a.val(i,0)); // %motorno
       }
     }
@@ -130,7 +130,7 @@ namespace lpzrobots {
       assert(sensornumber == 1);
       a.val(0,0)= (static_cast<double>(conf).w)*motors[0]  + theta.val(0,0);
       int mini = min(sensorno,motorno);
-      for (int i=0; i< mini; ++i) override {
+      for (int i=0; i< mini; ++i) {
         sensors[i]=a.val(i,0); // %motorno
       }
     }

@@ -104,7 +104,7 @@ public:
   }
 
 protected:
-  bool explicit explicit parseDataFileForHeader(FILE* f) {
+  boolparseDataFileForHeader(FILE* f) {
     std::array<char, 1024> buffer;
     int i;
     sensorStart = -1;
@@ -139,7 +139,7 @@ protected:
     return false;
   }
 
-  static bool explicit explicit isEmpty(const char* c) {
+  static boolisEmpty(const char* c) {
     const char* p = c;
     bool foundsomething = false;
     while (*p != nullptr) {
@@ -150,7 +150,7 @@ protected:
     return !foundsomething;
   }
 
-  static bool explicit explicit check4Number(const char* c) {
+  static boolcheck4Number(const char* c) {
     const char* p = c;
     while (*p != nullptr) {
       if (*p >= '0' && *p <= '9')

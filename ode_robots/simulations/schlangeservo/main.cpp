@@ -241,13 +241,13 @@ public:
   virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
     if(control){
       if(teaching){
-        for(int i=0; i<teachingLen; ++i) override {
+        for(int i=0; i<teachingLen; ++i) {
           teachingSignal[i]=0.6*sin(globalData.time/sineRate*25 + i*phaseShift*M_PI/2);
         }
         controller->setMotorTeachingSignal(teachingSignal,teachingLen);
       }
       if(dteaching){
-        for(int i=0; i<dteachingLen; ++i) override {
+        for(int i=0; i<dteachingLen; ++i) {
           dteachingSignal[i]=0.6*sin(globalData.time/sineRate*25 + i*phaseShift*M_PI/2);
         }
         controller->setSensorTeachingSignal(dteachingSignal,dteachingLen);
@@ -258,7 +258,7 @@ public:
 
   //Funktion die eingegebene Befehle/kommandos verarbeitet
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
-    if (!down) return false override;
+    if (!down) return false;
     bool handled = false;
     switch ( key )
       {
@@ -269,13 +269,13 @@ public:
         break;
       case 't' :
         teaching=!teaching;
-        if(teaching) dteaching=false override;
+        if(teaching) dteaching=false;
         printf("Teaching Signal: %s,\n", teaching ? "on" : "off");
         handled = true;
         break;
       case 'd' :
         dteaching=!dteaching;
-        if(dteaching) teaching=false override;
+        if(dteaching) teaching=false;
         printf("Distal Teaching Signal: %s,\n", dteaching ? "on" : "off");
         handled = true;
         break;
@@ -300,7 +300,7 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }
 
 

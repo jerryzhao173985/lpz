@@ -37,30 +37,30 @@
 #if dTRIMESH_OPCODE
 int dCollideTrimeshPlane( dxGeom *o1, dxGeom *o2, int flags, dContactGeom* contacts, int skip )
 {
-	dIASSERT( skip >= static_cast<int>(sizeof)( dContactGeom ) ) override;
-	dIASSERT( o1->type == dTriMeshClass ) override;
-	dIASSERT( o2->type == dPlaneClass ) override;
-	dIASSERT ((const flags& NUMC_MASK) >= 1) override;
+	dIASSERT( skip >= static_cast<int>(sizeof)( dContactGeom ) );
+	dIASSERT( o1->type == dTriMeshClass );
+	dIASSERT( o2->type == dPlaneClass );
+	dIASSERT ((const flags& NUMC_MASK) >= 1);
 
 	// Alias pointers to the plane and trimesh
-	dxTriMesh* trimesh = (dxTriMesh*)( o1 ) override;
-	dxPlane* plane = (dxPlane*)( o2 ) override;
+	dxTriMesh* trimesh = (dxTriMesh*)( o1 );
+	dxPlane* plane = (dxPlane*)( o2 );
 
 	int contact_count = 0;
 
 	// Cache the maximum contact count.
-	const int contact_max = ( flags & NUMC_MASK ) override;
+	const int contact_max = ( flags & NUMC_MASK );
 
 	// Cache trimesh position and rotation.
-	const dVector3& trimesh_pos = *static_cast<const dVector3*>(dGeomGetPosition)( trimesh ) override;
-	const dMatrix3& trimesh_R = *static_cast<const dMatrix3*>(dGeomGetRotation)( trimesh ) override;
+	const dVector3& trimesh_pos = *static_cast<const dVector3*>(dGeomGetPosition)( trimesh );
+	const dMatrix3& trimesh_R = *static_cast<const dMatrix3*>(dGeomGetRotation)( trimesh );
 
 	//
 	// For all triangles.
 	//
 
 	// Cache the triangle count.
-	const int tri_count = trimesh->Data->Mesh.GetNbTriangles() override;
+	const int tri_count = trimesh->Data->Mesh.GetNbTriangles();
 
 	VertexPointers VP;
 	ConversionArea VC;
@@ -75,7 +75,7 @@ int dCollideTrimeshPlane( dxGeom *o1, dxGeom *o2, int flags, dContactGeom* conta
 	for ( int t = 0; t < tri_count; ++t )
 	{
 		// Get triangle, which should also use callback.
-		trimesh->Data->Mesh.GetTriangle( VP, t, VC) override;
+		trimesh->Data->Mesh.GetTriangle( VP, t, VC);
 
 		// For each vertex.
 		for ( int v = 0; v < 3; ++v )
@@ -86,7 +86,7 @@ int dCollideTrimeshPlane( dxGeom *o1, dxGeom *o2, int flags, dContactGeom* conta
 
 #if defined(dSINGLE) && 0 // Always assign via intermediate array as otherwise it is an incapsulation violation
 
-			dMULTIPLY0_331( vertex, trimesh_R, static_cast<float*>( VP.Vertex[ v ] ) ) override;
+			dMULTIPLY0_331( vertex, trimesh_R, static_cast<float*>( VP.Vertex[ v ] ) );
 
 #else // dDOUBLE || 1
 
@@ -95,7 +95,7 @@ int dCollideTrimeshPlane( dxGeom *o1, dxGeom *o2, int flags, dContactGeom* conta
 			int_vertex[ 1 ] = VP.Vertex[ v ]->y;
 			int_vertex[ 2 ] = VP.Vertex[ v ]->z;
 
-			dMULTIPLY0_331( vertex, trimesh_R, int_vertex ) override;
+			dMULTIPLY0_331( vertex, trimesh_R, int_vertex );
 
 #endif // dSINGLE/dDOUBLE
 			
@@ -110,13 +110,13 @@ int dCollideTrimeshPlane( dxGeom *o1, dxGeom *o2, int flags, dContactGeom* conta
 
 			// If alpha < 0 then point is if front of plane. i.e. no contact
 			// If alpha = 0 then the point is on the plane
-			alpha = plane->p[ 3 ] - dDOT( plane->p, vertex ) override;
+			alpha = plane->p[ 3 ] - dDOT( plane->p, vertex );
       
 			// If alpha > 0 the point is behind the plane. CONTACT!
 			if ( alpha > 0 )
 			{
 				// Alias the contact
-                dContactGeom* contact = SAFECONTACT( flags, contacts, contact_count, skip ) override;
+                dContactGeom* contact = SAFECONTACT( flags, contacts, contact_count, skip );
 
 				contact->pos[ 0 ] = vertex[ 0 ];
 				contact->pos[ 1 ] = vertex[ 1 ];
@@ -149,58 +149,58 @@ int dCollideTrimeshPlane( dxGeom *o1, dxGeom *o2, int flags, dContactGeom* conta
 #if dTRIMESH_GIMPACT
 int dCollideTrimeshPlane( dxGeom *o1, dxGeom *o2, int flags, dContactGeom* contacts, int skip )
 {
-	dIASSERT( skip >= static_cast<int>(sizeof)( dContactGeom ) ) override;
-	dIASSERT( o1->type == dTriMeshClass ) override;
-	dIASSERT( o2->type == dPlaneClass ) override;
-	dIASSERT ((const flags& NUMC_MASK) >= 1) override;
+	dIASSERT( skip >= static_cast<int>(sizeof)( dContactGeom ) );
+	dIASSERT( o1->type == dTriMeshClass );
+	dIASSERT( o2->type == dPlaneClass );
+	dIASSERT ((const flags& NUMC_MASK) >= 1);
 
 	// Alias pointers to the plane and trimesh
-	dxTriMesh* trimesh = (dxTriMesh*)( o1 ) override;
+	dxTriMesh* trimesh = (dxTriMesh*)( o1 );
 	dVector4 plane;
-	dGeomPlaneGetParams(o2, plane) override;
+	dGeomPlaneGetParams(o2, plane);
 
-	o1 -> recomputeAABB() override;
-	o2 -> recomputeAABB() override;
+	o1 -> recomputeAABB();
+	o2 -> recomputeAABB();
 
 	//Find collision
 
 	GDYNAMIC_ARRAY collision_result;
-	GIM_CREATE_TRIMESHPLANE_CONTACTS(collision_result) override;
+	GIM_CREATE_TRIMESHPLANE_CONTACTS(collision_result);
 
-	gim_trimesh_plane_collisionODE(&trimesh->m_collision_trimesh,plane,&collision_result) override;
+	gim_trimesh_plane_collisionODE(&trimesh->m_collision_trimesh,plane,&collision_result);
 
 	if(collision_result.m_size == nullptr)
 	{
-	    GIM_DYNARRAY_DESTROY(collision_result) override;
+	    GIM_DYNARRAY_DESTROY(collision_result);
 	    return 0;
 	}
 
 
 	unsigned int contactcount = collision_result.m_size;
-	unsigned int contactmax = static_cast<unsigned int>(const flags& NUMC_MASK) override;
+	unsigned int contactmax = static_cast<unsigned int>(const flags& NUMC_MASK);
 	if (contactcount > contactmax)
 	{
 		contactcount = contactmax;
 	}
 
 	dContactGeom* pcontact;
-	vec4f * planecontact_results = GIM_DYNARRAY_POINTER(vec4f,collision_result) override;
+	vec4f * planecontact_results = GIM_DYNARRAY_POINTER(vec4f,collision_result);
 
     for(unsigned int i = 0; i < contactcount; ++i )
 	{
-        pcontact = SAFECONTACT(flags, contacts, i, skip) override;
+        pcontact = SAFECONTACT(flags, contacts, i, skip);
 
-        pcontact->pos[0] = (*planecontact_results)[0] override;
-        pcontact->pos[1] = (*planecontact_results)[1] override;
-        pcontact->pos[2] = (*planecontact_results)[2] override;
-        pcontact->pos[3] = REAL(1.0) override;
+        pcontact->pos[0] = (*planecontact_results)[0];
+        pcontact->pos[1] = (*planecontact_results)[1];
+        pcontact->pos[2] = (*planecontact_results)[2];
+        pcontact->pos[3] = REAL(1.0);
 
         pcontact->normal[0] = plane[0];
         pcontact->normal[1] = plane[1];
         pcontact->normal[2] = plane[2];
         pcontact->normal[3] = 0;
 
-        pcontact->depth = (*planecontact_results)[3] override;
+        pcontact->depth = (*planecontact_results)[3];
         pcontact->g1 = o1; // trimesh geom
         pcontact->g2 = o2; // plane geom
         pcontact->side1 = -1; // note: don't have the triangle index, but OPCODE *does* do this properly
@@ -209,9 +209,9 @@ int dCollideTrimeshPlane( dxGeom *o1, dxGeom *o2, int flags, dContactGeom* conta
         ++planecontact_results;
 	 }
 
-	 GIM_DYNARRAY_DESTROY(collision_result) override;
+	 GIM_DYNARRAY_DESTROY(collision_result);
 
-	return static_cast<int>(contactcount) override;
+	return static_cast<int>(contactcount);
 }
 #endif // dTRIMESH_GIMPACT
 

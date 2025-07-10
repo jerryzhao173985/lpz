@@ -54,10 +54,10 @@ public:
   virtual void init(unsigned int inputDim,
                     unsigned int outputDim,
                     double unit_map = 0.0,
-                    RandGen* randGen = nullptr) override;
+                    RandGen* randGen = nullptr);
 
   /// passive processing of the input
-  virtual const matrix::Matrix process(const matrix::Matrix& input) override;
+  virtual const matrix::Matrix process(const matrix::Matrix& input);
 
   /** performs learning and returns the network output before learning
       (process should be called before) */
@@ -83,7 +83,7 @@ public:
       ATTENTION: input is ignored! use process before!
    */
   virtual const matrix::Matrix inversion(const matrix::Matrix& input,
-                                         const matrix::Matrix& xsi)  const override;
+                                         const matrix::Matrix& xsi)  const;
 
   /// returns the number of input neurons
   virtual unsigned int getInputDim() const override {
@@ -101,7 +101,7 @@ public:
   }
 
   /// damps the weights and the biases by multiplying (1-damping)
-  virtual void damp(double damping) override;
+  virtual void damp(double damping);
 
   // total number of layers (1 means no hidden units)
   virtual unsigned int getLayerNum() const {
@@ -146,18 +146,18 @@ public:
 
   /**************  STOREABLE **********************************/
   /// stores the layer binary into file stream
-  bool store(FILE* f)  const override;
+  bool store(FILE* f)  const;
   /// restores the layer binary from file stream
-  bool restore(FILE* f) override;
+  bool restore(FILE* f);
 
   /// writes the layer ASCII into file stream (not in the storable interface)
   bool write(FILE* f) const;
 
   /************** Inspectable **********************************/
-  virtual std::list<iparamkey> getInternalParamNames()  const override;
-  virtual std::list<iparamval> getInternalParams()  const override;
-  virtual std::list<ILayer> getStructuralLayers()  const override;
-  virtual std::list<IConnection> getStructuralConnections()  const override;
+  virtual std::list<iparamkey> getInternalParamNames()  const;
+  virtual std::list<iparamval> getInternalParams()  const;
+  virtual std::list<ILayer> getStructuralLayers()  const;
+  virtual std::list<IConnection> getStructuralConnections()  const;
 
   virtual void setSomeInternalParams(bool someInternalParams) {
     assert(!initialised);

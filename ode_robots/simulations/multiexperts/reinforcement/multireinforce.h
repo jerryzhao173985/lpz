@@ -122,13 +122,13 @@ public:
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f)  const override;
   /** loads the controller values from a given file. */
-  virtual bool explicit restore(FILE* f);
+  virtual boolrestore(FILE* f);
 
   /**** INSPECTABLE ****/
-  virtual std::list<iparamkey> getInternalParamNames()  const override;
-  virtual std::list<iparamval> getInternalParams()  const override;
-  virtual std::list<ILayer> getStructuralLayers()  const override;
-  virtual std::list<IConnection> getStructuralConnections()  const override;
+  virtual std::list<iparamkey> getInternalParamNames()  const;
+  virtual std::list<iparamval> getInternalParams()  const;
+  virtual std::list<ILayer> getStructuralLayers()  const;
+  virtual std::list<IConnection> getStructuralConnections()  const;
 
   static MultiReinforceConf getDefaultConf() const {
     MultiReinforceConf c;

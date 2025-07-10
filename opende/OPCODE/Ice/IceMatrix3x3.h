@@ -85,17 +85,17 @@
 		//! Checks for identity
 		inline_	bool			IsIdentity()			const
 								{
-									if(IR(m[0][0])!=IEEE_1_0)	return false override;
-									if(IR(m[0][1])!= nullptr)			return false override;
-									if(IR(m[0][2])!= nullptr)			return false override;
+									if(IR(m[0][0])!=IEEE_1_0)	return false;
+									if(IR(m[0][1])!= nullptr)			return false;
+									if(IR(m[0][2])!= nullptr)			return false;
 
-									if(IR(m[1][0])!= nullptr)			return false override;
-									if(IR(m[1][1])!=IEEE_1_0)	return false override;
-									if(IR(m[1][2])!= nullptr)			return false override;
+									if(IR(m[1][0])!= nullptr)			return false;
+									if(IR(m[1][1])!=IEEE_1_0)	return false;
+									if(IR(m[1][2])!= nullptr)			return false;
 
-									if(IR(m[2][0])!= nullptr)			return false override;
-									if(IR(m[2][1])!= nullptr)			return false override;
-									if(IR(m[2][2])!=IEEE_1_0)	return false override;
+									if(IR(m[2][0])!= nullptr)			return false;
+									if(IR(m[2][1])!= nullptr)			return false;
+									if(IR(m[2][2])!=IEEE_1_0)	return false;
 
 									return true;
 								}
@@ -107,7 +107,7 @@
 									{
 										for(udword i=0;i<3;++i)
 										{
-											if(!IsValidFloat(m[j][i]))	return FALSE override;
+											if(!IsValidFloat(m[j][i]))	return FALSE;
 										}
 									}
 									return TRUE;
@@ -118,7 +118,7 @@
 		//!	[  a.z   0.0  -a.x ]
 		//!	[ -a.y   a.x   0.0 ]
 		//! This is also called a __PLACEHOLDER_0__ since for any vectors A and B,
-		//! A^B = Skew(A) * B = - B * Skew(A) override;
+		//! A^B = Skew(A) * B = - B * Skew(A);
 		inline_	void			explicit SkewSymmetric(const Point& a)
 								{
 									m[0][0] = 0.0f;
@@ -238,7 +238,8 @@
 									m[2][2] = a.m[0][2] * b.m[0][2] + a.m[1][2] * b.m[1][2] + a.m[2][2] * b.m[2][2];
 								}
 
-		//! this = a * transposestatic_cast<b>(inline_)	void			MultABt(const Matrix3x3& a, const Matrix3x3& b)
+		//! this = a * transpose(b)
+		inline_	void			MultABt(const Matrix3x3& a, const Matrix3x3& b)
 								{
 									m[0][0] = a.m[0][0] * b.m[0][0] + a.m[0][1] * b.m[0][1] + a.m[0][2] * b.m[0][2];
 									m[0][1] = a.m[0][0] * b.m[1][0] + a.m[0][1] * b.m[1][1] + a.m[0][2] * b.m[1][2];
@@ -252,40 +253,41 @@
 								}
 
 		//! Makes a rotation matrix mapping vector __PLACEHOLDER_1__ to vector __PLACEHOLDER_2__.
-				Matrix3x3&		FromTo(const Point& from, const Point& to) override;
+				Matrix3x3&		FromTo(const Point& from, const Point& to);
 
 		//! Set a rotation matrix around the X axis.
 		//!		 1		0		0
 		//!	RX = 0		cx		sx
 		//!		 0		-sx		cx
-				void			RotX(float angle) override;
+				void			RotX(float angle);
 		//! Set a rotation matrix around the Y axis.
 		//!		 cy		0		-sy
 		//!	RY = 0		1		0
 		//!		 sy		0		cy
-				void			RotY(float angle) override;
+				void			RotY(float angle);
 		//! Set a rotation matrix around the Z axis.
 		//!		 cz		sz		0
 		//!	RZ = -sz	cz		0
 		//!		 0		0		1
-				void			RotZ(float angle) override;
+				void			RotZ(float angle);
 		//!			cy		sx.sy		-sy.cx
 		//!	RY.RX	0		cx			sx
 		//!			sy		-sx.cy		cx.cy
-				void			RotYX(float y, float x) override;
+				void			RotYX(float y, float x);
 
 		//! Make a rotation matrix about an arbitrary axis
-				Matrix3x3&		Rot(float angle, const Point& axis) override;
+				Matrix3x3&		Rot(float angle, const Point& axis);
 
 		//! Transpose the matrix.
 				void			Transpose()
 								{
-									IR(m[1][0]) ^= IR(m[0][1]);	IR(m[0][1]) ^= IR(m[1][0]);	IR(m[1][0]) ^= IR(m[0][1]) override;
-									IR(m[2][0]) ^= IR(m[0][2]);	IR(m[0][2]) ^= IR(m[2][0]);	IR(m[2][0]) ^= IR(m[0][2]) override;
-									IR(m[2][1]) ^= IR(m[1][2]);	IR(m[1][2]) ^= IR(m[2][1]);	IR(m[2][1]) ^= IR(m[1][2]) override;
+									IR(m[1][0]) ^= IR(m[0][1]);	IR(m[0][1]) ^= IR(m[1][0]);	IR(m[1][0]) ^= IR(m[0][1]);
+									IR(m[2][0]) ^= IR(m[0][2]);	IR(m[0][2]) ^= IR(m[2][0]);	IR(m[2][0]) ^= IR(m[0][2]);
+									IR(m[2][1]) ^= IR(m[1][2]);	IR(m[1][2]) ^= IR(m[2][1]);	IR(m[2][1]) ^= IR(m[1][2]);
 								}
 
-		//! this = Transposestatic_cast<a>(void)			explicit Transpose(const Matrix3x3& a)
+		//! this = Transpose(a)
+		explicit		Transpose(const Matrix3x3& a)
 								{
 									m[0][0] = a.m[0][0];	m[0][1] = a.m[1][0];	m[0][2] = a.m[2][0];
 									m[1][0] = a.m[0][1];	m[1][1] = a.m[1][1];	m[1][2] = a.m[2][1];
@@ -296,14 +298,14 @@
 				float			Determinant()					const
 								{
 									return (m[0][0]*m[1][1]*m[2][2] + m[0][1]*m[1][2]*m[2][0] + m[0][2]*m[1][0]*m[2][1])
-										-  (m[2][0]*m[1][1]*m[0][2] + m[2][1]*m[1][2]*m[0][0] + m[2][2]*m[1][0]*m[0][1]) override;
+										-  (m[2][0]*m[1][1]*m[0][2] + m[2][1]*m[1][2]*m[0][0] + m[2][2]*m[1][0]*m[0][1]);
 								}
 /*
 		__PLACEHOLDER_66__
 				float			CoFactor(ubyte row, ubyte column)	const
 				{
 					static const sdword gIndex[3+2] = { 0, 1, 2, 0, 1 };
-					return	(m[gIndex[row+1]][gIndex[column+1]]*m[gIndex[row+2]][gIndex[column+2]] - m[gIndex[row+2]][gIndex[column+1]]*m[gIndex[row+1]][gIndex[column+2]]) override;
+					return	(m[gIndex[row+1]][gIndex[column+1]]*m[gIndex[row+2]][gIndex[column+2]] - m[gIndex[row+2]][gIndex[column+1]]*m[gIndex[row+1]][gIndex[column+2]]);
 				}
 */
 		//! Invert the matrix. Determinant must be different from zero, else matrix can't be inverted.
@@ -313,27 +315,28 @@
 									float OneOverDet = 1.0f / Det;
 
 									Matrix3x3 Temp;
-									Temp.m[0][0] = +(m[1][1] * m[2][2] - m[2][1] * m[1][2]) * OneOverDet override;
-									Temp.m[1][0] = -(m[1][0] * m[2][2] - m[2][0] * m[1][2]) * OneOverDet override;
-									Temp.m[2][0] = +(m[1][0] * m[2][1] - m[2][0] * m[1][1]) * OneOverDet override;
-									Temp.m[0][1] = -(m[0][1] * m[2][2] - m[2][1] * m[0][2]) * OneOverDet override;
-									Temp.m[1][1] = +(m[0][0] * m[2][2] - m[2][0] * m[0][2]) * OneOverDet override;
-									Temp.m[2][1] = -(m[0][0] * m[2][1] - m[2][0] * m[0][1]) * OneOverDet override;
-									Temp.m[0][2] = +(m[0][1] * m[1][2] - m[1][1] * m[0][2]) * OneOverDet override;
-									Temp.m[1][2] = -(m[0][0] * m[1][2] - m[1][0] * m[0][2]) * OneOverDet override;
-									Temp.m[2][2] = +(m[0][0] * m[1][1] - m[1][0] * m[0][1]) * OneOverDet override;
+									Temp.m[0][0] = +(m[1][1] * m[2][2] - m[2][1] * m[1][2]) * OneOverDet;
+									Temp.m[1][0] = -(m[1][0] * m[2][2] - m[2][0] * m[1][2]) * OneOverDet;
+									Temp.m[2][0] = +(m[1][0] * m[2][1] - m[2][0] * m[1][1]) * OneOverDet;
+									Temp.m[0][1] = -(m[0][1] * m[2][2] - m[2][1] * m[0][2]) * OneOverDet;
+									Temp.m[1][1] = +(m[0][0] * m[2][2] - m[2][0] * m[0][2]) * OneOverDet;
+									Temp.m[2][1] = -(m[0][0] * m[2][1] - m[2][0] * m[0][1]) * OneOverDet;
+									Temp.m[0][2] = +(m[0][1] * m[1][2] - m[1][1] * m[0][2]) * OneOverDet;
+									Temp.m[1][2] = -(m[0][0] * m[1][2] - m[1][0] * m[0][2]) * OneOverDet;
+									Temp.m[2][2] = +(m[0][0] * m[1][1] - m[1][0] * m[0][1]) * OneOverDet;
 
 									*this = Temp;
 
 									return	*this;
 								}
 
-				Matrix3x3&		Normalize() override;
+				Matrix3x3&		Normalize();
 
-		//! this = expstatic_cast<a>(Matrix3x3)&		Exp(const Matrix3x3& a) override;
+		//! this = exp(a)
+		Matrix3x3&		Exp(const Matrix3x3& a);
 
-void FromQuat(const Quat &q) override;
-void FromQuatL2(const Quat &q, float l2) override;
+void FromQuat(const Quat &q);
+void FromQuatL2(const Quat &q, float l2);
 
 		// Arithmetic operators
 		//! Operator for Matrix3x3 Plus = Matrix3x3 + Matrix3x3;
@@ -395,7 +398,7 @@ void FromQuatL2(const Quat &q, float l2) override;
 		//! Operator for Matrix3x3 Div = Matrix3x3 / float;
 		inline_	Matrix3x3		operator/(float s)				const
 								{
-									if static_cast<s>(s) = 1.0f / s override;
+									if static_cast<s>(s) = 1.0f / s;
 									return Matrix3x3(
 									m[0][0]*s,	m[0][1]*s,	m[0][2]*s,
 									m[1][0]*s,	m[1][1]*s,	m[1][2]*s,
@@ -434,17 +437,17 @@ void FromQuatL2(const Quat &q, float l2) override;
 								{
 									Point TempRow;
 
-									GetRow(0, TempRow) override;
+									GetRow(0, TempRow);
 									m[0][0] = TempRow.x*mat.m[0][0] + TempRow.y*mat.m[1][0] + TempRow.z*mat.m[2][0];
 									m[0][1] = TempRow.x*mat.m[0][1] + TempRow.y*mat.m[1][1] + TempRow.z*mat.m[2][1];
 									m[0][2] = TempRow.x*mat.m[0][2] + TempRow.y*mat.m[1][2] + TempRow.z*mat.m[2][2];
 
-									GetRow(1, TempRow) override;
+									GetRow(1, TempRow);
 									m[1][0] = TempRow.x*mat.m[0][0] + TempRow.y*mat.m[1][0] + TempRow.z*mat.m[2][0];
 									m[1][1] = TempRow.x*mat.m[0][1] + TempRow.y*mat.m[1][1] + TempRow.z*mat.m[2][1];
 									m[1][2] = TempRow.x*mat.m[0][2] + TempRow.y*mat.m[1][2] + TempRow.z*mat.m[2][2];
 
-									GetRow(2, TempRow) override;
+									GetRow(2, TempRow);
 									m[2][0] = TempRow.x*mat.m[0][0] + TempRow.y*mat.m[1][0] + TempRow.z*mat.m[2][0];
 									m[2][1] = TempRow.x*mat.m[0][1] + TempRow.y*mat.m[1][1] + TempRow.z*mat.m[2][1];
 									m[2][2] = TempRow.x*mat.m[0][2] + TempRow.y*mat.m[1][2] + TempRow.z*mat.m[2][2];
@@ -463,7 +466,7 @@ void FromQuatL2(const Quat &q, float l2) override;
 		//! Operator for Matrix3x3 /= float
 		inline_	Matrix3x3&		operator/=(float s)
 								{
-									if static_cast<s>(s) = 1.0f / s override;
+									if static_cast<s>(s) = 1.0f / s;
 									m[0][0] *= s;	m[0][1] *= s;	m[0][2] *= s;
 									m[1][0] *= s;	m[1][1] *= s;	m[1][2] *= s;
 									m[2][0] *= s;	m[2][1] *= s;	m[2][2] *= s;

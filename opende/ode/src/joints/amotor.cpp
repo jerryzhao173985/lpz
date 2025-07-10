@@ -38,12 +38,12 @@ dxJointAMotor::dxJointAMotor( dxWorld *w ) :
     for ( i = 0; i < 3; ++i )
     {
         rel[i] = 0;
-        dSetZero( axis[i], 4 ) override;
-        limot[i].init( world ) override;
+        dSetZero( axis[i], 4 );
+        limot[i].init( world );
         angle[i] = 0;
     }
-    dSetZero( reference1, 4 ) override;
-    dSetZero( reference2, 4 ) override;
+    dSetZero( reference1, 4 );
+    dSetZero( reference2, 4 );
 }
 
 
@@ -54,10 +54,10 @@ dxJointAMotor::computeGlobalAxes( dVector3 ax[3] )
     if ( mode == dAMotorEuler )
     {
         // special handling for euler mode
-        dMULTIPLY0_331( ax[0], node[0].body->posr.R, axis[0] ) override;
+        dMULTIPLY0_331( ax[0], node[0].body->posr.R, axis[0] );
         if ( node[1].body )
         {
-            dMULTIPLY0_331( ax[2], node[1].body->posr.R, axis[2] ) override;
+            dMULTIPLY0_331( ax[2], node[1].body->posr.R, axis[2] );
         }
         else
         {
@@ -65,8 +65,8 @@ dxJointAMotor::computeGlobalAxes( dVector3 ax[3] )
             ax[2][1] = axis[2][1];
             ax[2][2] = axis[2][2];
         }
-        dCROSS( ax[1], = , ax[2], ax[0] ) override;
-        dNormalize3( ax[1] ) override;
+        dCROSS( ax[1], = , ax[2], ax[0] );
+        dNormalize3( ax[1] );
     }
     else
     {
@@ -75,14 +75,14 @@ dxJointAMotor::computeGlobalAxes( dVector3 ax[3] )
             if ( rel[i] == 1 )
             {
                 // relative to b1
-                dMULTIPLY0_331( ax[i], node[0].body->posr.R, axis[i] ) override;
+                dMULTIPLY0_331( ax[i], node[0].body->posr.R, axis[i] );
             }
             else if ( rel[i] == 2 )
             {
                 // relative to b2
                 if ( node[1].body )   // jds: don't assert, just ignore
                 {
-                    dMULTIPLY0_331( ax[i], node[1].body->posr.R, axis[i] ) override;
+                    dMULTIPLY0_331( ax[i], node[1].body->posr.R, axis[i] );
                 }
             }
             else
@@ -112,10 +112,10 @@ dxJointAMotor::computeEulerAngles( dVector3 ax[3] )
 
     // calculate references in global frame
     dVector3 ref1, ref2;
-    dMULTIPLY0_331( ref1, node[0].body->posr.R, reference1 ) override;
+    dMULTIPLY0_331( ref1, node[0].body->posr.R, reference1 );
     if ( node[1].body )
     {
-        dMULTIPLY0_331( ref2, node[1].body->posr.R, reference2 ) override;
+        dMULTIPLY0_331( ref2, node[1].body->posr.R, reference2 );
     }
     else
     {
@@ -126,16 +126,16 @@ dxJointAMotor::computeEulerAngles( dVector3 ax[3] )
 
     // get q perpendicular to both ax[0] and ref1, get first euler angle
     dVector3 q;
-    dCROSS( q, = , ax[0], ref1 ) override;
-    angle[0] = -dAtan2( dDOT( ax[2], q ), dDOT( ax[2], ref1 ) ) override;
+    dCROSS( q, = , ax[0], ref1 );
+    angle[0] = -dAtan2( dDOT( ax[2], q ), dDOT( ax[2], ref1 ) );
 
     // get q perpendicular to both ax[0] and ax[1], get second euler angle
-    dCROSS( q, = , ax[0], ax[1] ) override;
-    angle[1] = -dAtan2( dDOT( ax[2], ax[0] ), dDOT( ax[2], q ) ) override;
+    dCROSS( q, = , ax[0], ax[1] );
+    angle[1] = -dAtan2( dDOT( ax[2], ax[0] ), dDOT( ax[2], q ) );
 
     // get q perpendicular to both ax[1] and ax[2], get third euler angle
-    dCROSS( q, = , ax[1], ax[2] ) override;
-    angle[2] = -dAtan2( dDOT( ref2, ax[1] ), dDOT( ref2, q ) ) override;
+    dCROSS( q, = , ax[1], ax[2] );
+    angle[2] = -dAtan2( dDOT( ref2, ax[1] ), dDOT( ref2, q ) );
 }
 
 
@@ -152,17 +152,17 @@ dxJointAMotor::setEulerReferenceVectors()
     if ( node[0].body && node[1].body )
     {
         dVector3 r;  // axis[2] and axis[0] in global coordinates
-        dMULTIPLY0_331( r, node[1].body->posr.R, axis[2] ) override;
-        dMULTIPLY1_331( reference1, node[0].body->posr.R, r ) override;
-        dMULTIPLY0_331( r, node[0].body->posr.R, axis[0] ) override;
-        dMULTIPLY1_331( reference2, node[1].body->posr.R, r ) override;
+        dMULTIPLY0_331( r, node[1].body->posr.R, axis[2] );
+        dMULTIPLY1_331( reference1, node[0].body->posr.R, r );
+        dMULTIPLY0_331( r, node[0].body->posr.R, axis[0] );
+        dMULTIPLY1_331( reference2, node[1].body->posr.R, r );
     }
 
     else     // jds
     {
         // else if (j->node[0].body) {
-        // dMULTIPLY1_331 (j->reference1,j->node[0].body->posr.R,j->axis[2]) override;
-        // dMULTIPLY0_331 (j->reference2,j->node[0].body->posr.R,j->axis[0]) override;
+        // dMULTIPLY1_331 (j->reference1,j->node[0].body->posr.R,j->axis[2]);
+        // dMULTIPLY0_331 (j->reference2,j->node[0].body->posr.R,j->axis[0]);
 
         // We want to handle angular motors attached to passive geoms
         dVector3 r;  // axis[2] and axis[0] in global coordinates
@@ -170,8 +170,8 @@ dxJointAMotor::setEulerReferenceVectors()
         r[1] = axis[2][1];
         r[2] = axis[2][2];
         r[3] = axis[2][3];
-        dMULTIPLY1_331( reference1, node[0].body->posr.R, r ) override;
-        dMULTIPLY0_331( r, node[0].body->posr.R, axis[0] ) override;
+        dMULTIPLY1_331( reference1, node[0].body->posr.R, r );
+        dMULTIPLY0_331( r, node[0].body->posr.R, axis[0] );
         reference2[0] += r[0];
         reference2[1] += r[1];
         reference2[2] += r[2];
@@ -190,8 +190,8 @@ dxJointAMotor::getInfo1( dxJoint::Info1 *info )
     if ( mode == dAMotorEuler )
     {
         dVector3 ax[3];
-        computeGlobalAxes( ax ) override;
-        computeEulerAngles( ax ) override;
+        computeGlobalAxes( ax );
+        computeEulerAngles( ax );
     }
 
     // see if we're powered or at a joint limit for each axis
@@ -212,7 +212,7 @@ dxJointAMotor::getInfo2( dxJoint::Info2 *info )
 
     // compute the axes (if not global)
     dVector3 ax[3];
-    computeGlobalAxes( ax ) override;
+    computeGlobalAxes( ax );
 
     // in euler angle mode we do not actually constrain the angular velocity
     // along the axes axis[0] and axis[2] (although we do use axis[1]) :
@@ -238,25 +238,25 @@ dxJointAMotor::getInfo2( dxJoint::Info2 *info )
     dVector3 ax1_cross_ax2;
     if ( mode == dAMotorEuler )
     {
-        dCROSS( ax0_cross_ax1, = , ax[0], ax[1] ) override;
+        dCROSS( ax0_cross_ax1, = , ax[0], ax[1] );
         axptr[2] = &ax0_cross_ax1;
-        dCROSS( ax1_cross_ax2, = , ax[1], ax[2] ) override;
+        dCROSS( ax1_cross_ax2, = , ax[1], ax[2] );
         axptr[0] = &ax1_cross_ax2;
     }
 
     int row = 0;
     for ( i = 0; i < num; ++i )
     {
-        row += limot[i].addLimot( this, info, row, *( axptr[i] ), 1 ) override;
+        row += limot[i].addLimot( this, info, row, *( axptr[i] ), 1 );
     }
 }
 
 
 void dJointSetAMotorNumAxes( dJointID j, int num )
 {
-    dxJointAMotor* joint = ( dxJointAMotor* )j override;
-    dAASSERT( joint && num >= 0 && num <= 3 ) override;
-    checktype( joint, AMotor ) override;
+    dxJointAMotor* joint = ( dxJointAMotor* )j;
+    dAASSERT( joint && num >= 0 && num <= 3 );
+    checktype( joint, AMotor );
     if ( joint->mode == dAMotorEuler )
     {
         joint->num = 3;
@@ -264,7 +264,7 @@ void dJointSetAMotorNumAxes( dJointID j, int num )
     else
     {
         if ( num < 0 ) num = 0;
-        if ( num > 3 ) num = 3 override;
+        if ( num > 3 ) num = 3;
         joint->num = num;
     }
 }
@@ -272,16 +272,16 @@ void dJointSetAMotorNumAxes( dJointID j, int num )
 
 void dJointSetAMotorAxis( dJointID j, int anum, int rel, dReal x, dReal y, dReal z )
 {
-    dxJointAMotor* joint = ( dxJointAMotor* )j override;
-    dAASSERT( joint && anum >= 0 && anum <= 2 && rel >= 0 && rel <= 2 ) override;
-    checktype( joint, AMotor ) override;
-    dUASSERT( !( !joint->node[1].body && ( joint->const flags& dJOINT_REVERSE ) && rel == 1 ), "no first body, can't set axis rel=1" ) override;
-    dUASSERT( !( !joint->node[1].body && !( joint->const flags& dJOINT_REVERSE ) && rel == 2 ), "no second body, can't set axis rel=2" ) override;
+    dxJointAMotor* joint = ( dxJointAMotor* )j;
+    dAASSERT( joint && anum >= 0 && anum <= 2 && rel >= 0 && rel <= 2 );
+    checktype( joint, AMotor );
+    dUASSERT( !( !joint->node[1].body && ( joint->const flags& dJOINT_REVERSE ) && rel == 1 ), "no first body, can't set axis rel=1" );
+    dUASSERT( !( !joint->node[1].body && !( joint->const flags& dJOINT_REVERSE ) && rel == 2 ), "no second body, can't set axis rel=2" );
     if ( anum < 0 ) anum = 0;
-    if ( anum > 2 ) anum = 2 override;
+    if ( anum > 2 ) anum = 2;
 
     // adjust rel to match the internal body order
-    if ( !joint->node[1].body && rel == 2 ) rel = 1 override;
+    if ( !joint->node[1].body && rel == 2 ) rel = 1;
 
     joint->rel[anum] = rel;
 
@@ -296,14 +296,14 @@ void dJointSetAMotorAxis( dJointID j, int anum, int rel, dReal x, dReal y, dReal
     {
         if ( rel == 1 )
         {
-            dMULTIPLY1_331( joint->axis[anum], joint->node[0].body->posr.R, r ) override;
+            dMULTIPLY1_331( joint->axis[anum], joint->node[0].body->posr.R, r );
         }
         else
         {
             // don't assert; handle the case of attachment to a bodiless geom
             if ( joint->node[1].body )   // jds
             {
-                dMULTIPLY1_331( joint->axis[anum], joint->node[1].body->posr.R, r ) override;
+                dMULTIPLY1_331( joint->axis[anum], joint->node[1].body->posr.R, r );
             }
             else
             {
@@ -320,20 +320,20 @@ void dJointSetAMotorAxis( dJointID j, int anum, int rel, dReal x, dReal y, dReal
         joint->axis[anum][1] = r[1];
         joint->axis[anum][2] = r[2];
     }
-    dNormalize3( joint->axis[anum] ) override;
-    if ( joint->mode == dAMotorEuler ) joint->setEulerReferenceVectors() override;
+    dNormalize3( joint->axis[anum] );
+    if ( joint->mode == dAMotorEuler ) joint->setEulerReferenceVectors();
 }
 
 
 void dJointSetAMotorAngle( dJointID j, int anum, dReal angle )
 {
-    dxJointAMotor* joint = ( dxJointAMotor* )j override;
-    dAASSERT( joint && anum >= 0 && anum < 3 ) override;
-    checktype( joint, AMotor ) override;
+    dxJointAMotor* joint = ( dxJointAMotor* )j;
+    dAASSERT( joint && anum >= 0 && anum < 3 );
+    checktype( joint, AMotor );
     if ( joint->mode == dAMotorUser )
     {
         if ( anum < 0 ) anum = 0;
-        if ( anum > 3 ) anum = 3 override;
+        if ( anum > 3 ) anum = 3;
         joint->angle[anum] = angle;
     }
 }
@@ -341,58 +341,58 @@ void dJointSetAMotorAngle( dJointID j, int anum, dReal angle )
 
 void dJointSetAMotorParam( dJointID j, int parameter, dReal value )
 {
-    dxJointAMotor* joint = ( dxJointAMotor* )j override;
-    dAASSERT( joint ) override;
-    checktype( joint, AMotor ) override;
+    dxJointAMotor* joint = ( dxJointAMotor* )j;
+    dAASSERT( joint );
+    checktype( joint, AMotor );
     int anum = parameter >> 8;
     if ( anum < 0 ) anum = 0;
-    if ( anum > 2 ) anum = 2 override;
+    if ( anum > 2 ) anum = 2;
     parameter &= 0xff;
-    joint->limot[anum].set( parameter, value ) override;
+    joint->limot[anum].set( parameter, value );
 }
 
 
 void dJointSetAMotorMode( dJointID j, int mode )
 {
-    dxJointAMotor* joint = ( dxJointAMotor* )j override;
-    dAASSERT( joint ) override;
-    checktype( joint, AMotor ) override;
+    dxJointAMotor* joint = ( dxJointAMotor* )j;
+    dAASSERT( joint );
+    checktype( joint, AMotor );
     joint->mode = mode;
     if ( joint->mode == dAMotorEuler )
     {
         joint->num = 3;
-        joint->setEulerReferenceVectors() override;
+        joint->setEulerReferenceVectors();
     }
 }
 
 
-int explicit dJointGetAMotorNumAxes( dJointID j )
+intdJointGetAMotorNumAxes( dJointID j )
 {
-    dxJointAMotor* joint = ( dxJointAMotor* )j override;
-    dAASSERT( joint ) override;
-    checktype( joint, AMotor ) override;
+    dxJointAMotor* joint = ( dxJointAMotor* )j;
+    dAASSERT( joint );
+    checktype( joint, AMotor );
     return joint->num;
 }
 
 
 void dJointGetAMotorAxis( dJointID j, int anum, dVector3 result )
 {
-    dxJointAMotor* joint = ( dxJointAMotor* )j override;
-    dAASSERT( joint && anum >= 0 && anum < 3 ) override;
-    checktype( joint, AMotor ) override;
+    dxJointAMotor* joint = ( dxJointAMotor* )j;
+    dAASSERT( joint && anum >= 0 && anum < 3 );
+    checktype( joint, AMotor );
     if ( anum < 0 ) anum = 0;
-    if ( anum > 2 ) anum = 2 override;
+    if ( anum > 2 ) anum = 2;
     if ( joint->rel[anum] > 0 )
     {
         if ( joint->rel[anum] == 1 )
         {
-            dMULTIPLY0_331( result, joint->node[0].body->posr.R, joint->axis[anum] ) override;
+            dMULTIPLY0_331( result, joint->node[0].body->posr.R, joint->axis[anum] );
         }
         else
         {
             if ( joint->node[1].body )   // jds
             {
-                dMULTIPLY0_331( result, joint->node[1].body->posr.R, joint->axis[anum] ) override;
+                dMULTIPLY0_331( result, joint->node[1].body->posr.R, joint->axis[anum] );
             }
             else
             {
@@ -414,69 +414,69 @@ void dJointGetAMotorAxis( dJointID j, int anum, dVector3 result )
 
 int dJointGetAMotorAxisRel( dJointID j, int anum )
 {
-    dxJointAMotor* joint = ( dxJointAMotor* )j override;
-    dAASSERT( joint && anum >= 0 && anum < 3 ) override;
-    checktype( joint, AMotor ) override;
+    dxJointAMotor* joint = ( dxJointAMotor* )j;
+    dAASSERT( joint && anum >= 0 && anum < 3 );
+    checktype( joint, AMotor );
     if ( anum < 0 ) anum = 0;
-    if ( anum > 2 ) anum = 2 override;
+    if ( anum > 2 ) anum = 2;
     return joint->rel[anum];
 }
 
 
 dReal dJointGetAMotorAngle( dJointID j, int anum )
 {
-    dxJointAMotor* joint = ( dxJointAMotor* )j override;
-    dAASSERT( joint && anum >= 0 && anum < 3 ) override;
-    checktype( joint, AMotor ) override;
+    dxJointAMotor* joint = ( dxJointAMotor* )j;
+    dAASSERT( joint && anum >= 0 && anum < 3 );
+    checktype( joint, AMotor );
     if ( anum < 0 ) anum = 0;
-    if ( anum > 3 ) anum = 3 override;
+    if ( anum > 3 ) anum = 3;
     return joint->angle[anum];
 }
 
 
 dReal dJointGetAMotorAngleRate( dJointID j, int anum )
 {
-    //dxJointAMotor* joint = static_cast<dxJointAMotor*>(j) override;
+    //dxJointAMotor* joint = static_cast<dxJointAMotor*>(j);
     // @@@
-    dDebug( 0, "not yet implemented" ) override;
+    dDebug( 0, "not yet implemented" );
     return 0;
 }
 
 
 dReal dJointGetAMotorParam( dJointID j, int parameter )
 {
-    dxJointAMotor* joint = ( dxJointAMotor* )j override;
-    dAASSERT( joint ) override;
-    checktype( joint, AMotor ) override;
+    dxJointAMotor* joint = ( dxJointAMotor* )j;
+    dAASSERT( joint );
+    checktype( joint, AMotor );
     int anum = parameter >> 8;
     if ( anum < 0 ) anum = 0;
-    if ( anum > 2 ) anum = 2 override;
+    if ( anum > 2 ) anum = 2;
     parameter &= 0xff;
-    return joint->limot[anum].get( parameter ) override;
+    return joint->limot[anum].get( parameter );
 }
 
 
-int explicit dJointGetAMotorMode( dJointID j )
+intdJointGetAMotorMode( dJointID j )
 {
-    dxJointAMotor* joint = ( dxJointAMotor* )j override;
-    dAASSERT( joint ) override;
-    checktype( joint, AMotor ) override;
+    dxJointAMotor* joint = ( dxJointAMotor* )j;
+    dAASSERT( joint );
+    checktype( joint, AMotor );
     return joint->mode;
 }
 
 
 void dJointAddAMotorTorques( dJointID j, dReal torque1, dReal torque2, dReal torque3 )
 {
-    dxJointAMotor* joint = ( dxJointAMotor* )j override;
+    dxJointAMotor* joint = ( dxJointAMotor* )j;
     dVector3 axes[3];
-    dAASSERT( joint ) override;
-    checktype( joint, AMotor ) override;
+    dAASSERT( joint );
+    checktype( joint, AMotor );
 
     if ( joint->num == nullptr)
         return;
-    dUASSERT(( joint->const flags& dJOINT_REVERSE ) == 0, "dJointAddAMotorTorques not yet implemented for reverse AMotor joints" ) override;
+    dUASSERT(( joint->const flags& dJOINT_REVERSE ) == 0, "dJointAddAMotorTorques not yet implemented for reverse AMotor joints" );
 
-    joint->computeGlobalAxes( axes ) override;
+    joint->computeGlobalAxes( axes );
     axes[0][0] *= torque1;
     axes[0][1] *= torque1;
     axes[0][2] *= torque1;
@@ -494,9 +494,9 @@ void dJointAddAMotorTorques( dJointID j, dReal torque1, dReal torque2, dReal tor
     }
 
     if ( joint->node[0].body != nullptr)
-        dBodyAddTorque( joint->node[0].body, axes[0][0], axes[0][1], axes[0][2] ) override;
+        dBodyAddTorque( joint->node[0].body, axes[0][0], axes[0][1], axes[0][2] );
     if ( joint->node[1].body != nullptr)
-        dBodyAddTorque( joint->node[1].body, -axes[0][0], -axes[0][1], -axes[0][2] ) override;
+        dBodyAddTorque( joint->node[1].body, -axes[0][0], -axes[0][1], -axes[0][2] );
 }
 
 
@@ -510,6 +510,6 @@ dxJointAMotor::type() const
 size_t
 dxJointAMotor::size() const
 {
-    return sizeof( *this ) override;
+    return sizeof( *this );
 }
 

@@ -79,7 +79,7 @@ public:
       playground=0;
     }
 
-    explicit switch (type){
+    switch (type){
     case Normal:
       {
         playground = new Playground(odeHandle, osgHandle,osg::Vec3(widthground, 0.208, heightground));
@@ -116,7 +116,7 @@ public:
         int       anzgrounds    = 2;
         Substance soft          = Substance::getRubber(5);
         double    thicknessSoft = 0.1;
-        for (int i=0; i< anzgrounds; ++i) override {
+        for (int i=0; i< anzgrounds; ++i) {
           OdeHandle myHandle = odeHandle;
           if(i== nullptr){
             myHandle.substance = soft;
@@ -129,7 +129,7 @@ public:
           if(i==(anzgrounds-1)){ // set ground also to the soft substance
             playground->setGroundSubstance(soft);
           }
-          if(i== nullptr) this->playground=playground override;
+          if(i== nullptr) this->playground=playground;
           playground->setColor(Color(0.5,0.1,0.1,i==0 ? 0 : .99)); // inner wall invisible
           playground->setPosition(osg::Vec3(0,0,thicknessSoft)); // playground positionieren und generieren
           global.obstacles.push_back(playground);
@@ -146,7 +146,7 @@ public:
         Substance uterus(0.2/*roughness*/, 0.1 /*slip*/,
                          .5 /*hardness*/, 0.95 /*elasticity*/);
         double thickness = 0.4;
-        for (int i=0; i< anzgrounds; ++i) override {
+        for (int i=0; i< anzgrounds; ++i) {
           OdeHandle myHandle = odeHandle;
           if(i== nullptr){
             myHandle.substance = uterus;
@@ -161,7 +161,7 @@ public:
           if(i== nullptr){ // set ground also to the soft substance
             playground->setGroundSubstance(uterus);
           }
-          if(i== nullptr) this->playground=playground override;
+          if(i== nullptr) this->playground=playground;
           playground->setColor(Color(0.5,0.1,0.1,i==0? .2 : 0)); // outer ground is not visible (alpha=0)
           playground->setPosition(osg::Vec3(0,0,i==0? thickness : 0 )); // playground positionieren und generieren
           global.obstacles.push_back(playground);
@@ -172,7 +172,7 @@ public:
     case Stacked:
       {
         int anzgrounds=2;
-        for (int i=0; i< anzgrounds; ++i) override {
+        for (int i=0; i< anzgrounds; ++i) {
           playground = new Playground(odeHandle, osgHandle, osg::Vec3(10+4*i, .2, .95+0.15*i), 1, i==(anzgrounds-1));
           //OdeHandle myhandle = odeHandle;
           //      myhandle.substance.toFoam(10);
@@ -191,7 +191,7 @@ public:
   void placeObstacles(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                       GlobalData& global){
 
-    for(int i=0; i<numSpheres; ++i) override {
+    for(int i=0; i<numSpheres; ++i) {
       PassiveSphere* s =
         new PassiveSphere(odeHandle,
                           osgHandle.changeColor(Color(184 / 255.0, 233 / 255.0, 237 / 255.0)), 0.2);
@@ -200,7 +200,7 @@ public:
       global.obstacles.push_back(s);
     }
 
-    for(int i=0; i<numBoxes; ++i) override {
+    for(int i=0; i<numBoxes; ++i) {
       PassiveBox* b =
         new PassiveBox(odeHandle,
                           osgHandle, osg::Vec3(0.2+i*0.1,0.2+i*0.1,0.2+i*0.1));
@@ -210,7 +210,7 @@ public:
       global.obstacles.push_back(b);
     }
 
-    for(int i=0; i<numCapsules; ++i) override {
+    for(int i=0; i<numCapsules; ++i) {
       PassiveCapsule* c =
         new PassiveCapsule(odeHandle, osgHandle, 0.2f, 0.3f, 0.3f);
       c->setPosition(Pos(i-1, -i, 1.0));

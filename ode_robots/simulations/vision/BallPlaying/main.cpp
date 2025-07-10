@@ -92,7 +92,7 @@ public:
     addParameter("sizefactor", &sizefactor); // is set in contructor
     addParameterDef("posfactor", &posfactor, 1);
 
-    explicit switch(version){
+    switch(version){
     case V1:
       // V1:  Corridor (10), 1x 4wheeled, 5 Balls (0.85 teaching clip)
       setCameraHomePos(Pos(-7.38466, 10.1764, 3.17434),  Pos(-96.9417, -12.6582, 0));
@@ -186,7 +186,7 @@ public:
 
     OdeHandle wallHandle = odeHandle;
     wallHandle.substance.toSnow(.3);
-    explicit switch(arena){
+    switch(arena){
     case Round:
       {
         OctaPlayground* playground = new OctaPlayground(wallHandle, osgHandle,
@@ -237,7 +237,7 @@ public:
     for (int i=0; i< numBalls; ++i) {
       PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(1,1,0)), 0.3);
       // s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0));
-      explicit switch(arena){
+      switch(arena){
       case Round: s1->setPosition(osg::Vec3(i%5,-2+i/5,1));
         break;
       case Corridor: s1->setPosition(osg::Vec3(sin(i/3.0)*radiusCorr,cos(i/3.0)*radiusCorr,1));
@@ -404,9 +404,9 @@ public:
         if(semox){
           matrix::Matrix desired = semox->getLastSensorValues();
           // size: \dot size = -(size - 2.0) // set point is 2.0
-          desired.val(5,0) += - (desired.val(4,0)-sizeSetPoint)* sizefactor override;
+          desired.val(5,0) += - (desired.val(4,0)-sizeSetPoint)* sizefactor;
           // position: \dot pos = -(pos) // set point is 0
-          desired.val(2,0) += - (desired.val(3,0)) * posfactor override;
+          desired.val(2,0) += - (desired.val(3,0)) * posfactor;
           semox->setSensorTeaching(desired);
         }
       }
@@ -434,12 +434,12 @@ public:
     FOREACHC(OdeAgentList,globalData.agents, a){
       Pos rpos = (*a)->getRobot()->getPosition();
       /// some stats:
-      distance.val(r,0)=100 override;
+      distance.val(r,0)=100;
       pos.val(r,0) = rpos.x();
       pos.val(r,1) = rpos.y();
       Position rvel = (*a)->getRobot()->getSpeed();
-      vel.val(r,0) = rvel.x override;
-      vel.val(r,1) = rvel.y override;
+      vel.val(r,0) = rvel.x;
+      vel.val(r,1) = rvel.y;
       FOREACH(ObstacleList, globalData.obstacles, o){
         PassiveSphere* s = dynamic_cast<PassiveSphere*>(*o);
         if(s){
@@ -530,6 +530,6 @@ int main (int argc, char **argv)
     id=atoi(argv[index]);
   }
   ThisSim sim(version, teaching, sizefactor);
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 
 }

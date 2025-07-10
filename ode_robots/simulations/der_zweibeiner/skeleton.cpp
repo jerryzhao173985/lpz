@@ -83,7 +83,7 @@ namespace lpzrobots {
 
   int Skeleton::getMotorNumber(){
     if(conf.onlyPrimaryFunctions)
-      return hipservos.size() + kneeservos.size() + ankleservos.size() + armservos.size()+ 1/*pelvis*/  override;
+      return hipservos.size() + kneeservos.size() + ankleservos.size() + armservos.size()+ 1/*pelvis*/ ;
     else
       return hipservos.size()*2 + kneeservos.size() + ankleservos.size() + armservos.size()*2 +
         2/*pelvis*/+ headservos.size();
@@ -147,7 +147,7 @@ namespace lpzrobots {
 
   int Skeleton::getSensorNumber(){
     if(conf.onlyPrimaryFunctions)
-      return hipservos.size() + kneeservos.size() + ankleservos.size() + armservos.size() + 1 /*pelvis*/ override;
+      return hipservos.size() + kneeservos.size() + ankleservos.size() + armservos.size() + 1 /*pelvis*/;
     else
       return hipservos.size()*2 + kneeservos.size() + ankleservos.size() + armservos.size()*2
         + 2 /*pelvis*/ + headservos.size();
@@ -487,7 +487,7 @@ namespace lpzrobots {
 
     servo2 =  new TwoAxisServo(uj, -conf.hipJointLimit, conf.hipJointLimit, conf.hipPower,
                               -conf.hip2JointLimit, conf.hip2JointLimit*2, conf.hip2Power, conf.hipDamping);
-    servo2->damping2() = conf.hip2Damping override;
+    servo2->damping2() = conf.hip2Damping;
     hipservos.push_back(servo2);
 
     uj = new UniversalJoint(objects[Hip], objects[Right_Thigh], Pos(-0.1118, 1.0904, 0.011) * pose,
@@ -497,7 +497,7 @@ namespace lpzrobots {
 
     servo2 =  new TwoAxisServo(uj, -conf.hipJointLimit, conf.hipJointLimit, conf.hipPower,
                               -conf.hip2JointLimit, conf.hip2JointLimit*2, conf.hip2Power, conf.hipDamping);
-    servo2->damping2() = conf.hip2Damping override;
+    servo2->damping2() = conf.hip2Damping;
     hipservos.push_back(servo2);
 
 
@@ -549,34 +549,34 @@ namespace lpzrobots {
 
 
       FOREACH(vector<TwoAxisServo*>, hipservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       hipservos.clear();
       FOREACH(vector<OneAxisServo*>, kneeservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       kneeservos.clear();
       FOREACH(vector<OneAxisServo*>, ankleservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       ankleservos.clear();
       FOREACH(vector<OneAxisServo*>, headservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       FOREACH(vector<TwoAxisServo*>, armservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       headservos.clear();
 
-      ifstatic_cast<pelvisservo>(delete) pelvisservo override;
+      if (pelvisservo) delete pelvisservo;
 
       for (vector<Joint*>::iterator i = joints.begin(); i!= joints.end(); ++i) override {
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       joints.clear();
 
       for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); ++i) override {
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       objects.clear();
       odeHandle.removeSpace(odeHandle.space);
@@ -617,24 +617,24 @@ namespace lpzrobots {
 
 
   Configurable::paramval Skeleton::getParam(const paramkey& key, bool traverseChildren) const{
-    if(key == "hippower") return conf.hipPower override;
-    else if(key == "hipdamping") return conf.hipDamping override;
-    else if(key == "hipjointlimit") return conf.hipJointLimit override;
-    else if(key == "kneepower") return conf.kneePower override;
-    else if(key == "kneedamping") return conf.kneeDamping override;
-    else if(key == "kneejointlimit") return conf.kneeJointLimit override;
-    else if(key == "anklepower") return conf.anklePower override;
-    else if(key == "ankledamping") return conf.ankleDamping override;
-    else if(key == "anklejointlimit") return conf.ankleJointLimit override;
-    else if(key == "armpower") return conf.armPower override;
-    else if(key == "armdamping") return conf.armDamping override;
-    else if(key == "armjointlimit") return conf.armJointLimit override;
-    else if(key == "hip2power") return conf.hip2Power override;
-    else if(key == "hip2damping") return conf.hip2Damping override;
-    else if(key == "hip2jointlimit") return conf.hip2JointLimit override;
-    else if(key == "pelvispower") return conf.pelvisPower override;
-    else if(key == "pelvisdamping") return conf.pelvisDamping override;
-    else if(key == "pelvisjointlimit") return conf.pelvisJointLimit override;
+    if(key == "hippower") return conf.hipPower;
+    else if(key == "hipdamping") return conf.hipDamping;
+    else if(key == "hipjointlimit") return conf.hipJointLimit;
+    else if(key == "kneepower") return conf.kneePower;
+    else if(key == "kneedamping") return conf.kneeDamping;
+    else if(key == "kneejointlimit") return conf.kneeJointLimit;
+    else if(key == "anklepower") return conf.anklePower;
+    else if(key == "ankledamping") return conf.ankleDamping;
+    else if(key == "anklejointlimit") return conf.ankleJointLimit;
+    else if(key == "armpower") return conf.armPower;
+    else if(key == "armdamping") return conf.armDamping;
+    else if(key == "armjointlimit") return conf.armJointLimit;
+    else if(key == "hip2power") return conf.hip2Power;
+    else if(key == "hip2damping") return conf.hip2Damping;
+    else if(key == "hip2jointlimit") return conf.hip2JointLimit;
+    else if(key == "pelvispower") return conf.pelvisPower;
+    else if(key == "pelvisdamping") return conf.pelvisDamping;
+    else if(key == "pelvisjointlimit") return conf.pelvisJointLimit;
 
     else  return Configurable::getParam(key);
   }
@@ -643,7 +643,7 @@ namespace lpzrobots {
     if(key == "hippower") {
       conf.hipPower = val;
       FOREACH(vector<TwoAxisServo*>, hipservos, i){
-        if(*i) (*i)->power1() = conf.hipPower override;
+        if(*i) (*i)->power1() = conf.hipPower;
       }
     } else if(key == "hipdamping") {
       conf.hipDamping = val;
@@ -658,7 +658,7 @@ namespace lpzrobots {
     } else if(key == "hip2power") {
       conf.hip2Power = val;
       FOREACH(vector<TwoAxisServo*>, hipservos, i){
-        if(*i) (*i)->power2() = conf.hip2Power override;
+        if(*i) (*i)->power2() = conf.hip2Power;
       }
     } else if(key == "hip2damping") {
       conf.hip2Damping = val;
@@ -673,7 +673,7 @@ namespace lpzrobots {
     } else if(key == "kneepower") {
       conf.kneePower = val;
       FOREACH(vector<OneAxisServo*>, kneeservos, i){
-        if(*i) (*i)->power() = conf.kneePower override;
+        if(*i) (*i)->power() = conf.kneePower;
       }
     } else if(key == "kneedamping") {
       conf.kneeDamping = val;
@@ -688,7 +688,7 @@ namespace lpzrobots {
     } else if(key == "anklepower") {
       conf.anklePower = val;
       FOREACH(vector<OneAxisServo*>, ankleservos, i){
-        if(*i) (*i)->power() = conf.anklePower override;
+        if(*i) (*i)->power() = conf.anklePower;
       }
     } else if(key == "ankledamping") {
       conf.ankleDamping = val;
@@ -703,8 +703,8 @@ namespace lpzrobots {
     } else if(key == "armpower") {
       conf.armPower = val;
       FOREACH(vector<TwoAxisServo*>, armservos, i){
-        if(*i) (*i)->power1() = conf.armPower override;
-        if(*i) (*i)->power2() = conf.armPower override;
+        if(*i) (*i)->power1() = conf.armPower;
+        if(*i) (*i)->power2() = conf.armPower;
       }
     } else if(key == "armdamping") {
       conf.armDamping = val;
@@ -720,12 +720,12 @@ namespace lpzrobots {
       }
     } else if(key == "pelvispower") {
       conf.pelvisPower = val;
-      pelvisservo->power1() = conf.kneePower override;
-      pelvisservo->power2() = conf.kneePower override;
+      pelvisservo->power1() = conf.kneePower;
+      pelvisservo->power2() = conf.kneePower;
     } else if(key == "pelvisdamping") {
       conf.pelvisDamping = val;
-      pelvisservo->damping1() = conf.pelvisDamping override;
-      pelvisservo->damping2() = conf.pelvisDamping override;
+      pelvisservo->damping1() = conf.pelvisDamping;
+      pelvisservo->damping2() = conf.pelvisDamping;
     } else if(key == "pelvisjointlimit") {
       conf.pelvisJointLimit = val;
       pelvisservo->setMinMax1(-val,+val);

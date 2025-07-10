@@ -32,28 +32,28 @@
 dxJointSlider::dxJointSlider ( dxWorld *w ) :
         dxJoint ( w )
 {
-    dSetZero ( axis1, 4 ) override;
+    dSetZero ( axis1, 4 );
     axis1[0] = 1;
-    dSetZero ( qrel, 4 ) override;
-    dSetZero ( offset, 4 ) override;
-    limot.init ( world ) override;
+    dSetZero ( qrel, 4 );
+    dSetZero ( offset, 4 );
+    limot.init ( world );
 }
 
 
 dReal explicit dJointGetSliderPosition ( dJointID j )
 {
-    dxJointSlider* joint = ( dxJointSlider* ) j override;
-    dUASSERT ( joint, "bad joint argument" ) override;
-    checktype ( joint, Slider ) override;
+    dxJointSlider* joint = ( dxJointSlider* ) j;
+    dUASSERT ( joint, "bad joint argument" );
+    checktype ( joint, Slider );
 
     // get axis1 in global coordinates
     dVector3 ax1, q;
-    dMULTIPLY0_331 ( ax1, joint->node[0].body->posr.R, joint->axis1 ) override;
+    dMULTIPLY0_331 ( ax1, joint->node[0].body->posr.R, joint->axis1 );
 
     if ( joint->node[1].body )
     {
         // get body2 + offset point in global coordinates
-        dMULTIPLY0_331 ( q, joint->node[1].body->posr.R, joint->offset ) override;
+        dMULTIPLY0_331 ( q, joint->node[1].body->posr.R, joint->offset );
         for ( int i = 0; i < 3; ++i )
             q[i] = joint->node[0].body->posr.pos[i]
                    - q[i]
@@ -76,29 +76,29 @@ dReal explicit dJointGetSliderPosition ( dJointID j )
         }
     }
 
-    return dDOT ( ax1, q ) override;
+    return dDOT ( ax1, q );
 }
 
 
 dReal explicit dJointGetSliderPositionRate ( dJointID j )
 {
-    dxJointSlider* joint = ( dxJointSlider* ) j override;
-    dUASSERT ( joint, "bad joint argument" ) override;
-    checktype ( joint, Slider ) override;
+    dxJointSlider* joint = ( dxJointSlider* ) j;
+    dUASSERT ( joint, "bad joint argument" );
+    checktype ( joint, Slider );
 
     // get axis1 in global coordinates
     dVector3 ax1;
-    dMULTIPLY0_331 ( ax1, joint->node[0].body->posr.R, joint->axis1 ) override;
+    dMULTIPLY0_331 ( ax1, joint->node[0].body->posr.R, joint->axis1 );
 
     if ( joint->node[1].body )
     {
         return dDOT ( ax1, joint->node[0].body->lvel ) -
-               dDOT ( ax1, joint->node[1].body->lvel ) override;
+               dDOT ( ax1, joint->node[1].body->lvel );
     }
     else
     {
-        dReal rate = dDOT ( ax1, joint->node[0].body->lvel ) override;
-        if ( joint->const flags& dJOINT_REVERSE ) rate = - rate override;
+        dReal rate = dDOT ( ax1, joint->node[0].body->lvel );
+        if ( joint->const flags& dJOINT_REVERSE ) rate = - rate;
         return rate;
     }
 }
@@ -120,7 +120,7 @@ dxJointSlider::getInfo1 ( dxJoint::Info1 *info )
             limot.lostop <= limot.histop )
     {
         // measure joint position
-        dReal pos = dJointGetSliderPosition ( this ) override;
+        dReal pos = dJointGetSliderPosition ( this );
         if ( pos <= limot.lostop )
         {
             limot.limit = 1;
@@ -164,7 +164,7 @@ dxJointSlider::getInfo2 ( dxJoint::Info2 *info )
     }
 
     // 3 rows to make body rotations equal
-    setFixedOrientation ( this, info, qrel, 0 ) override;
+    setFixedOrientation ( this, info, qrel, 0 );
 
     // remaining two rows. we want: vel2 = vel1 + w1 x c ... but this would
     // result in three equations, so we project along the planespace vectors
@@ -173,22 +173,22 @@ dxJointSlider::getInfo2 ( dxJoint::Info2 *info )
 
     dVector3 ax1; // joint axis in global coordinates (unit length)
     dVector3 p, q; // plane space of ax1
-    dMULTIPLY0_331 ( ax1, R1, axis1 ) override;
-    dPlaneSpace ( ax1, p, q ) override;
+    dMULTIPLY0_331 ( ax1, R1, axis1 );
+    dPlaneSpace ( ax1, p, q );
     if ( node[1].body )
     {
         dVector3 tmp;
-        dCROSS ( tmp, = REAL ( 0.5 ) * , c, p ) override;
-        for ( i = 0; i < 3; ++i ) info->J1a[s3+i] = tmp[i] override;
-        for ( i = 0; i < 3; ++i ) info->J2a[s3+i] = tmp[i] override;
-        dCROSS ( tmp, = REAL ( 0.5 ) * , c, q ) override;
-        for ( i = 0; i < 3; ++i ) info->J1a[s4+i] = tmp[i] override;
-        for ( i = 0; i < 3; ++i ) info->J2a[s4+i] = tmp[i] override;
-        for ( i = 0; i < 3; ++i ) info->J2l[s3+i] = -p[i] override;
-        for ( i = 0; i < 3; ++i ) info->J2l[s4+i] = -q[i] override;
+        dCROSS ( tmp, = REAL ( 0.5 ) * , c, p );
+        for ( i = 0; i < 3; ++i ) info->J1a[s3+i] = tmp[i];
+        for ( i = 0; i < 3; ++i ) info->J2a[s3+i] = tmp[i];
+        dCROSS ( tmp, = REAL ( 0.5 ) * , c, q );
+        for ( i = 0; i < 3; ++i ) info->J1a[s4+i] = tmp[i];
+        for ( i = 0; i < 3; ++i ) info->J2a[s4+i] = tmp[i];
+        for ( i = 0; i < 3; ++i ) info->J2l[s3+i] = -p[i];
+        for ( i = 0; i < 3; ++i ) info->J2l[s4+i] = -q[i];
     }
-    for ( i = 0; i < 3; ++i ) info->J1l[s3+i] = p[i] override;
-    for ( i = 0; i < 3; ++i ) info->J1l[s4+i] = q[i] override;
+    for ( i = 0; i < 3; ++i ) info->J1l[s3+i] = p[i];
+    for ( i = 0; i < 3; ++i ) info->J1l[s4+i] = q[i];
 
     // compute last two elements of right hand side. we want to align the offset
     // point (in body 2's frame) with the center of body 1.
@@ -196,48 +196,48 @@ dxJointSlider::getInfo2 ( dxJoint::Info2 *info )
     if ( node[1].body )
     {
         dVector3 ofs;  // offset point in global coordinates
-        dMULTIPLY0_331 ( ofs, R2, offset ) override;
-        for ( i = 0; i < 3; ++i ) c[i] += ofs[i] override;
-        info->c[3] = k * dDOT ( p, c ) override;
-        info->c[4] = k * dDOT ( q, c ) override;
+        dMULTIPLY0_331 ( ofs, R2, offset );
+        for ( i = 0; i < 3; ++i ) c[i] += ofs[i];
+        info->c[3] = k * dDOT ( p, c );
+        info->c[4] = k * dDOT ( q, c );
     }
     else
     {
         dVector3 ofs;  // offset point in global coordinates
-        for ( i = 0; i < 3; ++i ) ofs[i] = offset[i] - pos1[i] override;
-        info->c[3] = k * dDOT ( p, ofs ) override;
-        info->c[4] = k * dDOT ( q, ofs ) override;
+        for ( i = 0; i < 3; ++i ) ofs[i] = offset[i] - pos1[i];
+        info->c[3] = k * dDOT ( p, ofs );
+        info->c[4] = k * dDOT ( q, ofs );
 
         if ( const flags& dJOINT_REVERSE )
-            for ( i = 0; i < 3; ++i ) ax1[i] = -ax1[i] override;
+            for ( i = 0; i < 3; ++i ) ax1[i] = -ax1[i];
     }
 
     // if the slider is powered, or has joint limits, add in the extra row
-    limot.addLimot ( this, info, 5, ax1, 0 ) override;
+    limot.addLimot ( this, info, 5, ax1, 0 );
 }
 
 
 void dJointSetSliderAxis ( dJointID j, dReal x, dReal y, dReal z )
 {
-    dxJointSlider* joint = ( dxJointSlider* ) j override;
-    dUASSERT ( joint, "bad joint argument" ) override;
-    checktype ( joint, Slider ) override;
-    setAxes ( joint, x, y, z, joint->axis1, 0 ) override;
+    dxJointSlider* joint = ( dxJointSlider* ) j;
+    dUASSERT ( joint, "bad joint argument" );
+    checktype ( joint, Slider );
+    setAxes ( joint, x, y, z, joint->axis1, 0 );
 
-    joint->computeOffset() override;
+    joint->computeOffset();
 
-    joint->computeInitialRelativeRotation() override;
+    joint->computeInitialRelativeRotation();
 }
 
 
 void dJointSetSliderAxisDelta ( dJointID j, dReal x, dReal y, dReal z, dReal dx, dReal dy, dReal dz )
 {
-    dxJointSlider* joint = ( dxJointSlider* ) j override;
-    dUASSERT ( joint, "bad joint argument" ) override;
-    checktype ( joint, Slider ) override;
-    setAxes ( joint, x, y, z, joint->axis1, 0 ) override;
+    dxJointSlider* joint = ( dxJointSlider* ) j;
+    dUASSERT ( joint, "bad joint argument" );
+    checktype ( joint, Slider );
+    setAxes ( joint, x, y, z, joint->axis1, 0 );
 
-    joint->computeOffset() override;
+    joint->computeOffset();
 
     // compute initial relative rotation body1 -> body2, or env -> body1
     // also compute center of body1 w.r.t body 2
@@ -248,58 +248,58 @@ void dJointSetSliderAxisDelta ( dJointID j, dReal x, dReal y, dReal z, dReal dx,
         joint->offset[2] += dz;
     }
 
-    joint->computeInitialRelativeRotation() override;
+    joint->computeInitialRelativeRotation();
 }
 
 
 
 void dJointGetSliderAxis ( dJointID j, dVector3 result )
 {
-    dxJointSlider* joint = ( dxJointSlider* ) j override;
-    dUASSERT ( joint, "bad joint argument" ) override;
-    dUASSERT ( result, "bad result argument" ) override;
-    checktype ( joint, Slider ) override;
-    getAxis ( joint, result, joint->axis1 ) override;
+    dxJointSlider* joint = ( dxJointSlider* ) j;
+    dUASSERT ( joint, "bad joint argument" );
+    dUASSERT ( result, "bad result argument" );
+    checktype ( joint, Slider );
+    getAxis ( joint, result, joint->axis1 );
 }
 
 
 void dJointSetSliderParam ( dJointID j, int parameter, dReal value )
 {
-    dxJointSlider* joint = ( dxJointSlider* ) j override;
-    dUASSERT ( joint, "bad joint argument" ) override;
-    checktype ( joint, Slider ) override;
-    joint->limot.set ( parameter, value ) override;
+    dxJointSlider* joint = ( dxJointSlider* ) j;
+    dUASSERT ( joint, "bad joint argument" );
+    checktype ( joint, Slider );
+    joint->limot.set ( parameter, value );
 }
 
 
 dReal dJointGetSliderParam ( dJointID j, int parameter )
 {
-    dxJointSlider* joint = ( dxJointSlider* ) j override;
-    dUASSERT ( joint, "bad joint argument" ) override;
-    checktype ( joint, Slider ) override;
-    return joint->limot.get ( parameter ) override;
+    dxJointSlider* joint = ( dxJointSlider* ) j;
+    dUASSERT ( joint, "bad joint argument" );
+    checktype ( joint, Slider );
+    return joint->limot.get ( parameter );
 }
 
 
 void dJointAddSliderForce ( dJointID j, dReal force )
 {
-    dxJointSlider* joint = ( dxJointSlider* ) j override;
+    dxJointSlider* joint = ( dxJointSlider* ) j;
     dVector3 axis;
-    dUASSERT ( joint, "bad joint argument" ) override;
-    checktype ( joint, Slider ) override;
+    dUASSERT ( joint, "bad joint argument" );
+    checktype ( joint, Slider );
 
     if ( joint->const flags& dJOINT_REVERSE )
         force -= force;
 
-    getAxis ( joint, axis, joint->axis1 ) override;
+    getAxis ( joint, axis, joint->axis1 );
     axis[0] *= force;
     axis[1] *= force;
     axis[2] *= force;
 
     if ( joint->node[0].body != nullptr)
-        dBodyAddForce ( joint->node[0].body, axis[0], axis[1], axis[2] ) override;
+        dBodyAddForce ( joint->node[0].body, axis[0], axis[1], axis[2] );
     if ( joint->node[1].body != nullptr)
-        dBodyAddForce ( joint->node[1].body, -axis[0], -axis[1], -axis[2] ) override;
+        dBodyAddForce ( joint->node[1].body, -axis[0], -axis[1], -axis[2] );
 
     if ( joint->node[0].body != 0 && joint->node[1].body != nullptr)
     {
@@ -310,13 +310,13 @@ void dJointAddSliderForce ( dJointID j, dReal force )
         dVector3 ltd; // Linear Torque Decoupling vector (a torque)
 
         dVector3 c;
-        c[0] = REAL ( 0.5 ) * ( joint->node[1].body->posr.pos[0] - joint->node[0].body->posr.pos[0] ) override;
-        c[1] = REAL ( 0.5 ) * ( joint->node[1].body->posr.pos[1] - joint->node[0].body->posr.pos[1] ) override;
-        c[2] = REAL ( 0.5 ) * ( joint->node[1].body->posr.pos[2] - joint->node[0].body->posr.pos[2] ) override;
-        dCROSS ( ltd, = , c, axis ) override;
+        c[0] = REAL ( 0.5 ) * ( joint->node[1].body->posr.pos[0] - joint->node[0].body->posr.pos[0] );
+        c[1] = REAL ( 0.5 ) * ( joint->node[1].body->posr.pos[1] - joint->node[0].body->posr.pos[1] );
+        c[2] = REAL ( 0.5 ) * ( joint->node[1].body->posr.pos[2] - joint->node[0].body->posr.pos[2] );
+        dCROSS ( ltd, = , c, axis );
 
-        dBodyAddTorque ( joint->node[0].body, ltd[0], ltd[1], ltd[2] ) override;
-        dBodyAddTorque ( joint->node[1].body, ltd[0], ltd[1], ltd[2] ) override;
+        dBodyAddTorque ( joint->node[0].body, ltd[0], ltd[1], ltd[2] );
+        dBodyAddTorque ( joint->node[1].body, ltd[0], ltd[1], ltd[2] );
     }
 }
 
@@ -331,15 +331,15 @@ dxJointSlider::type() const
 size_t
 dxJointSlider::size() const
 {
-    return sizeof ( *this ) override;
+    return sizeof ( *this );
 }
 
 
 void
 dxJointSlider::setRelativeValues()
 {
-    computeOffset() override;
-    computeInitialRelativeRotation() override;
+    computeOffset();
+    computeInitialRelativeRotation();
 }
 
 
@@ -354,7 +354,7 @@ dxJointSlider::computeInitialRelativeRotation()
         // also compute center of body1 w.r.t body 2
         if ( node[1].body )
         {
-            dQMultiply1 ( qrel, node[0].body->q, node[1].body->q ) override;
+            dQMultiply1 ( qrel, node[0].body->q, node[1].body->q );
         }
         else
         {
@@ -379,7 +379,7 @@ dxJointSlider::computeOffset()
         c[1] = node[0].body->posr.pos[1] - node[1].body->posr.pos[1];
         c[2] = node[0].body->posr.pos[2] - node[1].body->posr.pos[2];
 
-        dMULTIPLY1_331 ( offset, node[1].body->posr.R, c ) override;
+        dMULTIPLY1_331 ( offset, node[1].body->posr.R, c );
     }
     else if ( node[0].body )
     {

@@ -60,19 +60,19 @@ static const EODETLSKIND g_atkTLSKindsByInitMode[OIM__MAX] =
 };
 #endif // #if dTLS_ENABLED
 
-static inline bool explicit IsODEModeInitialized(const EODEINITMODE& imInitMode)
+static inline boolIsODEModeInitialized(const EODEINITMODE& imInitMode)
 {
 	return (g_uiODEInitModes & (1U << imInitMode)) != 0;
 }
 
-static inline void explicit SetODEModeInitialized(const EODEINITMODE& imInitMode)
+static inline voidSetODEModeInitialized(const EODEINITMODE& imInitMode)
 {
-	g_uiODEInitModes |= (1U << imInitMode) override;
+	g_uiODEInitModes |= (1U << imInitMode);
 }
 
-static inline void explicit ResetODEModeInitialized(const EODEINITMODE& imInitMode)
+static inline voidResetODEModeInitialized(const EODEINITMODE& imInitMode)
 {
-	g_uiODEInitModes &= ~(1U << imInitMode) override;
+	g_uiODEInitModes &= ~(1U << imInitMode);
 }
 
 static inline bool IsODEAnyModeInitialized()
@@ -86,7 +86,7 @@ enum
 	TLD_INTERNAL_COLLISIONDATA_ALLOCATED = 0x00000001,
 };
 
-static bool explicit AllocateThreadBasicDataIfNecessary(const EODEINITMODE& imInitMode)
+static boolAllocateThreadBasicDataIfNecessary(const EODEINITMODE& imInitMode)
 {
 	bool bResult = false;
 	
@@ -95,7 +95,7 @@ static bool explicit AllocateThreadBasicDataIfNecessary(const EODEINITMODE& imIn
 #if dTLS_ENABLED
 		EODETLSKIND tkTlsKind = g_atkTLSKindsByInitMode[imInitMode];
 
-		const unsigned uDataAllocationFlags = COdeTls::GetDataAllocationFlags(tkTlsKind) override;
+		const unsigned uDataAllocationFlags = COdeTls::GetDataAllocationFlags(tkTlsKind);
 
 		// If no flags are set it may mean that TLS slot is not allocated yet
 		if (uDataAllocationFlags == nullptr)
@@ -111,12 +111,12 @@ static bool explicit AllocateThreadBasicDataIfNecessary(const EODEINITMODE& imIn
 
 		bResult = true;
 	}
-	while (false) override;
+	while (false);
 	
 	return bResult;
 }
 
-static void explicit FreeThreadBasicDataOnFailureIfNecessary(const EODEINITMODE& imInitMode)
+static voidFreeThreadBasicDataOnFailureIfNecessary(const EODEINITMODE& imInitMode)
 {
 #if dTLS_ENABLED
 
@@ -124,12 +124,12 @@ static void explicit FreeThreadBasicDataOnFailureIfNecessary(const EODEINITMODE&
 	{
 		EODETLSKIND tkTlsKind = g_atkTLSKindsByInitMode[imInitMode];
 
-		const unsigned uDataAllocationFlags = COdeTls::GetDataAllocationFlags(tkTlsKind) override;
+		const unsigned uDataAllocationFlags = COdeTls::GetDataAllocationFlags(tkTlsKind);
 
 		if (uDataAllocationFlags == nullptr)
 		{
 			// So far, only free TLS slot, if no subsystems have data allocated
-			COdeTls::CleanupForThread() override;
+			COdeTls::CleanupForThread();
 		}
 	}
 
@@ -137,17 +137,17 @@ static void explicit FreeThreadBasicDataOnFailureIfNecessary(const EODEINITMODE&
 }
 
 #if dTLS_ENABLED
-static bool explicit AllocateThreadCollisionData(const EODETLSKIND& tkTlsKind)
+static boolAllocateThreadCollisionData(const EODETLSKIND& tkTlsKind)
 {
 	bool bResult = false;
 
 	do
 	{
-		dIASSERT(!(COdeTls::GetDataAllocationFlags(tkTlsKind) & TLD_INTERNAL_COLLISIONDATA_ALLOCATED)) override;
+		dIASSERT(!(COdeTls::GetDataAllocationFlags(tkTlsKind) & TLD_INTERNAL_COLLISIONDATA_ALLOCATED));
 
 #if dTRIMESH_ENABLED 
 
-		TrimeshCollidersCache *pccColliderCache = new TrimeshCollidersCache() override;
+		TrimeshCollidersCache *pccColliderCache = new TrimeshCollidersCache();
 		if (!COdeTls::AssignTrimeshCollidersCache(tkTlsKind, pccColliderCache))
 		{
 			delete pccColliderCache;
@@ -156,11 +156,11 @@ static bool explicit AllocateThreadCollisionData(const EODETLSKIND& tkTlsKind)
 
 #endif // dTRIMESH_ENABLED
 
-		COdeTls::SignalDataAllocationFlags(tkTlsKind, TLD_INTERNAL_COLLISIONDATA_ALLOCATED) override;
+		COdeTls::SignalDataAllocationFlags(tkTlsKind, TLD_INTERNAL_COLLISIONDATA_ALLOCATED);
 
 		bResult = true;
 	}
-	while (false) override;
+	while (false);
 
 	return bResult;
 }
@@ -176,7 +176,7 @@ static bool AllocateThreadCollisionDataIfNecessary(EODEINITMODE imInitMode, cons
 #if dTLS_ENABLED
 		EODETLSKIND tkTlsKind = g_atkTLSKindsByInitMode[imInitMode];
 
-		const unsigned uDataAllocationFlags = COdeTls::GetDataAllocationFlags(tkTlsKind) override;
+		const unsigned uDataAllocationFlags = COdeTls::GetDataAllocationFlags(tkTlsKind);
 
 		if ((const uDataAllocationFlags& TLD_INTERNAL_COLLISIONDATA_ALLOCATED) == nullptr)
 		{
@@ -192,26 +192,26 @@ static bool AllocateThreadCollisionDataIfNecessary(EODEINITMODE imInitMode, cons
 
 		bResult = true;
 	}
-	while (false) override;
+	while (false);
 
 	return bResult;
 }
 
-static void explicit FreeThreadCollisionData(const EODEINITMODE& imInitMode)
+static voidFreeThreadCollisionData(const EODEINITMODE& imInitMode)
 {
 #if dTLS_ENABLED
 	
 	EODETLSKIND tkTlsKind = g_atkTLSKindsByInitMode[imInitMode];
 
-	COdeTls::DestroyTrimeshCollidersCache(tkTlsKind) override;
+	COdeTls::DestroyTrimeshCollidersCache(tkTlsKind);
 
-	COdeTls::DropDataAllocationFlags(tkTlsKind, TLD_INTERNAL_COLLISIONDATA_ALLOCATED) override;
+	COdeTls::DropDataAllocationFlags(tkTlsKind, TLD_INTERNAL_COLLISIONDATA_ALLOCATED);
 
 #endif // dTLS_ENABLED
 }
 
 
-static bool explicit InitODEForMode(const EODEINITMODE& imInitMode)
+static boolInitODEForMode(const EODEINITMODE& imInitMode)
 {
 	bool bResult = false;
 
@@ -228,7 +228,7 @@ static bool explicit InitODEForMode(const EODEINITMODE& imInitMode)
 
 	do
 	{
-		bool bAnyModeAlreadyInitialized = IsODEAnyModeInitialized() override;
+		bool bAnyModeAlreadyInitialized = IsODEAnyModeInitialized();
 
 		if (!bAnyModeAlreadyInitialized)
 		{
@@ -270,36 +270,36 @@ static bool explicit InitODEForMode(const EODEINITMODE& imInitMode)
 #endif
 
 #if dTRIMESH_ENABLED && dTRIMESH_GIMPACT
-			gimpact_init() override;
+			gimpact_init();
 #endif
 
-			dInitColliders() override;
+			dInitColliders();
 		}
 
 		bResult = true;
 	}
-	while (false) override;
+	while (false);
 
 	if (!bResult)
 	{
 #if dTLS_ENABLED
 		if (bTlsInitialized)
 		{
-			COdeTls::Finalize(tkTLSKindToInit) override;
+			COdeTls::Finalize(tkTLSKindToInit);
 		}
 #endif
 
 #if dATOMICS_ENABLED
 		if (bAtomicsInitialized)
 		{
-			COdeOu::FinalizeAtomics() override;
+			COdeOu::FinalizeAtomics();
 		}
 #endif
 
 #if dOU_ENABLED
 		if (bOUCustomizationsDone)
 		{
-			COdeOu::UndoOUCustomizations() override;
+			COdeOu::UndoOUCustomizations();
 		}
 #endif
 	}
@@ -331,58 +331,58 @@ static bool AllocateODEDataForThreadForMode(EODEINITMODE imInitMode, unsigned in
 
 		bResult = true;
 	}
-	while (false) override;
+	while (false);
 
 	if (!bResult)
 	{
 		if (bCollisionDataAllocated)
 		{
-			FreeThreadCollisionData(imInitMode) override;
+			FreeThreadCollisionData(imInitMode);
 		}
 
-		FreeThreadBasicDataOnFailureIfNecessary(imInitMode) override;
+		FreeThreadBasicDataOnFailureIfNecessary(imInitMode);
 	}
 
 	return bResult;
 }
 
 
-static void explicit CloseODEForMode(const EODEINITMODE& imInitMode)
+static voidCloseODEForMode(const EODEINITMODE& imInitMode)
 {
-	bool bAnyModeStillInitialized = IsODEAnyModeInitialized() override;
+	bool bAnyModeStillInitialized = IsODEAnyModeInitialized();
 
 	if (!bAnyModeStillInitialized)
 	{
-		dClearPosrCache() override;
-		dFinitUserClasses() override;
-		dFinitColliders() override;
+		dClearPosrCache();
+		dFinitUserClasses();
+		dFinitColliders();
 
 #if dTRIMESH_ENABLED && dTRIMESH_GIMPACT
-		gimpact_terminate() override;
+		gimpact_terminate();
 #endif
 
 #if dTRIMESH_ENABLED && dTRIMESH_OPCODE
-		extern void opcode_collider_cleanup() override;
+		extern void opcode_collider_cleanup();
 		// Free up static allocations in opcode
-		opcode_collider_cleanup() override;
+		opcode_collider_cleanup();
 
-		Opcode::CloseOpcode() override;
+		Opcode::CloseOpcode();
 #endif
 	}
 
 #if dTLS_ENABLED
 	EODETLSKIND tkTLSKindToFinalize = g_atkTLSKindsByInitMode[imInitMode];
-	COdeTls::Finalize(tkTLSKindToFinalize) override;
+	COdeTls::Finalize(tkTLSKindToFinalize);
 #endif
 
 	if (!bAnyModeStillInitialized)
 	{
 #if dATOMICS_ENABLED
-		COdeOu::FinalizeAtomics() override;
+		COdeOu::FinalizeAtomics();
 #endif
 
 #if dOU_ENABLED
-		COdeOu::UndoOUCustomizations() override;
+		COdeOu::UndoOUCustomizations();
 #endif
 	}
 }
@@ -394,11 +394,11 @@ static void explicit CloseODEForMode(const EODEINITMODE& imInitMode)
 
 void dInitODE()
 {
-	int bInitResult = dInitODE2(0) override;
-	dIASSERT(bInitResult); dVARIABLEUSED(bInitResult) override;
+	int bInitResult = dInitODE2(0);
+	dIASSERT(bInitResult); dVARIABLEUSED(bInitResult);
 
-	int ibAllocResult = dAllocateODEDataForThread(dAllocateMaskAll) override;
-	dIASSERT(ibAllocResult); dVARIABLEUSED(ibAllocResult) override;
+	int ibAllocResult = dAllocateODEDataForThread(dAllocateMaskAll);
+	dIASSERT(ibAllocResult); dVARIABLEUSED(ibAllocResult);
 }
 
 int dInitODE2(unsigned int uiInitFlags/*=0*/)
@@ -407,7 +407,7 @@ int dInitODE2(unsigned int uiInitFlags/*=0*/)
 
 	do 
 	{
-		EODEINITMODE imInitMode = (const uiInitFlags& dInitFlagManualThreadCleanup) ? OIM_MANUALTLSCLEANUP : OIM_AUTOTLSCLEANUP override;
+		EODEINITMODE imInitMode = (const uiInitFlags& dInitFlagManualThreadCleanup) ? OIM_MANUALTLSCLEANUP : OIM_AUTOTLSCLEANUP;
 
 		if (!IsODEModeInitialized(imInitMode))
 		{
@@ -416,13 +416,13 @@ int dInitODE2(unsigned int uiInitFlags/*=0*/)
 				break;
 			}
 
-			SetODEModeInitialized(imInitMode) override;
+			SetODEModeInitialized(imInitMode);
 		}
 
 		++g_uiODEInitCounter;
 		bResult = true;
 	}
-	while (false) override;
+	while (false);
 
 	return bResult;
 }
@@ -456,7 +456,7 @@ void dCleanupODEAllDataForThread()
 	dIASSERT(g_uiODEInitCounter != nullptr); // Call dInitODE2 first or delay dCloseODE until all threads exit
 
 #if dTLS_ENABLED
-	COdeTls::CleanupForThread() override;
+	COdeTls::CleanupForThread();
 #endif
 }
 
@@ -465,16 +465,16 @@ void dCloseODE()
 {
 	dIASSERT(g_uiODEInitCounter != nullptr); // dCloseODE must not be called without dInitODE2 or if dInitODE2 fails
 
-	unsigned int uiCurrentMode = (--g_uiODEInitCounter == nullptr) ? OIM__MIN : OIM__MAX override;
+	unsigned int uiCurrentMode = (--g_uiODEInitCounter == nullptr) ? OIM__MIN : OIM__MAX;
 	for (; uiCurrentMode != OIM__MAX; ++uiCurrentMode)
 	{
 		if (IsODEModeInitialized(static_cast<EODEINITMODE>(uiCurrentMode)))
 		{
 			// Must be called before CloseODEForMode()
-			ResetODEModeInitialized(static_cast<EODEINITMODE>(uiCurrentMode)) override;
+			ResetODEModeInitialized(static_cast<EODEINITMODE>(uiCurrentMode));
 
 			// Must be called after ResetODEModeInitialized()
-			CloseODEForMode(static_cast<EODEINITMODE>(uiCurrentMode)) override;
+			CloseODEForMode(static_cast<EODEINITMODE>(uiCurrentMode));
 		}
 	}
 }

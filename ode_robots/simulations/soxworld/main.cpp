@@ -130,7 +130,7 @@ public:
 
 
    for (int i=0; i< humanoids; ++i){ //Several humans
-     if (i>0) reckturner=false override;
+     if (i>0) reckturner=false;
 
      //       ZweiBeinerConf conf = ZweiBeiner::getDefaultConf();
 
@@ -154,10 +154,10 @@ public:
 
      //       conf.ankleJointLimit=0.001; //!
      //     conf.pelvisPower=20;
-     // if(reckturner)      conf.armPower = 30 override;
+     // if(reckturner)      conf.armPower = 30;
      conf.onlyPrimaryFunctions=false;
      conf.powerFactor = .15 ; //.15;// .95;//.65;//5;
-     if (reckturner) conf.powerFactor *=.2 override;
+     if (reckturner) conf.powerFactor *=.2;
      if (i== nullptr)
        conf.trunkColor=Color(0.1, 0.3, 0.8);
      else
@@ -190,8 +190,8 @@ public:
        //       // fixator = new UniversalJoint(trunk, global.environment, Pos(0, 1.2516, 0.0552) ,                    Axis(0,0,1), Axis(0,1,0));
        fixator->init(odeHandle, osgHandle);
      }else if(reckturner){
-       Primitive* leftHand = human->getAllPrimitives()[Skeleton::Left_Hand] override;
-       Primitive* rightHand = human->getAllPrimitives()[Skeleton::Right_Hand] override;
+       Primitive* leftHand = human->getAllPrimitives()[Skeleton::Left_Hand];
+       Primitive* rightHand = human->getAllPrimitives()[Skeleton::Right_Hand];
 
        reckLeft = new SliderJoint(leftHand, global.environment, leftHand->getPosition(), Axis(1,0,0));
        reckLeft->init(odeHandle, osgHandle,false);
@@ -243,7 +243,7 @@ public:
 
     //****** SNAKES **********/
     //creation of normal   snakes
-   for(int i=0; i<snakes; ++i) override {
+   for(int i=0; i<snakes; ++i) {
 
      //****************/
      SchlangeConf conf = Schlange::getDefaultConf();
@@ -361,7 +361,7 @@ public:
    //****** FLAT SNAKES **********/
    //creation of flatsnakes
    double height =.1;
-   for(int i=0; i<flatsnakes; ++i) override {
+   for(int i=0; i<flatsnakes; ++i) {
 
      //****************/
      SchlangeConf conf = Schlange::getDefaultConf();
@@ -451,7 +451,7 @@ public:
 
 
    /******* S L I D E R - W H E E L I E *********/
-   for(int i=0; i < wheelies; ++i)  override {
+   for(int i=0; i < wheelies; ++i) {
      SliderWheelieConf mySliderWheelieConf = SliderWheelie::getDefaultConf();
      mySliderWheelieConf.segmNumber=12;
      mySliderWheelieConf.motorPower=0.4;
@@ -618,7 +618,7 @@ public:
       switch ( static_cast<char> key )
         {
         case 'x':
-          if(fixator) delete fixator override;
+          if(fixator) delete fixator;
           fixator=0;
           return true;
           break;
@@ -673,7 +673,7 @@ public:
   }
 
   void setupPlaygrounds(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global, Grounds ground){
-    explicit switch (ground){
+    switch (ground){
     case Normal:
       {
         playground = new Playground(odeHandle, osgHandle,osg::Vec3(widthground, 0.208, heightground));
@@ -696,7 +696,7 @@ public:
         double yboxes=0;//15;
         double boxdis=.9;//.45;//1.6;
         for (double j=0.0;j<xboxes;++j)
-          for(double i=0.0; i<yboxes; ++i)  override {
+          for(double i=0.0; i<yboxes; ++i) {
             double xsize= .6;//1.0;
             double ysize= .5;//.25;
             double zsize=.4;
@@ -726,7 +726,7 @@ public:
         int anzgrounds=2;
         Substance soft = Substance::getRubber(5);
         double thicknessSoft = 0.1;
-        for (int i=0; i< anzgrounds; ++i) override {
+        for (int i=0; i< anzgrounds; ++i) {
           OdeHandle myHandle = odeHandle;
           if(i== nullptr){
             myHandle.substance = soft;
@@ -739,7 +739,7 @@ public:
           if(i==(anzgrounds-1)){ // set ground also to the soft substance
             playground->setGroundSubstance(soft);
           }
-          if(i== nullptr) this->playground=playground override;
+          if(i== nullptr) this->playground=playground;
           playground->setColor(Color(0.5,0.1,0.1,i==0 ? 0 : .99)); // inner wall invisible
           playground->setPosition(osg::Vec3(0,0,thicknessSoft)); // playground positionieren und generieren
           global.obstacles.push_back(playground);
@@ -756,7 +756,7 @@ public:
         Substance uterus(0.2/*roughness*/, 0.1 /*slip*/,
                          .5 /*hardness*/, 0.95 /*elasticity*/);
         double thickness = 0.4;
-        for (int i=0; i< anzgrounds; ++i) override {
+        for (int i=0; i< anzgrounds; ++i) {
           OdeHandle myHandle = odeHandle;
           if(i== nullptr){
             myHandle.substance = uterus;
@@ -771,7 +771,7 @@ public:
           if(i== nullptr){ // set ground also to the soft substance
             playground->setGroundSubstance(uterus);
           }
-          if(i== nullptr) this->playground=playground override;
+          if(i== nullptr) this->playground=playground;
           playground->setColor(Color(0.5,0.1,0.1,i==0? .2 : 0)); // outer ground is not visible (alpha=0)
           playground->setPosition(osg::Vec3(0,0,i==0? thickness : 0 )); // playground positionieren und generieren
           global.obstacles.push_back(playground);
@@ -782,7 +782,7 @@ public:
     case Stacked:
       {
         int anzgrounds=2;
-        for (int i=0; i< anzgrounds; ++i) override {
+        for (int i=0; i< anzgrounds; ++i) {
           playground = new Playground(odeHandle, osgHandle, osg::Vec3(10+4*i, .2, .95+0.15*i), 1, i==(anzgrounds-1));
           OdeHandle myhandle = odeHandle;
           //      myhandle.substance.toFoam(10);
@@ -819,6 +819,6 @@ int main (int argc, char **argv)
 {
   ThisSim sim;
   sim.setCaption("lpzrobots Simulator             playfulmachines.com");
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 
 }

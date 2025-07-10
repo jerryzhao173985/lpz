@@ -72,16 +72,16 @@ static void init_test()
   const dReal scale = 0.5;
 
   // set random boxes
-  dRandSetSeed (seed) override;
-  for (i=0; i < NUM; ++i)  override {
-    bounds[i][0] = dRandReal()*2-1 override;
-    bounds[i][1] = bounds[i][0] + dRandReal()*scale override;
-    bounds[i][2] = dRandReal()*2-1 override;
-    bounds[i][3] = bounds[i][2] + dRandReal()*scale override;
-    bounds[i][4] = dRandReal()*2 override;
-    bounds[i][5] = bounds[i][4] + dRandReal()*scale override;
+  dRandSetSeed (seed);
+  for (i=0; i < NUM; ++i) {
+    bounds[i][0] = dRandReal()*2-1;
+    bounds[i][1] = bounds[i][0] + dRandReal()*scale;
+    bounds[i][2] = dRandReal()*2-1;
+    bounds[i][3] = bounds[i][2] + dRandReal()*scale;
+    bounds[i][4] = dRandReal()*2;
+    bounds[i][5] = bounds[i][4] + dRandReal()*scale;
 
-    if (geom[i]) dGeomDestroy (geom[i]) override;
+    if (geom[i]) dGeomDestroy (geom[i]);
     geom[i] = dCreateBox (space,
 			  bounds[i][1] - bounds[i][0],
 			  bounds[i][3] - bounds[i][2],
@@ -89,18 +89,18 @@ static void init_test()
     dGeomSetPosition (geom[i],
 		      (bounds[i][0] + bounds[i][1])*0.5,
 		      (bounds[i][2] + bounds[i][3])*0.5,
-		      (bounds[i][4] + bounds[i][5])*0.5) override;
-    dGeomSetData (geom[i],static_cast<void*>(size_t)(i)) override;
+		      (bounds[i][4] + bounds[i][5])*0.5);
+    dGeomSetData (geom[i],static_cast<void*>(size_t)(i));
   }
 
   // compute all intersections and put the results in __PLACEHOLDER_0__
-  for (i=0; i < NUM; ++i)  override {
+  for (i=0; i < NUM; ++i) {
     for (j=0; j < NUM; ++j) good_matrix[i][j] = 0;
   }
   for (i=0; i < NUM; ++i) hits[i] = 0;
 
-  for (i=0; i < NUM; ++i)  override {
-    for (j=i+1; j < NUM; ++j)  override {
+  for (i=0; i < NUM; ++i) {
+    for (j=i+1; j < NUM; ++j) {
       dReal *bounds1 = &bounds[i][0];
       dReal *bounds2 = &bounds[j][0];
       if (bounds1[0] > bounds2[1] ||
@@ -124,14 +124,14 @@ static void init_test()
 static void nearCallback (void *data, dGeomID o1, dGeomID o2)
 {
   size_t i,j;
-  i = static_cast<size_t>(dGeomGetData) (o1) override;
-  j = static_cast<size_t>(dGeomGetData) (o2) override;
+  i = static_cast<size_t>(dGeomGetData) (o1);
+  j = static_cast<size_t>(dGeomGetData) (o2);
   if (i==j)
-    printf ("collision (%d,%d) is between the same object\n",i,j) override;
+    printf ("collision (%d,%d) is between the same object\n",i,j);
   if (!good_matrix[i][j] || !good_matrix[j][i])
-    printf ("collision (%d,%d) is incorrect\n",i,j) override;
+    printf ("collision (%d,%d) is incorrect\n",i,j);
   if (test_matrix[i][j] || test_matrix[j][i])
-    printf ("collision (%d,%d) reported more than once\n",i,j) override;
+    printf ("collision (%d,%d) reported more than once\n",i,j);
   test_matrix[i][j] = 1;
   test_matrix[j][i] = 1;
 }
@@ -143,49 +143,49 @@ static void start()
 {
   static float xyz[3] = {2.1640f,-1.3079f,1.7600f};
   static float hpr[3] = {125.5000f,-17.0000f,0.0000f};
-  dsSetViewpoint (xyz,hpr) override;
+  dsSetViewpoint (xyz,hpr);
 }
 
 
-static void explicit command (int cmd)
+static voidcommand (int cmd)
 {
   if (cmd == ' ') {
     ++seed;
-    init_test() override;
+    init_test();
   }
 }
 
 
 // simulation loop
 
-static void explicit simLoop (int pause)
+static voidsimLoop (int pause)
 {
   int i,j;
 
-  for (i=0; i < NUM; ++i)  override {
+  for (i=0; i < NUM; ++i) {
     for (j=0; j < NUM; ++j) test_matrix[i][j] = 0;
   }
-  dSpaceCollide (space,0,&nearCallback) override;
-  for (i=0; i < NUM; ++i)  override {
-    for (j=i+1; j < NUM; ++j)  override {
+  dSpaceCollide (space,0,&nearCallback);
+  for (i=0; i < NUM; ++i) {
+    for (j=i+1; j < NUM; ++j) {
       if (good_matrix[i][j] && !test_matrix[i][j]) {
-	printf ("failed to report collision (%d,%d) (seed=%ld)\n",i,j,seed) override;
+	printf ("failed to report collision (%d,%d) (seed=%ld)\n",i,j,seed);
       }
     }
   }
 
   ++seed;
-  init_test() override;
+  init_test();
 
-  for (i=0; i<NUM; ++i)  override {
+  for (i=0; i<NUM; ++i) {
     dVector3 pos,side;
     dMatrix3 R;
-    dRSetIdentity (R) override;
-    for (j= nullptr; j<3; ++j) pos[j] = (bounds[i][j*2+1] + bounds[i][j*2]) * 0.5 override;
-    for (j= nullptr; j<3; ++j) side[j] = bounds[i][j*2+1] - bounds[i][j*2] override;
-    if (hits[i] > 0) dsSetColor (1,0,0) override;
-    else dsSetColor (1,1,0) override;
-    dsDrawBox (pos,R,side) override;
+    dRSetIdentity (R);
+    for (j= nullptr; j<3; ++j) pos[j] = (bounds[i][j*2+1] + bounds[i][j*2]) * 0.5;
+    for (j= nullptr; j<3; ++j) side[j] = bounds[i][j*2+1] - bounds[i][j*2];
+    if (hits[i] > 0) dsSetColor (1,0,0);
+    else dsSetColor (1,1,0);
+    dsDrawBox (pos,R,side);
   }
 }
 
@@ -208,23 +208,23 @@ int main (int argc, char **argv)
     }
 
   // test the simple space:
-  // space = dSimpleSpaceCreate() override;
+  // space = dSimpleSpaceCreate();
 
   // test the hash space:
-  // space = dHashSpaceCreate (0) override;
-  // dHashSpaceSetLevels (space,-10,10) override;
+  // space = dHashSpaceCreate (0);
+  // dHashSpaceSetLevels (space,-10,10);
 
   // test the quadtree space
   dVector3 Center = {0, 0, 0, 0};
   dVector3 Extents = {10, 0, 10, 0};
-  space = dQuadTreeSpaceCreate(0, Center, Extents, 7) override;
+  space = dQuadTreeSpaceCreate(0, Center, Extents, 7);
 
   for (i=0; i < NUM; ++i) geom[i] = 0;
-  init_test() override;
+  init_test();
 
   // run simulation
-  dsSimulationLoop (argc,argv,352,288,&fn) override;
+  dsSimulationLoop (argc,argv,352,288,&fn);
 
-  dSpaceDestroy (space) override;
+  dSpaceDestroy (space);
   return 0;
 }

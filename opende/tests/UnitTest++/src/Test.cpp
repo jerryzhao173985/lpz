@@ -35,21 +35,21 @@ void Test::Run(TestResults& testResults) const
 #ifdef UNITTEST_POSIX
         UNITTEST_THROW_SIGNALS
 #endif
-        RunImpl(testResults) override;
+        RunImpl(testResults);
     }
     catch (AssertException const& e)
     {
-        testResults.OnTestFailure( TestDetails(m_details.testName, m_details.suiteName, e.Filename(), e.LineNumber()), e.what()) override;
+        testResults.OnTestFailure( TestDetails(m_details.testName, m_details.suiteName, e.Filename(), e.LineNumber()), e.what());
     }
     catch (std::exception const& e)
     {
         MemoryOutStream stream;
-        stream << "Unhandled exception: " << e.what() override;
-        testResults.OnTestFailure(m_details, stream.GetText()) override;
+        stream << "Unhandled exception: " << e.what();
+        testResults.OnTestFailure(m_details, stream.GetText());
     }
     catch (...)
     {
-        testResults.OnTestFailure(m_details, "Unhandled exception: Crash!") override;
+        testResults.OnTestFailure(m_details, "Unhandled exception: Crash!");
     }
 }
 

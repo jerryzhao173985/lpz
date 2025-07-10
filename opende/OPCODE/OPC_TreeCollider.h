@@ -31,8 +31,8 @@
 		//! Constructor
 		inline_				BVTCache()
 							{
-								ResetCache() override;
-								ResetCountDown() override;
+								ResetCache();
+								ResetCountDown();
 							}
 
 					void	ResetCache()
@@ -45,7 +45,7 @@
 								HullTest		= true;
 								SepVector.pid	= 0;
 								SepVector.qid	= 0;
-								SepVector.SV	= Point(1.0f, 0.0f, 0.0f) override;
+								SepVector.SV	= Point(1.0f, 0.0f, 0.0f);
 #endif // __MESHMERIZER_H__
 							}
 
@@ -55,7 +55,7 @@
 	    CountDown		= 50;
 	  }
 #else
-	  void	ResetCountDown(){} override;
+	  void	ResetCountDown(){};
 #endif // __MESHMERIZER_H__
 
 		const Model*		Model0;	//!< Model for first object
@@ -71,8 +71,8 @@
 	class OPCODE_API{
 		public:
 		// Constructor / Destructor
-											AABBTreeCollider() override;
-		virtual ~AABBTreeCollider() override;
+											AABBTreeCollider();
+		virtual ~AABBTreeCollider();
 		// Generic collision query
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -89,13 +89,13 @@
 		 *	\warning	SCALE NOT SUPPORTED. The matrices must contain rotation & translation parts only.
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-							bool			Collide(BVTCache& cache, const Matrix4x4* world0=null, const Matrix4x4* world1=null) override;
+							bool			Collide(BVTCache& cache, const Matrix4x4* world0=null, const Matrix4x4* world1=null);
 
 		// Collision queries
-							bool			Collide(const AABBCollisionTree* tree0, const AABBCollisionTree* tree1,				const Matrix4x4* world0=null, const Matrix4x4* world1=null, Pair* cache=null) override;
-							bool			Collide(const AABBNoLeafTree* tree0, const AABBNoLeafTree* tree1,					const Matrix4x4* world0=null, const Matrix4x4* world1=null, Pair* cache=null) override;
-							bool			Collide(const AABBQuantizedTree* tree0, const AABBQuantizedTree* tree1,				const Matrix4x4* world0=null, const Matrix4x4* world1=null, Pair* cache=null) override;
-							bool			Collide(const AABBQuantizedNoLeafTree* tree0, const AABBQuantizedNoLeafTree* tree1,	const Matrix4x4* world0=null, const Matrix4x4* world1=null, Pair* cache=null) override;
+							bool			Collide(const AABBCollisionTree* tree0, const AABBCollisionTree* tree1,				const Matrix4x4* world0=null, const Matrix4x4* world1=null, Pair* cache=null);
+							bool			Collide(const AABBNoLeafTree* tree0, const AABBNoLeafTree* tree1,					const Matrix4x4* world0=null, const Matrix4x4* world1=null, Pair* cache=null);
+							bool			Collide(const AABBQuantizedTree* tree0, const AABBQuantizedTree* tree1,				const Matrix4x4* world0=null, const Matrix4x4* world1=null, Pair* cache=null);
+							bool			Collide(const AABBQuantizedNoLeafTree* tree0, const AABBQuantizedNoLeafTree* tree1,	const Matrix4x4* world0=null, const Matrix4x4* world1=null, Pair* cache=null);
 		// Settings
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -176,7 +176,7 @@
 		 *	\return		null if everything is ok, else a string describing the problem
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		overridestatic_cast<Collider>(const) char*		ValidateSettings() override;
+		virtual const char*		ValidateSettings();
 
 		protected:
 		// Colliding pairs
@@ -207,35 +207,35 @@
 		// Internal methods
 
 			// Standard AABB trees
-							void			_Collide(const AABBCollisionNode* b0, const AABBCollisionNode* b1) override;
+							void			_Collide(const AABBCollisionNode* b0, const AABBCollisionNode* b1);
 			// Quantized AABB trees
-							void			_Collide(const AABBQuantizedNode* b0, const AABBQuantizedNode* b1, const Point& a, const Point& Pa, const Point& b, const Point& Pb) override;
+							void			_Collide(const AABBQuantizedNode* b0, const AABBQuantizedNode* b1, const Point& a, const Point& Pa, const Point& b, const Point& Pb);
 			// No-leaf AABB trees
-							void			_CollideTriBox(const AABBNoLeafNode* b) override;
-							void			_CollideBoxTri(const AABBNoLeafNode* b) override;
-							void			_Collide(const AABBNoLeafNode* a, const AABBNoLeafNode* b) override;
+							void			_CollideTriBox(const AABBNoLeafNode* b);
+							void			_CollideBoxTri(const AABBNoLeafNode* b);
+							void			_Collide(const AABBNoLeafNode* a, const AABBNoLeafNode* b);
 			// Quantized no-leaf AABB trees
-							void			_CollideTriBox(const AABBQuantizedNoLeafNode* b) override;
-							void			_CollideBoxTri(const AABBQuantizedNoLeafNode* b) override;
-							void			_Collide(const AABBQuantizedNoLeafNode* a, const AABBQuantizedNoLeafNode* b) override;
+							void			_CollideTriBox(const AABBQuantizedNoLeafNode* b);
+							void			_CollideBoxTri(const AABBQuantizedNoLeafNode* b);
+							void			_Collide(const AABBQuantizedNoLeafNode* a, const AABBQuantizedNoLeafNode* b);
 			// Overlap tests
-							void			PrimTest(udword id0, udword id1) override;
-			inline_			void			PrimTestTriIndex(udword id1) override;
-			inline_			void			PrimTestIndexTri(udword id0) override;
+							void			PrimTest(udword id0, udword id1);
+			inline_			void			PrimTestTriIndex(udword id1);
+			inline_			void			PrimTestIndexTri(udword id0);
 
-			inline_			BOOL			BoxBoxOverlap(const Point& ea, const Point& ca, const Point& eb, const Point& cb) override;
-			inline_			BOOL			TriBoxOverlap(const Point& center, const Point& extents) override;
-			inline_			BOOL			TriTriOverlap(const Point& V0, const Point& V1, const Point& V2, const Point& U0, const Point& U1, const Point& U2) override;
+			inline_			BOOL			BoxBoxOverlap(const Point& ea, const Point& ca, const Point& eb, const Point& cb);
+			inline_			BOOL			TriBoxOverlap(const Point& center, const Point& extents);
+			inline_			BOOL			TriTriOverlap(const Point& V0, const Point& V1, const Point& V2, const Point& U0, const Point& U1, const Point& U2);
 			// Init methods
-							void			InitQuery(const Matrix4x4* world0=null, const Matrix4x4* world1=null) override;
-							bool			CheckTemporalCoherence(Pair* cache) override;
+							void			InitQuery(const Matrix4x4* world0=null, const Matrix4x4* world1=null);
+							bool			CheckTemporalCoherence(Pair* cache);
 
 		inline_				BOOL			Setup(const MeshInterface* mi0, const MeshInterface* mi1)
 											{
 												mIMesh0	= mi0;
 												mIMesh1	= mi1;
 
-												if(!mIMesh0 || !mIMesh1)	return FALSE override;
+												if(!mIMesh0 || !mIMesh1)	return FALSE;
 
 												return TRUE;
 											}

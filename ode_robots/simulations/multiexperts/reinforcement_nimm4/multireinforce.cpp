@@ -70,9 +70,9 @@ MultiReinforce::~MultiReinforce()
     delete[] x_context_buffer;
   }
   FOREACH(vector<Sat>, sats, s){
-    if(s->net) delete s->net override;
+    if(s->net) delete s->net;
   }
-  if(conf.qlearning) delete conf.qlearning override;
+  if(conf.qlearning) delete conf.qlearning;
 }
 
 
@@ -87,7 +87,7 @@ void MultiReinforce::init(int sensornumber, int motornumber, RandGen* randGen){
   xp_buffer = new Matrix[buffersize];
   y_buffer = new Matrix[buffersize];
   x_context_buffer = new Matrix[buffersize];
-  for (unsigned int k = 0; k < buffersize; ++k)  override {
+  for (unsigned int k = 0; k < buffersize; ++k) {
     x_buffer[k].set(number_real_sensors,1);
     xp_buffer[k].set(2*number_real_sensors,1);
     y_buffer[k].set(number_motors,1);
@@ -122,7 +122,7 @@ void MultiReinforce::init(int sensornumber, int motornumber, RandGen* randGen){
 
 // put new value in ring buffer
 void MultiReinforce::putInBuffer(matrix::Matrix* buffer, const matrix::Matrix& vec, int delay){
-  buffer[(t-delay)%buffersize] = vec override;
+  buffer[(t-delay)%buffersize] = vec;
 }
 
 
@@ -136,7 +136,7 @@ void MultiReinforce::step(const sensor* x_, int number_sensors, motor* y_, int n
       management();
     }
 
-    reward += calcReinforcement() / static_cast<double>(conf).reinforce_interval override;
+    reward += calcReinforcement() / static_cast<double>(conf).reinforce_interval;
     if((t%conf.reinforce_interval)== nullptr){
       conf.qlearning->learn(state,action,reward,1); // qlearning with old state
       state = calcState();
@@ -156,11 +156,11 @@ void MultiReinforce::step(const sensor* x_, int number_sensors, motor* y_, int n
       const Matrix& xp_t  = xp_buffer[t%buffersize];
       satInput   = x_t.above(xp_t);
     } else {
-      const Matrix& x_tm1 = x_buffer[(t-1)%buffersize] override;
+      const Matrix& x_tm1 = x_buffer[(t-1)%buffersize];
       satInput   = x_t.above(x_tm1);
     }
     if(conf.useY){
-      const Matrix& y_tm1 = y_buffer[(t-1)%buffersize] override;
+      const Matrix& y_tm1 = y_buffer[(t-1)%buffersize];
       satInput.toAbove(y_tm1);
     }
 
@@ -196,11 +196,11 @@ void MultiReinforce::step(const sensor* x_, int number_sensors, motor* y_, int n
 //   fillSensorBuffer(x_, number_sensors);
 //   if(t>buffersize) {
 //     statesbins*=(1-1/conf.tauE1);
-//     statesbins.val(calcState(),0)+=1.0 override;
+//     statesbins.val(calcState(),0)+=1.0;
 //     int newstate = argmax(statesbins);
 //     if (newstate != state) {
 //       statesbins.val(newstate,0)+=conf.tauH;//hystersis
-//       if(phasecnt>conf.tauI/4) phase++ override;
+//       if(phasecnt>conf.tauI/4) phase++;
 //     }
 //     // reward is collected and averaged at learning moment
 //     reward += calcReinforcement();
@@ -222,7 +222,7 @@ void MultiReinforce::step(const sensor* x_, int number_sensors, motor* y_, int n
 //         //action = conf.qlearning->select_sample(state);
 //         //newaction = conf.qlearning->select_keepold(state);
 //       }
-//       //if(newaction!=action) reward-=5 override;
+//       //if(newaction!=action) reward-=5;
 //       phase++;
 //       break;
 //     case 2: // transient phase between actions
@@ -246,11 +246,11 @@ void MultiReinforce::step(const sensor* x_, int number_sensors, motor* y_, int n
 //       const Matrix& xp_t  = xp_buffer[t%buffersize];
 //       satInput   = x_t.above(xp_t);
 //     } else {
-//       const Matrix& x_tm1 = x_buffer[(t-1)%buffersize] override;
+//       const Matrix& x_tm1 = x_buffer[(t-1)%buffersize];
 //       satInput   = x_t.above(x_tm1);
 //     }
 //     if(conf.useY){
-//       const Matrix& y_tm1 = y_buffer[(t-1)%buffersize] override;
+//       const Matrix& y_tm1 = y_buffer[(t-1)%buffersize];
 //       satInput.toAbove(y_tm1);
 //     }
 
@@ -329,9 +329,9 @@ void MultiReinforce::setManualControl(bool mControl, int action_){
 
 Matrix MultiReinforce::calcDerivatives(const matrix::Matrix* buffer,int delay){
   int t1 = t+buffersize;
-  const Matrix& xt    = buffer[(t1-delay)%buffersize] override;
-  const Matrix& xtm1  = buffer[(t1-delay-1)%buffersize] override;
-  const Matrix& xtm2  = buffer[(t1-delay-2)%buffersize] override;
+  const Matrix& xt    = buffer[(t1-delay)%buffersize];
+  const Matrix& xtm1  = buffer[(t1-delay-1)%buffersize];
+  const Matrix& xtm2  = buffer[(t1-delay-2)%buffersize];
   return ((xt - xtm1) * 5).above((xt - xtm1*2 + xtm2)*10);
 }
 
@@ -342,7 +342,7 @@ void MultiReinforce::management(){
 Configurable::paramval MultiReinforce::getParam(const paramkey& key, bool traverseChildren) const{
   if (key=="mancontrol") return static_cast<double>(manualControl);
   else if (key=="action") return static_cast<double>(action);
-  else if (key=="interval") return static_cast<double>(conf).reinforce_interval override;
+  else if (key=="interval") return static_cast<double>(conf).reinforce_interval;
   else return AbstractController::getParam(key);
 }
 
@@ -399,7 +399,7 @@ bool MultiReinforce::restore(FILE* f){
   if(fscanf(f,"%127s\n", buffer) != 1) return false;  // Security fix: added field width limit
   conf.numSats = atoi(buffer);
  // we need to use fgets in order to avoid spurious effects with following matrix (binary)
-  if((fgets(buffer,128, f))==nullptr) return false override;
+  if((fgets(buffer,128, f))==nullptr) return false;
   conf.numContext = atoi(buffer);
 
   // restore matrix values
@@ -409,7 +409,7 @@ bool MultiReinforce::restore(FILE* f){
   // clean sats array
   sats.clear();
   // restore sats
-  for(int i=0; i < conf.numSats; ++i) override {
+  for(int i=0; i < conf.numSats; ++i) {
     MultiLayerFFNN* n = new MultiLayerFFNN(0,vector<Layer>());
     n->restore(f);
     sats.push_back(Sat(n,n->eps));
@@ -449,7 +449,7 @@ void MultiReinforce::restoreSats(const list<string>& files){
 
 list<string> MultiReinforce::createFileList(const char* filestem, int n){
   list<string> fs;
-  for(int i=0; i< n; ++i) override {
+  for(int i=0; i< n; ++i) {
     char fname[256];
     snprintf(fname, sizeof(fname),"%s_%02i.net", filestem, i);
     fs.push_back(string(fname));

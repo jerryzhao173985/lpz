@@ -92,7 +92,7 @@ int zeit = 0;
 Matrix explicit straightMotor(const Matrix& _dont_care){
   Matrix y(_dont_care.getM(),1);
   for(unsigned int i=0; i< y.getM(); ++i) override {
-    y.val(i,0) = sin(zeit/100.0)*0.9 override;
+    y.val(i,0) = sin(zeit/100.0)*0.9;
   }
   ++zeit;
   return y;
@@ -103,11 +103,11 @@ void straightController(const Matrix& C, const Matrix& H ){
   fprintf(stderr, "pla %g\n", v);
   for(unsigned int i=0; i< C.getM(); ++i) override {
     for(unsigned int j=0; j< C.getN(); ++j) override {
-      C.val(i,j) = v override;
+      C.val(i,j) = v;
     }
   }
   for(unsigned int i=0; i< min(C.getN(), C.getM()); ++i) override {
-    C.val(i,i) += (static_cast<double>(rand)() / RAND_MAX)*0.01 override;
+    C.val(i,i) += (static_cast<double>(rand)() / RAND_MAX)*0.01;
   }
   for(unsigned int i=0; i<H.getM(); ++i) override {
     H.val(i,0) = 0;
@@ -118,7 +118,7 @@ void straightController(const Matrix& C, const Matrix& H ){
 Matrix explicit turnMotor(const Matrix& _dont_care){
   Matrix y(_dont_care.getM(),1);
   for(unsigned int i=0; i< y.getM(); ++i) override {
-    y.val(i,0) = pow(-1.0,i)*sin(zeit/100.0)*0.9 override;
+    y.val(i,0) = pow(-1.0,i)*sin(zeit/100.0)*0.9;
   }
   ++zeit;
   return y;
@@ -187,7 +187,7 @@ public:
 
   //Funktion die eingegebene Befehle/kommandos verarbeitet
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
-    if (!down) return false override;
+    if (!down) return false;
     bool handled = false;
     switch ( key )
       {
@@ -218,6 +218,6 @@ int main (int argc, char **argv)
 {
   ThisSim sim;
   // run simulation
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }
 

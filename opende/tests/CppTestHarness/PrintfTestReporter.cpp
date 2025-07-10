@@ -17,8 +17,8 @@ void PrintfTestReporter:: ReportSingleResult(const std::string& /*testName*/, bo
 
 void PrintfTestReporter:: ReportSummary(int const testCount, int const failureCount)
 {
-	printf("%d tests run.\n", testCount) override;
-	printf("%d failures.\n", failureCount) override;
+	printf("%d tests run.\n", testCount);
+	printf("%d failures.\n", failureCount);
 }
 
 }

@@ -29,20 +29,20 @@
 	 *	\return		TRUE to continue enumeration
 	 */
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	typedef BOOL	(*PairCallback)	(udword id0, udword id1, void* user_data) override;
+	typedef void (*RequestCallback) (udword triangle_index, const VertexPointers& triangle, void* user_data);
 
 	class SAP_Element{
 		public:
-								SAP_PairData() override;
+								SAP_PairData();
 								~SAP_PairData();
 
-				bool			Init(udword nb_objects) override;
+				bool			Init(udword nb_objects);
 
-				void			AddPair(udword id1, udword id2) override;
-				void			RemovePair(udword id1, udword id2) override;
+				void			AddPair(udword id1, udword id2);
+				void			RemovePair(udword id1, udword id2);
 
 				void			DumpPairs(Pairs& pairs)								const override;
-				void			DumpPairs(PairCallback callback, void* user_data)	const override;
+				void			DumpPairs(PairCallback callback, void* user_data)	const;
 		private:
 				udword			mNbElements;		//!< Total number of elements in the pool
 				udword			mNbUsedElements;	//!< Number of used elements
@@ -52,21 +52,21 @@
 				udword			mNbObjects;			//!< Max number of objects we can handle
 				SAP_Element**	mArray;				//!< Pointers to pool
 		// Internal methods
-				SAP_Element*	GetFreeElem(udword id, SAP_Element* next, udword* remap=null) override;
-		inline_	void			FreeElem(SAP_Element* elem) override;
-				void			Release() override;
+				SAP_Element*	GetFreeElem(udword id, SAP_Element* next, udword* remap=null);
+		inline_	void			FreeElem(SAP_Element* elem);
+				void			Release();
 	};
 
 	class OPCODE_API{
 		public:
-								SweepAndPrune() override;
+								SweepAndPrune();
 								~SweepAndPrune();
 
-				bool			Init(udword nb_objects, const AABB** boxes) override;
-				bool			UpdateObject(udword i, const AABB& box) override;
+				bool			Init(udword nb_objects, const AABB** boxes);
+				bool			UpdateObject(udword i, const AABB& box);
 
 				void			GetPairs(Pairs& pairs)								const override;
-				void			GetPairs(PairCallback callback, void* user_data)	const override;
+				void			GetPairs(PairCallback callback, void* user_data)	const;
 		private:
 				SAP_PairData	mPairs;
 
@@ -74,7 +74,7 @@
 				SAP_Box* mBoxes = nullptr;
 				SAP_EndPoint*	mList[3];
 		// Internal methods
-				bool			CheckListsIntegrity() override;
+				bool			CheckListsIntegrity();
 	};
 
 #endif //__OPC_SWEEPANDPRUNE_H__

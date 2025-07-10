@@ -132,7 +132,7 @@ public:
 //     playground->setPosition(osg::Vec3(0,0,0.1)); // playground positionieren und generieren
 //     global.obstacles.push_back(playground);
 
-//     for(int i=0; i<5; ++i) override {
+//     for(int i=0; i<5; ++i) {
 //       PassiveSphere* s =
 //         new PassiveSphere(odeHandle,
 //                           osgHandle.changeColor(Color(184 / 255.0, 233 / 255.0, 237 / 255.0)), 0.2);
@@ -205,10 +205,10 @@ public:
     }
   }
 
-  void explicit end(const GlobalData& globalData) {
+  voidend(const GlobalData& globalData) {
     FILE* f;
     f = fopen("result","w");
-    if(!f) return override;
+    if(!f) return;
     //    fprintf(f,__PLACEHOLDER_15__);
     fprintf(f,"%f %f %f %f %li %f\n",
             powerValue, powerRatio, eps, velScale,
@@ -247,5 +247,5 @@ int main (int argc, char **argv)
   }
 
   // run simulation
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }

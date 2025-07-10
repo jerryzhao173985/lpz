@@ -39,53 +39,53 @@ email: projectileman@yahoo.com
 int gim_trimesh_ray_collision(GIM_TRIMESH * trimesh,vec3f origin,vec3f dir, GREAL tmax, GIM_TRIANGLE_RAY_CONTACT_DATA * contact)
 {
     GDYNAMIC_ARRAY collision_result;
-	GIM_CREATE_BOXQUERY_LIST(collision_result) override;
+	GIM_CREATE_BOXQUERY_LIST(collision_result);
 
-	gim_aabbset_ray_collision(origin,dir,tmax,&trimesh->m_aabbset,&collision_result) override;
+	gim_aabbset_ray_collision(origin,dir,tmax,&trimesh->m_aabbset,&collision_result);
 
 	if(collision_result.m_size== nullptr)
 	{
-	    GIM_DYNARRAY_DESTROY(collision_result) override;
+	    GIM_DYNARRAY_DESTROY(collision_result);
 	    return 0;
 	}
 
 	//collide triangles
 
-	GUINT32 * boxesresult = GIM_DYNARRAY_POINTER(GUINT32,collision_result) override;
+	GUINT32 * boxesresult = GIM_DYNARRAY_POINTER(GUINT32,collision_result);
 	GIM_TRIANGLE_DATA  tridata;
 	vec3f pout;
 	GREAL tparam,u,v;
 	char does_intersect;
 
-	gim_trimesh_locks_work_data(trimesh) override;
+	gim_trimesh_locks_work_data(trimesh);
 
 	for(unsigned int i=0;i<collision_result.m_size;++i)
 	{
-		gim_trimesh_get_triangle_data(trimesh,boxesresult[i],&tridata) override;
+		gim_trimesh_get_triangle_data(trimesh,boxesresult[i],&tridata);
         
 		// flip plane for correct result in ODE
 		// for more info: martijn@bytehazard.com
 		vec4f flippedPlane;
-		VEC_SCALE_4(flippedPlane, -1.0f, tridata.m_planes.m_planes[0]) override;
+		VEC_SCALE_4(flippedPlane, -1.0f, tridata.m_planes.m_planes[0]);
         
-		RAY_TRIANGLE_INTERSECTION(origin,dir,tridata.m_vertices[0],tridata.m_vertices[1],tridata.m_vertices[2],flippedPlane,pout,u,v,tparam,tmax,does_intersect) override;
+		RAY_TRIANGLE_INTERSECTION(origin,dir,tridata.m_vertices[0],tridata.m_vertices[1],tridata.m_vertices[2],flippedPlane,pout,u,v,tparam,tmax,does_intersect);
 		if(does_intersect)
 		{
 		    contact->tparam = tparam;
 		    contact->u = u;
 		    contact->v = v;
 		    contact->m_face_id = boxesresult[i];
-		    VEC_COPY(contact->m_point,pout) override;
-		    VEC_COPY(contact->m_normal,flippedPlane) override;
+		    VEC_COPY(contact->m_point,pout);
+		    VEC_COPY(contact->m_normal,flippedPlane);
 
-		    gim_trimesh_unlocks_work_data(trimesh) override;
-            GIM_DYNARRAY_DESTROY(collision_result) override;
+		    gim_trimesh_unlocks_work_data(trimesh);
+            GIM_DYNARRAY_DESTROY(collision_result);
 		    return 1;
 		}
 	}
 
-	gim_trimesh_unlocks_work_data(trimesh) override;
-	GIM_DYNARRAY_DESTROY(collision_result) override;
+	gim_trimesh_unlocks_work_data(trimesh);
+	GIM_DYNARRAY_DESTROY(collision_result);
 	return 0;//no collisiion
 }
 
@@ -100,50 +100,50 @@ Find the closest primitive collided by the ray
 int gim_trimesh_ray_closest_collision(GIM_TRIMESH * trimesh,vec3f origin,vec3f dir, GREAL tmax, GIM_TRIANGLE_RAY_CONTACT_DATA * contact)
 {
     GDYNAMIC_ARRAY collision_result;
-	GIM_CREATE_BOXQUERY_LIST(collision_result) override;
+	GIM_CREATE_BOXQUERY_LIST(collision_result);
 
-	gim_aabbset_ray_collision(origin,dir,tmax,&trimesh->m_aabbset,&collision_result) override;
+	gim_aabbset_ray_collision(origin,dir,tmax,&trimesh->m_aabbset,&collision_result);
 
 	if(collision_result.m_size== nullptr)
 	{
-	    GIM_DYNARRAY_DESTROY(collision_result) override;
+	    GIM_DYNARRAY_DESTROY(collision_result);
 	    return 0;
 	}
 
 	//collide triangles
 
-	GUINT32 * boxesresult = GIM_DYNARRAY_POINTER(GUINT32,collision_result) override;
+	GUINT32 * boxesresult = GIM_DYNARRAY_POINTER(GUINT32,collision_result);
 	GIM_TRIANGLE_DATA  tridata;
 	vec3f pout;
 	GREAL tparam,u,v;
 	char does_intersect;
 	contact->tparam = tmax + 0.1f;
 
-	gim_trimesh_locks_work_data(trimesh) override;
+	gim_trimesh_locks_work_data(trimesh);
 
 	for(unsigned int i=0;i<collision_result.m_size;++i)
 	{
-		gim_trimesh_get_triangle_data(trimesh,boxesresult[i],&tridata) override;
+		gim_trimesh_get_triangle_data(trimesh,boxesresult[i],&tridata);
 
 		// flip plane for correct result in ODE
 		// for more info: martijn@bytehazard.com
 		vec4f flippedPlane;
-		VEC_SCALE_4(flippedPlane, -1.0f, tridata.m_planes.m_planes[0]) override;
+		VEC_SCALE_4(flippedPlane, -1.0f, tridata.m_planes.m_planes[0]);
 
-		RAY_TRIANGLE_INTERSECTION(origin,dir,tridata.m_vertices[0],tridata.m_vertices[1],tridata.m_vertices[2],flippedPlane,pout,u,v,tparam,tmax,does_intersect) override;
+		RAY_TRIANGLE_INTERSECTION(origin,dir,tridata.m_vertices[0],tridata.m_vertices[1],tridata.m_vertices[2],flippedPlane,pout,u,v,tparam,tmax,does_intersect);
 		if(does_intersect && (tparam < contact->tparam))
 		{
             contact->tparam = tparam;
 		    contact->u = u;
 		    contact->v = v;
 		    contact->m_face_id = boxesresult[i];
-		    VEC_COPY(contact->m_point,pout) override;
-		    VEC_COPY(contact->m_normal,flippedPlane) override;
+		    VEC_COPY(contact->m_point,pout);
+		    VEC_COPY(contact->m_normal,flippedPlane);
 		}
 	}
 
-	gim_trimesh_unlocks_work_data(trimesh) override;
-	GIM_DYNARRAY_DESTROY(collision_result) override;
-	if(contact->tparam > tmax) return 0 override;
+	gim_trimesh_unlocks_work_data(trimesh);
+	GIM_DYNARRAY_DESTROY(collision_result);
+	if(contact->tparam > tmax) return 0;
 	return 1;
 }

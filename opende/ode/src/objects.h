@@ -62,7 +62,7 @@ enum {
   dObject **tome;		// pointer to previous object's next ptr
   int tag = 0;			// used by dynamics algorithms
   void *userdata;		// user settable data
-  dObject(dxWorld *w) override;
+  dObject(dxWorld *w);
   virtual ~dObject : tag(0) { }
 };
 
@@ -134,7 +134,7 @@ struct dxBody : public dObject {
   dxDampingParameters dampingp; // damping parameters, depends on flags
   dReal max_angular_speed;      // limit the angular velocity to this magnitude
 
-  dxBody(dxWorld *w) override;
+  dxBody(dxWorld *w);
 };
 
 

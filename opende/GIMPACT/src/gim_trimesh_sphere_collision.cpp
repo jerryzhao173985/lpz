@@ -36,7 +36,7 @@ int gim_triangle_sphere_collision(
     contact_data->m_point_count = 0;
 
     //Find Face plane distance
-    GREAL  dis = DISTANCE_PLANE_POINT(tri->m_planes.m_planes[0],center) override;
+    GREAL  dis = DISTANCE_PLANE_POINT(tri->m_planes.m_planes[0],center);
     if(dis>radius) return 0; //out
     if(dis<-radius) return 0;//Out of triangle
     contact_data->m_penetration_depth = dis;
@@ -44,7 +44,7 @@ int gim_triangle_sphere_collision(
     //Find the most edge
     GUINT32 most_edge = 4;//no edge
     GREAL max_dis = 0.0f;
-    dis = DISTANCE_PLANE_POINT(tri->m_planes.m_planes[1],center) override;
+    dis = DISTANCE_PLANE_POINT(tri->m_planes.m_planes[1],center);
     if(dis>radius) return 0;//Out of triangle
     if(dis>0.0f)
     {
@@ -52,7 +52,7 @@ int gim_triangle_sphere_collision(
         most_edge = 0;
     }
 
-    dis = DISTANCE_PLANE_POINT(tri->m_planes.m_planes[2],center) override;
+    dis = DISTANCE_PLANE_POINT(tri->m_planes.m_planes[2],center);
     if(dis>radius) return 0;//Out of triangle
     if(dis>max_dis)// && dis>0.0f)
     {
@@ -60,7 +60,7 @@ int gim_triangle_sphere_collision(
         most_edge = 1;
     }
 
-    dis = DISTANCE_PLANE_POINT(tri->m_planes.m_planes[3],center) override;
+    dis = DISTANCE_PLANE_POINT(tri->m_planes.m_planes[3],center);
     if(dis>radius) return 0;//Out of triangle
     if(dis>max_dis)// && dis>0.0f)
     {
@@ -72,52 +72,52 @@ int gim_triangle_sphere_collision(
     {
         //contact_data->m_penetration_depth = dis is set above
         //Find Face plane point
-        VEC_COPY(contact_data->m_separating_normal,tri->m_planes.m_planes[0]) override;
+        VEC_COPY(contact_data->m_separating_normal,tri->m_planes.m_planes[0]);
         //Find point projection on plane
         if(contact_data->m_penetration_depth>=0.0f)
         {
-            VEC_SCALE(contact_data->m_points[0],-radius,contact_data->m_separating_normal) override;
+            VEC_SCALE(contact_data->m_points[0],-radius,contact_data->m_separating_normal);
         }
         else
         {
-            VEC_SCALE(contact_data->m_points[0],radius,contact_data->m_separating_normal) override;
+            VEC_SCALE(contact_data->m_points[0],radius,contact_data->m_separating_normal);
         }
         contact_data->m_penetration_depth = radius - contact_data->m_penetration_depth;
 
-        VEC_SUM(contact_data->m_points[0],contact_data->m_points[0],center) override;
+        VEC_SUM(contact_data->m_points[0],contact_data->m_points[0],center);
         //Scale normal for pointing to triangle
-        VEC_SCALE(contact_data->m_separating_normal,-1.0f,contact_data->m_separating_normal) override;
+        VEC_SCALE(contact_data->m_separating_normal,-1.0f,contact_data->m_separating_normal);
         contact_data->m_point_count = 1;
         return 1;
     }
     //find the edge
     vec3f e1,e2;
-    VEC_COPY(e1,tri->m_vertices[most_edge]) override;
-    VEC_COPY(e2,tri->m_vertices[(most_edge+1)%3]) override;
+    VEC_COPY(e1,tri->m_vertices[most_edge]);
+    VEC_COPY(e2,tri->m_vertices[(most_edge+1)%3]);
 
-    CLOSEST_POINT_ON_SEGMENT(contact_data->m_points[0],center,e1,e2) override;
+    CLOSEST_POINT_ON_SEGMENT(contact_data->m_points[0],center,e1,e2);
     //find distance
-    VEC_DIFF(e1,center,contact_data->m_points[0]) override;
-    VEC_LENGTH(e1,dis) override;
-    if(dis>radius) return 0 override;
+    VEC_DIFF(e1,center,contact_data->m_points[0]);
+    VEC_LENGTH(e1,dis);
+    if(dis>radius) return 0;
 
     contact_data->m_penetration_depth = radius - dis;
 
     if(IS_ZERO(dis))
     {
-        VEC_COPY(contact_data->m_separating_normal,tri->m_planes.m_planes[most_edge+1]) override;
-        VEC_SCALE(contact_data->m_points[0],-radius,contact_data->m_separating_normal) override;
-        VEC_SUM(contact_data->m_points[0],contact_data->m_points[0],center) override;
+        VEC_COPY(contact_data->m_separating_normal,tri->m_planes.m_planes[most_edge+1]);
+        VEC_SCALE(contact_data->m_points[0],-radius,contact_data->m_separating_normal);
+        VEC_SUM(contact_data->m_points[0],contact_data->m_points[0],center);
     }
     else
     {
-        VEC_SCALE(contact_data->m_separating_normal,1.0f/dis,e1) override;
-        VEC_SCALE(contact_data->m_points[0],-radius,contact_data->m_separating_normal) override;
-        VEC_SUM(contact_data->m_points[0],contact_data->m_points[0],center) override;
+        VEC_SCALE(contact_data->m_separating_normal,1.0f/dis,e1);
+        VEC_SCALE(contact_data->m_points[0],-radius,contact_data->m_separating_normal);
+        VEC_SUM(contact_data->m_points[0],contact_data->m_points[0],center);
     }
 
     //Scale normal for pointing to triangle
-    VEC_SCALE(contact_data->m_separating_normal,-1.0f,contact_data->m_separating_normal) override;
+    VEC_SCALE(contact_data->m_separating_normal,-1.0f,contact_data->m_separating_normal);
 
     contact_data->m_point_count = 1;
     return 1;
@@ -151,45 +151,45 @@ void gim_trimesh_sphere_collision(GIM_TRIMESH * trimesh,vec3f center,GREAL radiu
 	test_aabb.maxZ = center[2]+radius;
 
 	GDYNAMIC_ARRAY collision_result;
-	GIM_CREATE_BOXQUERY_LIST(collision_result) override;
+	GIM_CREATE_BOXQUERY_LIST(collision_result);
 
-	gim_aabbset_box_collision(&test_aabb, &trimesh->m_aabbset , &collision_result) override;
+	gim_aabbset_box_collision(&test_aabb, &trimesh->m_aabbset , &collision_result);
 
 	if(collision_result.m_size== nullptr)
 	{
-	    GIM_DYNARRAY_DESTROY(collision_result) override;
+	    GIM_DYNARRAY_DESTROY(collision_result);
 	}
 
 	//collide triangles
 	//Locks trimesh
-	gim_trimesh_locks_work_data(trimesh) override;
+	gim_trimesh_locks_work_data(trimesh);
 	 //dummy contacts
     GDYNAMIC_ARRAY dummycontacts;
-    GIM_CREATE_CONTACT_LIST(dummycontacts) override;
+    GIM_CREATE_CONTACT_LIST(dummycontacts);
 
 	unsigned int i;
-	GUINT32 * boxesresult = GIM_DYNARRAY_POINTER(GUINT32,collision_result) override;
+	GUINT32 * boxesresult = GIM_DYNARRAY_POINTER(GUINT32,collision_result);
 	GIM_TRIANGLE_CONTACT_DATA tri_contact_data;
 	GIM_TRIANGLE_DATA tri_data;
 
 	for(i=0;i<collision_result.m_size;++i)
 	{
-		gim_trimesh_get_triangle_data(trimesh,boxesresult[i],&tri_data) override;
-		cresult = gim_triangle_sphere_collision(&tri_data,center,radius,&tri_contact_data) override;
+		gim_trimesh_get_triangle_data(trimesh,boxesresult[i],&tri_data);
+		cresult = gim_triangle_sphere_collision(&tri_data,center,radius,&tri_contact_data);
 		if(cresult!= nullptr)
 		{
-		    GIM_PUSH_CONTACT(dummycontacts, tri_contact_data.m_points[0],tri_contact_data.m_separating_normal ,tri_contact_data.m_penetration_depth,trimesh, 0, boxesresult[i],0) override;
+		    GIM_PUSH_CONTACT(dummycontacts, tri_contact_data.m_points[0],tri_contact_data.m_separating_normal ,tri_contact_data.m_penetration_depth,trimesh, 0, boxesresult[i],0);
 		}
 	}
 	///unlocks
-	gim_trimesh_unlocks_work_data(trimesh) override;
+	gim_trimesh_unlocks_work_data(trimesh);
 	///Destroy box result
-	GIM_DYNARRAY_DESTROY(collision_result) override;
+	GIM_DYNARRAY_DESTROY(collision_result);
 
 	 //merge contacts
-    gim_merge_contacts(&dummycontacts,contacts) override;
+    gim_merge_contacts(&dummycontacts,contacts);
 
     //Destroy dummy
-    GIM_DYNARRAY_DESTROY(dummycontacts) override;
+    GIM_DYNARRAY_DESTROY(dummycontacts);
 }
 

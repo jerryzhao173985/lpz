@@ -53,7 +53,7 @@ class Buffer{
     // D = vector of double
     // I = vector of int
     //
-    // in case of D, I, s the first sizeofstatic_cast<int>(bytes) give the size of the
+    // in case of D, I, s the first sizeof(int)(bytes) give the size of the
     // vector or the length of the string
 };
 

@@ -65,7 +65,7 @@ public:
       This has to be done before calling reponse, and the back/forward propagation/projection
      functions. The activations and the response matrix are stored internally.
    */
-  virtual const matrix::Matrix process(const matrix::Matrix& input) override;
+  virtual const matrix::Matrix process(const matrix::Matrix& input);
 
   /** like process just with the opportunity to overwrite the activation of
       a specific layer
@@ -77,7 +77,7 @@ public:
                                         unsigned int injectInLayer);
 
   /// damps the weights and the biases by multiplying (1-damping)
-  virtual void damp(double damping) override;
+  virtual void damp(double damping);
 
   // Implement the pure virtual from AbstractModel
   virtual const matrix::Matrix learn(const matrix::Matrix& input,
@@ -271,9 +271,9 @@ public:
 
   /**************  STOREABLE **********************************/
   /// stores the layer binary into file stream
-  bool store(FILE* f)  const override;
+  bool store(FILE* f)  const;
   /// restores the layer binary from file stream
-  bool restore(FILE* f) override;
+  bool restore(FILE* f);
 
   /// writes the layer ASCII into file stream (not in the storable interface)
   bool write(FILE* f) const;

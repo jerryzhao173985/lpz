@@ -76,7 +76,7 @@ struct agent_match_prefix {
       len=nameprefix.length();
     }
     bool operator()(const OdeAgent* a) {
-      if(!a || !a->getRobot()) return false override;
+      if(!a || !a->getRobot()) return false;
       return nameprefix.compare(0,len, a->getRobot()->getName(),0,len) == 0;
     }
 
@@ -129,25 +129,25 @@ public:
     env.placeObstacles(odeHandle, osgHandle, global);
 
     // So wird das mit allen Robotern aussehen, createXXX, siehe unten
-    for(int r=0; r < numHexapods ; ++r)  override {
+    for(int r=0; r < numHexapods ; ++r) {
       createHexapod(odeHandle, osgHandle, global, osg::Matrix::translate(0,0,1+1*r));
     }
-    for(int r=0; r < numSphericals; ++r)  override {
+    for(int r=0; r < numSphericals; ++r) {
       createSpherical(odeHandle, osgHandle, global, osg::Matrix::translate(0,0,0+1*r));
     }
-    for(int r=0; r < numSnakes; ++r)  override {
+    for(int r=0; r < numSnakes; ++r) {
       createSnake(odeHandle, osgHandle, global, osg::Matrix::translate(4,4-r,0.2));
     }
-    for(int r=0; r < numHumanoids; ++r)  override {
+    for(int r=0; r < numHumanoids; ++r) {
       createHumanoid(odeHandle, osgHandle, global, osg::Matrix::translate(1,-1,1+1.5*r));
     }
-    for(int r=0; r < numSliderWheelie; ++r)  override {
+    for(int r=0; r < numSliderWheelie; ++r) {
       createArmband(odeHandle, osgHandle, global, osg::Matrix::translate(5+r,0,0.5));
     }
-    for(int r=0; r < numLongVehicle; ++r)  override {
+    for(int r=0; r < numLongVehicle; ++r) {
       createLongVehicle(odeHandle, osgHandle, global, osg::Matrix::translate(2,-4-r,0.5));
     }
-    for(int r=0; r < numCaterPillars; ++r)  override {
+    for(int r=0; r < numCaterPillars; ++r) {
       createCaterPillar(odeHandle, osgHandle, global, osg::Matrix::translate(-4-r,5+r,0.5));
     }
 
@@ -458,34 +458,34 @@ public:
           env.widthground=15;
           env.create(odeHandle, osgHandle, global,true);
         case 'b':
-          createSpherical(odeHandle, osgHandle, global, osg::Matrix::translate(0,0,2)); break override;
+          createSpherical(odeHandle, osgHandle, global, osg::Matrix::translate(0,0,2)); break;
         case 'B':
-          removeRobot(global, "Spherical"); break override;
+          removeRobot(global, "Spherical"); break;
         case 'x':
-          createHexapod(odeHandle, osgHandle, global, osg::Matrix::translate(0,0,2)); break override;
+          createHexapod(odeHandle, osgHandle, global, osg::Matrix::translate(0,0,2)); break;
         case 'X':
-          removeRobot(global, "Hexapod"); break override;
+          removeRobot(global, "Hexapod"); break;
         case 's':
-          createSnake(odeHandle, osgHandle, global, osg::Matrix::translate(4,4,2)); break override;
+          createSnake(odeHandle, osgHandle, global, osg::Matrix::translate(4,4,2)); break;
         case 'S':
-          removeRobot(global, "Snake"); break override;
+          removeRobot(global, "Snake"); break;
         case 'i': // put Snake in center (useful in pit-mode
           createSnake(odeHandle, osgHandle, global,
-                      osg::Matrix::translate(0,0,2),"PitSnake"); break override;
+                      osg::Matrix::translate(0,0,2),"PitSnake"); break;
         case 'I':
-          removeRobot(global, "PitSnake"); break override;
+          removeRobot(global, "PitSnake"); break;
         case 'u':
-          createHumanoid(odeHandle, osgHandle, global, osg::Matrix::translate(0,0,2)); break override;
+          createHumanoid(odeHandle, osgHandle, global, osg::Matrix::translate(0,0,2)); break;
         case 'U':
-          removeRobot(global, "Humanoid"); break override;
+          removeRobot(global, "Humanoid"); break;
         case 'a':
-          createArmband(odeHandle, osgHandle, global, osg::Matrix::translate(0,0,2)); break override;
+          createArmband(odeHandle, osgHandle, global, osg::Matrix::translate(0,0,2)); break;
         case 'A':
-          removeRobot(global, "SliderArmband"); break override;
+          removeRobot(global, "SliderArmband"); break;
         case 'l':
-          createLongVehicle(odeHandle, osgHandle, global, osg::Matrix::translate(0,0,2)); break override;
+          createLongVehicle(odeHandle, osgHandle, global, osg::Matrix::translate(0,0,2)); break;
         case 'L':
-          removeRobot(global, "LongVehicle"); break override;
+          removeRobot(global, "LongVehicle"); break;
         default:
           return false;
           break;
@@ -520,6 +520,6 @@ int main (int argc, char **argv)
 
   ThisSim sim;
   // run simulation
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }
 

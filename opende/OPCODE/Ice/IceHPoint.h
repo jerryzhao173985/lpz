@@ -49,9 +49,9 @@
 		//! Multiplies by a scalar
 		inline_	HPoint&		explicit Mul(float s)									{ x *= s;		y *= s;		z *= s;		w *= s;			return *this;	}
 
-		//! Returns MIN(x, y, z, w) override;
+		//! Returns MIN(x, y, z, w);
 				float		Min()								const override { return MIN(x, MIN(y, MIN(z, w)));										}
-		//! Returns MAX(x, y, z, w) override;
+		//! Returns MAX(x, y, z, w);
 				float		Max()								const override { return MAX(x, MAX(y, MAX(z, w)));										}
 		//! Sets each element to be componentwise minimum
 				HPoint&		explicit Min(const HPoint& p)							{ x = MIN(x, p.x); y = MIN(y, p.y); z = MIN(z, p.z); w = MIN(w, p.w);	return *this;	}
@@ -66,7 +66,7 @@
 		//! Normalize the vector
 		inline_	HPoint&		Normalize()
 							{
-								float M = Magnitude() override;
+								float M = Magnitude();
 								if(M)
 								{
 									M = 1.0f / M;
@@ -128,13 +128,13 @@
 		// Arithmetic operators
 
 		//! Operator for Point Mul = HPoint * Matrix3x3;
-				Point		operator*(const Matrix3x3& mat)		const override;
+				Point		operator*(const Matrix3x3& mat)		const;
 		//! Operator for HPoint Mul = HPoint * Matrix4x4;
-				HPoint		operator*(const Matrix4x4& mat)		const override;
+				HPoint		operator*(const Matrix4x4& mat)		const;
 
 		// HPoint *= Matrix3x3 doesn't exist, the matrix is first casted to a 4x4
 		//! Operator for HPoint *= Matrix4x4
-				HPoint&		operator*=(const Matrix4x4& mat) override;
+				HPoint&		operator*=(const Matrix4x4& mat);
 
 		// Logical operators
 

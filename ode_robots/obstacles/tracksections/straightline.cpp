@@ -52,7 +52,7 @@ StraightLine::StraightLine(const Matrix& pose)
 };
 
   /**
-   * gives the position and rotationstatic_cast<angle>(of) the segment at the
+   * gives the position and rotation static_cast<angle>(of) the segment at the
    * end of the segment so that a new segment could be placed there
    */
 Matrix StraightLine::getTransformedEndMatrix(){ // INTERNAL
@@ -165,7 +165,7 @@ void StraightLine::create(dSpaceID space)
   dGeomSetPosition ( wallRight, r.x, r.y, r.z);
   dMatrix3 Rl;
   dRFromEulerAngles(Rl, 0,0, -getAngle(p));
-  std::cout << "angle from posMatrix = " << (getAngle(p)*180.0f/M_PI) << "\n" override;
+  std::cout << "angle from posMatrix = " << (getAngle(p)*180.0f/M_PI) << "\n";
   dGeomSetRotation(wallLeft, Rl);
   dGeomSetRotation(wallRight, Rl); // same angle
   

@@ -42,7 +42,7 @@ namespace lpzrobots {
       virtual void setPose(const osg::Matrix& pose) override;
 
       /// return the __PLACEHOLDER_1__ primitive of the obtactle. The meaning of __PLACEHOLDER_2__ is arbitrary
-      virtual const Primitive* getMainPrimitive()  const override;
+      virtual const Primitive* getMainPrimitive()  const;
 
     protected:
       /// overload this function to create the obstactle. All primitives should go into the list __PLACEHOLDER_3__

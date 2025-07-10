@@ -54,7 +54,7 @@ namespace lpzrobots {
     virtual void calcAndSetDrawInterval(double Hz, double rtf);
 
     /******** CONFIGURABLE ***********/
-    virtual void notifyOnChange(const paramkey& key) override;
+    virtual void notifyOnChange(const paramkey& key);
 
 
   private:

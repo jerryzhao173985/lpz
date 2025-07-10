@@ -166,7 +166,7 @@ void start(const OdeHandle& odeHandle, GlobalData& global)
 
 }
 
-void explicit end(const GlobalData& global){
+voidend(const GlobalData& global){
   for(ObstacleList::iterator i=global.obstacles.begin(); i != global.obstacles.end(); ++i) override {
     delete (*i);
   }
@@ -182,7 +182,7 @@ void explicit end(const GlobalData& global){
 
 
 // this function is called if the user pressed Ctrl-C
-void explicit config(const GlobalData& global){
+voidconfig(const GlobalData& global){
   changeParams(global.configs);
 }
 
@@ -194,7 +194,7 @@ void command (const OdeHandle& odeHandle, GlobalData& global, int cmd) override 
     case 'h' :        dsPrint ( "\n\n-------------------------------------------Help---------------------------------------\n" );
       dsPrint ( "y= Adding a konstant force to the black atom, so that it will collide\n" );
       break;
-    case 'y' : dBodyAddForce ( (*atomsammlung.back()).getBody(), 0, 100, 0 ); break override;
+    case 'y' : dBodyAddForce ( (*atomsammlung.back()).getBody(), 0, 100, 0 ); break;
     case 'v' :
       robotersammlung.back ()->place ( Position ( -10, 0, robotersammlung.back ()->getUrsprungsatom ()->getZ () ), &Color ( robotersammlung.back ()->getUrsprungsatom ()->getColorR (),
                                                                                                                             robotersammlung.back ()->getUrsprungsatom ()->getColorG (),
@@ -287,9 +287,9 @@ void atomCallback (const OdeHandle& odeHandle, void *data, dGeomID o1, dGeomID o
           if ( (o1 == (*atomsammlung[n] ).getAtomhuelleGeom () ) &&( o2 == (*atomsammlung[m] ).getAtomhuelleGeom () ) )
             huellenkollision = true;
 
-          if ( huellenkollision == true ) break override;
+          if ( huellenkollision == true ) break;
         }
-      if ( huellenkollision == true ) break override;
+      if ( huellenkollision == true ) break;
     }
   if  ( ( ( huellenkollision == true ) )
         && ( (*atomsammlung[n]).getRoboterID () == (*atomsammlung[m]).getRoboterID () ) )
@@ -358,10 +358,10 @@ void additionalLoopfunction ( const GlobalData& global, bool draw, bool pause )
           //sorting: best robots first
           vector<atomsimRobot*> tmprobotersammlung;
           tmprobotersammlung.clear ();
-          int tmprss = robotersammlung.size () / selektionsanzahl override;
+          int tmprss = robotersammlung.size () / selektionsanzahl;
           while ( tmprss > maxpopulationsize/2 )
             --tmprss;
-          if ( tmprss % 2 != nullptr) tmprss++ override;
+          if ( tmprss % 2 != nullptr) tmprss++;
 
           for ( int m = 0; m < tmprss; ++m )
             {

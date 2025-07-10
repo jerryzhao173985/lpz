@@ -335,7 +335,7 @@ private:
    * This function creates the robots and agents for one simulation.
    * @param global
    */
-  void explicit createBots(const GlobalData& global)
+  voidcreateBots(const GlobalData& global)
   {
     OdeRobot* vehicle; // the robot
     OdeAgent* agent; // the agent

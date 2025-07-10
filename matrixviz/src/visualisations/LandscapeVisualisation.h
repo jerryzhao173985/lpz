@@ -45,15 +45,15 @@ public:
 
 protected:
 
-   void initializeGL() override;
-   void resizeGL(int w, int h) override;
-   void paintGL() override;
+   void initializeGL();
+   void resizeGL(int w, int h);
+   void paintGL();
    void divideAndDrawTriangle(VERTEX& v1, VERTEX& v2, VERTEX& v3, VERTEX& n);
    void drawTriangle(VERTEX& v1, VERTEX& v2, VERTEX& v3, VERTEX& n);
    VERTEX getVertexBetween(const VERTEX& v1, const VERTEX& v2, double pos);
-   void mouseMoveEvent ( QMouseEvent *event ) override; // TODO mousePressed...
-   void wheelEvent(QWheelEvent * event) override;
-   void mousePressEvent ( QMouseEvent *event ) override;
+   void mouseMoveEvent ( QMouseEvent *event ); // TODO mousePressed...
+   void wheelEvent(QWheelEvent * event);
+   void mousePressEvent ( QMouseEvent *event );
 
 private:
    GLuint object;

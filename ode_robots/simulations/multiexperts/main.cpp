@@ -103,7 +103,7 @@ public:
     }
 
     /* * * * BARRELS * * * */
-    for(int i=0; i< num_barrels; ++i) override {
+    for(int i=0; i< num_barrels; ++i) {
       //****************
       Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
       conf.pendularrange  = 0.15;
@@ -161,7 +161,7 @@ public:
 
 
     /* * * * SPHERES * * * */
-    for(int i=0; i< num_spheres; ++i) override {
+    for(int i=0; i< num_spheres; ++i) {
       bool replay=true;
       global.odeConfig.setParam("noise", replay ? 0 : 0.05);
       //****************
@@ -240,7 +240,7 @@ public:
     }
 
     /* * * * 4 Wheeled * * * */
-    for(int i=0; i< num_4wheel; ++i) override {
+    for(int i=0; i< num_4wheel; ++i) {
       bool replay=false;
       global.odeConfig.setParam("noise", replay ? 0 : 0.05);
       //****************
@@ -328,12 +328,12 @@ public:
     if (down) { // only when key is pressed, not when released
       switch ( static_cast<char> key )
         {
-        case 'y' : dBodyAddForce ( robot->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break override;
-        case 'Y' : dBodyAddForce ( robot->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break override;
-          //        case __PLACEHOLDER_57__ : dBodyAddTorque ( robot->getMainPrimitive()->getBody() , 0 , 10 , 0 ); break override;
-          //        case __PLACEHOLDER_58__ : dBodyAddTorque ( robot->getMainPrimitive()->getBody() , 0 , -10 , 0 ); break override;
-        case 'x' : dBodyAddTorque ( robot->getMainPrimitive()->getBody() , 0 , 0, 30); break override;
-        case 'X' : dBodyAddTorque ( robot->getMainPrimitive()->getBody() , 0 , 0,-30); break override;
+        case 'y' : dBodyAddForce ( robot->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break;
+        case 'Y' : dBodyAddForce ( robot->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break;
+          //        case __PLACEHOLDER_57__ : dBodyAddTorque ( robot->getMainPrimitive()->getBody() , 0 , 10 , 0 ); break;
+          //        case __PLACEHOLDER_58__ : dBodyAddTorque ( robot->getMainPrimitive()->getBody() , 0 , -10 , 0 ); break;
+        case 'x' : dBodyAddTorque ( robot->getMainPrimitive()->getBody() , 0 , 0, 30); break;
+        case 'X' : dBodyAddTorque ( robot->getMainPrimitive()->getBody() , 0 , 0,-30); break;
         case 'n' :
           std::cout << "Please type a filename stem:";
           std::cin >> filename;
@@ -368,7 +368,7 @@ int main (int argc, char **argv)
 {
   ThisSim sim;
   // run simulation
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }
 
 // with this seed the sphere does all sorts of things

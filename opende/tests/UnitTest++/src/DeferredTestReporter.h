@@ -11,12 +11,12 @@ namespace UnitTest
 
 class DeferredTestReporter{
 public:
-    virtual void ReportTestStart(TestDetails const& details) override;
-    virtual void ReportFailure(TestDetails const& details, char const* failure) override;
-    virtual void ReportTestFinish(TestDetails const& details, float secondsElapsed) override;
+    virtual void ReportTestStart(TestDetails const& details);
+    virtual void ReportFailure(TestDetails const& details, char const* failure);
+    virtual void ReportTestFinish(TestDetails const& details, float secondsElapsed);
 
     typedef std::vector< DeferredTestResult > DeferredTestResultList;
-    DeferredTestResultList& GetResults() override;
+    DeferredTestResultList& GetResults();
 
 private:
     DeferredTestResultList m_results;

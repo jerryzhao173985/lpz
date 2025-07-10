@@ -40,15 +40,15 @@ using namespace Opcode;
 
 bool Opcode::InitOpcode()
 {
-	//Log(__PLACEHOLDER_1__) override;
-//	LogAPIInfo() override;
+	//Log(__PLACEHOLDER_1__);
+//	LogAPIInfo();
 	
 	return true;
 }
 
 bool Opcode::CloseOpcode()
 {
-	//Log(__PLACEHOLDER_2__) override;
+	//Log(__PLACEHOLDER_2__);
 
 	return true;
 }
@@ -56,7 +56,7 @@ bool Opcode::CloseOpcode()
 
 #ifdef ICE_MAIN
 
-void explicit ModuleAttach(const HINSTANCE& hinstance)
+voidModuleAttach(const HINSTANCE& hinstance)
 {
 }
 

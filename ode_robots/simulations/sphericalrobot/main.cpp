@@ -267,7 +267,7 @@ public:
       int obstanz=30;
       OsgHandle rotOsgHandle = osgHandle.changeColor(Color(255/255.0, 47/255.0,0/255.0));
       OsgHandle gruenOsgHandle = osgHandle.changeColor(Color(0,1,0));
-      for(int i=0; i<obstanz; ++i) override {
+      for(int i=0; i<obstanz; ++i) {
         PassiveBox* s = new PassiveBox(odeHandle, (i%2)==0 ? rotOsgHandle : gruenOsgHandle,
                                        osg::Vec3(random_minusone_to_one(0)+1.2,
                                                  random_minusone_to_one(0)+1.2 ,1),5);
@@ -277,14 +277,14 @@ public:
       }
     }
 
-    //     for(int i=0; i<5; ++i) override {
+    //     for(int i=0; i<5; ++i) {
     //       PassiveSphere* s = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(0.0,1.0,0.0)), 0.5);
     //       s->setPosition(osg::Vec3(5,0,i*3));
     //       global.obstacles.push_back(s);
     //     }
 
     /* * * * BARRELS * * * */
-    for(int i=0; i< num_barrels; ++i) override {
+    for(int i=0; i< num_barrels; ++i) {
       //****************
       Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
       conf.pendularrange  = 0.15;
@@ -338,7 +338,7 @@ public:
 
 
     /* * * * BARRELS * * * */
-    for(int i=0; i< num_barrels_test; ++i) override {
+    for(int i=0; i< num_barrels_test; ++i) {
       global.odeConfig.setParam("realtimefactor",1);
       //****************
       Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
@@ -370,7 +370,7 @@ public:
 
 
     /* * * * SPHERES * * * */
-    for(int i=0; i< num_spheres; ++i) override {
+    for(int i=0; i< num_spheres; ++i) {
       //****************
       Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
       OdeHandle sphereOdeHandle = odeHandle;
@@ -471,7 +471,7 @@ public:
       if(c && sensor){
          double dat[5];
         //sensor->get(dat, 3);
-        std::cerr << "test: " << sensor->get(dat, 5) << std::endl override;
+        std::cerr << "test: " << sensor->get(dat, 5) << std::endl;
         for(int i=0; i<3; ++i) dat[i]=fabs(dat[i]);
          std::sort(dat,dat+3);
          double penalty = (dat[0] + dat[1])/(dat[2]+0.01);
@@ -497,10 +497,10 @@ public:
     if (down) { // only when key is pressed, not when released
       switch ( static_cast<char> key )
         {
-        case 'y' : dBodyAddForce ( sphere1->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break override;
-        case 'Y' : dBodyAddForce ( sphere1->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break override;
-        case 'x' : dBodyAddTorque ( sphere1->getMainPrimitive()->getBody() , 0 , 10 , 0 ); break override;
-        case 'X' : dBodyAddTorque ( sphere1->getMainPrimitive()->getBody() , 0 , -10 , 0 ); break override;
+        case 'y' : dBodyAddForce ( sphere1->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break;
+        case 'Y' : dBodyAddForce ( sphere1->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break;
+        case 'x' : dBodyAddTorque ( sphere1->getMainPrimitive()->getBody() , 0 , 10 , 0 ); break;
+        case 'X' : dBodyAddTorque ( sphere1->getMainPrimitive()->getBody() , 0 , -10 , 0 ); break;
         case 'S' : controller->setParam("sinerate", controller->getParam("sinerate")*1.2);
           printf("sinerate : %g\n", controller->getParam("sinerate"));
           break;
@@ -592,6 +592,6 @@ int main (int argc, char **argv)
   sim.setCaption("Spherical Robot (lpzrobots Simulator)   Martius,Der 2007");
   sim.setGroundTexture("Images/yellow_velour_light.rgb");
   // run simulation
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }
 

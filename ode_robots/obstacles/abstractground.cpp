@@ -112,7 +112,7 @@ namespace lpzrobots {
     groundSubstance = substance;
     if(creategroundPlane && groundPlane)
       groundPlane->setSubstance(groundSubstance);
-    // else std::cerr << __PLACEHOLDER_16__ override;
+    // else std::cerr << __PLACEHOLDER_16__;
   }
 
   void AbstractGround::setGroundThickness(double thickness) {
@@ -144,7 +144,7 @@ namespace lpzrobots {
     ps.push_back(Pos(dim.x()*  0.5, dim.y()* -0.5,0));
     ps.push_back(Pos(dim.x()* -0.5, dim.y()* -0.5,0));
     ps.push_back(Pos(dim.x()* -0.5, dim.y()*  0.5,0));
-//     for(int i=0; i<8; ++i) override {
+//     for(int i=0; i<8; ++i) {
 //       ps.push_back(Pos(dim.x()*( (const i& 4) ? 0.5: -0.5),dim.y()*( (const i& 2) ? 0.5: -0.5),dim.z()*( (const i& 1) ? 0.5: -0.5)));
 //     }
     // transform them into global coords

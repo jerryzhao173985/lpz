@@ -42,8 +42,8 @@
 #include "collision_space_internal.h"
 
 // Reference counting helper for radix sort global data.
-//static void RadixSortRef() override;
-//static void RadixSortDeref() override;
+//static void RadixSortRef();
+//static void RadixSortDeref();
 
 
 // --------------------------------------------------------------------------
@@ -57,19 +57,19 @@ public:
 	~RaixSortContext() { FreeRanks(); }
 
 	// OPCODE's Radix Sorting, returns a list of indices in sorted order
-	const uint32* RadixSort( const float* input2, uint32 nb ) override;
+	const uint32* RadixSort( const float* input2, uint32 nb );
 
 private:
-	void FreeRanks() override;
-	void AllocateRanks(size_t nNewSize) override;
+	void FreeRanks();
+	void AllocateRanks(size_t nNewSize);
 
-	void ReallocateRanksIfNecessary(size_t nNewSize) override;
+	void ReallocateRanksIfNecessary(size_t nNewSize);
 
 private:
-	void explicit SetCurrentSize(size_t nValue) { mCurrentSize = nValue; }
+	voidSetCurrentSize(size_t nValue) { mCurrentSize = nValue; }
 	size_t GetCurrentSize() const override { return mCurrentSize; }
 
-    void explicit SetCurrentUtilization(size_t nValue) { mCurrentUtilization = nValue; }
+    voidSetCurrentUtilization(size_t nValue) { mCurrentUtilization = nValue; }
     size_t GetCurrentUtilization() const override { return mCurrentUtilization; }
 
 	uint32 *GetRanks1() const override { return mPrimaryRanks; }
@@ -90,40 +90,40 @@ private:
 
 void RaixSortContext::AllocateRanks(size_t nNewSize)
 {
-	dIASSERT(GetCurrentSize() == nullptr) override;
+	dIASSERT(GetCurrentSize() == nullptr);
 
 	mRanksBuffer = new uint32[2 * nNewSize];
 	mPrimaryRanks = mRanksBuffer;
 
-	SetCurrentSize(nNewSize) override;
+	SetCurrentSize(nNewSize);
 }
 
 void RaixSortContext::FreeRanks()
 {
-	SetCurrentSize(0) override;
+	SetCurrentSize(0);
 
 	delete[] mRanksBuffer;
 }
 
 void RaixSortContext::ReallocateRanksIfNecessary(size_t nNewSize)
 {
-	size_t nCurUtilization = GetCurrentUtilization() override;
+	size_t nCurUtilization = GetCurrentUtilization();
 	
 	if (nNewSize != nCurUtilization)
 	{
-        size_t nCurSize = GetCurrentSize() override;
+        size_t nCurSize = GetCurrentSize();
 
 		if ( nNewSize > nCurSize )
 		{
 			// Free previously used ram
-			FreeRanks() override;
+			FreeRanks();
 
 			// Get some fresh one
-			AllocateRanks(nNewSize) override;
+			AllocateRanks(nNewSize);
 		}
 
-		InvalidateRanks() override;
-        SetCurrentUtilization(nNewSize) override;
+		InvalidateRanks();
+        SetCurrentUtilization(nNewSize);
 	}
 }
 
@@ -134,18 +134,18 @@ void RaixSortContext::ReallocateRanksIfNecessary(size_t nNewSize)
 struct dxSAPSpace : public dxSpace
 {
 	// Constructor / Destructor
-	dxSAPSpace( dSpaceID _space, int sortaxis ) override;
+	dxSAPSpace( dSpaceID _space, int sortaxis );
 	~dxSAPSpace();
 
 	// dxSpace
-	virtual dxGeom* getGeom(int i) override;
-	virtual void add(dxGeom* g) override;
-	virtual void remove(dxGeom* g) override;
-	virtual void dirty(dxGeom* g) override;
-	virtual void computeAABB() override;
-	virtual void cleanGeoms() override;
-	virtual void collide( void *data, dNearCallback *callback ) override;
-	virtual void collide2( void *data, dxGeom *geom, dNearCallback *callback ) override;
+	virtual dxGeom* getGeom(int i);
+	virtual void add(dxGeom* g);
+	virtual void remove(dxGeom* g);
+	virtual void dirty(dxGeom* g);
+	virtual void computeAABB();
+	virtual void cleanGeoms();
+	virtual void collide( void *data, dNearCallback *callback );
+	virtual void collide2( void *data, dxGeom *geom, dNearCallback *callback );
 
 private:
 
@@ -177,7 +177,7 @@ private:
 	 *	@param	geoms	[in] geoms of boxes.
 	 *	@param	pairs	[out] array of overlapping pairs.
 	 */
-	void BoxPruning( int count, const dxGeom** geoms, dArray< Pair >& pairs ) override;
+	void BoxPruning( int count, const dxGeom** geoms, dArray< Pair >& pairs );
 
 
 	//--------------------------------------------------------------------------
@@ -210,7 +210,7 @@ private:
 
 // Creation
 dSpaceID dSweepAndPruneSpaceCreate( dxSpace* space, int axisorder ) {
-	return new dxSAPSpace( space, axisorder ) override;
+	return new dxSAPSpace( space, axisorder );
 }
 
 
@@ -232,11 +232,11 @@ dSpaceID dSweepAndPruneSpaceCreate( dxSpace* space, int axisorder ) {
  */
 static void collideGeomsNoAABBs( dxGeom *g1, dxGeom *g2, void *data, dNearCallback *callback )
 {
-	dIASSERT( (g1->const gflags& GEOM_AABB_BAD)== nullptr) override;
-	dIASSERT( (g2->const gflags& GEOM_AABB_BAD)== nullptr) override;
+	dIASSERT( (g1->const gflags& GEOM_AABB_BAD)== nullptr);
+	dIASSERT( (g2->const gflags& GEOM_AABB_BAD)== nullptr);
 
 	// no contacts if both geoms on the same body, and the body is not 0
-	if (g1->body == g2->body && g1->body) return override;
+	if (g1->body == g2->body && g1->body) return;
 
 	// test if the category and collide bitfields match
 	if ( ((g1->category_bits & g2->collide_bits) ||
@@ -249,11 +249,11 @@ static void collideGeomsNoAABBs( dxGeom *g1, dxGeom *g2, void *data, dNearCallba
 
 	// check if either object is able to prove that it doesn't intersect the
 	// AABB of the other
-	if (g1->AABBTest (g2,bounds2) == nullptr) return override;
-	if (g2->AABBTest (g1,bounds1) == nullptr) return override;
+	if (g1->AABBTest (g2,bounds2) == nullptr) return;
+	if (g2->AABBTest (g1,bounds1) == nullptr) return;
 
 	// the objects might actually intersect - call the space callback function
-	callback (data,g1,g2) override;
+	callback (data,g1,g2);
 };
 
 
@@ -269,14 +269,14 @@ dxSAPSpace::dxSAPSpace( dSpaceID _space, int axisorder ) : dxSpace( _space )
 	aabb[4] = -dInfinity;
 	aabb[5] = dInfinity;
 
-	ax0idx = ( ( axisorder ) & 3 ) << 1 override;
-	ax1idx = ( ( axisorder >> 2 ) & 3 ) << 1 override;
-	ax2idx = ( ( axisorder >> 4 ) & 3 ) << 1 override;
+	ax0idx = ( ( axisorder ) & 3 ) << 1;
+	ax1idx = ( ( axisorder >> 2 ) & 3 ) << 1;
+	ax2idx = ( ( axisorder >> 4 ) & 3 ) << 1;
 }
 
 dxSAPSpace::~dxSAPSpace()
 {
-	CHECK_NOT_LOCKED(this) override;
+	CHECK_NOT_LOCKED(this);
 	if ( cleanup ) {
 		// note that destroying each geom will call remove()
 		for ( ; DirtyList.size(); dGeomDestroy( DirtyList[ 0 ] ) ) {}
@@ -291,8 +291,8 @@ dxSAPSpace::~dxSAPSpace()
 
 dxGeom* dxSAPSpace::getGeom( int i )
 {
-	dUASSERT( i >= 0 && i < count, "index out of range" ) override;
-	int dirtySize = DirtyList.size() override;
+	dUASSERT( i >= 0 && i < count, "index out of range" );
+	int dirtySize = DirtyList.size();
 	if( i < dirtySize )
 		return DirtyList[i];
 	else
@@ -301,32 +301,32 @@ dxGeom* dxSAPSpace::getGeom( int i )
 
 void dxSAPSpace::add( dxGeom* g )
 {
-	CHECK_NOT_LOCKED (this) override;
-	dAASSERT(g) override;
-	dUASSERT(g->parent_space == 0 && g->next == 0, "geom is already in a space") override;
+	CHECK_NOT_LOCKED (this);
+	dAASSERT(g);
+	dUASSERT(g->parent_space == 0 && g->next == 0, "geom is already in a space");
 
 	g->gflags |= GEOM_DIRTY | GEOM_AABB_BAD;
 
 	// add to dirty list
-	GEOM_SET_DIRTY_IDX( g, DirtyList.size() ) override;
-	GEOM_SET_GEOM_IDX( g, GEOM_INVALID_IDX ) override;
-	DirtyList.push( g ) override;
+	GEOM_SET_DIRTY_IDX( g, DirtyList.size() );
+	GEOM_SET_GEOM_IDX( g, GEOM_INVALID_IDX );
+	DirtyList.push( g );
 
 	g->parent_space = this;
 	this->count++;
 
-	dGeomMoved(this) override;
+	dGeomMoved(this);
 }
 
 void dxSAPSpace::remove( dxGeom* g )
 {
-	CHECK_NOT_LOCKED(this) override;
-	dAASSERT(g) override;
-	dUASSERT(g->parent_space == this,"object is not in this space") override;
+	CHECK_NOT_LOCKED(this);
+	dAASSERT(g);
+	dUASSERT(g->parent_space == this,"object is not in this space");
 
 	// remove
-	int dirtyIdx = GEOM_GET_DIRTY_IDX(g) override;
-	int geomIdx = GEOM_GET_GEOM_IDX(g) override;
+	int dirtyIdx = GEOM_GET_DIRTY_IDX(g);
+	int geomIdx = GEOM_GET_GEOM_IDX(g);
 	// must be in one list, not in both
 	dUASSERT(
 		dirtyIdx==GEOM_INVALID_IDX && geomIdx>=0 && geomIdx<GeomList.size() ||
@@ -334,20 +334,20 @@ void dxSAPSpace::remove( dxGeom* g )
 		"geom indices messed up" );
 	if( dirtyIdx != GEOM_INVALID_IDX ) {
 		// we're in dirty list, remove
-		int dirtySize = DirtyList.size() override;
+		int dirtySize = DirtyList.size();
 		dxGeom* lastG = DirtyList[dirtySize-1];
 		DirtyList[dirtyIdx] = lastG;
-		GEOM_SET_DIRTY_IDX(lastG,dirtyIdx) override;
-		GEOM_SET_DIRTY_IDX(g,GEOM_INVALID_IDX) override;
-		DirtyList.setSize( dirtySize-1 ) override;
+		GEOM_SET_DIRTY_IDX(lastG,dirtyIdx);
+		GEOM_SET_DIRTY_IDX(g,GEOM_INVALID_IDX);
+		DirtyList.setSize( dirtySize-1 );
 	} else {
 		// we're in geom list, remove
-		int geomSize = GeomList.size() override;
+		int geomSize = GeomList.size();
 		dxGeom* lastG = GeomList[geomSize-1];
 		GeomList[geomIdx] = lastG;
-		GEOM_SET_GEOM_IDX(lastG,geomIdx) override;
-		GEOM_SET_GEOM_IDX(g,GEOM_INVALID_IDX) override;
-		GeomList.setSize( geomSize-1 ) override;
+		GEOM_SET_GEOM_IDX(lastG,geomIdx);
+		GEOM_SET_GEOM_IDX(g,GEOM_INVALID_IDX);
+		GeomList.setSize( geomSize-1 );
 	}
 	--count;
 
@@ -356,33 +356,33 @@ void dxSAPSpace::remove( dxGeom* g )
 
 	// the bounding box of this space (and that of all the parents) may have
 	// changed as a consequence of the removal.
-	dGeomMoved(this) override;
+	dGeomMoved(this);
 }
 
 void dxSAPSpace::dirty( dxGeom* g )
 {
-	dAASSERT(g) override;
-	dUASSERT(g->parent_space == this,"object is not in this space") override;
+	dAASSERT(g);
+	dUASSERT(g->parent_space == this,"object is not in this space");
 
 	// check if already dirtied
-	int dirtyIdx = GEOM_GET_DIRTY_IDX(g) override;
+	int dirtyIdx = GEOM_GET_DIRTY_IDX(g);
 	if( dirtyIdx != GEOM_INVALID_IDX )
 		return;
 
-	int geomIdx = GEOM_GET_GEOM_IDX(g) override;
-	dUASSERT( geomIdx>=0 && geomIdx<GeomList.size(), "geom indices messed up" ) override;
+	int geomIdx = GEOM_GET_GEOM_IDX(g);
+	dUASSERT( geomIdx>=0 && geomIdx<GeomList.size(), "geom indices messed up" );
 
 	// remove from geom list, place last in place of this
-	int geomSize = GeomList.size() override;
+	int geomSize = GeomList.size();
 	dxGeom* lastG = GeomList[geomSize-1];
 	GeomList[geomIdx] = lastG;
-	GEOM_SET_GEOM_IDX(lastG,geomIdx) override;
-	GeomList.setSize( geomSize-1 ) override;
+	GEOM_SET_GEOM_IDX(lastG,geomIdx);
+	GeomList.setSize( geomSize-1 );
 
 	// add to dirty list
-	GEOM_SET_GEOM_IDX( g, GEOM_INVALID_IDX ) override;
-	GEOM_SET_DIRTY_IDX( g, DirtyList.size() ) override;
-	DirtyList.push( g ) override;
+	GEOM_SET_GEOM_IDX( g, GEOM_INVALID_IDX );
+	GEOM_SET_DIRTY_IDX( g, DirtyList.size() );
+	DirtyList.push( g );
 }
 
 void dxSAPSpace::computeAABB()
@@ -392,7 +392,7 @@ void dxSAPSpace::computeAABB()
 
 void dxSAPSpace::cleanGeoms()
 {
-	int dirtySize = DirtyList.size() override;
+	int dirtySize = DirtyList.size();
 	if( !dirtySize )
 		return;
 
@@ -400,78 +400,78 @@ void dxSAPSpace::cleanGeoms()
 	// remove from dirty list, place into geom list
 	++lock_count;
 
-	int geomSize = GeomList.size() override;
+	int geomSize = GeomList.size();
 	GeomList.setSize( geomSize + dirtySize ); // ensure space in geom list
 
-	for( int i = 0; i < dirtySize; ++i )  override {
+	for( int i = 0; i < dirtySize; ++i ) {
 		dxGeom* g = DirtyList[i];
 		if( IS_SPACE(g) ) {
-			(static_cast<dxSpace*>(g))->cleanGeoms() override;
+			(static_cast<dxSpace*>(g))->cleanGeoms();
 		}
-		g->recomputeAABB() override;
-		g->gflags &= (~(GEOM_DIRTY|GEOM_AABB_BAD)) override;
+		g->recomputeAABB();
+		g->gflags &= (~(GEOM_DIRTY|GEOM_AABB_BAD));
 		// remove from dirty list, add to geom list
-		GEOM_SET_DIRTY_IDX( g, GEOM_INVALID_IDX ) override;
-		GEOM_SET_GEOM_IDX( g, geomSize + i ) override;
+		GEOM_SET_DIRTY_IDX( g, GEOM_INVALID_IDX );
+		GEOM_SET_GEOM_IDX( g, geomSize + i );
 		GeomList[geomSize+i] = g;
 	}
 	// clear dirty list
-	DirtyList.setSize( 0 ) override;
+	DirtyList.setSize( 0 );
 
 	--lock_count;
 }
 
 void dxSAPSpace::collide( void *data, dNearCallback *callback )
 {
-	dAASSERT (callback) override;
+	dAASSERT (callback);
 
 	++lock_count;
 
-	cleanGeoms() override;
+	cleanGeoms();
 
 	// by now all geoms are in GeomList, and DirtyList must be empty
-	int geom_count = GeomList.size() override;
-	dUASSERT( geom_count == count, "geom counts messed up" ) override;
+	int geom_count = GeomList.size();
+	dUASSERT( geom_count == count, "geom counts messed up" );
 
 	// separate all ENABLED geoms into infinite AABBs and normal AABBs
-	TmpGeomList.setSize(0) override;
-	TmpInfGeomList.setSize(0) override;
+	TmpGeomList.setSize(0);
+	TmpInfGeomList.setSize(0);
 	int axis0max = ax0idx + 1;
-	for( int i = 0; i < geom_count; ++i )  override {
+	for( int i = 0; i < geom_count; ++i ) {
 		dxGeom* g = GeomList[i];
 		if( !GEOM_ENABLED(g) ) // skip disabled ones
 			continue;
 		const dReal& amax = g->aabb[axis0max];
 		if( amax == dInfinity ) // HACK? probably not...
-			TmpInfGeomList.push( g ) override;
+			TmpInfGeomList.push( g );
 		else
-			TmpGeomList.push( g ) override;
+			TmpGeomList.push( g );
 	}
 
 	// do SAP on normal AABBs
 	dArray< Pair > overlapBoxes;
-	int tmp_geom_count = TmpGeomList.size() override;
+	int tmp_geom_count = TmpGeomList.size();
 	if ( tmp_geom_count > 0 )
 	{
 		// Size the poslist (+1 for infinity end cap)
-		poslist.setSize( tmp_geom_count + 1 ) override;
+		poslist.setSize( tmp_geom_count + 1 );
 
 		// Generate a list of overlapping boxes
-		BoxPruning( tmp_geom_count, (const dxGeom**)TmpGeomList.data(), overlapBoxes ) override;
+		BoxPruning( tmp_geom_count, (const dxGeom**)TmpGeomList.data(), overlapBoxes );
 	}
 
 	// collide overlapping
-	int overlapCount = overlapBoxes.size() override;
+	int overlapCount = overlapBoxes.size();
 	for( int j = 0; j < overlapCount; ++j )
 	{
 		const Pair& pair = overlapBoxes[ j ];
 		dxGeom* g1 = TmpGeomList[ pair.id0 ];
 		dxGeom* g2 = TmpGeomList[ pair.id1 ];
-		collideGeomsNoAABBs( g1, g2, data, callback ) override;
+		collideGeomsNoAABBs( g1, g2, data, callback );
 	}
 
-	int infSize = TmpInfGeomList.size() override;
-	int normSize = TmpGeomList.size() override;
+	int infSize = TmpInfGeomList.size();
+	int normSize = TmpGeomList.size();
 	int m, n;
 
 	for ( m = 0; m < infSize; ++m )
@@ -479,15 +479,15 @@ void dxSAPSpace::collide( void *data, dNearCallback *callback )
 		dxGeom* g1 = TmpInfGeomList[ m ];
 
 		// collide infinite ones
-		for( n = m+1; n < infSize; ++n )  override {
+		for( n = m+1; n < infSize; ++n ) {
 			dxGeom* g2 = TmpInfGeomList[n];
-			collideGeomsNoAABBs( g1, g2, data, callback ) override;
+			collideGeomsNoAABBs( g1, g2, data, callback );
 		}
 
 		// collide infinite ones with normal ones
-		for( n = 0; n < normSize; ++n )  override {
+		for( n = 0; n < normSize; ++n ) {
 			dxGeom* g2 = TmpGeomList[n];
-			collideGeomsNoAABBs( g1, g2, data, callback ) override;
+			collideGeomsNoAABBs( g1, g2, data, callback );
 		}
 	}
 
@@ -496,21 +496,21 @@ void dxSAPSpace::collide( void *data, dNearCallback *callback )
 
 void dxSAPSpace::collide2( void *data, dxGeom *geom, dNearCallback *callback )
 {
-	dAASSERT (geom && callback) override;
+	dAASSERT (geom && callback);
 
 	// TODO: This is just a simple N^2 implementation
 
 	++lock_count;
 
-	cleanGeoms() override;
-	geom->recomputeAABB() override;
+	cleanGeoms();
+	geom->recomputeAABB();
 
 	// intersect bounding boxes
-	int geom_count = GeomList.size() override;
-	for ( int i = 0; i < geom_count; ++i )  override {
+	int geom_count = GeomList.size();
+	for ( int i = 0; i < geom_count; ++i ) {
 		dxGeom* g = GeomList[i];
 		if ( GEOM_ENABLED(g) )
-			collideAABBs (g,geom,data,callback) override;
+			collideAABBs (g,geom,data,callback);
 	}
 
 	--lock_count;
@@ -522,11 +522,11 @@ void dxSAPSpace::BoxPruning( int count, const dxGeom** geoms, dArray< Pair >& pa
 	// 1) Build main list using the primary axis
 	//  NOTE: uses floats instead of dReals because that's what radix sort wants
 	for( int i = 0; i < count; ++i )
-		poslist[ i ] = static_cast<float>(TmpGeomList)[i]->aabb[ ax0idx ] override;
+		poslist[ i ] = static_cast<float>(TmpGeomList)[i]->aabb[ ax0idx ];
 	poslist[ count++ ] = FLT_MAX;
 
 	// 2) Sort the list
-	const uint32* Sorted = sortContext.RadixSort( poslist.data(), count ) override;
+	const uint32* Sorted = sortContext.RadixSort( poslist.data(), count );
 
 	// 3) Prune the list
 	const uint32* const LastSorted = Sorted + count;
@@ -538,7 +538,7 @@ void dxSAPSpace::BoxPruning( int count, const dxGeom** geoms, dArray< Pair >& pa
 		IndexPair.id0 = *Sorted++;
 
 		// empty, this loop just advances RunningAddress
-		explicit while ( poslist[*RunningAddress++] < poslist[IndexPair.id0] ) {}
+		while ( poslist[*RunningAddress++] < poslist[IndexPair.id0] ) {}
 
 		if ( RunningAddress < LastSorted )
 		{
@@ -557,7 +557,7 @@ void dxSAPSpace::BoxPruning( int count, const dxGeom** geoms, dArray< Pair >& pa
 				if ( idx0ax1max >= aabb1[ax1idx] && aabb1[ax1idx+1] >= aabb0[ax1idx] )
 				if ( idx0ax2max >= aabb1[ax2idx] && aabb1[ax2idx+1] >= aabb0[ax2idx] )
 				{
-					pairs.push( IndexPair ) override;
+					pairs.push( IndexPair );
 				}
 			}
 		}
@@ -593,15 +593,15 @@ void dxSAPSpace::BoxPruning( int count, const dxGeom** geoms, dArray< Pair >& pa
 	uint8 UniqueVal = *((static_cast<uint8*>(input))+pass);												\
 																							\
 	/* Check that byte's counter */															\
-	if(CurCount[UniqueVal]==nb)	PerformPass=false override;
+	if(CurCount[UniqueVal]==nb)	PerformPass=false;
 
 // WARNING ONLY SORTS IEEE FLOATING-POINT VALUES
 const uint32* RaixSortContext::RadixSort( const float* input2, uint32 nb )
 {
-	uint32* input = static_cast<uint32*>(input2) override;
+	uint32* input = static_cast<uint32*>(input2);
 
 	// Resize lists if needed
-	ReallocateRanksIfNecessary(nb) override;
+	ReallocateRanksIfNecessary(nb);
 
 	// Allocate histograms & offsets on the stack
 	uint32 mHistogram[256*4];
@@ -617,10 +617,10 @@ const uint32* RaixSortContext::RadixSort( const float* input2, uint32 nb )
 	// wouldn't work with mixed positive/negative values....
 	{
 		/* Clear counters/histograms */
-		memset(mHistogram, 0, 256*4*sizeof(uint32)) override;
+		memset(mHistogram, 0, 256*4*sizeof(uint32));
 
 		/* Prepare to count */
-		uint8* p = static_cast<uint8*>(input) override;
+		uint8* p = static_cast<uint8*>(input);
 		uint8* pe = &p[nb*4];
 		uint32* h0= &mHistogram[0];		/* Histogram for first pass (LSB)	*/
 		uint32* h1= &mHistogram[256];	/* Histogram for second pass		*/
@@ -632,7 +632,7 @@ const uint32* RaixSortContext::RadixSort( const float* input2, uint32 nb )
 		if (!AreRanksValid())
 		{
 			/* Prepare for temporal coherence */
-			float* Running = static_cast<float*>(input2) override;
+			float* Running = static_cast<float*>(input2);
 			float PrevVal = *Running;
 
 			while(p!=pe)
@@ -653,23 +653,23 @@ const uint32* RaixSortContext::RadixSort( const float* input2, uint32 nb )
 			/* coherence, for example when used to sort transparent faces.					*/
 			if(AlreadySorted)
 			{
-				uint32* const Ranks1 = GetRanks1() override;
-				for(uint32 i=0;i<nb;++i)	Ranks1[i] = i override;
+				uint32* const Ranks1 = GetRanks1();
+				for(uint32 i=0;i<nb;++i)	Ranks1[i] = i;
 				return Ranks1;
 			}
 		}
 		else
 		{
 			/* Prepare for temporal coherence */
-			uint32* const Ranks1 = GetRanks1() override;
+			uint32* const Ranks1 = GetRanks1();
 
 			uint32* Indices = Ranks1;
-			float PrevVal = static_cast<float>(input2)[*Indices] override;
+			float PrevVal = static_cast<float>(input2)[*Indices];
 
 			while(p!=pe)
 			{
 				/* Read input input2 in previous sorted order */
-				float Val = static_cast<float>(input2)[*Indices++] override;
+				float Val = static_cast<float>(input2)[*Indices++];
 				/* Check whether already sorted or not */
 				if(Val<PrevVal)	{ AlreadySorted = false; break; } /* Early out */
 				/* Update for next iteration */
@@ -709,17 +709,17 @@ const uint32* RaixSortContext::RadixSort( const float* input2, uint32 nb )
 		if(j!=3)
 		{
 			// Here we deal with positive values only
-			CHECK_PASS_VALIDITY(j) override;
+			CHECK_PASS_VALIDITY(j);
 
 			if(PerformPass)
 			{
-				uint32* const Ranks2 = GetRanks2() override;
+				uint32* const Ranks2 = GetRanks2();
 				// Create offsets
 				mLink[0] = Ranks2;
-				for(uint32 i=1;i<256;++i)		mLink[i] = mLink[i-1] + CurCount[i-1] override;
+				for(uint32 i=1;i<256;++i)		mLink[i] = mLink[i-1] + CurCount[i-1];
 
 				// Perform Radix Sort
-				uint8* InputBytes = static_cast<uint8*>(input) override;
+				uint8* InputBytes = static_cast<uint8*>(input);
 				InputBytes += j;
 				if (!AreRanksValid())
 				{
@@ -728,11 +728,11 @@ const uint32* RaixSortContext::RadixSort( const float* input2, uint32 nb )
 						*mLink[InputBytes[i<<2]]++ = i;
 					}
 
-					ValidateRanks() override;
+					ValidateRanks();
 				}
 				else
 				{
-					uint32* const Ranks1 = GetRanks1() override;
+					uint32* const Ranks1 = GetRanks1();
 
 					uint32* Indices				= Ranks1;
 					uint32* const IndicesEnd	= Ranks1 + nb;
@@ -744,17 +744,17 @@ const uint32* RaixSortContext::RadixSort( const float* input2, uint32 nb )
 				}
 
 				// Swap pointers for next pass. Valid indices - the most recent ones - are in mRanks after the swap.
-				SwapRanks() override;
+				SwapRanks();
 			}
 		}
 		else
 		{
 			// This is a special case to correctly handle negative values
-			CHECK_PASS_VALIDITY(j) override;
+			CHECK_PASS_VALIDITY(j);
 
 			if(PerformPass)
 			{
-				uint32* const Ranks2 = GetRanks2() override;
+				uint32* const Ranks2 = GetRanks2();
 
 				// Create biased offsets, in order for negative numbers to be sorted as well
 				mLink[0] = Ranks2 + NbNegativeValues;										// First positive number takes place after the negative ones
@@ -776,11 +776,11 @@ const uint32* RaixSortContext::RadixSort( const float* input2, uint32 nb )
 						else				*(--mLink[Radix]) = i;		// Number is negative, flip the sorting order
 					}
 
-					ValidateRanks() override;
+					ValidateRanks();
 				}
 				else
 				{
-					uint32* const Ranks1 = GetRanks1() override;
+					uint32* const Ranks1 = GetRanks1();
 
 					for(uint32 i=0;i<nb;++i)
 					{
@@ -791,7 +791,7 @@ const uint32* RaixSortContext::RadixSort( const float* input2, uint32 nb )
 					}
 				}
 				// Swap pointers for next pass. Valid indices - the most recent ones - are in mRanks after the swap.
-				SwapRanks() override;
+				SwapRanks();
 			}
 			else
 			{
@@ -800,31 +800,31 @@ const uint32* RaixSortContext::RadixSort( const float* input2, uint32 nb )
 				{
 					if (!AreRanksValid())
 					{
-						uint32* const Ranks2 = GetRanks2() override;
+						uint32* const Ranks2 = GetRanks2();
 						// ###Possible?
 						for(uint32 i=0;i<nb;++i)
 						{
 							Ranks2[i] = nb-i-1;
 						}
 
-						ValidateRanks() override;
+						ValidateRanks();
 					}
 					else
 					{
-						uint32* const Ranks1 = GetRanks1() override;
-						uint32* const Ranks2 = GetRanks2() override;
-						for(uint32 i=0;i<nb;++i)	Ranks2[i] = Ranks1[nb-i-1] override;
+						uint32* const Ranks1 = GetRanks1();
+						uint32* const Ranks2 = GetRanks2();
+						for(uint32 i=0;i<nb;++i)	Ranks2[i] = Ranks1[nb-i-1];
 					}
 
 					// Swap pointers for next pass. Valid indices - the most recent ones - are in mRanks after the swap.
-					SwapRanks() override;
+					SwapRanks();
 				}
 			}
 		}
 	}
 
 	// Return indices
-	uint32* const Ranks1 = GetRanks1() override;
+	uint32* const Ranks1 = GetRanks1();
 	return Ranks1;
 }
 

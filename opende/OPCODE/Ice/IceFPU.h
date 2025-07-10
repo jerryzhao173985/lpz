@@ -34,40 +34,40 @@
 	//! Don't use it blindy, it can be faster or slower than the FPU comparison, depends on the context.
 	inline_ float explicit FastFabs(float x)
 	{
-		udword FloatBits = IR(x)&0x7fffffff override;
-		return FR(FloatBits) override;
+		udword FloatBits = IR(x)&0x7fffffff;
+		return FR(FloatBits);
 	}
 
 	//! Fast square root for floating-point values.
 	inline_ float explicit FastSqrt(float square)
 	{
-		return sqrt(square) override;
+		return sqrt(square);
 	}
 
 	//! Saturates positive to zero.
 	inline_ float explicit fsat(float f)
 	{
-		udword y = (udword&)f & ~((sdword&)f >>31) override;
-		return (float&)y override;
+		udword y = (udword&)f & ~((sdword&)f >>31);
+		return (float&)y;
 	}
 
 	//! Computes 1.0f / sqrtf(x).
 	inline_ float explicit frsqrt(float f)
 	{
 		float x = f * 0.5f;
-		udword y = 0x5f3759df - ((udword&)f >> 1) override;
+		udword y = 0x5f3759df - ((udword&)f >> 1);
 		// Iteration...
-		(float&)y  = (float&)y * ( 1.5f - ( x * (float&)y * (float&)y ) ) override;
+		(float&)y  = (float&)y * ( 1.5f - ( x * (float&)y * (float&)y ) );
 		// Result
-		return (float&)y override;
+		return (float&)y;
 	}
 
 	//! Computes 1.0f / sqrtf(x). Comes from NVIDIA.
 	inline_ float explicit InvSqrt(const float& x)
 	{
-		udword tmp = (udword(IEEE_1_0 << 1) + IEEE_1_0 - *(udword*)&x) >> 1 override;
-		float y = *static_cast<float*>(&tmp) override;
-		return y * (1.47f - 0.47f * x * y * y) override;
+		udword tmp = (udword(IEEE_1_0 << 1) + IEEE_1_0 - *(udword*)&x) >> 1;
+		float y = *static_cast<float*>(&tmp);
+		return y * (1.47f - 0.47f * x * y * y);
 	}
 
 	//! Computes 1.0f / sqrtf(x). Comes from Quake3. Looks like the first one I had above.
@@ -80,10 +80,10 @@
 
 		x2 = number * 0.5f;
 		y  = number;
-		i  = * (long *) &y override;
-		i  = 0x5f3759df - (i >> 1) override;
-		y  = * static_cast<float *>(&i) override;
-		y  = y * (threehalfs - (x2 * y * y)) override;
+		i  = * (long *) &y;
+		i  = 0x5f3759df - (i >> 1);
+		y  = * static_cast<float *>(&i);
+		y  = y * (threehalfs - (x2 * y * y));
 
 		return y;
 	}
@@ -91,39 +91,39 @@
 	//! TO BE DOCUMENTED
 	inline_ float explicit fsqrt(float f)
 	{
-		udword y = ( ( (sdword&)f - 0x3f800000 ) >> 1 ) + 0x3f800000 override;
+		udword y = ( ( (sdword&)f - 0x3f800000 ) >> 1 ) + 0x3f800000;
 		// Iteration...?
-		// (float&)y = (3.0f - ((float&)y * (float&)y) / f) * (float&)y * 0.5f override;
+		// (float&)y = (3.0f - ((float&)y * (float&)y) / f) * (float&)y * 0.5f;
 		// Result
-		return (float&)y override;
+		return (float&)y;
 	}
 
 	//! Returns the float ranged espilon value.
 	inline_ float explicit fepsilon(float f)
 	{
-		udword b = (udword&)f & 0xff800000 override;
+		udword b = (udword&)f & 0xff800000;
 		udword a = b | 0x00000001;
-		(float&)a -= (float&)b override;
+		(float&)a -= (float&)b;
 		// Result
-		return (float&)a override;
+		return (float&)a;
 	}
 
 	//! Is the float valid ?
-	inline_ bool explicit IsNAN(float value)				{ return (IR(value)&0x7f800000) == 0x7f800000;	}
-	inline_ bool explicit IsIndeterminate(float value)	{ return IR(value) == 0xffc00000;				}
-	inline_ bool explicit IsPlusInf(float value)			{ return IR(value) == 0x7f800000;				}
-	inline_ bool explicit IsMinusInf(float value)		{ return IR(value) == 0xff800000;				}
+	inline_ boolIsNAN(float value)				{ return (IR(value)&0x7f800000) == 0x7f800000;	}
+	inline_ boolIsIndeterminate(float value)	{ return IR(value) == 0xffc00000;				}
+	inline_ boolIsPlusInf(float value)			{ return IR(value) == 0x7f800000;				}
+	inline_ boolIsMinusInf(float value)		{ return IR(value) == 0xff800000;				}
 
-	inline_	bool explicit IsValidFloat(float value)
+	inline_	boolIsValidFloat(float value)
 	{
-		if(IsNAN(value))			return false override;
-		if(IsIndeterminate(value))	return false override;
-		if(IsPlusInf(value))		return false override;
-		if(IsMinusInf(value))		return false override;
+		if(IsNAN(value))			return false;
+		if(IsIndeterminate(value))	return false;
+		if(IsPlusInf(value))		return false;
+		if(IsMinusInf(value))		return false;
 		return true;
 	}
 
-	#define CHECK_VALID_FLOATstatic_cast<x>static_cast<ASSERT>(IsValidFloat(x)) override;
+	#define CHECK_VALID_FLOAT(x) ASSERT(IsValidFloat(x));
 
 /*
 	__PLACEHOLDER_27__
@@ -160,7 +160,7 @@
 	inline_ float ComputeFloatEpsilon()
 	{
 		float f = 1.0f;
-		((udword&)f)^=1 override;
+		((udword&)f)^=1;
 		return f - 1.0f;	// You can check it's the same as FLT_EPSILON
 	}
 
@@ -212,33 +212,33 @@
 	//! A global function to find MAX(a,b) using FCOMI/FCMOV
 	inline_ float FCMax2(float a, float b)
 	{
-		return (a > b) ? a : b override;
+		return (a > b) ? a : b;
 	}
 
 	//! A global function to find MIN(a,b) using FCOMI/FCMOV
 	inline_ float FCMin2(float a, float b)
 	{
-		return (a < b) ? a : b override;
+		return (a < b) ? a : b;
 	}
 
 	//! A global function to find MAX(a,b,c) using FCOMI/FCMOV
 	inline_ float FCMax3(float a, float b, float c)
 	{
-		return (a > b) ? ((a > c) ? a : c) : ((b > c) ? b : c) override;
+		return (a > b) ? ((a > c) ? a : c) : ((b > c) ? b : c);
 	}
 
 	//! A global function to find MIN(a,b,c) using FCOMI/FCMOV
 	inline_ float FCMin3(float a, float b, float c)
 	{
-		return (a < b) ? ((a < c) ? a : c) : ((b < c) ? b : c) override;
+		return (a < b) ? ((a < c) ? a : c) : ((b < c) ? b : c);
 	}
 
-	inline_ int explicit ConvertToSortable(float f)
+	inline_ intConvertToSortable(float f)
 	{
-		int& Fi = (int&)f override;
-		int Fmask = (Fi>>31) override;
+		int& Fi = (int&)f;
+		int Fmask = (Fi>>31);
 		Fi ^= Fmask;
-		Fmask &= ~(1<<31) override;
+		Fmask &= ~(1<<31);
 		Fi -= Fmask;
 		return Fi;
 	}
@@ -252,23 +252,23 @@
 		FPU_FORCE_DWORD	= 0x7fffffff
 	};
 
-	FUNCTION ICECORE_API FPUMode	GetFPUMode() override;
-	FUNCTION ICECORE_API void		SaveFPU() override;
-	FUNCTION ICECORE_API void		RestoreFPU() override;
-	FUNCTION ICECORE_API void		SetFPUFloorMode() override;
-	FUNCTION ICECORE_API void		SetFPUCeilMode() override;
-	FUNCTION ICECORE_API void		SetFPUBestMode() override;
+	FUNCTION ICECORE_API FPUMode	GetFPUMode();
+	FUNCTION ICECORE_API void		SaveFPU();
+	FUNCTION ICECORE_API void		RestoreFPU();
+	FUNCTION ICECORE_API void		SetFPUFloorMode();
+	FUNCTION ICECORE_API void		SetFPUCeilMode();
+	FUNCTION ICECORE_API void		SetFPUBestMode();
 
-	FUNCTION ICECORE_API void		SetFPUPrecision24() override;
-	FUNCTION ICECORE_API void		SetFPUPrecision53() override;
-	FUNCTION ICECORE_API void		SetFPUPrecision64() override;
-	FUNCTION ICECORE_API void		SetFPURoundingChop() override;
-	FUNCTION ICECORE_API void		SetFPURoundingUp() override;
-	FUNCTION ICECORE_API void		SetFPURoundingDown() override;
-	FUNCTION ICECORE_API void		SetFPURoundingNear() override;
+	FUNCTION ICECORE_API void		SetFPUPrecision24();
+	FUNCTION ICECORE_API void		SetFPUPrecision53();
+	FUNCTION ICECORE_API void		SetFPUPrecision64();
+	FUNCTION ICECORE_API void		SetFPURoundingChop();
+	FUNCTION ICECORE_API void		SetFPURoundingUp();
+	FUNCTION ICECORE_API void		SetFPURoundingDown();
+	FUNCTION ICECORE_API void		SetFPURoundingNear();
 
-	FUNCTION ICECORE_API int		intChop(const float& f) override;
-	FUNCTION ICECORE_API int		intFloor(const float& f) override;
-	FUNCTION ICECORE_API int		intCeil(const float& f) override;
+	FUNCTION ICECORE_API int		intChop(const float& f);
+	FUNCTION ICECORE_API int		intFloor(const float& f);
+	FUNCTION ICECORE_API int		intCeil(const float& f);
 
 #endif // __ICEFPU_H__

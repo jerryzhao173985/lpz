@@ -53,7 +53,7 @@ namespace lpzrobots {
     virtual int getSensorNumber()  const override;
 
     virtual bool sense(const GlobalData& globaldata);
-    virtual std::list<sensor> getList()  const override;
+    virtual std::list<sensor> getList()  const;
     virtual int get(sensor* sensors, int length)  const override;
   protected:
     matrix::Matrix getSenseMatrix() const;

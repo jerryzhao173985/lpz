@@ -32,7 +32,7 @@ namespace lpzrobots {
   class Formel1 : public OdeRobot {
   public:
 
-    explicit Formel1(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
+    formel1(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
           double size=1, double force=3, double speed=15, bool sphereWheels=true);
 
     virtual ~Formel1() {};
@@ -40,26 +40,26 @@ namespace lpzrobots {
     /**
      * updates the OSG nodes of the vehicle
      */
-    virtual void update() override;
+    virtual void update();
 
 
     /** sets the pose of the vehicle
         @param pose desired pose matrix
     */
-    virtual void placeIntern(const osg::Matrix& pose) override;
+    virtual void placeIntern(const osg::Matrix& pose);
 
     /** returns actual sensorvalues
         @param sensors sensors scaled to [-1,1]
         @param sensornumber length of the sensor array
         @return number of actually written sensors
     */
-    virtual int getSensorsIntern(double* sensors, int sensornumber) override;
+    virtual int getSensorsIntern(double* sensors, int sensornumber);
 
     /** sets actual motorcommands
         @param motors motors scaled to [-1,1]
         @param motornumber length of the motor array
     */
-    virtual void setMotorsIntern(const double* motors, int motornumber) override;
+    virtual void setMotorsIntern(const double* motors, int motornumber);
 
     /** returns number of sensors
      */

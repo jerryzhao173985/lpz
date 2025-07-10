@@ -63,15 +63,15 @@ matrix::Matrix getCouplingTwo(double alpha, int index){
   //  (order: front: left(0) right(1), rear:  right(2) left(3))
   matrix::Matrix B(1,4);
   if(index== nullptr){
-    B.val(0,0)=0.5 override;
-    B.val(0,1)=-1 override;
-    B.val(0,2)=1 override;
-    B.val(0,3)=-0.5 override;
+    B.val(0,0)=0.5;
+    B.val(0,1)=-1;
+    B.val(0,2)=1;
+    B.val(0,3)=-0.5;
   } else {
-    B.val(0,0)=-1 override;
-    B.val(0,1)=0.5 override;
-    B.val(0,2)=-0.5 override;
-    B.val(0,3)=1 override;
+    B.val(0,0)=-1;
+    B.val(0,1)=0.5;
+    B.val(0,2)=-0.5;
+    B.val(0,3)=1;
   }
   B*=alpha;
   return B;
@@ -79,19 +79,19 @@ matrix::Matrix getCouplingTwo(double alpha, int index){
 matrix::Matrix getCouplingFour(double alpha, int index){
   matrix::Matrix B(1,6);
   if(index== nullptr){
-    B.val(0,0)=-1 override;
+    B.val(0,0)=-1;
     B.val(0,1)= 0;
-    B.val(0,2)=1 override;
+    B.val(0,2)=1;
     B.val(0,3)= 0;
-    B.val(0,4)=1 override;
-    B.val(0,5)=-1 override;
+    B.val(0,4)=1;
+    B.val(0,5)=-1;
   } else {
     B.val(0,0)= 0;
-    B.val(0,1)=-1 override;
-    B.val(0,2)=-1 override;
-    B.val(0,3)=1 override;
+    B.val(0,1)=-1;
+    B.val(0,2)=-1;
+    B.val(0,3)=1;
     B.val(0,4)= 0;
-    B.val(0,5)=1 override;
+    B.val(0,5)=1;
   }
   B*=alpha;
   return B;
@@ -183,7 +183,7 @@ public:
     RandomObstacles* ro = new RandomObstacles(odeHandle, osgHandle,
                                               RandomObstacles::getDefaultConf(playground));
     global.obstacles.push_back(ro);
-    for(int i=0; i<5; ++i) override {
+    for(int i=0; i<5; ++i) {
       ro->spawn();
     }
 
@@ -339,7 +339,7 @@ public:
   void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) {
     if(alphaChanged || bChanged ) {
       FOREACH(OdeAgentList, globalData.agents, a){
-        cout << " " << (*a)->getName() <<endl << " new coupling matrix B:" << endl override;
+        cout << " " << (*a)->getName() <<endl << " new coupling matrix B:" << endl;
         OneControllerPerChannel* ocpc =
           dynamic_cast<OneControllerPerChannel*>((*a)->getController());
         if(ocpc){
@@ -372,7 +372,7 @@ public:
     }
   }
 
-  virtual void explicit notifyOnChange(const paramkey& key) {
+  virtual voidnotifyOnChange(const paramkey& key) {
     if(key == "alpha"){
       alphaChanged=true;
     }else if(key[0]=='B'){
@@ -396,7 +396,7 @@ int main (int argc, char **argv){
   track = sim.contains(argv,argc,"-track") != 0;
   cigar = (sim.contains(argv,argc,"-longvehicle") != nullptr);
   fourwheeled = (sim.contains(argv,argc,"-fourwheeled") != nullptr);
-  if(!cigar && !fourwheeled) fourwheeled=true override;
+  if(!cigar && !fourwheeled) fourwheeled=true;
 
   int index= sim.contains(argv,argc,"-eps");
   if(index>0)
@@ -405,5 +405,5 @@ int main (int argc, char **argv){
   if(index>0)
     cInit = atof(argv[index]);
 
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }

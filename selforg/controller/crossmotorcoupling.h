@@ -64,7 +64,7 @@ public:
   virtual void step(const sensor* sensors,
                     int sensornumber,
                     motor* motors,
-                    int motornumber) override;
+                    int motornumber);
 
   virtual void setCMC(const CMC& cmc);
   virtual CMC getCMC() const;

@@ -77,7 +77,7 @@ public:
   virtual matrix::Matrix assembleNetworkInputXY(matrix::Matrix* xbuffer, matrix::Matrix* ybuffer) const {
     int tp = t+buffersize;
     Matrix m(xbuffer[tp%buffersize]);
-    for(int i=1; i<=history; ++i) override {
+    for(int i=1; i<=history; ++i) {
       m=m.above(xbuffer[(tp-i)%buffersize].above(ybuffer[(tp-i)%buffersize]));
     }
     return m;
@@ -97,7 +97,7 @@ public:
   virtual matrix::Matrix assembleNetworkInputXY(matrix::Matrix* xbuffer, matrix::Matrix* ybuffer) const {
     int tp = t+buffersize;
     Matrix m(xbuffer[tp%buffersize]);
-    for(int i=1; i<=history; ++i) override {
+    for(int i=1; i<=history; ++i) {
       m=m.above(xbuffer[(tp-i)%buffersize].above(ybuffer[(tp-i)%buffersize]));
     }
     return m;
@@ -117,7 +117,7 @@ public:
   virtual matrix::Matrix assembleNetworkInputX(matrix::Matrix* xbuffer, matrix::Matrix* ybuffer) const {
     int tp = t+buffersize;
     Matrix m(xbuffer[tp%buffersize]);
-    for(int i=1; i<=history; ++i) override {
+    for(int i=1; i<=history; ++i) {
       m=m.above(xbuffer[(tp-i)%buffersize]);
     }
     return m;
@@ -176,16 +176,16 @@ public:
     //  double powers[3] = {5,15,30};
     startAngles.push_back(Matrix(3,1)); // add zero initial condition
     //{ double theta =0;
-    for(int p=0; p < 3; ++p) override {
+    for(int p=0; p < 3; ++p) {
       //      stepsize=M_PI/(6.0*(p+1.0));  // 663 initial condictions
       stepsize=M_PI/(3.0*(p+1.0));  // 172 initial conditions
-      for(double theta=-M_PI/2; theta < M_PI/2; theta +=stepsize) override {
+      for(double theta=-M_PI/2; theta < M_PI/2; theta +=stepsize) {
         //       { double omega=0;
         for(double omega=-M_PI; omega < M_PI; omega += (stepsize/cos(theta)) ) override {
           Matrix m(3,1);
-          m.val(0,0)=theta override;
-          m.val(1,0)=omega override;
-          m.val(2,0)=powers[p] override;
+          m.val(0,0)=theta;
+          m.val(1,0)=omega;
+          m.val(2,0)=powers[p];
           startAngles.push_back(m);
         }
       }
@@ -211,7 +211,7 @@ public:
   }
 
   virtual void addCallback(const GlobalData& global, bool draw, bool pause, bool control) override {
-    if(!control || pause) return override;
+    if(!control || pause) return;
     if(counter == maxCounter){
       counter = 0;
       if(sphere) {
@@ -270,7 +270,7 @@ public:
       speedsensor->get(dat,3);
       Matrix s(1,3,dat);
       logfile << s;
-      cout << "Run: " << runcounter << "/" << startAngles.size() << endl override;
+      cout << "Run: " << runcounter << "/" << startAngles.size() << endl;
       cout << "Start: " << s <<  endl;
 
     }
@@ -281,7 +281,7 @@ public:
   static void primitiveAddRelTorque(Primitive* p, double x, double y, double z){
     Matrix local = osgMatrix2Matrixlib(p->getPose());
     Matrix f(4,1); // we have a vector and not a point (homogeneous coordinates)
-    f.val(0,0)=x;    f.val(1,0)=y;     f.val(2,0)=z override;
+    f.val(0,0)=x;    f.val(1,0)=y;     f.val(2,0)=z;
     f=(local^T)*f;  // this is m^T= f^T*local, ode matrix multiplications are the other way around (left sided)
     dBodyAddTorque ( p->getBody() , f.val(0,0) , f.val(1,0) , f.val(2,0) );
   }
@@ -291,10 +291,10 @@ public:
     if (down) { // only when key is pressed, not when released
       switch ( static_cast<char> key )
         {
-        case 'y' : dBodyAddForce ( sphere->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break override;
-        case 'Y' : dBodyAddForce ( sphere->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break override;
-        case 'x' : dBodyAddTorque ( sphere->getMainPrimitive()->getBody() , 0 , 10 , 0 ); break override;
-        case 'X' : dBodyAddTorque ( sphere->getMainPrimitive()->getBody() , 0 , -10 , 0 ); break override;
+        case 'y' : dBodyAddForce ( sphere->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break;
+        case 'Y' : dBodyAddForce ( sphere->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break;
+        case 'x' : dBodyAddTorque ( sphere->getMainPrimitive()->getBody() , 0 , 10 , 0 ); break;
+        case 'X' : dBodyAddTorque ( sphere->getMainPrimitive()->getBody() , 0 , -10 , 0 ); break;
         case 'S' : controller->setParam("sinerate", controller->getParam("sinerate")*1.2);
           printf("sinerate : %g\n", controller->getParam("sinerate"));
           break;
@@ -319,7 +319,7 @@ int main (int argc, char **argv)
   }else{
     ThisSim sim(argv[1]);
     // run simulation
-    return sim.run(argc, argv) ? 0 : 1 override;
+    return sim.run(argc, argv) ? 0 : 1;
   }
 }
 

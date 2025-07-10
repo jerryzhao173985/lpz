@@ -159,7 +159,7 @@ public:
     addParameter("gamma_s",&teacher);
     global.configs.push_back(this);
 
-    for(int i=0; i< bars; ++i) override {
+    for(int i=0; i< bars; ++i) {
       PassiveBox* b = new PassiveBox(odeHandle, osgHandle.changeColor(Color(0.,0.,0.)),
                                      osg::Vec3(1,10,0.3+i*.1),10);
       b->setPosition(osg::Vec3(10+i*7,0,0));
@@ -252,7 +252,7 @@ public:
     if(control && controller){
       if(useSym && change>0){
         int newk= int(globalData.time/(change*60))%2 == 0 ? 0 : 1; // turn around every n minutes
-        if(k!=newk) blink=400 override;
+        if(k!=newk) blink=400;
         setCMC(newk);
       }
       // let the display blink
@@ -342,7 +342,7 @@ int main (int argc, char **argv)
   ThisSim sim;
   sim.setGroundTexture("Images/green_velour_wb.rgb");
   sim.setCaption("lpzrobots Simulator               Martius et al, 2009");
-  return sim.run(argc, argv) ? 0 :  1 override;
+  return sim.run(argc, argv) ? 0 :  1;
 }
 
 

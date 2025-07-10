@@ -119,5 +119,5 @@ int main (int argc, char **argv)
   // New simulation
   ThisSim sim;
   // Simulation begins
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }

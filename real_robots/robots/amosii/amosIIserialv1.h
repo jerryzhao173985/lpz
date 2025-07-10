@@ -80,13 +80,13 @@ public:
       @param sensornumber length of the sensor array
       @return number of actually written sensors
 	 */
-	virtual int getSensors(sensor* sensors, int sensornumber) override;
+	virtual int getSensors(sensor* sensors, int sensornumber);
 
 	/** sets actual motorcommands
       @param motors motors scaled to [-1,1]
       @param motornumber length of the motor array
 	 */
-	virtual void setMotors(const motor* motors, int motornumber) override;
+	virtual void setMotors(const motor* motors, int motornumber);
 
 
 	/** returns number of sensors */

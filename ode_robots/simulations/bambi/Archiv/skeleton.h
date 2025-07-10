@@ -333,7 +333,7 @@ namespace lpzrobots {
         like space-internal collision detection, sensor resets/update etc.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void explicit doInternalStuff(const GlobalData& globalData);
+    virtual voiddoInternalStuff(const GlobalData& globalData);
 
 
 

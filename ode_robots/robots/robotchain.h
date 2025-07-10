@@ -90,26 +90,26 @@ namespace lpzrobots {
     /** sets the pose of the vehicle
         @param pose desired pose matrix
     */
-    virtual void placeIntern(const osg::Matrix& pose) override;
+    virtual void placeIntern(const osg::Matrix& pose);
 
-    virtual int getSensorsIntern(sensor* sensors, int sensornumber) override;
+    virtual int getSensorsIntern(sensor* sensors, int sensornumber);
 
-    virtual void setMotorsIntern(const double* motors, int motornumber) override;
+    virtual void setMotorsIntern(const double* motors, int motornumber);
 
     virtual int getSensorNumberIntern()  const override;
 
     virtual int getMotorNumberIntern()  const override;
 
-    virtual void doInternalStuff(const GlobalData& globalData) override;
+    virtual void doInternalStuff(const GlobalData& globalData);
 
     /******** CONFIGURABLE ***********/
-    virtual void notifyOnChange(const paramkey& key) override;
+    virtual void notifyOnChange(const paramkey& key);
 
 
     virtual int getIRSensorNum() const;
 
   protected:
-    virtual const Primitive* getMainPrimitive()  const override;
+    virtual const Primitive* getMainPrimitive()  const;
 
     virtual void create(const osg::Matrix& pose);
 

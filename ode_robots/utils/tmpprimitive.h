@@ -87,9 +87,9 @@ namespace lpzrobots {
     TmpDisplayItem(const TmpDisplayItem&) = delete;
     TmpDisplayItem& operator=(const TmpDisplayItem&) = delete;
 
-    virtual void init(const OdeHandle& odeHandle, const OsgHandle& osgHandle) override;
+    virtual void init(const OdeHandle& odeHandle, const OsgHandle& osgHandle);
 
-    virtual void deleteObject() override;
+    virtual void deleteObject();
     virtual void update() override {} // nothing to be done here, because they do not move
 
   private:
@@ -122,10 +122,10 @@ namespace lpzrobots {
     TmpJoint(const TmpJoint&) = delete;
     TmpJoint& operator=(const TmpJoint&) = delete;
 
-    virtual void init(const OdeHandle& odeHandle, const OsgHandle& osgHandle) override;
+    virtual void init(const OdeHandle& odeHandle, const OsgHandle& osgHandle);
 
-    virtual void deleteObject() override;
-    virtual void update() override;
+    virtual void deleteObject();
+    virtual void update();
 
   private:
     Joint* joint = nullptr;

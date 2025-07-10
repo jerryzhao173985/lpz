@@ -226,7 +226,7 @@ namespace lpzrobots {
        *
        * @return pointer to the robot head primitive
        */
-      virtual Primitive* getMainPrimitive()  const override;
+      virtual Primitive* getMainPrimitive()  const;
 
       /**
        * Returns number of motors.
@@ -321,7 +321,7 @@ namespace lpzrobots {
        * @param motors motors scaled to [-1,1]
        * @param motornumber length of the motor array
        */
-      virtual void setMotorsIntern(const double* motors, int motornumber) override;
+      virtual void setMotorsIntern(const double* motors, int motornumber);
 
     private:
 

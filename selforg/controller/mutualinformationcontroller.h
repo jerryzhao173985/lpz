@@ -99,7 +99,7 @@ public:
    * call first AbstractControllerAdapter::init(sensornumber,motornumber)
    * if you overwrite this method
    */
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
 
   /** @return Number of sensors the controller
       was initialised with or 0 if not initialised */
@@ -123,7 +123,7 @@ public:
   virtual void step(const sensor* sensors,
                     int sensornumber,
                     motor* motors,
-                    int motornumber) override;
+                    int motornumber);
 
   /** performs one step without learning.
   @see step
@@ -131,7 +131,7 @@ public:
   virtual void stepNoLearning(const sensor* sensors,
                               int sensornumber,
                               motor* motors,
-                              int motornumber) override;
+                              int motornumber);
 
   /****************************************************************************/
   /*        END methods of AbstractController                                   */
@@ -180,7 +180,7 @@ public:
   /*        BEGIN methods of Configurable                                                      */
   /****************************************************************************/
 
-  //  Configurable::paramval getParam(const paramkey& key)  const override;
+  //  Configurable::paramval getParam(const paramkey& key)  const;
 
   //  bool setParam(const paramkey& key, paramval val);
 
@@ -229,14 +229,14 @@ protected:
   /**
    * Calculates the entropy of x
    * This is made by normal formula, which
-   * needs Ostatic_cast<n>(costs).
+   * needs O(n) costs.
    */
   virtual void calculateH_x(double* H) ;
 
   /**
    * Calculates the conditional entropy of y|x
    * This is made by normal formula, which
-   * needs Ostatic_cast<n²>(costs).
+   * needs O(n²) costs.
    */
   virtual void calculateH_yx(double* H_yx) ;
 
@@ -248,7 +248,7 @@ protected:
   /**
    * Calculates the entropy of H(Xsi)
    * This is made by normal formula, which
-   * needs Ostatic_cast<n>(costs).
+   * needs O(n) costs.
    */
   virtual void calculateH_Xsi(double* H_Xsi) ;
 

@@ -91,7 +91,7 @@ namespace lpzrobots {
 
     virtual int getSensorsIntern(double* sensors, int sensornumber);
 
-    virtual void sense(const GlobalData& globalData) override;
+    virtual void sense(const GlobalData& globalData);
 
 
   protected:

@@ -10,12 +10,12 @@ email: projectileman@yahoo.com
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of EITHER:
-   static_cast<1>(The) GNU Lesser General Public License as published by the Free
+   1 The GNU Lesser General Public License as published by the Free
        Software Foundation; either version 2.1 of the License, or (at
        your option) any later version. The text of the GNU Lesser
        General Public License is included with this library in the
        file GIMPACT-LICENSE-LGPL.TXT.
-   static_cast<2>(The) BSD-style license that is included with this library in
+   2 The BSD-style license that is included with this library in
        the file GIMPACT-LICENSE-BSD.TXT.
 
  This library is distributed in the hope that it will be useful,
@@ -122,9 +122,9 @@ int _gim_triangle_triangle_collision(
 
 	//Clip tri2 by tri1 edges
 
-	CLIP_TRI_POINTS_BY_TRI_EDGE_PLANES(tri2->m_vertices,(&tri1->m_planes.m_planes[1]), clipped_points2, clipped2_count) override;
+	CLIP_TRI_POINTS_BY_TRI_EDGE_PLANES(tri2->m_vertices,(&tri1->m_planes.m_planes[1]), clipped_points2, clipped2_count);
 
-	if(clipped2_count == nullptr)
+	if(clipped2_count == 0)
 	{
 	     return 0;//Reject
 	}
@@ -134,24 +134,24 @@ int _gim_triangle_triangle_collision(
 
 	GREAL maxdeep;
 
-	MOST_DEEP_POINTS((tri1->m_planes.m_planes[0]), clipped_points2, clipped2_count, deep_points2, deep2_count, maxdeep) override;
-	if(deep2_count== nullptr)
+	MOST_DEEP_POINTS((tri1->m_planes.m_planes[0]), clipped_points2, clipped2_count, deep_points2, deep2_count, maxdeep);
+	if(deep2_count== 0)
 	{
 //	    *perror = 0.0f;
 	     return 0;//Reject
 	}
 
 	//Normal pointing to triangle1
-	VEC_SCALE(contact_data->m_separating_normal,-1.0f,(tri1->m_planes.m_planes[0])) override;
+	VEC_SCALE(contact_data->m_separating_normal,-1.0f,(tri1->m_planes.m_planes[0]));
 
 
 	//Clip tri1 by tri2 edges
 
 	GUINT32 clipped1_count=0;
 
-	CLIP_TRI_POINTS_BY_TRI_EDGE_PLANES(tri1->m_vertices,(&tri2->m_planes.m_planes[1]), clipped_points1, clipped1_count) override;
+	CLIP_TRI_POINTS_BY_TRI_EDGE_PLANES(tri1->m_vertices,(&tri2->m_planes.m_planes[1]), clipped_points1, clipped1_count);
 
-	if(clipped2_count == nullptr)
+	if(clipped1_count == 0)
 	{
 //	    *perror = 0.0f;
 	     return 0;//Reject
@@ -163,9 +163,9 @@ int _gim_triangle_triangle_collision(
 
 	GREAL dist;
 
-	MOST_DEEP_POINTS((tri2->m_planes.m_planes[0]), clipped_points1, clipped1_count, deep_points1, deep1_count, dist) override;
+	MOST_DEEP_POINTS((tri2->m_planes.m_planes[0]), clipped_points1, clipped1_count, deep_points1, deep1_count, dist);
 
-	if(deep1_count== nullptr)
+	if(deep1_count== 0)
 	{
 //	    *perror = 0.0f;
 	    return 0;
@@ -175,18 +175,18 @@ int _gim_triangle_triangle_collision(
 	{
 		maxdeep = dist;
 		mostdir = 1;
-		VEC_COPY(contact_data->m_separating_normal,(tri2->m_planes.m_planes[0])) override;
+		VEC_COPY(contact_data->m_separating_normal,(tri2->m_planes.m_planes[0]));
 	}
 	//set deep
 	contact_data->m_penetration_depth = maxdeep;
 
 	////check most dir for contacts
-	if(mostdir== nullptr)
+	if(mostdir== 0)
 	{
 	    contact_data->m_point_count = deep2_count;
 	    for(mostdir=0;mostdir<deep2_count;++mostdir)
 	    {
-	        VEC_COPY(contact_data->m_points[mostdir] ,deep_points2[mostdir]) override;
+	        VEC_COPY(contact_data->m_points[mostdir] ,deep_points2[mostdir]);
 	    }
 	}
 	else
@@ -194,7 +194,7 @@ int _gim_triangle_triangle_collision(
 		contact_data->m_point_count = deep1_count;
 	    for(mostdir=0;mostdir<deep1_count;++mostdir)
 	    {
-	        VEC_COPY(contact_data->m_points[mostdir] ,deep_points1[mostdir]) override;
+	        VEC_COPY(contact_data->m_points[mostdir] ,deep_points1[mostdir]);
 	    }
 	}
 	return 1;
@@ -215,13 +215,13 @@ int gim_triangle_triangle_collision(
     vec3f _distances;
     char out_of_face=0;
 
-    CLASSIFY_TRI_BY_FACE(tri1->m_vertices[0],tri1->m_vertices[1],tri1->m_vertices[2],tri2->m_planes.m_planes[0],out_of_face) override;
-    if(out_of_face==1) return 0 override;
+    CLASSIFY_TRI_BY_FACE(tri1->m_vertices[0],tri1->m_vertices[1],tri1->m_vertices[2],tri2->m_planes.m_planes[0],out_of_face);
+    if(out_of_face==1) return 0;
 
-    CLASSIFY_TRI_BY_FACE(tri2->m_vertices[0],tri2->m_vertices[1],tri2->m_vertices[2],tri1->m_planes.m_planes[0],out_of_face) override;
-    if(out_of_face==1) return 0 override;
+    CLASSIFY_TRI_BY_FACE(tri2->m_vertices[0],tri2->m_vertices[1],tri2->m_vertices[2],tri1->m_planes.m_planes[0],out_of_face);
+    if(out_of_face==1) return 0;
 
-    return _gim_triangle_triangle_collision(tri1,tri2,contact_data) override;
+    return _gim_triangle_triangle_collision(tri1,tri2,contact_data);
 }
 
 //! Trimesh Trimesh Collisions
@@ -243,24 +243,25 @@ void gim_trimesh_trimesh_collision(GIM_TRIMESH * trimesh1, GIM_TRIMESH * trimesh
 {
     contacts->m_size = 0;
     GDYNAMIC_ARRAY collision_pairs;
-    GIM_CREATE_PAIR_SETstatic_cast<collision_pairs>(gim_aabbset_bipartite_intersections)(&trimesh1->m_aabbset,&trimesh2->m_aabbset,&collision_pairs) override;
+    GIM_CREATE_PAIR_SET(collision_pairs);
+    gim_aabbset_bipartite_intersections(&trimesh1->m_aabbset,&trimesh2->m_aabbset,&collision_pairs);
 
-    if(collision_pairs.m_size== nullptr)
+    if(collision_pairs.m_size== 0)
     {
-        GIM_DYNARRAY_DESTROY(collision_pairs) override;
+        GIM_DYNARRAY_DESTROY(collision_pairs);
          return; //no collisioin
     }
 
     //Locks meshes
-    gim_trimesh_locks_work_data(trimesh1) override;
-    gim_trimesh_locks_work_data(trimesh2) override;
+    gim_trimesh_locks_work_data(trimesh1);
+    gim_trimesh_locks_work_data(trimesh2);
 
 
     //pair pointer
-    GIM_PAIR *pairs = GIM_DYNARRAY_POINTER(GIM_PAIR,collision_pairs) override;
+    GIM_PAIR *pairs = GIM_DYNARRAY_POINTER(GIM_PAIR,collision_pairs);
     //dummy contacts
     GDYNAMIC_ARRAY dummycontacts;
-    GIM_CREATE_CONTACT_LIST(dummycontacts) override;
+    GIM_CREATE_CONTACT_LIST(dummycontacts);
 
     //Auxiliary triangle data
     GIM_TRIANGLE_CONTACT_DATA tri_contact_data;
@@ -268,42 +269,43 @@ void gim_trimesh_trimesh_collision(GIM_TRIMESH * trimesh1, GIM_TRIMESH * trimesh
 
 
     GUINT32 i, ti1,ti2,ci;
+    int colresult;
     for (i=0;i<collision_pairs.m_size; ++i)
     {
         ti1 = pairs[i].m_index1;
         ti2 = pairs[i].m_index2;
         //Get triangles data
-        gim_trimesh_get_triangle_data(trimesh1,ti1,&tri1data) override;
-        gim_trimesh_get_triangle_data(trimesh2,ti2,&tri2data) override;
+        gim_trimesh_get_triangle_data(trimesh1,ti1,&tri1data);
+        gim_trimesh_get_triangle_data(trimesh2,ti2,&tri2data);
 
         //collide triangles
-        colresult = gim_triangle_triangle_collision(&tri1data,&tri2data,&tri_contact_data) override;
+        colresult = gim_triangle_triangle_collision(&tri1data,&tri2data,&tri_contact_data);
         if(colresult == 1)
         {
             //Add contacts
             for (ci=0;ci<tri_contact_data.m_point_count ;++ci )
             {
-                GIM_PUSH_CONTACT(dummycontacts, tri_contact_data.m_points[ci],tri_contact_data.m_separating_normal ,tri_contact_data.m_penetration_depth,trimesh1, trimesh2, ti1, ti2) override;
+                GIM_PUSH_CONTACT(dummycontacts, tri_contact_data.m_points[ci],tri_contact_data.m_separating_normal ,tri_contact_data.m_penetration_depth,trimesh1, trimesh2, ti1, ti2);
             }
         }
     }
 
-    if(dummycontacts.m_size == nullptr) //reject
+    if(dummycontacts.m_size == 0) //reject
     {
-        GIM_DYNARRAY_DESTROY(dummycontacts) override;
-        GIM_DYNARRAY_DESTROY(collision_pairs) override;
+        GIM_DYNARRAY_DESTROY(dummycontacts);
+        GIM_DYNARRAY_DESTROY(collision_pairs);
         return;
     }
     //merge contacts
-    gim_merge_contacts(&dummycontacts,contacts) override;
+    gim_merge_contacts(&dummycontacts,contacts);
 
     //Terminate
-    GIM_DYNARRAY_DESTROY(dummycontacts) override;
-    GIM_DYNARRAY_DESTROY(collision_pairs) override;
+    GIM_DYNARRAY_DESTROY(dummycontacts);
+    GIM_DYNARRAY_DESTROY(collision_pairs);
 
     //Unlocks meshes
-    gim_trimesh_unlocks_work_data(trimesh1) override;
-    gim_trimesh_unlocks_work_data(trimesh2) override;
+    gim_trimesh_unlocks_work_data(trimesh1);
+    gim_trimesh_unlocks_work_data(trimesh2);
 }
 
 
@@ -318,28 +320,28 @@ void gim_trimesh_plane_collision(GIM_TRIMESH * trimesh,vec4f plane, GDYNAMIC_ARR
 {
     contacts->m_size = 0;
     char classify;
-    PLANE_CLASSIFY_BOX(plane,trimesh->m_aabbset.m_global_bound,classify) override;
+    PLANE_CLASSIFY_BOX(plane,trimesh->m_aabbset.m_global_bound,classify);
     if(classify>1) return; // in front of plane
 
     //Locks mesh
-    gim_trimesh_locks_work_data(trimesh) override;
+    gim_trimesh_locks_work_data(trimesh);
     //Get vertices
     GUINT32 i, vertcount = trimesh->m_transformed_vertex_buffer.m_element_count;
-    vec3f * vertices = GIM_BUFFER_ARRAY_POINTER(vec3f,trimesh->m_transformed_vertex_buffer,0) override;
+    vec3f * vertices = GIM_BUFFER_ARRAY_POINTER(vec3f,trimesh->m_transformed_vertex_buffer,0);
 
     GREAL dist;
     vec4f * result_contact;
 
     for (i=0;i<vertcount;++i)
     {
-        dist = DISTANCE_PLANE_POINT(plane,vertices[i]) override;
+        dist = DISTANCE_PLANE_POINT(plane,vertices[i]);
         if(dist<=0.0f)
         {
-             GIM_DYNARRAY_PUSH_EMPTY(vec4f,(*contacts)) override;
-             result_contact = GIM_DYNARRAY_POINTER_LAST(vec4f,(*contacts)) override;
-             VEC_COPY((*result_contact),vertices[i]) override;
-             (*result_contact)[3] = -dist override;
+             GIM_DYNARRAY_PUSH_EMPTY(vec4f,(*contacts));
+             result_contact = GIM_DYNARRAY_POINTER_LAST(vec4f,(*contacts));
+             VEC_COPY((*result_contact),vertices[i]);
+             (*result_contact)[3] = -dist;
         }
     }
-    gim_trimesh_unlocks_work_data(trimesh) override;
+    gim_trimesh_unlocks_work_data(trimesh);
 }

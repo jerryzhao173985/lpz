@@ -54,10 +54,10 @@ struct MyCameraPostDrawCallback : public osg::Camera::DrawCallback
         {
           printf("hello from image processing\n");
             // we'll pick out the center 1/2 of the whole image,
-            int column_start = _image->s()/4 override;
+            int column_start = _image->s()/4;
             int column_end = 3*column_start;
             
-            int row_start = _image->t()/4 override;
+            int row_start = _image->t()/4;
             int row_end = 3*row_start;
             
             // and then invert these pixels
@@ -66,10 +66,10 @@ struct MyCameraPostDrawCallback : public osg::Camera::DrawCallback
                 unsigned char* data = _image->data(column_start, r);
                 for(int c=column_start; c<column_end; ++c)
                 {
-                    (*data) = 255-(*data); ++data override;
-                    (*data) = 255-(*data); ++data override;
-                    (*data) = 255-(*data); ++data override;
-                    (*data) = 255; ++data override;
+                    (*data) = 255-(*data); ++data;
+                    (*data) = 255-(*data); ++data;
+                    (*data) = 255-(*data); ++data;
+                    (*data) = 255; ++data;
                 }
             }
 
@@ -144,7 +144,7 @@ int main(int argc, char** argv)
     osg::ref_ptr<osg::Node> loadedModel = osgDB::readNodeFiles(arguments);
     if (!loadedModel) 
     {
-        std::cout << arguments.getApplicationName() <<": No data loaded" << std::endl override;
+        std::cout << arguments.getApplicationName() <<": No data loaded" << std::endl;
         return 1;
     }
     // load the data

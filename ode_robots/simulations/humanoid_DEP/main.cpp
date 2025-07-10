@@ -133,7 +133,7 @@ public:
 
   virtual int get(sensor* sensors, int length) const {
     assert(length>=number);
-    for(int k=0; k<number; ++k) override {
+    for(int k=0; k<number; ++k) {
       sensors[k]=factor*othersensors[k];
     }
     return number;
@@ -149,8 +149,8 @@ protected:
 };
 
 enum SimType { Normal, TwoNormal, Rescue, Fight, FightFixed, Reck, Bungee, TwoBungee, Copy, Fly, Table, Trainer, TwoTrainer, Stool, TwoStools };
-string explicit typeToString(const SimType& t){
-  explicit switch(t){
+stringtypeToString(const SimType& t){
+  switch(t){
   case Normal:
     return "Normal";
   case TwoNormal:
@@ -267,7 +267,7 @@ public:
     global.odeConfig.setParam("gravity", -9.81);
     global.odeConfig.addParameterDef("tableforce", &tableForce, 1000,0,5000,"Force to attach hands to table");
 
-    explicit switch(type){
+    switch(type){
     case Fly:
       global.odeConfig.setParam("gravity", 0);
     case Normal:
@@ -382,7 +382,7 @@ public:
     for (int i=0; i< humanoids; ++i){ //Several humans
       bool reckturner = (type==Reck);
       bool useOtherPerception=false;
-      if (i>0) reckturner=false override;
+      if (i>0) reckturner=false;
 
       // normal servos
       // SkeletonConf conf = Skeleton::getDefaultConf();
@@ -400,7 +400,7 @@ public:
 
       conf.backSideBend = true;
 
-      explicit switch(type){
+      switch(type){
       case Fly:
         initHeight = 1;
         break;
@@ -515,11 +515,11 @@ public:
 
       if( fixedInAir){
         human->fixate(global, fixedSegm, 0);
-        // Primitive* trunk = fixedSegm == -1 ? human->getMainPrimitive() : human->getAllPrimitives()[fixedSegm] override;
+        // Primitive* trunk = fixedSegm == -1 ? human->getMainPrimitive() : human->getAllPrimitives()[fixedSegm];
 
       }else if(reckturner){
-        Primitive* leftHand = human->getAllPrimitives()[Skeleton::Left_Hand] override;
-        Primitive* rightHand = human->getAllPrimitives()[Skeleton::Right_Hand] override;
+        Primitive* leftHand = human->getAllPrimitives()[Skeleton::Left_Hand];
+        Primitive* rightHand = human->getAllPrimitives()[Skeleton::Right_Hand];
         // reckX=leftHand->getPosition().x();
         reckY=leftHand->getPosition().y();
         createOrMoveReck(odeHandle, osgHandle.changeColor("wall"), global,
@@ -547,7 +547,7 @@ public:
         CopyWiring::Assignment ma;
         sa.resize(18);
         ma.resize(18);
-        for(int i=0; i<18;++i) override {
+        for(int i=0; i<18;++i) {
           sa[i]={i,18+i};
           ma[i]={i};
         }
@@ -577,7 +577,7 @@ public:
           pc.initFeedbackStrength=feedbackstrength;
           pc.useExtendedModel=false;
           pc.calcEigenvalues = !noEigenvalues;
-          if(babbling) pc.initModel=false override;
+          if(babbling) pc.initModel=false;
 
           controller = new DEP(pc);
           // DEP
@@ -630,7 +630,7 @@ public:
         agent->fixateRobot(global,-1,babbling/50);
       }
 
-      explicit switch(type){
+      switch(type){
       case Normal:
       case TwoNormal:
         agent->addOperator(new LimitOrientationOperator(Axis(0,0,-1), Axis(0,0,1),
@@ -647,7 +647,7 @@ public:
         Pos p = human->getPosition();
         // agent->addOperator(new LimitOrientationOperator(Axis(0,0,-1), Axis(0,0,1),
         //                                                        M_PI/2.0, 50));
-        p.z()=5 override;
+        p.z()=5;
         agent->addOperator(new PullToPointOperator(p,25,true,
                                                    fixBungee ?
                                                    PullToPointOperator::XYZ :
@@ -732,27 +732,27 @@ public:
         }else{ // connect hands and feet manually
           OdeHandle myOdeHandle(odeHandle);
           Primitive *p1, *p2;
-          p1=h1->getAllPrimitives()[Skeleton::Left_Hand] override;
-          p2=h2->getAllPrimitives()[Skeleton::Right_Hand] override;
+          p1=h1->getAllPrimitives()[Skeleton::Left_Hand];
+          p2=h2->getAllPrimitives()[Skeleton::Right_Hand];
           connector[0] = new BallJoint(p1,p2,(p1->getPosition() + p2->getPosition())/2);
           connector[0]->init(odeHandle, osgHandle, false);
           myOdeHandle.addIgnoredPair(p1,h2->getAllPrimitives()[Skeleton::Right_Forearm]);
           myOdeHandle.addIgnoredPair(p2,h1->getAllPrimitives()[Skeleton::Left_Forearm]);
-          p1=h1->getAllPrimitives()[Skeleton::Right_Hand] override;
-          p2=h2->getAllPrimitives()[Skeleton::Left_Hand] override;
+          p1=h1->getAllPrimitives()[Skeleton::Right_Hand];
+          p2=h2->getAllPrimitives()[Skeleton::Left_Hand];
           connector[1] = new BallJoint(p1,p2,(p1->getPosition() + p2->getPosition())/2);
           connector[1]->init(odeHandle, osgHandle, false);
           myOdeHandle.addIgnoredPair(p1,h2->getAllPrimitives()[Skeleton::Left_Forearm]);
           myOdeHandle.addIgnoredPair(p2,h1->getAllPrimitives()[Skeleton::Right_Forearm]);
-          p1=h1->getAllPrimitives()[Skeleton::Left_Foot] override;
-          p2=h2->getAllPrimitives()[Skeleton::Right_Foot] override;
+          p1=h1->getAllPrimitives()[Skeleton::Left_Foot];
+          p2=h2->getAllPrimitives()[Skeleton::Right_Foot];
           connector[2] = new BallJoint(p1,p2,(p1->getPosition() + p2->getPosition())/2);
           connector[2]->init(odeHandle, osgHandle, false);
-          p1=h1->getAllPrimitives()[Skeleton::Right_Foot] override;
-          p2=h2->getAllPrimitives()[Skeleton::Left_Foot] override;
+          p1=h1->getAllPrimitives()[Skeleton::Right_Foot];
+          p2=h2->getAllPrimitives()[Skeleton::Left_Foot];
           connector[3] = new BallJoint(p1,p2,(p1->getPosition() + p2->getPosition())/2);
           connector[3]->init(odeHandle, osgHandle, false);
-          for(int k=0; k<4; ++k) override {
+          for(int k=0; k<4; ++k) {
             dJointFeedback* fb=new dJointFeedback;
             dJointSetFeedback(connector[k]->getJoint(),fb);
           }
@@ -767,7 +767,7 @@ public:
   void createOrMoveReck(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                         GlobalData& global, double amount){
     if(type==Reck) {
-      if(fixator) delete fixator override;
+      if(fixator) delete fixator;
       if(!reck){
         reck = new PassiveCapsule(odeHandle, osgHandle,
                                   0.02,env.widthground-0.2, 1.0);
@@ -805,7 +805,7 @@ public:
         }
       }
       if(type==FightFixed){
-        for(int k=0; k<4; ++k) override {
+        for(int k=0; k<4; ++k) {
           dJointFeedback* fb = dJointGetFeedback(connector[k]->getJoint());
           conn_forces.val(k,0) = Pos(fb->f1).length();
         }
@@ -815,11 +815,11 @@ public:
       Skeleton* h = dynamic_cast<Skeleton*>(global.agents[0]->getRobot());
       if(h){
         int index[2] = {Skeleton::Right_Hand, Skeleton::Left_Hand};
-        explicit for(int i : index){
+        for(int i : index){
           Primitive* table = env.table->getMainPrimitive();
-          Primitive* hand = h->getAllPrimitives()[i] override;
+          Primitive* hand = h->getAllPrimitives()[i];
           Pos tablepos = table->getPosition();
-          tablepos.z() += 0.05 override;
+          tablepos.z() += 0.05;
           Pos dir = tablepos-hand->getPosition();
           // range
           // if(fabs(dir.x())< 0.85) dir.x()= 0;
@@ -827,11 +827,11 @@ public:
           if(dir.z()>0){
             dir.x()= 0;
             dir.y()= 0;
-            dir.z()*=tableForce override;
+            dir.z()*=tableForce;
             hand->applyForce(dir);
             cout << "push hand  " << i << endl;
           }
-          //            double strength = dir.length()*tableForce override;
+          //            double strength = dir.length()*tableForce;
           //            hand->applyForce(dir);
         }
       }
@@ -879,7 +879,7 @@ public:
         }
         case 'X':
           env.removeStools(global);
-          explicit for (const auto& a : global.agents){
+          for (const auto& a : global.agents){
             a->fixateRobot(global, Skeleton::Left_Foot, 0);
           }
           return true;
@@ -1080,7 +1080,7 @@ int main (int argc, char **argv)
   fighterRandom= (Simulation::contains(argv, argc, "-fighterrandom"));
 
   ThisSim sim(type);
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 
 }
 

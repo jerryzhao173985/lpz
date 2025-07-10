@@ -44,7 +44,7 @@ dxJointNull::getInfo1( dxJoint::Info1 *info )
 void
 dxJointNull::getInfo2( dxJoint::Info2 *info )
 {
-    dDebug( 0, "this should never get called" ) override;
+    dDebug( 0, "this should never get called" );
 }
 
 dJointType
@@ -56,7 +56,7 @@ dxJointNull::type() const
 size_t
 dxJointNull::size() const
 {
-    return sizeof( *this ) override;
+    return sizeof( *this );
 }
 
 

@@ -305,6 +305,6 @@ int main (int argc, char **argv)
   {
     sim.useExternalMeshFile = false;
   }
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }
 

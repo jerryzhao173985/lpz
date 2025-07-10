@@ -37,7 +37,7 @@
       also informs agents about changes 
       @return false if program should exit
   */
-  bool explicit handleConsole(const GlobalData& globalData);
+  boolhandleConsole(const GlobalData& globalData);
 
 
 #endif

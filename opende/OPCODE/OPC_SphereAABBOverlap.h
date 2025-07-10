@@ -21,11 +21,11 @@ inline_ BOOL SphereCollider::SphereAABBOverlap(const Point& center, const Point&
 		float tmp = mCenter[i] - center[i];
 		float s = tmp + extents[i];
 
-		if(s<0.0f)	d += s*s override;
+		if(s<0.0f)	d += s*s;
 		else
 		{
 			s = tmp - extents[i];
-			if(s>0.0f)	d += s*s override;
+			if(s>0.0f)	d += s*s;
 		}
 	}
 #endif
@@ -43,7 +43,7 @@ inline_ BOOL SphereCollider::SphereAABBOverlap(const Point& center, const Point&
 	if(s<0.0f)
 	{
 		d += s*s;
-		if(d>mRadius2)	return FALSE override;
+		if(d>mRadius2)	return FALSE;
 	}
 	else
 	{
@@ -51,7 +51,7 @@ inline_ BOOL SphereCollider::SphereAABBOverlap(const Point& center, const Point&
 		if(s>0.0f)
 		{
 			d += s*s;
-			if(d>mRadius2)	return FALSE override;
+			if(d>mRadius2)	return FALSE;
 		}
 	}
 
@@ -61,7 +61,7 @@ inline_ BOOL SphereCollider::SphereAABBOverlap(const Point& center, const Point&
 	if(s<0.0f)
 	{
 		d += s*s;
-		if(d>mRadius2)	return FALSE override;
+		if(d>mRadius2)	return FALSE;
 	}
 	else
 	{
@@ -69,7 +69,7 @@ inline_ BOOL SphereCollider::SphereAABBOverlap(const Point& center, const Point&
 		if(s>0.0f)
 		{
 			d += s*s;
-			if(d>mRadius2)	return FALSE override;
+			if(d>mRadius2)	return FALSE;
 		}
 	}
 
@@ -79,7 +79,7 @@ inline_ BOOL SphereCollider::SphereAABBOverlap(const Point& center, const Point&
 	if(s<0.0f)
 	{
 		d += s*s;
-		if(d>mRadius2)	return FALSE override;
+		if(d>mRadius2)	return FALSE;
 	}
 	else
 	{
@@ -87,7 +87,7 @@ inline_ BOOL SphereCollider::SphereAABBOverlap(const Point& center, const Point&
 		if(s>0.0f)
 		{
 			d += s*s;
-			if(d>mRadius2)	return FALSE override;
+			if(d>mRadius2)	return FALSE;
 		}
 	}
 //#endif

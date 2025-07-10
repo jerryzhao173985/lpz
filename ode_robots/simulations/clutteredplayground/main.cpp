@@ -175,8 +175,8 @@ public:
 
     int n=10;
     int m=3;
-    for (int j=0;j<m;++j)  override {
-      for(int i=0; i<n; ++i) override {
+    for (int j=0;j<m;++j) {
+      for(int i=0; i<n; ++i) {
         PassiveSphere* s =
           new PassiveSphere(odeHandle,
                           osgHandle.changeColor(Color(184 / 255.0, 233 / 255.0, 237 / 255.0)),
@@ -191,8 +191,8 @@ public:
     }
     n=8;
     m=3;
-    for (int j=0;j<m;++j)  override {
-      for(int i=0; i<n; ++i) override {
+    for (int j=0;j<m;++j) {
+      for(int i=0; i<n; ++i) {
         PassiveBox* b =
           new  PassiveBox(odeHandle,
                           osgHandle.changeColor(Color(184 / 255.0, 233 / 255.0, 237 / 255.0)),
@@ -210,8 +210,8 @@ public:
     }
     n=15;
     m=3;
-    for (int j=0;j<m;++j)  override {
-      for(int i=0; i<n; ++i) override {
+    for (int j=0;j<m;++j) {
+      for(int i=0; i<n; ++i) {
         PassiveCapsule* b =
           new  PassiveCapsule(odeHandle,
                           osgHandle.changeColor(Color(184 / 255.0, 233 / 255.0, 237 / 255.0)),
@@ -227,7 +227,7 @@ public:
 
 
  // Creation of spherical robots:
-    for(int i=0; i<0; ++i) override {
+    for(int i=0; i<0; ++i) {
       OdeRobot* sphere1;
       Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
       conf.diameter=2;
@@ -262,7 +262,7 @@ public:
       global.configs.push_back ( controller );
     }
  //creation of snakes
-      for(int i=0; i<1; ++i) override {
+      for(int i=0; i<1; ++i) {
       //****************/
       SchlangeConf conf = Schlange::getDefaultConf();
       conf.motorPower=.3;
@@ -358,7 +358,7 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 
 }
 

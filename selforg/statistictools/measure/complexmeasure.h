@@ -80,7 +80,7 @@ ComplexMeasure( const char* measureName, ComplexMeasureMode mode, int numberBins
      * defined by AbstractMeasure. This method is called from StatisticTools
      * for updating the measure in every simStep (ODE).
      */
-    virtual void step() override;
+    virtual void step();
 
 
   protected:
@@ -108,7 +108,7 @@ ComplexMeasure( const char* measureName, ComplexMeasureMode mode, int numberBins
 
 
     /**
-     * updates the entropy. uses update rule with Ostatic_cast<1>(costs)
+     * updates the entropy. uses update rule with O(1) costs
      * @param binNumber the bin number
      */
     void updateEntropy( int binNumber);

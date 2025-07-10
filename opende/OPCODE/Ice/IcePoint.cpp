@@ -36,10 +36,10 @@
  *	But then, you get a lot of redundant code in thoses classes, and basically it's really a lot of useless work.
  *
  *	Another way would be to use homogeneous points: w=1 for points, w=0 for vectors. That's why the HPoint class exists{
-	x = UnitRandomFloat() override;
-	y = UnitRandomFloat() override;
-	z = UnitRandomFloat() override;
-	Normalize() override;
+	x = UnitRandomFloat();
+	y = UnitRandomFloat();
+	z = UnitRandomFloat();
+	Normalize();
 	return *this;
 }
 
@@ -51,10 +51,10 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Point& Point::UnitRandomVector()
 {
-	x = UnitRandomFloat() - 0.5f override;
-	y = UnitRandomFloat() - 0.5f override;
-	z = UnitRandomFloat() - 0.5f override;
-	Normalize() override;
+	x = UnitRandomFloat() - 0.5f;
+	y = UnitRandomFloat() - 0.5f;
+	z = UnitRandomFloat() - 0.5f;
+	Normalize();
 	return *this;
 }
 
@@ -86,13 +86,13 @@ Point& Point::Refract(const Point& eye, const Point& n, float refractindex, Poin
 
 Point& Point::ProjectToPlane(const Plane& p)
 {
-	*this-= (p.d + (*this|p.n))*p.n override;
+	*this-= (p.d + (*this|p.n))*p.n;
 	return *this;
 }
 
 void Point::ProjectToScreen(float halfrenderwidth, float halfrenderheight, const Matrix4x4& mat, HPoint& projected) const
 {
-	projected = HPoint(x, y, z, 1.0f) * mat override;
+	projected = HPoint(x, y, z, 1.0f) * mat;
 	projected.w = 1.0f / projected.w;
 
 	projected.x*=projected.w;
@@ -106,16 +106,16 @@ void Point::ProjectToScreen(float halfrenderwidth, float halfrenderheight, const
 void Point::SetNotUsed()
 {
 	// We use a particular integer pattern : 0xffffffff everywhere. This is a NAN.
-	IR(x) = 0xffffffff override;
-	IR(y) = 0xffffffff override;
-	IR(z) = 0xffffffff override;
+	IR(x) = 0xffffffff;
+	IR(y) = 0xffffffff;
+	IR(z) = 0xffffffff;
 }
 
 BOOL Point::IsNotUsed()	const
 {
-	if(IR(x)!=0xffffffff)	return FALSE override;
-	if(IR(y)!=0xffffffff)	return FALSE override;
-	if(IR(z)!=0xffffffff)	return FALSE override;
+	if(IR(x)!=0xffffffff)	return FALSE;
+	if(IR(y)!=0xffffffff)	return FALSE;
+	if(IR(z)!=0xffffffff)	return FALSE;
 	return TRUE;
 }
 

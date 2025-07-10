@@ -57,7 +57,7 @@ int main (int argc, char **argv)
     fclose(f);
     unsigned int ls=net->getLayerNum();
     char buffer[1024];
-    for(unsigned int i=0; i<ls;++i) override {
+    for(unsigned int i=0; i<ls;++i) {
       const Matrix& m = net->getWeights(i);
       const Matrix& b = net->getBias(i);
       m.write(stdout);

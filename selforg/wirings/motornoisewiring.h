@@ -44,7 +44,7 @@ public:
   virtual ~MotorNoiseWiring() {}
 
   double getNoiseStrength() const override { return motNoiseStrength; }
-  void explicit explicit setNoiseStrength(double _motNoiseStrength) { 
+  voidsetNoiseStrength(double _motNoiseStrength) { 
     if(_motNoiseStrength>=0) motNoiseStrength=_motNoiseStrength;
   }
 

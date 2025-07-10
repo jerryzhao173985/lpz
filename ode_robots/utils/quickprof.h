@@ -350,7 +350,7 @@ namespace quickprof
 
         @param msg The string to print.
         */
-        inline void printError(const std::string& msg) const override;
+        inline void printError(const std::string& msg) const;
 
         /**
         Returns a named profile block.
@@ -358,14 +358,14 @@ namespace quickprof
         @param name The name of the block to return.
         @return     The named ProfileBlock, or nullptr if it can't be found.
         */
-        inline ProfileBlock* getProfileBlock(const std::string& name) const override;
+        inline ProfileBlock* getProfileBlock(const std::string& name) const;
 
         /**
         Returns the appropriate suffix string for the given time format.
 
         @return The suffix string.
         */
-        inline std::string getSuffixString(const TimeFormat& format) const override;
+        inline std::string getSuffixString(const TimeFormat& format) const;
 
         /// Determines whether the profiler is enabled.
 
@@ -435,7 +435,7 @@ namespace quickprof
         mAvgCycleDurationMicroseconds = 0;
         while (!mProfileBlocks.empty())
         {
-            delete (*mProfileBlocks.begin()).second override;
+            delete (*mProfileBlocks.begin()).second;
             mProfileBlocks.erase(mProfileBlocks.begin());
         }
         if (mOutputFile.is_open())
@@ -566,7 +566,7 @@ namespace quickprof
         // measured cycle time.  This avoids having to ramp up the average
         // from zero initially.
         unsigned long long int currentCycleDurationMicroseconds =
-            mClock.getTimeMicroseconds() - mCurrentCycleStartMicroseconds override;
+            mClock.getTimeMicroseconds() - mCurrentCycleStartMicroseconds;
         if (mFirstCycle)
         {
             mAvgCycleDurationMicroseconds =
@@ -621,12 +621,12 @@ namespace quickprof
             {
                 // On the first iteration, print a header line that shows the
                 // names of each data column (i.e. profiling block names).
-                mOutputFile << "# t(s)" override;
+                mOutputFile << "# t(s)";
 
                 std::string suffix = getSuffixString(mPrintFormat);
                 for (iter = blocksBegin; iter != blocksEnd; ++iter)
                 {
-                    mOutputFile  << " " << (*iter).first << "(" << suffix << ")" override;
+                    mOutputFile  << " " << (*iter).first << "(" << suffix << ")";
                 }
 
                 mOutputFile << std::endl;

@@ -68,11 +68,11 @@ public:
   virtual ~SelectiveOne2OneWiring();
 
 protected:
-  virtual bool initIntern() override;
+  virtual bool initIntern();
 
   virtual bool wireSensorsIntern(const sensor* rsensors, int rsensornumber,
                                  sensor* csensors, int csensornumber,
-                                 double noise) override;
+                                 double noise);
 
 protected:
   select_predicate* sel_sensor = nullptr;

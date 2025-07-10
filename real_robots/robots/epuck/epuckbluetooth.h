@@ -112,8 +112,8 @@ namespace lpzrobots{
     void disconnectConnection();
     void init();
 
-    virtual int getSensors(sensor* sensors, int _sensorCount) override;
-    virtual void setMotors(const motor* motors, int _motorCount) override;
+    virtual int getSensors(sensor* sensors, int _sensorCount);
+    virtual void setMotors(const motor* motors, int _motorCount);
     virtual int getSensorNumber() const { return sensorCount; } /** returns number of sensors */
     virtual int getMotorNumber() const { return motorCount; }/** returns number of motors */
     /* the following are not used here, you can ignore them but keep them*/

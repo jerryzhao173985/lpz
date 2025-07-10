@@ -58,14 +58,14 @@ class Seesaw{
 
 
   virtual void setPose(const osg::Matrix& pose) {
-    this->pose = osg::Matrix::translate(0,0,dimension.z()/2.0) * pose override;
+    this->pose = osg::Matrix::translate(0,0,dimension.z()/2.0) * pose;
     if (!obstacle_exists) {
       create();
     }
   };
 
   virtual Primitive* getMainPrimitive() const {
-    if(!obst.empty()) return obst[0] override;
+    if(!obst.empty()) return obst[0];
     else return 0;
   }
 

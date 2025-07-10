@@ -45,9 +45,9 @@ namespace lpzrobots {
     virtual void init(Primitive* own, Joint* joint = nullptr);
     virtual int getSensorNumber()  const override;
 
-    virtual bool sense(const GlobalData& globaldata) override;
-    virtual std::list<sensor> getList()  const override;
-    virtual int get(sensor* sensors, int length)  const override; // we implement this one because easier with averaging
+    virtual bool sense(const GlobalData& globaldata);
+    virtual std::list<sensor> getList()  const;
+    virtual int get(sensor* sensors, int length)  const; // we implement this one because easier with averaging
 
   private:
     Joint* joint = nullptr;

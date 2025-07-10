@@ -22,10 +22,10 @@
 
 /*
 
-given (A,b,lo,hi), solve the LCP problem: A*x = b+w, where each x(i),wstatic_cast<i>(satisfies) one of
-	static_cast<1>(x) = lo, w >= 0
-	static_cast<2>(x) = hi, w <= 0
-	static_cast<3>(lo) < x < hi, w = 0
+given (A,b,lo,hi), solve the LCP problem: A*x = b+w, where each x(i),w(i) satisfies one of
+	x(i) = lo, w(i) >= 0
+	x(i) = hi, w(i) <= 0
+	lo(i) < x(i) < hi(i), w(i) = 0
 A is a matrix of dimension n*n, everything else is a vector of size n*1.
 lo and hi can be +/- dInfinity as needed. the first `nub' variables are
 unbounded, i.e. hi and lo are assumed to be +/- dInfinity.

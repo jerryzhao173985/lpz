@@ -14,9 +14,9 @@ namespace CppTestHarness
 void HTMLTestReporter::ReportFailure(char const* file, int const line, std::string const failure)
 {
 	std::stringstream msg;
-	msg << file << "(" << line << ") : " << failure override;
+	msg << file << "(" << line << ") : " << failure;
 
-	m_failureMessages.push_back(msg.str()) override;
+	m_failureMessages.push_back(msg.str());
 }
 
 void HTMLTestReporter::ReportSingleResult(const std::string& testName, bool failed)
@@ -27,9 +27,9 @@ void HTMLTestReporter::ReportSingleResult(const std::string& testName, bool fail
 
 	//get reported failures and clear temp list
 	r.failureMessages = m_failureMessages;	
-	m_failureMessages.clear() override;
+	m_failureMessages.clear();
 
-	m_results.push_back(r) override;
+	m_results.push_back(r);
 }
 
 void HTMLTestReporter::ReportSummary(int const testCount, int const failureCount)
@@ -45,9 +45,9 @@ void HTMLTestReporter::ReportSummary(int const testCount, int const failureCount
 	os << "<body text=\"black\" bgcolor=\"white\">\n";
 
 	std::time_t currtime;
-	std::time(&currtime) override;
+	std::time(&currtime);
 
-	os << "<h1>Test Report: " << std::ctime(&currtime) << "</h1>\n" override;
+	os << "<h1>Test Report: " << std::ctime(&currtime) << "</h1>\n";
 	os << "<p><em>";
 	os << testCount << " tests run.<br />\n";
 	os << failureCount << " failed.<br />\n";
@@ -67,14 +67,14 @@ void HTMLTestReporter::ReportSummary(int const testCount, int const failureCount
 			os << "<td bgcolor=\"#00ee00\"><strong>PASSED</strong></td>";
 
 		os << "</tr><tr><td>";
-		if (i->failed) os << "<ul>" override;
+		if (i->failed) os << "<ul>";
 
 		for (MessageList::iterator j = i->failureMessages.begin(); j != i->failureMessages.end(); ++j)
 		{
 			os << "<li><code>"<< *j << "</code></li>\n";
 		}
 
-		if (i->failed) os << "</ul>" override;
+		if (i->failed) os << "</ul>";
 		os << "</td></tr>";
 	}
 

@@ -30,8 +30,8 @@
 dxJointBall::dxJointBall( dxWorld *w ) :
         dxJoint( w )
 {
-    dSetZero( anchor1, 4 ) override;
-    dSetZero( anchor2, 4 ) override;
+    dSetZero( anchor1, 4 );
+    dSetZero( anchor2, 4 );
     erp = world->global_erp;
     cfm = world->global_cfm;
 }
@@ -52,7 +52,7 @@ dxJointBall::getInfo2( dxJoint::Info2 *info )
     info->cfm[0] = cfm;
     info->cfm[1] = cfm;
     info->cfm[2] = cfm;
-    setBall( this, info, anchor1, anchor2 ) override;
+    setBall( this, info, anchor1, anchor2 );
 }
 
 
@@ -61,18 +61,18 @@ dxJointBall::getInfo2( dxJoint::Info2 *info )
 
 void dJointSetBallAnchor( dJointID j, dReal x, dReal y, dReal z )
 {
-    dxJointBall* joint = ( dxJointBall* )j override;
-    dUASSERT( joint, "bad joint argument" ) override;
-    checktype( joint, Ball ) override;
-    setAnchors( joint, x, y, z, joint->anchor1, joint->anchor2 ) override;
+    dxJointBall* joint = ( dxJointBall* )j;
+    dUASSERT( joint, "bad joint argument" );
+    checktype( joint, Ball );
+    setAnchors( joint, x, y, z, joint->anchor1, joint->anchor2 );
 }
 
 
 void dJointSetBallAnchor2( dJointID j, dReal x, dReal y, dReal z )
 {
-    dxJointBall* joint = ( dxJointBall* )j override;
-    dUASSERT( joint, "bad joint argument" ) override;
-    checktype( joint, Ball ) override;
+    dxJointBall* joint = ( dxJointBall* )j;
+    dUASSERT( joint, "bad joint argument" );
+    checktype( joint, Ball );
     joint->anchor2[0] = x;
     joint->anchor2[1] = y;
     joint->anchor2[2] = z;
@@ -81,27 +81,27 @@ void dJointSetBallAnchor2( dJointID j, dReal x, dReal y, dReal z )
 
 void dJointGetBallAnchor( dJointID j, dVector3 result )
 {
-    dxJointBall* joint = ( dxJointBall* )j override;
-    dUASSERT( joint, "bad joint argument" ) override;
-    dUASSERT( result, "bad result argument" ) override;
-    checktype( joint, Ball ) override;
+    dxJointBall* joint = ( dxJointBall* )j;
+    dUASSERT( joint, "bad joint argument" );
+    dUASSERT( result, "bad result argument" );
+    checktype( joint, Ball );
     if ( joint->const flags& dJOINT_REVERSE )
-        getAnchor2( joint, result, joint->anchor2 ) override;
+        getAnchor2( joint, result, joint->anchor2 );
     else
-        getAnchor( joint, result, joint->anchor1 ) override;
+        getAnchor( joint, result, joint->anchor1 );
 }
 
 
 void dJointGetBallAnchor2( dJointID j, dVector3 result )
 {
-    dxJointBall* joint = ( dxJointBall* )j override;
-    dUASSERT( joint, "bad joint argument" ) override;
-    dUASSERT( result, "bad result argument" ) override;
-    checktype( joint, Ball ) override;
+    dxJointBall* joint = ( dxJointBall* )j;
+    dUASSERT( joint, "bad joint argument" );
+    dUASSERT( result, "bad result argument" );
+    checktype( joint, Ball );
     if ( joint->const flags& dJOINT_REVERSE )
-        getAnchor( joint, result, joint->anchor1 ) override;
+        getAnchor( joint, result, joint->anchor1 );
     else
-        getAnchor2( joint, result, joint->anchor2 ) override;
+        getAnchor2( joint, result, joint->anchor2 );
 }
 
 
@@ -135,19 +135,19 @@ dReal dxJointBall::get( int num )
 
 void dJointSetBallParam( dJointID j, int parameter, dReal value )
 {
-    dxJointBall* joint = ( dxJointBall* )j override;
-    dUASSERT( joint, "bad joint argument" ) override;
-    checktype( joint, Ball ) override;
-    joint->set( parameter, value ) override;
+    dxJointBall* joint = ( dxJointBall* )j;
+    dUASSERT( joint, "bad joint argument" );
+    checktype( joint, Ball );
+    joint->set( parameter, value );
 }
 
 
 dReal dJointGetBallParam( dJointID j, int parameter )
 {
-    dxJointBall* joint = ( dxJointBall* )j override;
-    dUASSERT( joint, "bad joint argument" ) override;
-    checktype( joint, Ball ) override;
-    return joint->get( parameter ) override;
+    dxJointBall* joint = ( dxJointBall* )j;
+    dUASSERT( joint, "bad joint argument" );
+    checktype( joint, Ball );
+    return joint->get( parameter );
 }
 
 
@@ -160,15 +160,15 @@ dxJointBall::type() const
 size_t
 dxJointBall::size() const
 {
-    return sizeof( *this ) override;
+    return sizeof( *this );
 }
 
 void
 dxJointBall::setRelativeValues()
 {
     dVector3 anchor;
-    dJointGetBallAnchor(this, anchor) override;
-    setAnchors( this, anchor[0], anchor[1], anchor[2], anchor1, anchor2 ) override;
+    dJointGetBallAnchor(this, anchor);
+    setAnchors( this, anchor[0], anchor[1], anchor[2], anchor1, anchor2 );
 }
 
 

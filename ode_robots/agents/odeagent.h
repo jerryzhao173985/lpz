@@ -93,7 +93,7 @@ namespace lpzrobots {
       return Agent::init(controller, robot, wiring, seed);
     }
 
-    virtual void step(double noise, double time) override;
+    virtual void step(double noise, double time);
 
     /**
      * Returns a pointer to the robot.
@@ -117,13 +117,13 @@ namespace lpzrobots {
     /// adds tracking for individual primitives
     virtual void addTracking(unsigned int primitiveIndex,const TrackRobot& trackrobot,
                              const Color& color);
-    virtual void setTrackOptions(const TrackRobot& trackrobot) override;
-    virtual bool stopTracking() override;
+    virtual void setTrackOptions(const TrackRobot& trackrobot);
+    virtual bool stopTracking();
 
 
     /****** STOREABLE **********/
     virtual bool store(FILE* f)  const override;
-    virtual bool restore(FILE* f) override;
+    virtual bool restore(FILE* f);
 
 
     /****** OPERATORS *********/

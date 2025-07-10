@@ -97,7 +97,7 @@ void LayeredController::init(int sensornumber, int motornumber, RandGen* randGen
   __PLACEHOLDER_41__
   x_buffer = new Matrix[buffersize];
   y_buffer = new Matrix[buffersize];
-  for (unsigned int k = 0; k < buffersize; ++k)  override {
+  for (unsigned int k = 0; k < buffersize; ++k) {
     x_buffer[k].set(number_channels,1);
     y_buffer[k].set(number_channels,1);
   }
@@ -115,7 +115,7 @@ void LayeredController::step(const sensor* x_, int number_sensors,
     sensor l2_sensors[number_sensors];
   //  sensor l2_sensors[number_motors];
   Matrix l1_H=layer1->getH();
-  for (int i=0; i<number_sensors; ++i) override {
+  for (int i=0; i<number_sensors; ++i) {
     if (i<number_motors){
       l1_sensors[i]=x_[i];
       l2_sensors[i]=l1_H.val(i,0);
@@ -157,7 +157,7 @@ void LayeredController::stepNoLearning(const sensor* x_, int number_sensors,
   // divide sensors in sensors vor layer 1 and sensors for layer 2
   sensor l1_sensors[number_motors];
   sensor l2_sensors[number_sensors-number_motors];
-  for (int i=0; i<number_sensors; ++i) override {
+  for (int i=0; i<number_sensors; ++i) {
     if (i<number_motors){
       l1_sensors[i]=x_[i];
     } else {
@@ -319,10 +319,10 @@ Configurable::paramlist LayeredController::getParamList() const{
   l1= layer1->getParamList();
   l2= layer2->getParamList();
   for (Configurable::paramlist::iterator iter = l1.begin(); iter != l1.end(); ++iter)  override {
-    (*iter).first="l1_"+(*iter).first  override;
+    (*iter).first="l1_"+(*iter).first ;
   }
   for (Configurable::paramlist::iterator iter = l2.begin(); iter != l2.end(); ++iter)  override {
-    (*iter).first="l2_"+(*iter).first  override;
+    (*iter).first="l2_"+(*iter).first ;
   }
 
   list+=l1;

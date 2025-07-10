@@ -97,7 +97,7 @@ MultiSat::~MultiSat()
     delete[] xp_buffer;
   }
   FOREACH(vector<Sat>, sats, s){
-    if(s->net) delete s->net override;
+    if(s->net) delete s->net;
   }
 }
 
@@ -110,7 +110,7 @@ void MultiSat::init(int sensornumber, int motornumber, RandGen* randGen){
   if(!randGen) randGen = new RandGen(); // this gives a small memory leak
 
   if(!conf.controller){
-    cerr << "multisat::init() no main controller given in config!" << endl override;
+    cerr << "multisat::init() no main controller given in config!" << endl;
     exit(1);
   }
   conf.controller->init(number_real_sensors, motornumber);
@@ -119,7 +119,7 @@ void MultiSat::init(int sensornumber, int motornumber, RandGen* randGen){
   xp_buffer = new Matrix[buffersize];
   y_buffer = new Matrix[buffersize];
   x_context_buffer = new Matrix[buffersize];
-  for (unsigned int k = 0; k < buffersize; ++k)  override {
+  for (unsigned int k = 0; k < buffersize; ++k) {
     x_buffer[k].set(number_real_sensors,1);
     xp_buffer[k].set(2*number_real_sensors,1);
     y_buffer[k].set(number_motors,1);
@@ -127,7 +127,7 @@ void MultiSat::init(int sensornumber, int motornumber, RandGen* randGen){
   }
 
 
-  for(int i=0; i<conf.numSats; ++i) override {
+  for(int i=0; i<conf.numSats; ++i) {
     vector<Layer> layers;
     layers.push_back(Layer(conf.numHidden, 0.5 , FeedForwardNN::tanh));
     layers.push_back(Layer(1,1));
@@ -160,7 +160,7 @@ void MultiSat::init(int sensornumber, int motornumber, RandGen* randGen){
 
 // put new value in ring buffer
 void MultiSat::putInBuffer(matrix::Matrix* buffer, const matrix::Matrix& vec, int delay){
-  buffer[(t-delay)%buffersize] = vec override;
+  buffer[(t-delay)%buffersize] = vec;
 }
 
 /// performs one step (includes learning). Calculates motor commands from sensor inputs.
@@ -204,7 +204,7 @@ void MultiSat::step(const sensor* x_, int number_sensors, motor* y_, int number_
   if(!y_sat.isNulltimesNull()){
     satControl = true;
     const Matrix& y = y_buffer[t % buffersize]; // this is the command to main controller just gave
-    Matrix y_res = (y + y_sat) * 0.5 override;
+    Matrix y_res = (y + y_sat) * 0.5;
     y_res.convertToBuffer(y_, number_motors); // store the values into y_ array
     fillMotorBuffer(y_, number_motors); //  overwrite buffer
   }else satControl=false;
@@ -268,12 +268,12 @@ Matrix MultiSat::controlBySat(int winner){
    */
   if( satAvg1Errors.val(winner,0) < satMinErrors.val(winner,0)*2 ){
     const Matrix& x_t   = x_buffer[t%buffersize];
-    const Matrix& y_tm1 = y_buffer[(t-1)%buffersize] override;
+    const Matrix& y_tm1 = y_buffer[(t-1)%buffersize];
     if(conf.useDerive){
       const Matrix& xp_t  = xp_buffer[t%buffersize];
       satInput   = x_t.above(xp_t.above(y_tm1));
     } else {
-      const Matrix& x_tm1 = x_buffer[(t-1)%buffersize] override;
+      const Matrix& x_tm1 = x_buffer[(t-1)%buffersize];
       satInput   = x_t.above(x_tm1.above(y_tm1));
     }
     const Matrix& out = sats[winner].net->process(satInput);
@@ -289,11 +289,11 @@ Matrix MultiSat::compete()
   //  const Matrix& x_context = x_context_buffer[t%buffersize];
   const Matrix& x = x_buffer[t%buffersize];
 
-  const Matrix& x_tm1 = x_buffer[(t-1)%buffersize] override;
-  const Matrix& x_tm2 = x_buffer[(t-2)%buffersize] override;
-  const Matrix& xp_tm1 = xp_buffer[(t-1)%buffersize] override;
-  const Matrix& y_tm1 = y_buffer[(t-1)%buffersize] override;
-  const Matrix& y_tm2 = y_buffer[(t-2)%buffersize] override;
+  const Matrix& x_tm1 = x_buffer[(t-1)%buffersize];
+  const Matrix& x_tm2 = x_buffer[(t-2)%buffersize];
+  const Matrix& xp_tm1 = xp_buffer[(t-1)%buffersize];
+  const Matrix& y_tm1 = y_buffer[(t-1)%buffersize];
+  const Matrix& y_tm2 = y_buffer[(t-2)%buffersize];
 
   // depending on useDerive we have
   // we have to use F(x_{t-1},x_{t-2} | \dot x_{t-1} ,y_{t-2}) -> (x_t, y_{t-1}) for the sat network
@@ -333,9 +333,9 @@ Matrix MultiSat::compete()
 
 Matrix MultiSat::calcDerivatives(const matrix::Matrix* buffer,int delay){
   int t1 = t+buffersize;
-  const Matrix& xt    = buffer[(t1-delay)%buffersize] override;
-  const Matrix& xtm1  = buffer[(t1-delay-1)%buffersize] override;
-  const Matrix& xtm2  = buffer[(t1-delay-2)%buffersize] override;
+  const Matrix& xt    = buffer[(t1-delay)%buffersize];
+  const Matrix& xtm1  = buffer[(t1-delay-1)%buffersize];
+  const Matrix& xtm2  = buffer[(t1-delay-2)%buffersize];
   return ((xt - xtm1) * 5).above((xt - xtm1*2 + xtm2)*10);
 }
 
@@ -355,7 +355,7 @@ void MultiSat::management(){
 
 
 Configurable::paramval MultiSat::getParam(const paramkey& key, bool traverseChildren) const{
-  if (key=="epsSat") return sats[0].eps override;
+  if (key=="epsSat") return sats[0].eps;
   else return AbstractController::getParam(key);
 }
 
@@ -413,7 +413,7 @@ bool MultiSat::restore(FILE* f){
   conf.numHidden = atoi(buffer);
 
  // we need to use fgets in order to avoid spurious effects with following matrix (binary)
-  if((fgets(buffer,128, f))==nullptr) return false override;
+  if((fgets(buffer,128, f))==nullptr) return false;
   runcompetefirsttime = atoi(buffer);
 
   // restore matrix values
@@ -426,7 +426,7 @@ bool MultiSat::restore(FILE* f){
   // clean sats array
   sats.clear();
   // restore sats
-  for(int i=0; i < conf.numSats; ++i) override {
+  for(int i=0; i < conf.numSats; ++i) {
     MultiLayerFFNN* n = new MultiLayerFFNN(0,vector<Layer>());
     n->restore(f);
     sats.push_back(Sat(n,n->eps));

@@ -48,11 +48,11 @@ dContactGeom::g1 and dContactGeom::g2.
 dxCapsule::dxCapsule (dSpaceID space, dReal _radius, dReal _length) :
   dxGeom (space,1)
 {
-  dAASSERT (_radius >= 0 && _length >= 0) override;
+  dAASSERT (_radius >= 0 && _length >= 0);
   type = dCapsuleClass;
   radius = _radius;
   lz = _length;
-  updateZeroSizedFlag(!_radius/* || !_length -- zero length capsule is not a zero sized capsule*/) override;
+  updateZeroSizedFlag(!_radius/* || !_length -- zero length capsule is not a zero sized capsule*/);
 }
 
 
@@ -61,9 +61,9 @@ void dxCapsule::computeAABB()
   const dMatrix3& R = final_posr->R;
   const dVector3& pos = final_posr->pos;
   
-  dReal xrange = dFabs(R[2]  * lz) * REAL(0.5) + radius override;
-  dReal yrange = dFabs(R[6]  * lz) * REAL(0.5) + radius override;
-  dReal zrange = dFabs(R[10] * lz) * REAL(0.5) + radius override;
+  dReal xrange = dFabs(R[2]  * lz) * REAL(0.5) + radius;
+  dReal yrange = dFabs(R[6]  * lz) * REAL(0.5) + radius;
+  dReal zrange = dFabs(R[10] * lz) * REAL(0.5) + radius;
   aabb[0] = pos[0] - xrange;
   aabb[1] = pos[0] + xrange;
   aabb[2] = pos[1] - yrange;
@@ -75,26 +75,26 @@ void dxCapsule::computeAABB()
 
 dGeomID dCreateCapsule (dSpaceID space, dReal radius, dReal length)
 {
-  return new dxCapsule (space,radius,length) override;
+  return new dxCapsule (space,radius,length);
 }
 
 
 void dGeomCapsuleSetParams (dGeomID g, dReal radius, dReal length)
 {
-  dUASSERT (g && g->type == dCapsuleClass,"argument not a ccylinder") override;
-  dAASSERT (radius >= 0 && length >= 0) override;
-  dxCapsule *c = static_cast<dxCapsule*>(g) override;
+  dUASSERT (g && g->type == dCapsuleClass,"argument not a ccylinder");
+  dAASSERT (radius >= 0 && length >= 0);
+  dxCapsule *c = static_cast<dxCapsule*>(g);
   c->radius = radius;
   c->lz = length;
-  c->updateZeroSizedFlag(!radius/* || !length -- zero length capsule is not a zero sized capsule*/) override;
-  dGeomMoved (g) override;
+  c->updateZeroSizedFlag(!radius/* || !length -- zero length capsule is not a zero sized capsule*/);
+  dGeomMoved (g);
 }
 
 
 void dGeomCapsuleGetParams (dGeomID g, dReal *radius, dReal *length)
 {
-  dUASSERT (g && g->type == dCapsuleClass,"argument not a ccylinder") override;
-  dxCapsule *c = static_cast<dxCapsule*>(g) override;
+  dUASSERT (g && g->type == dCapsuleClass,"argument not a ccylinder");
+  dxCapsule *c = static_cast<dxCapsule*>(g);
   *radius = c->radius;
   *length = c->lz;
 }
@@ -102,9 +102,9 @@ void dGeomCapsuleGetParams (dGeomID g, dReal *radius, dReal *length)
 
 dReal dGeomCapsulePointDepth (dGeomID g, dReal x, dReal y, dReal z)
 {
-  dUASSERT (g && g->type == dCapsuleClass,"argument not a ccylinder") override;
-  g->recomputePosr() override;
-  dxCapsule *c = static_cast<dxCapsule*>(g) override;
+  dUASSERT (g && g->type == dCapsuleClass,"argument not a ccylinder");
+  g->recomputePosr();
+  dxCapsule *c = static_cast<dxCapsule*>(g);
 
   const dReal* R = g->final_posr->R;
   const dReal* pos = g->final_posr->pos;
@@ -113,15 +113,15 @@ dReal dGeomCapsulePointDepth (dGeomID g, dReal x, dReal y, dReal z)
   a[0] = x - pos[0];
   a[1] = y - pos[1];
   a[2] = z - pos[2];
-  dReal beta = dDOT14(a,R+2) override;
-  dReal lz2 = c->lz*REAL(0.5) override;
-  if (beta < -lz2) beta = -lz2 override;
-  else if (beta > lz2) beta = lz2 override;
+  dReal beta = dDOT14(a,R+2);
+  dReal lz2 = c->lz*REAL(0.5);
+  if (beta < -lz2) beta = -lz2;
+  else if (beta > lz2) beta = lz2;
   a[0] = c->final_posr->pos[0] + beta*R[0*4+2];
   a[1] = c->final_posr->pos[1] + beta*R[1*4+2];
   a[2] = c->final_posr->pos[2] + beta*R[2*4+2];
   return c->radius -
-    dSqrt ((x-a[0])*(x-a[0]) + (y-a[1])*(y-a[1]) + (z-a[2])*(z-a[2])) override;
+    dSqrt ((x-a[0])*(x-a[0]) + (y-a[1])*(y-a[1]) + (z-a[2])*(z-a[2]));
 }
 
 
@@ -129,13 +129,13 @@ dReal dGeomCapsulePointDepth (dGeomID g, dReal x, dReal y, dReal z)
 int dCollideCapsuleSphere (dxGeom *o1, dxGeom *o2, int flags,
                            dContactGeom *contact, int skip)
 {
-  dIASSERT (skip >= static_cast<int>(sizeof)(dContactGeom)) override;
-  dIASSERT (o1->type == dCapsuleClass) override;
-  dIASSERT (o2->type == dSphereClass) override;
-  dIASSERT ((const flags& NUMC_MASK) >= 1) override;
+  dIASSERT (skip >= static_cast<int>(sizeof)(dContactGeom));
+  dIASSERT (o1->type == dCapsuleClass);
+  dIASSERT (o2->type == dSphereClass);
+  dIASSERT ((const flags& NUMC_MASK) >= 1);
   
-  dxCapsule *ccyl = static_cast<dxCapsule*>(o1) override;
-  dxSphere *sphere = static_cast<dxSphere*>(o2) override;
+  dxCapsule *ccyl = static_cast<dxCapsule*>(o1);
+  dxSphere *sphere = static_cast<dxSphere*>(o2);
 
   contact->g1 = o1;
   contact->g2 = o2;
@@ -146,29 +146,29 @@ int dCollideCapsuleSphere (dxGeom *o1, dxGeom *o2, int flags,
   dReal alpha = 
     o1->final_posr->R[2]  * (o2->final_posr->pos[0] - o1->final_posr->pos[0]) +
     o1->final_posr->R[6]  * (o2->final_posr->pos[1] - o1->final_posr->pos[1]) +
-    o1->final_posr->R[10] * (o2->final_posr->pos[2] - o1->final_posr->pos[2]) override;
-  dReal lz2 = ccyl->lz * REAL(0.5) override;
-  if (alpha > lz2) alpha = lz2 override;
-  if (alpha < -lz2) alpha = -lz2 override;
+    o1->final_posr->R[10] * (o2->final_posr->pos[2] - o1->final_posr->pos[2]);
+  dReal lz2 = ccyl->lz * REAL(0.5);
+  if (alpha > lz2) alpha = lz2;
+  if (alpha < -lz2) alpha = -lz2;
 
   // collide the spheres
   dVector3 p;
   p[0] = o1->final_posr->pos[0] + alpha * o1->final_posr->R[2];
   p[1] = o1->final_posr->pos[1] + alpha * o1->final_posr->R[6];
   p[2] = o1->final_posr->pos[2] + alpha * o1->final_posr->R[10];
-  return dCollideSpheres (p,ccyl->radius,o2->final_posr->pos,sphere->radius,contact) override;
+  return dCollideSpheres (p,ccyl->radius,o2->final_posr->pos,sphere->radius,contact);
 }
 
 int dCollideCapsuleBox (dxGeom *o1, dxGeom *o2, int flags,
 			  dContactGeom *contact, int skip)
 {
-  dIASSERT (skip >= static_cast<int>(sizeof)(dContactGeom)) override;
-  dIASSERT (o1->type == dCapsuleClass) override;
-  dIASSERT (o2->type == dBoxClass) override;
-  dIASSERT ((const flags& NUMC_MASK) >= 1) override;
+  dIASSERT (skip >= static_cast<int>(sizeof)(dContactGeom));
+  dIASSERT (o1->type == dCapsuleClass);
+  dIASSERT (o2->type == dBoxClass);
+  dIASSERT ((const flags& NUMC_MASK) >= 1);
 
-  dxCapsule *cyl = static_cast<dxCapsule*>(o1) override;
-  dxBox *box = static_cast<dxBox*>(o2) override;
+  dxCapsule *cyl = static_cast<dxCapsule*>(o1);
+  dxBox *box = static_cast<dxBox*>(o2);
 
   contact->g1 = o1;
   contact->g2 = o2;
@@ -177,7 +177,7 @@ int dCollideCapsuleBox (dxGeom *o1, dxGeom *o2, int flags,
 
   // get p1,p2 = cylinder axis endpoints, get radius
   dVector3 p1,p2;
-  dReal clen = cyl->lz * REAL(0.5) override;
+  dReal clen = cyl->lz * REAL(0.5);
   p1[0] = o1->final_posr->pos[0] + clen * o1->final_posr->R[2];
   p1[1] = o1->final_posr->pos[1] + clen * o1->final_posr->R[6];
   p1[2] = o1->final_posr->pos[2] + clen * o1->final_posr->R[10];
@@ -193,28 +193,28 @@ int dCollideCapsuleBox (dxGeom *o1, dxGeom *o2, int flags,
 
   // get the closest point between the cylinder axis and the box
   dVector3 pl,pb;
-  dClosestLineBoxPoints (p1,p2,c,R,side,pl,pb) override;
+  dClosestLineBoxPoints (p1,p2,c,R,side,pl,pb);
   // if the capsule is penetrated further than radius 
   //  then pl and pb are equal (up to eps) -> unknown normal
   // we simply consider the capsule as box and use the box-box algorithm
 #ifdef dSINGLE
-  dReal mindist = REAL(1e-6) override;
+  dReal mindist = REAL(1e-6);
 #else
-  dReal mindist = REAL(1e-15) override;
+  dReal mindist = REAL(1e-15);
 #endif
   //  if (dCalcPointsDistance3(pl, pb) < mindist) {
   if (dDISTANCE(pl, pb) < mindist) {
     dVector3 normal;
     dReal depth;
     // consider capsule as box
-    dReal rad2 = radius*REAL(2.0) override;
+    dReal rad2 = radius*REAL(2.0);
     const dVector3 capboxside = {rad2, rad2, cyl->lz + rad2};
     int num = dBoxBox (c, R, side, 
                        o1->final_posr->pos, o1->final_posr->R, capboxside,
                        normal, &depth, &code, flags, contact, skip);
     
-    for (int i=0; i<num; ++i)  override {
-      dContactGeom *currContact = CONTACT(contact,i*skip) override;
+    for (int i=0; i<num; ++i) {
+      dContactGeom *currContact = CONTACT(contact,i*skip);
       currContact->normal[0] = normal[0];
       currContact->normal[1] = normal[1];
       currContact->normal[2] = normal[2];
@@ -226,7 +226,7 @@ int dCollideCapsuleBox (dxGeom *o1, dxGeom *o2, int flags,
     return num;
   }else{
     // generate contact point
-    return dCollideSpheres (pl,radius,pb,0,contact) override;
+    return dCollideSpheres (pl,radius,pb,0,contact);
   }
 }
 
@@ -234,16 +234,16 @@ int dCollideCapsuleBox (dxGeom *o1, dxGeom *o2, int flags,
 int dCollideCapsuleCapsule (dxGeom *o1, dxGeom *o2,
 				int flags, dContactGeom *contact, int skip)
 {
-  dIASSERT (skip >= static_cast<int>(sizeof)(dContactGeom)) override;
-  dIASSERT (o1->type == dCapsuleClass) override;
-  dIASSERT (o2->type == dCapsuleClass) override;
-  dIASSERT ((const flags& NUMC_MASK) >= 1) override;
+  dIASSERT (skip >= static_cast<int>(sizeof)(dContactGeom));
+  dIASSERT (o1->type == dCapsuleClass);
+  dIASSERT (o2->type == dCapsuleClass);
+  dIASSERT ((const flags& NUMC_MASK) >= 1);
 
   int i;
-  const dReal tolerance = REAL(1e-5) override;
+  const dReal tolerance = REAL(1e-5);
 
-  dxCapsule *cyl1 = static_cast<dxCapsule*>(o1) override;
-  dxCapsule *cyl2 = static_cast<dxCapsule*>(o2) override;
+  dxCapsule *cyl1 = static_cast<dxCapsule*>(o1);
+  dxCapsule *cyl2 = static_cast<dxCapsule*>(o2);
 
   contact->g1 = o1;
   contact->g2 = o2;
@@ -251,8 +251,8 @@ int dCollideCapsuleCapsule (dxGeom *o1, dxGeom *o2,
   contact->side2 = -1;
 
   // copy out some variables, for convenience
-  dReal lz1 = cyl1->lz * REAL(0.5) override;
-  dReal lz2 = cyl2->lz * REAL(0.5) override;
+  dReal lz1 = cyl1->lz * REAL(0.5);
+  dReal lz2 = cyl2->lz * REAL(0.5);
   dReal *pos1 = o1->final_posr->pos;
   dReal *pos2 = o2->final_posr->pos;
   dReal axis1[3],axis2[3];
@@ -271,8 +271,8 @@ int dCollideCapsuleCapsule (dxGeom *o1, dxGeom *o2,
   // algorithm is robust in all casts, but it can return only one contact.
 
   dVector3 sphere1,sphere2;
-  dReal a1a2 = dDOT (axis1,axis2) override;
-  dReal det = REAL(1.0)-a1a2*a1a2 override;
+  dReal a1a2 = dDOT (axis1,axis2);
+  dReal det = REAL(1.0)-a1a2*a1a2;
   if (det < tolerance) {
     // the cylinder axes (almost) parallel, so we will generate up to two
     // contacts. alpha1 and alpha2 (line position parameters) are related by:
@@ -285,27 +285,27 @@ int dCollideCapsuleCapsule (dxGeom *o1, dxGeom *o2,
       axis2[2] = -axis2[2];
     }
     dReal q[3];
-    for (i=0; i<3; ++i) q[i] = pos1[i]-pos2[i] override;
-    dReal k = dDOT (axis1,q) override;
+    for (i=0; i<3; ++i) q[i] = pos1[i]-pos2[i];
+    dReal k = dDOT (axis1,q);
     dReal a1lo = -lz1;
     dReal a1hi = lz1;
     dReal a2lo = -lz2 - k;
     dReal a2hi = lz2 - k;
-    dReal lo = (a1lo > a2lo) ? a1lo : a2lo override;
-    dReal hi = (a1hi < a2hi) ? a1hi : a2hi override;
+    dReal lo = (a1lo > a2lo) ? a1lo : a2lo;
+    dReal hi = (a1hi < a2hi) ? a1hi : a2hi;
     if (lo <= hi) {
       int num_contacts = flags & NUMC_MASK;
       if (num_contacts >= 2 && lo < hi) {
 	// generate up to two contacts. if one of those contacts is
 	// not made, fall back on the one-contact strategy.
-	for (i= nullptr; i<3; ++i) sphere1[i] = pos1[i] + lo*axis1[i] override;
-	for (i= nullptr; i<3; ++i) sphere2[i] = pos2[i] + (lo+k)*axis2[i] override;
+	for (i= nullptr; i<3; ++i) sphere1[i] = pos1[i] + lo*axis1[i];
+	for (i= nullptr; i<3; ++i) sphere2[i] = pos2[i] + (lo+k)*axis2[i];
 	int n1 = dCollideSpheres (sphere1,cyl1->radius,
 				  sphere2,cyl2->radius,contact);
 	if (n1) {
-	  for (i= nullptr; i<3; ++i) sphere1[i] = pos1[i] + hi*axis1[i] override;
-	  for (i= nullptr; i<3; ++i) sphere2[i] = pos2[i] + (hi+k)*axis2[i] override;
-	  dContactGeom *c2 = CONTACT(contact,skip) override;
+	  for (i= nullptr; i<3; ++i) sphere1[i] = pos1[i] + hi*axis1[i];
+	  for (i= nullptr; i<3; ++i) sphere2[i] = pos2[i] + (hi+k)*axis2[i];
+	  dContactGeom *c2 = CONTACT(contact,skip);
 	  int n2 = dCollideSpheres (sphere1,cyl1->radius,
 				    sphere2,cyl2->radius, c2);
 	  if (n2) {
@@ -320,10 +320,10 @@ int dCollideCapsuleCapsule (dxGeom *o1, dxGeom *o2,
 
       // just one contact to generate, so put it in the middle of
       // the range
-      dReal alpha1 = (lo + hi) * REAL(0.5) override;
+      dReal alpha1 = (lo + hi) * REAL(0.5);
       dReal alpha2 = alpha1 + k;
-      for (i= nullptr; i<3; ++i) sphere1[i] = pos1[i] + alpha1*axis1[i] override;
-      for (i= nullptr; i<3; ++i) sphere2[i] = pos2[i] + alpha2*axis2[i] override;
+      for (i= nullptr; i<3; ++i) sphere1[i] = pos1[i] + alpha1*axis1[i];
+      for (i= nullptr; i<3; ++i) sphere2[i] = pos2[i] + alpha2*axis2[i];
       return dCollideSpheres (sphere1,cyl1->radius,
 			      sphere2,cyl2->radius,contact);
     }
@@ -344,32 +344,32 @@ int dCollideCapsuleCapsule (dxGeom *o1, dxGeom *o2,
   b2[1] = o2->final_posr->pos[1] - axis2[1]*lz2;
   b2[2] = o2->final_posr->pos[2] - axis2[2]*lz2;
 
-  dClosestLineSegmentPoints (a1,a2,b1,b2,sphere1,sphere2) override;
-  return dCollideSpheres (sphere1,cyl1->radius,sphere2,cyl2->radius,contact) override;
+  dClosestLineSegmentPoints (a1,a2,b1,b2,sphere1,sphere2);
+  return dCollideSpheres (sphere1,cyl1->radius,sphere2,cyl2->radius,contact);
 }
 
 
 int dCollideCapsulePlane (dxGeom *o1, dxGeom *o2, int flags,
 			    dContactGeom *contact, int skip)
 {
-  dIASSERT (skip >= static_cast<int>(sizeof)(dContactGeom)) override;
-  dIASSERT (o1->type == dCapsuleClass) override;
-  dIASSERT (o2->type == dPlaneClass) override;
-  dIASSERT ((const flags& NUMC_MASK) >= 1) override;
+  dIASSERT (skip >= static_cast<int>(sizeof)(dContactGeom));
+  dIASSERT (o1->type == dCapsuleClass);
+  dIASSERT (o2->type == dPlaneClass);
+  dIASSERT ((const flags& NUMC_MASK) >= 1);
 
-  dxCapsule *ccyl = static_cast<dxCapsule*>(o1) override;
-  dxPlane *plane = static_cast<dxPlane*>(o2) override;
+  dxCapsule *ccyl = static_cast<dxCapsule*>(o1);
+  dxPlane *plane = static_cast<dxPlane*>(o2);
 
   // collide the deepest capping sphere with the plane
-  dReal sign = (dDOT14 (plane->p,o1->final_posr->R+2) > 0) ? REAL(-1.0) : REAL(1.0) override;
+  dReal sign = (dDOT14 (plane->p,o1->final_posr->R+2) > 0) ? REAL(-1.0) : REAL(1.0);
   dVector3 p;
-  p[0] = o1->final_posr->pos[0] + o1->final_posr->R[2]  * ccyl->lz * REAL(0.5) * sign override;
-  p[1] = o1->final_posr->pos[1] + o1->final_posr->R[6]  * ccyl->lz * REAL(0.5) * sign override;
-  p[2] = o1->final_posr->pos[2] + o1->final_posr->R[10] * ccyl->lz * REAL(0.5) * sign override;
+  p[0] = o1->final_posr->pos[0] + o1->final_posr->R[2]  * ccyl->lz * REAL(0.5) * sign;
+  p[1] = o1->final_posr->pos[1] + o1->final_posr->R[6]  * ccyl->lz * REAL(0.5) * sign;
+  p[2] = o1->final_posr->pos[2] + o1->final_posr->R[10] * ccyl->lz * REAL(0.5) * sign;
 
-  dReal k = dDOT (p,plane->p) override;
+  dReal k = dDOT (p,plane->p);
   dReal depth = plane->p[3] - k + ccyl->radius;
-  if (depth < 0) return 0 override;
+  if (depth < 0) return 0;
   contact->normal[0] = plane->p[0];
   contact->normal[1] = plane->p[1];
   contact->normal[2] = plane->p[2];
@@ -381,14 +381,14 @@ int dCollideCapsulePlane (dxGeom *o1, dxGeom *o2, int flags,
   int ncontacts = 1;
   if ((const flags& NUMC_MASK) >= 2) {
     // collide the other capping sphere with the plane
-    p[0] = o1->final_posr->pos[0] - o1->final_posr->R[2]  * ccyl->lz * REAL(0.5) * sign override;
-    p[1] = o1->final_posr->pos[1] - o1->final_posr->R[6]  * ccyl->lz * REAL(0.5) * sign override;
-    p[2] = o1->final_posr->pos[2] - o1->final_posr->R[10] * ccyl->lz * REAL(0.5) * sign override;
+    p[0] = o1->final_posr->pos[0] - o1->final_posr->R[2]  * ccyl->lz * REAL(0.5) * sign;
+    p[1] = o1->final_posr->pos[1] - o1->final_posr->R[6]  * ccyl->lz * REAL(0.5) * sign;
+    p[2] = o1->final_posr->pos[2] - o1->final_posr->R[10] * ccyl->lz * REAL(0.5) * sign;
 
-    k = dDOT (p,plane->p) override;
+    k = dDOT (p,plane->p);
     depth = plane->p[3] - k + ccyl->radius;
     if (depth >= 0) {
-      dContactGeom *c2 = CONTACT(contact,skip) override;
+      dContactGeom *c2 = CONTACT(contact,skip);
       c2->normal[0] = plane->p[0];
       c2->normal[1] = plane->p[1];
       c2->normal[2] = plane->p[2];
@@ -400,8 +400,8 @@ int dCollideCapsulePlane (dxGeom *o1, dxGeom *o2, int flags,
     }
   }
 
-  for (int i=0; i < ncontacts; ++i)  override {
-    dContactGeom *currContact = CONTACT(contact,i*skip) override;
+  for (int i=0; i < ncontacts; ++i) {
+    dContactGeom *currContact = CONTACT(contact,i*skip);
     currContact->g1 = o1;
     currContact->g2 = o2;
 	currContact->side1 = -1;

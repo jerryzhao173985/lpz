@@ -43,11 +43,11 @@ namespace lpzrobots {
              RaySensor::rayDrawMode drawMode = RaySensor::drawSensor);
 
     //Override sense to include characteristic
-    virtual bool sense(const GlobalData& globaldata) override;
+    virtual bool sense(const GlobalData& globaldata);
 
     //Override to return value given by characteristic
     virtual int get(sensor* sensors, int length)  const override;
-    virtual std::list<sensor> getList()  const override;
+    virtual std::list<sensor> getList()  const;
 
     //Directly return value (needed for backward compatibility
     virtual double getValue() const;

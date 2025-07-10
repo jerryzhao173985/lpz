@@ -117,8 +117,8 @@ namespace lpzrobots {
     virtual void addForce1(double force)  = 0;
 
     virtual int getNumberAxes() const override { return 1;};
-    virtual std::list<double> getPositions()  const override;
-    virtual std::list<double> getPositionRates()  const override;
+    virtual std::list<double> getPositions()  const;
+    virtual std::list<double> getPositionRates()  const;
     virtual int getPositions(double* sensorarray)  const override;
     virtual int getPositionRates(double* sensorarray)  const override;
   protected:
@@ -141,8 +141,8 @@ namespace lpzrobots {
     }
 
     virtual int getNumberAxes() const override { return 2;};
-    virtual std::list<double> getPositions()  const override;
-    virtual std::list<double> getPositionRates()  const override;
+    virtual std::list<double> getPositions()  const;
+    virtual std::list<double> getPositionRates()  const;
     virtual int getPositions(double* sensorarray)  const override;
     virtual int getPositionRates(double* sensorarray)  const override;
 
@@ -166,10 +166,10 @@ namespace lpzrobots {
     */
     virtual void init(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                       bool withVisual = true, double visualSize = 0.2,
-                      bool ignoreColl = true) override;
+                      bool ignoreColl = true);
 
-    virtual void update() override;
-    virtual void setParam(int parameter, double value) override;
+    virtual void update();
+    virtual void setParam(int parameter, double value);
     virtual double getParam(int parameter)  const override;
 
     virtual int getNumberAxes() const override { return 0; }
@@ -192,14 +192,14 @@ namespace lpzrobots {
     */
     virtual void init(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                       bool withVisual = true, double visualSize = 0.2,
-                      bool ignoreColl = true) override;
+                      bool ignoreColl = true);
 
-    virtual void update() override;
+    virtual void update();
 
-    virtual void addForce1(double t) override;
+    virtual void addForce1(double t);
     virtual double getPosition1()  const override;
     virtual double getPosition1Rate()  const override;
-    virtual void setParam(int parameter, double value) override;
+    virtual void setParam(int parameter, double value);
     virtual double getParam(int parameter)  const override;
 
   protected:
@@ -220,18 +220,18 @@ namespace lpzrobots {
     */
     virtual void init(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                       bool withVisual = true, double visualSize = 0.2,
-                      bool ignoreColl = true) override;
+                      bool ignoreColl = true);
 
-    virtual void update() override;
+    virtual void update();
 
     /// adds torques to axis 1 and 2
-    virtual void addForce1(double t1) override;
-    virtual void addForce2(double t2) override;
+    virtual void addForce1(double t1);
+    virtual void addForce2(double t2);
     virtual double getPosition1()  const override;
-    virtual double getPosition2()  const override; /// This is not supported by the joint!
+    virtual double getPosition2()  const; /// This is not supported by the joint!
     virtual double getPosition1Rate()  const override;
     virtual double getPosition2Rate()  const override;
-    virtual void setParam(int parameter, double value) override;
+    virtual void setParam(int parameter, double value);
     virtual double getParam(int parameter)  const override;
 
   protected:
@@ -252,19 +252,19 @@ namespace lpzrobots {
     */
     virtual void init(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                       bool withVisual = true, double visualSize = 0.2,
-                      bool ignoreColl = true) override;
+                      bool ignoreColl = true);
 
-    virtual void update() override;
+    virtual void update();
 
     /// adds torques to axis 1 and 2
-    virtual void addForce1(double t1) override;
-    virtual void addForce2(double t2) override;
+    virtual void addForce1(double t1);
+    virtual void addForce2(double t2);
     virtual double getPosition1()  const override;
     virtual double getPosition2()  const override;
     virtual double getPosition1Rate()  const override;
     virtual double getPosition2Rate()  const override;
 
-    virtual void setParam(int parameter, double value) override;
+    virtual void setParam(int parameter, double value);
     virtual double getParam(int parameter)  const override;
 
   protected:
@@ -285,13 +285,13 @@ namespace lpzrobots {
     */
     virtual void init(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                       bool withVisual = true, double visualSize = 0.2,
-                      bool ignoreColl = true) override;
+                      bool ignoreColl = true);
 
-    virtual void update() override;
+    virtual void update();
 
     virtual int getNumberAxes() const override { return 0; }
     // Ball and Socket has no parameter
-    virtual void setParam(int parameter, double value) override;
+    virtual void setParam(int parameter, double value);
     virtual double getParam(int parameter)  const override;
 
   protected:
@@ -314,14 +314,14 @@ namespace lpzrobots {
     */
     virtual void init(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                       bool withVisual = true, double visualSize = 0.1,
-                      bool ignoreColl = true) override;
+                      bool ignoreColl = true);
 
-    virtual void update() override;
+    virtual void update();
 
-    virtual void addForce1(double t) override;
+    virtual void addForce1(double t);
     virtual double getPosition1()  const override;
     virtual double getPosition1Rate()  const override;
-    virtual void setParam(int parameter, double value) override;
+    virtual void setParam(int parameter, double value);
     virtual double getParam(int parameter)  const override;
 
   protected:
@@ -351,10 +351,10 @@ namespace lpzrobots {
 
   //   virtual void addForce1(double t);
   //   virtual void addForce2(double t);
-  //   virtual double getPosition1()  const override;
-  //   virtual double getPosition2()  const override;
-  //   virtual double getPosition1Rate()  const override;
-  //   virtual double getPosition2Rate()  const override;
+  //   virtual double getPosition1()  const;
+  //   virtual double getPosition2()  const;
+  //   virtual double getPosition1Rate()  const;
+  //   virtual double getPosition2Rate()  const;
 
   //   virtual void setParam(int parameter, double value);
   //   virtual double getParam(int parameter) const;

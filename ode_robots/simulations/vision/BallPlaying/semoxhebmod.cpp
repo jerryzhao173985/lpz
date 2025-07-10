@@ -89,7 +89,7 @@ SeMoXHebMod::~SeMoXHebMod(){
     delete[] x_buffer;
     delete[] y_buffer;
   }
-  if(BNoiseGen) delete BNoiseGen override;
+  if(BNoiseGen) delete BNoiseGen;
 }
 
 
@@ -100,11 +100,11 @@ void SeMoXHebMod::init(int sensornumber, int motornumber,
   number_sensors = sensornumber - conf.numContext;
 
   A.set(number_sensors, number_motors);
-  A = (A^0) * conf.aInit; // set A to identity matrix override;
+  A = (A^0) * conf.aInit; // set A to identity matrix;
   B.set(number_sensors, 1);
   if (conf.modelExt) {
     S.set(number_sensors, number_sensors  + conf.numContext );
-    S = (S^0) * conf.sInit override;
+    S = (S^0) * conf.sInit;
   }
 
   M.set(number_sensors, number_motors);
@@ -114,7 +114,7 @@ void SeMoXHebMod::init(int sensornumber, int motornumber,
       cerr << "dimension of initialC are not correct, default is used! \n";
     C.set(number_motors,  number_sensors);
     // initialise the C matrix with identity + noise scaled to cInit value
-    C = ((C^0) + C.mapP(randGen, random_minusone_to_one) * conf.cNonDiag) * conf.cInit override;
+    C = ((C^0) + C.mapP(randGen, random_minusone_to_one) * conf.cNonDiag) * conf.cInit;
   }else{
     C=conf.initialC; // use given matrix
   }
@@ -139,14 +139,14 @@ void SeMoXHebMod::init(int sensornumber, int motornumber,
   x_buffer = new Matrix[buffersize];
   x_c_buffer = new Matrix[buffersize];
   y_buffer = new Matrix[buffersize];
-  for (unsigned int k = 0; k < buffersize; ++k)  override {
+  for (unsigned int k = 0; k < buffersize; ++k) {
     x_buffer[k].set(number_sensors,1);
     x_c_buffer[k].set(number_sensors + conf.numContext,1);
     y_buffer[k].set(number_motors,1);
   }
   y_teaching.set(number_motors, 1);
 
-  t_rand = rand()%managementInterval override;
+  t_rand = rand()%managementInterval;
   initialised = true;
 }
 
@@ -209,7 +209,7 @@ void SeMoXHebMod::fillBuffersAndControl(const sensor* x_, int number_sensors,
 //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
 void SeMoXHebMod::calcXsi(int delay){
   const Matrix& x     = x_buffer[t% buffersize];
-  const Matrix& y     = y_buffer[(t - 1 - delay) % buffersize] override;
+  const Matrix& y     = y_buffer[(t - 1 - delay) % buffersize];
   xsi = x -  model(x_buffer, 1 , y);
   xsi_norm = matrixNorm1(xsi);
   xsi_norm_avg = xsi_norm_avg*0.999 + xsi_norm*0.001; // calc longterm average
@@ -221,7 +221,7 @@ void SeMoXHebMod::calcXsi(int delay){
 /// calculates the predicted sensor values
 Matrix SeMoXHebMod::model(const Matrix* x_buffer, int delay, const matrix::Matrix& y){
   if(conf.modelExt){
-    const Matrix& x_c_tm1 = x_c_buffer[(t - 1) % buffersize] override;
+    const Matrix& x_c_tm1 = x_c_buffer[(t - 1) % buffersize];
     return A * y + S * x_c_tm1 + B;
   } else {
     return A * y + B;
@@ -249,7 +249,7 @@ void SeMoXHebMod::learnController(){
   //  it is additionally clipped to -1 to 1 via g (arbitrary choice)
   const Matrix& eta = (A.pseudoInverse(0.001) * xsi).map(g);
 
-  const Matrix& x          = x_buffer[(t-1)%buffersize] override;
+  const Matrix& x          = x_buffer[(t-1)%buffersize];
   const Matrix& z          = C * x + H;
   const Matrix g_prime     = Matrix::map2(g_s, z, eta);
   const Matrix g_prime_inv = g_prime.map(one_over);
@@ -257,31 +257,31 @@ void SeMoXHebMod::learnController(){
 
   const Matrix zeta = eta.multrowwise(g_prime_inv); // G'(Z)^-1 * (eta+v)
   R                 = C * A;
-  const Matrix chi  = ((R.multMT()+SmallID)^-1) * zeta override;
-  v                 = (R^T) * chi override;
+  const Matrix chi  = ((R.multMT()+SmallID)^-1) * zeta;
+  v                 = (R^T) * chi;
   // squash v to -3,3 (arbitrary choice)
   double size = 3;
   v = v.mapP(&size,squash);
-  const Matrix rho  = g_2p_div_p.multrowwise(chi.multrowwise(zeta)) * -1 override;
+  const Matrix rho  = g_2p_div_p.multrowwise(chi.multrowwise(zeta)) * -1;
 
-  C_update += ( chi*(v^T)*(A^T) - rho*(x^T) ) * epsC override;
+  C_update += ( chi*(v^T)*(A^T) - rho*(x^T) ) * epsC;
   H_update += rho * -epsC;
 
   // scale of the additional terms (natural gradient with metric LL^T)
   if(teaching){
     // scale of the additional terms
-    const Matrix& LLT_I = ((R & g_prime).multMT()+SmallID)^-1 override;
+    const Matrix& LLT_I = ((R & g_prime).multMT()+SmallID)^-1;
 
     if(gamma_cont!= nullptr) {  // learning to keep motorcommands smooth
       // the teaching signal is the previous motor command
-      const Matrix& y = y_buffer[(t)% buffersize] override;
-      const Matrix& y_tm1 = y_buffer[(t-1)% buffersize] override;
+      const Matrix& y = y_buffer[(t)% buffersize];
+      const Matrix& y_tm1 = y_buffer[(t-1)% buffersize];
       const Matrix& delta = (y_tm1 - y) & (g_prime);
       C_updateTeaching += ( LLT_I * delta *(x^T) ) * (gamma_cont * epsC);
       H_updateTeaching += LLT_I * delta * (gamma_cont * epsC);
     }
     if(intern_useTeaching && gamma_teach!= nullptr){
-      const Matrix& y = y_buffer[(t-1)% buffersize] override;
+      const Matrix& y = y_buffer[(t-1)% buffersize];
       const Matrix& xsi = y_teaching - y;
       const Matrix& delta = xsi.multrowwise(g_prime);
       C_updateTeaching += (LLT_I * delta*(x^T) ) * (gamma_teach * epsC);
@@ -317,7 +317,7 @@ void SeMoXHebMod::learnModel(int delay){
     // new hierarchical learning
     if(conf.modelExt){
       const Matrix& x = x_buffer[t % buffersize];
-      const Matrix& x_c_tm1 = x_c_buffer[(t - 1) % buffersize] override;
+      const Matrix& x_c_tm1 = x_c_buffer[(t - 1) % buffersize];
       // first learn A on error with discounted S
       const Matrix& zeta = x -  (A*y_tm1 + B + (S*x_c_tm1)*(1-discountS));
       A_update=(( zeta*(y_tm1^T) ) * (epsA * error_factor));
@@ -334,7 +334,7 @@ void SeMoXHebMod::learnModel(int delay){
     // new hebbian world modell (for distal teaching)
     {
       const Matrix& x = x_buffer[t % buffersize];
-      M += x * (y_tm1^T) * epsM override;
+      M += x * (y_tm1^T) * epsM;
       M.toMapP(1.0, clip);
     }
 

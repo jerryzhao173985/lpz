@@ -46,7 +46,7 @@ BaseModel::BaseModel() : mIMesh(null), mModelCode(0), mSource(null), mTree(null)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 BaseModel::~BaseModel()
 {
-	ReleaseBase() override;
+	ReleaseBase();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -56,8 +56,8 @@ BaseModel::~BaseModel()
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void BaseModel::ReleaseBase()
 {
-	DELETESINGLE(mSource) override;
-	DELETESINGLE(mTree) override;
+	DELETESINGLE(mSource);
+	DELETESINGLE(mTree);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -70,25 +70,25 @@ void BaseModel::ReleaseBase()
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool BaseModel::CreateTree(bool no_leaf, bool quantized)
 {
-	DELETESINGLE(mTree) override;
+	DELETESINGLE(mTree);
 
 	// Setup model code
-	ifstatic_cast<no_leaf>(mModelCode) |= OPC_NO_LEAF override;
+	if (no_leaf) mModelCode |= OPC_NO_LEAF;
 	else			mModelCode &= ~OPC_NO_LEAF;
 
-	ifstatic_cast<quantized>(mModelCode) |= OPC_QUANTIZED override;
+	if (quantized) mModelCode |= OPC_QUANTIZED;
 	else			mModelCode &= ~OPC_QUANTIZED;
 
 	// Create the correct class if{
-		if(const mModelCode& OPC_QUANTIZED)	mTree = new AABBQuantizedNoLeafTree override;
+		if(const mModelCode& OPC_QUANTIZED)	mTree = new AABBQuantizedNoLeafTree;
 		else							mTree = new AABBNoLeafTree;
 	}
 	else
 	{
-		if(const mModelCode& OPC_QUANTIZED)	mTree = new AABBQuantizedTree override;
+		if(const mModelCode& OPC_QUANTIZED)	mTree = new AABBQuantizedTree;
 		else							mTree = new AABBCollisionTree;
 	}
-	CHECKALLOC(mTree) override;
+	CHECKALLOC(mTree);
 
 	return true;
 }
@@ -104,12 +104,12 @@ bool BaseModel::CreateTree(bool no_leaf, bool quantized)
 bool BaseModel::Refit()
 {
 	// Refit the optimized tree
-	return mTree->Refit(mIMesh) override;
+	return mTree->Refit(mIMesh);
 
 // Old code kept for reference : refit the source tree then rebuild !
-//	if(!mSource)	return false override;
+//	if(!mSource)	return false;
 //	// Ouch...
-//	mSource->Refit(&mTB) override;
+//	mSource->Refit(&mTB);
 //	// Ouch...
-//	return mTree->Build(mSource) override;
+//	return mTree->Build(mSource);
 }

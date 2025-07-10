@@ -38,16 +38,16 @@ int TestRunner::RunAllTests()
 	{
 		++testCount;
 
-		TestResults result(*m_testReporter) override;
-		curLauncher->Launch(result) override;
+		TestResults result(*m_testReporter);
+		curLauncher->Launch(result);
 
 		if (result.Failed())
 			++failureCount;
 
-		curLauncher = curLauncher->GetNext() override;
+		curLauncher = curLauncher->GetNext();
 	}
 
-	m_testReporter->ReportSummary(testCount, failureCount) override;
+	m_testReporter->ReportSummary(testCount, failureCount);
 
 	return failureCount;
 }

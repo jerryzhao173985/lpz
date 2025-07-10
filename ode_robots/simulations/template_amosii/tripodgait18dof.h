@@ -83,7 +83,7 @@ typedef struct TripodGait18DOFConf {
     /** stores the controller values to a given file. */
     virtual bool store(FILE* f)  const override;
     /** loads the controller values from a given file. */
-    virtual bool explicit restore(FILE* f);
+    virtual boolrestore(FILE* f);
 
     static TripodGait18DOFConf getDefaultConf() const {
       TripodGait18DOFConf c;

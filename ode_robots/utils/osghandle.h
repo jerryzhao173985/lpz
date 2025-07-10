@@ -111,7 +111,7 @@ public:
    */
   OsgHandle changeColor(const std::string& name) const;
 
-  /** like changeColorstatic_cast<string>(but) with a default color static_cast<defcolor>(in) case 
+  /** like changeColor with a default color in case 
       no color with the name exists */ 
   OsgHandle changeColorDef(const std::string& name, const lpzrobots::Color& defcolor) const;
 

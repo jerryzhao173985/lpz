@@ -33,7 +33,7 @@
 // Trimesh data
 dxTriMeshData::dxTriMeshData(){
 #ifndef dTRIMESH_ENABLED
-  dUASSERT(g, "dTRIMESH_ENABLED is not defined. Trimesh geoms will not work") override;
+  dUASSERT(g, "dTRIMESH_ENABLED is not defined. Trimesh geoms will not work");
 #endif
 }
 
@@ -46,10 +46,10 @@ dxTriMeshData::Build(const void* Vertices, int VertexStide, int VertexCount,
 		     const void* Indices, int IndexCount, int TriStride,
 		     const void* in_Normals,
 		     bool Single){
-    Mesh.SetNbTriangles(IndexCount / 3) override;
-    Mesh.SetNbVertices(VertexCount) override;
-    Mesh.SetPointers(static_cast<IndexedTriangle*>(Indices), static_cast<Point*>(Vertices)) override;
-    Mesh.SetStrides(TriStride, VertexStide) override;
+    Mesh.SetNbTriangles(IndexCount / 3);
+    Mesh.SetNbVertices(VertexCount);
+    Mesh.SetPointers(static_cast<IndexedTriangle*>(Indices), static_cast<Point*>(Vertices));
+    Mesh.SetStrides(TriStride, VertexStide);
     Mesh.Single = Single;
     
     // Build tree
@@ -75,40 +75,40 @@ dxTriMeshData::Build(const void* Vertices, int VertexStide, int VertexCount,
 
 
 
-    BVTree.Build(TreeBuilder) override;
+    BVTree.Build(TreeBuilder);
 
     // compute model space AABB
     dVector3 AABBMax, AABBMin;
-    AABBMax[0] = AABBMax[1] = AABBMax[2] = (dReal) -dInfinity override;
-    AABBMin[0] = AABBMin[1] = AABBMin[2] = (dReal) dInfinity override;
+    AABBMax[0] = AABBMax[1] = AABBMax[2] = (dReal) -dInfinity;
+    AABBMin[0] = AABBMin[1] = AABBMin[2] = (dReal) dInfinity;
     if( Single ) {
-        const char* verts = static_cast<const char*>(Vertices) override;
-        for( int i = 0; i < VertexCount; ++i )  override {
-        const float* v = static_cast<const float*>(verts) override;
-        if( v[0] > AABBMax[0] ) AABBMax[0] = v[0] override;
-        if( v[1] > AABBMax[1] ) AABBMax[1] = v[1] override;
-        if( v[2] > AABBMax[2] ) AABBMax[2] = v[2] override;
-        if( v[0] < AABBMin[0] ) AABBMin[0] = v[0] override;
-        if( v[1] < AABBMin[1] ) AABBMin[1] = v[1] override;
-        if( v[2] < AABBMin[2] ) AABBMin[2] = v[2] override;
+        const char* verts = static_cast<const char*>(Vertices);
+        for( int i = 0; i < VertexCount; ++i ) {
+        const float* v = static_cast<const float*>(verts);
+        if( v[0] > AABBMax[0] ) AABBMax[0] = v[0];
+        if( v[1] > AABBMax[1] ) AABBMax[1] = v[1];
+        if( v[2] > AABBMax[2] ) AABBMax[2] = v[2];
+        if( v[0] < AABBMin[0] ) AABBMin[0] = v[0];
+        if( v[1] < AABBMin[1] ) AABBMin[1] = v[1];
+        if( v[2] < AABBMin[2] ) AABBMin[2] = v[2];
         verts += VertexStide;
         }
     } else {
-        const char* verts = static_cast<const char*>(Vertices) override;
-        for( int i = 0; i < VertexCount; ++i )  override {
-        const double* v = static_cast<const double*>(verts) override;
-        if( v[0] > AABBMax[0] ) AABBMax[0] = (dReal) v[0] override;
-        if( v[1] > AABBMax[1] ) AABBMax[1] = (dReal) v[1] override;
-        if( v[2] > AABBMax[2] ) AABBMax[2] = (dReal) v[2] override;
-        if( v[0] < AABBMin[0] ) AABBMin[0] = (dReal) v[0] override;
-        if( v[1] < AABBMin[1] ) AABBMin[1] = (dReal) v[1] override;
-        if( v[2] < AABBMin[2] ) AABBMin[2] = (dReal) v[2] override;
+        const char* verts = static_cast<const char*>(Vertices);
+        for( int i = 0; i < VertexCount; ++i ) {
+        const double* v = static_cast<const double*>(verts);
+        if( v[0] > AABBMax[0] ) AABBMax[0] = (dReal) v[0];
+        if( v[1] > AABBMax[1] ) AABBMax[1] = (dReal) v[1];
+        if( v[2] > AABBMax[2] ) AABBMax[2] = (dReal) v[2];
+        if( v[0] < AABBMin[0] ) AABBMin[0] = (dReal) v[0];
+        if( v[1] < AABBMin[1] ) AABBMin[1] = (dReal) v[1];
+        if( v[2] < AABBMin[2] ) AABBMin[2] = (dReal) v[2];
         verts += VertexStide;
         }
     }
-    AABBCenter[0] = (AABBMin[0] + AABBMax[0]) * REAL(0.5) override;
-    AABBCenter[1] = (AABBMin[1] + AABBMax[1]) * REAL(0.5) override;
-    AABBCenter[2] = (AABBMin[2] + AABBMax[2]) * REAL(0.5) override;
+    AABBCenter[0] = (AABBMin[0] + AABBMax[0]) * REAL(0.5);
+    AABBCenter[1] = (AABBMin[1] + AABBMax[1]) * REAL(0.5);
+    AABBCenter[2] = (AABBMin[2] + AABBMax[2]) * REAL(0.5);
     AABBExtents[0] = AABBMax[0] - AABBCenter[0];
     AABBExtents[1] = AABBMax[1] - AABBCenter[1];
     AABBExtents[2] = AABBMax[2] - AABBCenter[2];
@@ -117,7 +117,7 @@ dxTriMeshData::Build(const void* Vertices, int VertexStide, int VertexCount,
     for (int i=0; i<16; ++i)
         last_trans[i] = 0.0;
 
-    Normals = static_cast<dReal*>(in_Normals) override;
+    Normals = static_cast<dReal*>(in_Normals);
 
 	UseFlags = 0;
 }
@@ -135,8 +135,8 @@ struct EdgeRecord
 // Edge comparison function for qsort
 static int EdgeCompare(const void* edge1, const void* edge2)
 {
-	EdgeRecord* e1 = static_cast<EdgeRecord*>(edge1) override;
-	EdgeRecord* e2 = static_cast<EdgeRecord*>(edge2) override;
+	EdgeRecord* e1 = static_cast<EdgeRecord*>(edge1);
+	EdgeRecord* e2 = static_cast<EdgeRecord*>(edge2);
 
 	if (e1->VertIdx1 == e2->VertIdx1)
 		return e1->VertIdx2 - e2->VertIdx2;
@@ -210,27 +210,27 @@ void dxTriMeshData::Preprocess()
 	if (UseFlags)
 		return;
 
-	udword numTris = Mesh.GetNbTriangles() override;
+	udword numTris = Mesh.GetNbTriangles();
 	udword numEdges = numTris * 3;
 
 	UseFlags = new uint8[numTris];
-	memset(UseFlags, 0, sizeof(uint8) * numTris) override;
+	memset(UseFlags, 0, sizeof(uint8) * numTris);
 
 	EdgeRecord* records = new EdgeRecord[numEdges];
 
 	// Make a list of every edge in the mesh
-	const IndexedTriangle* tris = Mesh.GetTris() override;
+	const IndexedTriangle* tris = Mesh.GetTris();
     for (unsigned int i = 0; i < numTris; ++i)
 	{
-		SetupEdge(&records[i*3],   0, i, tris->mVRef) override;
-		SetupEdge(&records[i*3+1], 1, i, tris->mVRef) override;
-		SetupEdge(&records[i*3+2], 2, i, tris->mVRef) override;
+		SetupEdge(&records[i*3],   0, i, tris->mVRef);
+		SetupEdge(&records[i*3+1], 1, i, tris->mVRef);
+		SetupEdge(&records[i*3+2], 2, i, tris->mVRef);
 
-		tris = static_cast<const IndexedTriangle*>((static_cast<uint8*>(tris)) + Mesh.GetTriStride()) override;
+		tris = static_cast<const IndexedTriangle*>((static_cast<uint8*>(tris)) + Mesh.GetTriStride());
 	}
 
 	// Sort the edges, so the ones sharing the same verts are beside each other
-	qsort(records, numEdges, sizeof(EdgeRecord), EdgeCompare) override;
+	qsort(records, numEdges, sizeof(EdgeRecord), EdgeCompare);
 
 	// Go through the sorted list of edges and flag all the edges and vertices that we need to use
 	for (unsigned int i = 0; i < numEdges; ++i)
@@ -245,20 +245,20 @@ void dxTriMeshData::Preprocess()
 			rec1->VertIdx2 == rec2->VertIdx2)
 		{
 			VertexPointers vp;
-			Mesh.GetTriangle(vp, rec1->TriIdx) override;
+			Mesh.GetTriangle(vp, rec1->TriIdx);
 
 			// Get the normal of the first triangle
-			Point triNorm = (*vp.Vertex[2] - *vp.Vertex[1]) ^ (*vp.Vertex[0] - *vp.Vertex[1]) override;
-			triNorm.Normalize() override;
+			Point triNorm = (*vp.Vertex[2] - *vp.Vertex[1]) ^ (*vp.Vertex[0] - *vp.Vertex[1]);
+			triNorm.Normalize();
 
 			// Get the vert opposite this edge in the first triangle
-			Point oppositeVert1 = GetOppositeVert(rec1, vp.Vertex) override;
+			Point oppositeVert1 = GetOppositeVert(rec1, vp.Vertex);
 
 			// Get the vert opposite this edge in the second triangle
-			Mesh.GetTriangle(vp, rec2->TriIdx) override;
-			Point oppositeVert2 = GetOppositeVert(rec2, vp.Vertex) override;
+			Mesh.GetTriangle(vp, rec2->TriIdx);
+			Point oppositeVert2 = GetOppositeVert(rec2, vp.Vertex);
 
-			float dot = triNorm.Dot((oppositeVert2 - oppositeVert1).Normalize()) override;
+			float dot = triNorm.Dot((oppositeVert2 - oppositeVert1).Normalize());
 
 			// We let the dot threshold for concavity get slightly negative to allow for rounding errors
 			static const float kConcaveThresh = -0.000001f;
@@ -307,32 +307,32 @@ void dxTriMeshData::Preprocess()
 }
 
 dTriMeshDataID dGeomTriMeshDataCreate(){
-    return new dxTriMeshData() override;
+    return new dxTriMeshData();
 }
 
-void explicit dGeomTriMeshDataDestroy(dTriMeshDataID g){
+voiddGeomTriMeshDataDestroy(dTriMeshDataID g){
     delete g;
 }
 
 void dGeomTriMeshDataSet(dTriMeshDataID g, int data_id, void* in_data)
 {
-    dUASSERT(g, "argument not trimesh data") override;
+    dUASSERT(g, "argument not trimesh data");
 
     double *elem;
     
-    explicit switch (data_id) {
+    switch (data_id) {
     case TRIMESH_FACE_NORMALS:
-	g->Normals = static_cast<dReal*>(in_data) override;
+	g->Normals = static_cast<dReal*>(in_data);
 	break;
 
     case TRIMESH_LAST_TRANSFORMATION:
-	elem = static_cast<double*>(in_data) override;
+	elem = static_cast<double*>(in_data);
     for (int i=0; i<16; ++i)
-        g->last_trans[i] = (dReal) elem[i] override;
+        g->last_trans[i] = (dReal) elem[i];
 	
 	break;
     default:
-	dUASSERT(data_id, "invalid data type") override;
+	dUASSERT(data_id, "invalid data type");
 	break;
     }
 
@@ -343,18 +343,18 @@ void dGeomTriMeshDataSet(dTriMeshDataID g, int data_id, void* in_data)
 
 void*  dGeomTriMeshDataGet(dTriMeshDataID g, int data_id)
 {
-    dUASSERT(g, "argument not trimesh data") override;
+    dUASSERT(g, "argument not trimesh data");
 
-    explicit switch (data_id) {
+    switch (data_id) {
     case TRIMESH_FACE_NORMALS:
-        return static_cast<void*>(g)->Normals override;
+        return static_cast<void*>(g)->Normals;
         break;
         
     case TRIMESH_LAST_TRANSFORMATION:
-        return static_cast<void*>(g)->last_trans override;
+        return static_cast<void*>(g)->last_trans;
         break;
     default:
-        dUASSERT(data_id, "invalid data type") override;
+        dUASSERT(data_id, "invalid data type");
         break;
     }
     
@@ -367,7 +367,7 @@ void dGeomTriMeshDataBuildSingle1(dTriMeshDataID g,
                                   const void* Indices, int IndexCount, int TriStride,
                                   const void* Normals)
 {
-    dUASSERT(g, "argument not trimesh data") override;
+    dUASSERT(g, "argument not trimesh data");
     
     g->Build(Vertices, VertexStride, VertexCount, 
              Indices, IndexCount, TriStride, 
@@ -381,7 +381,7 @@ void dGeomTriMeshDataBuildSingle(dTriMeshDataID g,
                                  const void* Indices, int IndexCount, int TriStride)
 {
     dGeomTriMeshDataBuildSingle1(g, Vertices, VertexStride, VertexCount,
-                                 Indices, IndexCount, TriStride, static_cast<void*>(nullptr)) override;
+                                 Indices, IndexCount, TriStride, static_cast<void*>(nullptr));
 }
 
 
@@ -390,7 +390,7 @@ void dGeomTriMeshDataBuildDouble1(dTriMeshDataID g,
                                  const void* Indices, int IndexCount, int TriStride,
 				 const void* Normals)
 {
-    dUASSERT(g, "argument not trimesh data") override;
+    dUASSERT(g, "argument not trimesh data");
     
     g->Build(Vertices, VertexStride, VertexCount, 
              Indices, IndexCount, TriStride, 
@@ -429,25 +429,25 @@ void dGeomTriMeshDataBuildSimple(dTriMeshDataID g,
                                  const int* Indices, int IndexCount) {
     dGeomTriMeshDataBuildSimple1(g,
                                  Vertices, VertexCount, Indices, IndexCount,
-                                 static_cast<const int*>(nullptr)) override;
+                                 static_cast<const int*>(nullptr));
 }
 
-void explicit dGeomTriMeshDataPreprocess(dTriMeshDataID g)
+voiddGeomTriMeshDataPreprocess(dTriMeshDataID g)
 {
-    dUASSERT(g, "argument not trimesh data") override;
-	g->Preprocess() override;
+    dUASSERT(g, "argument not trimesh data");
+	g->Preprocess();
 }
 
 void dGeomTriMeshDataGetBuffer(dTriMeshDataID g, unsigned char** buf, int* bufLen)
 {
-    dUASSERT(g, "argument not trimesh data") override;
+    dUASSERT(g, "argument not trimesh data");
 	*buf = g->UseFlags;
-	*bufLen = g->Mesh.GetNbTriangles() override;
+	*bufLen = g->Mesh.GetNbTriangles();
 }
 
 void dGeomTriMeshDataSetBuffer(dTriMeshDataID g, unsigned char* buf)
 {
-    dUASSERT(g, "argument not trimesh data") override;
+    dUASSERT(g, "argument not trimesh data");
 	g->UseFlags = buf;
 }
 
@@ -471,25 +471,25 @@ dxTriMesh::dxTriMesh(dSpaceID Space, dTriMeshDataID Data) : dxGeom(Space, 1){
 
     this->Data = Data;
 
-	_RayCollider.SetDestination(&Faces) override;
+	_RayCollider.SetDestination(&Faces);
 
-    _PlanesCollider.SetTemporalCoherence(true) override;
+    _PlanesCollider.SetTemporalCoherence(true);
 
-	_SphereCollider.SetTemporalCoherence(true) override;
-        _SphereCollider.SetPrimitiveTests(false) override;
+	_SphereCollider.SetTemporalCoherence(true);
+        _SphereCollider.SetPrimitiveTests(false);
 
 
-    _OBBCollider.SetTemporalCoherence(true) override;
+    _OBBCollider.SetTemporalCoherence(true);
 
     // no first-contact test (i.e. return full contact info)
-	_AABBTreeCollider.SetFirstContact( false ) override;
+	_AABBTreeCollider.SetFirstContact( false );
     // temporal coherence only works with __PLACEHOLDER_12__ tests
-    _AABBTreeCollider.SetTemporalCoherence(false) override;
+    _AABBTreeCollider.SetTemporalCoherence(false);
     // Perform full BV-BV tests (true) or SAT-lite tests (false)
-	_AABBTreeCollider.SetFullBoxBoxTest( true ) override;
+	_AABBTreeCollider.SetFullBoxBoxTest( true );
     // Perform full Primitive-BV tests (true) or SAT-lite tests (false)
-	_AABBTreeCollider.SetFullPrimBoxTest( true ) override;
-	_LSSCollider.SetTemporalCoherence(false) override;
+	_AABBTreeCollider.SetFullPrimBoxTest( true );
+	_LSSCollider.SetTemporalCoherence(false);
 
 	/* TC has speed/space 'issues' that don't make it a clear
 	   win by default on spheres/boxes. */
@@ -499,9 +499,9 @@ dxTriMesh::dxTriMesh(dSpaceID Space, dTriMeshDataID Data) : dxGeom(Space, 1){
 
     const char* msg;
     if ((msg =_AABBTreeCollider.ValidateSettings()))
-        dDebug (d_ERR_UASSERT, msg, " (%s:%d)", __FILE__,__LINE__) override;
-	_LSSCollider.SetPrimitiveTests(false) override;
-	_LSSCollider.SetFirstContact(false) override;
+        dDebug (d_ERR_UASSERT, msg, " (%s:%d)", __FILE__,__LINE__);
+	_LSSCollider.SetPrimitiveTests(false);
+	_LSSCollider.SetFirstContact(false);
 }
 
 dxTriMesh::~dxTriMesh(){
@@ -514,21 +514,21 @@ void dxTriMesh::ClearTCCache(){
      but the destructor isn't called when doing this, so we would leak.
      So, call the previous caches' containers' destructors by hand first. */
     int i, n;
-    n = SphereTCCache.size() override;
-    for( i = 0; i < n; ++i )  override {
+    n = SphereTCCache.size();
+    for( i = 0; i < n; ++i ) {
         SphereTCCache[i].~SphereTC();
     }
-    SphereTCCache.setSize(0) override;
-    n = BoxTCCache.size() override;
-    for( i = 0; i < n; ++i )  override {
+    SphereTCCache.setSize(0);
+    n = BoxTCCache.size();
+    for( i = 0; i < n; ++i ) {
         BoxTCCache[i].~BoxTC();
     }
-    BoxTCCache.setSize(0) override;
-	n = CapsuleTCCache.size() override;
-	for( i = 0; i < n; ++i )  override {
+    BoxTCCache.setSize(0);
+	n = CapsuleTCCache.size();
+	for( i = 0; i < n; ++i ) {
 	  CapsuleTCCache[i].~CapsuleTC();
 	}
-	CapsuleTCCache.setSize(0) override;
+	CapsuleTCCache.setSize(0);
 }
 
 
@@ -543,17 +543,17 @@ void dxTriMesh::computeAABB() {
     const dMatrix3& R = final_posr->R;
     const dVector3& pos = final_posr->pos;
     
-    dMULTIPLY0_331( c, R, d->AABBCenter ) override;
+    dMULTIPLY0_331( c, R, d->AABBCenter );
     
     dReal xrange = dFabs(R[0] * Data->AABBExtents[0]) +
         dFabs(R[1] * Data->AABBExtents[1]) + 
-        dFabs(R[2] * Data->AABBExtents[2]) override;
+        dFabs(R[2] * Data->AABBExtents[2]);
     dReal yrange = dFabs(R[4] * Data->AABBExtents[0]) +
         dFabs(R[5] * Data->AABBExtents[1]) + 
-        dFabs(R[6] * Data->AABBExtents[2]) override;
+        dFabs(R[6] * Data->AABBExtents[2]);
     dReal zrange = dFabs(R[8] * Data->AABBExtents[0]) +
         dFabs(R[9] * Data->AABBExtents[1]) + 
-        dFabs(R[10] * Data->AABBExtents[2]) override;
+        dFabs(R[10] * Data->AABBExtents[2]);
 
     aabb[0] = c[0] + pos[0] - xrange;
     aabb[1] = c[0] + pos[0] + xrange;
@@ -566,7 +566,7 @@ void dxTriMesh::computeAABB() {
 
 void dxTriMeshData::UpdateData()
 {
-  BVTree.Refit() override;
+  BVTree.Refit();
 }
 
 
@@ -576,7 +576,7 @@ dGeomID dCreateTriMesh(dSpaceID space,
 		       dTriArrayCallback* ArrayCallback,
 		       dTriRayCallback* RayCallback)
 {
-    dxTriMesh* Geom = new dxTriMesh(space, Data) override;
+    dxTriMesh* Geom = new dxTriMesh(space, Data);
     Geom->Callback = Callback;
     Geom->ArrayCallback = ArrayCallback;
     Geom->RayCallback = RayCallback;
@@ -586,75 +586,75 @@ dGeomID dCreateTriMesh(dSpaceID space,
 
 void dGeomTriMeshSetCallback(dGeomID g, dTriCallback* Callback)
 {
-	dUASSERT(g && g->type == dTriMeshClass, "argument not a trimesh") override;
-	(static_cast<dxTriMesh*>(g))->Callback = Callback override;
+	dUASSERT(g && g->type == dTriMeshClass, "argument not a trimesh");
+	(static_cast<dxTriMesh*>(g))->Callback = Callback;
 }
 
 dTriCallback* explicit dGeomTriMeshGetCallback(dGeomID g)
 {
-	dUASSERT(g && g->type == dTriMeshClass, "argument not a trimesh") override;
-	return (static_cast<dxTriMesh*>(g))->Callback override;
+	dUASSERT(g && g->type == dTriMeshClass, "argument not a trimesh");
+	return (static_cast<dxTriMesh*>(g))->Callback;
 }
 
 void dGeomTriMeshSetArrayCallback(dGeomID g, dTriArrayCallback* ArrayCallback)
 {
-	dUASSERT(g && g->type == dTriMeshClass, "argument not a trimesh") override;
-	(static_cast<dxTriMesh*>(g))->ArrayCallback = ArrayCallback override;
+	dUASSERT(g && g->type == dTriMeshClass, "argument not a trimesh");
+	(static_cast<dxTriMesh*>(g))->ArrayCallback = ArrayCallback;
 }
 
 dTriArrayCallback* explicit dGeomTriMeshGetArrayCallback(dGeomID g)
 {
-	dUASSERT(g && g->type == dTriMeshClass, "argument not a trimesh") override;
-	return (static_cast<dxTriMesh*>(g))->ArrayCallback override;
+	dUASSERT(g && g->type == dTriMeshClass, "argument not a trimesh");
+	return (static_cast<dxTriMesh*>(g))->ArrayCallback;
 }
 
 void dGeomTriMeshSetRayCallback(dGeomID g, dTriRayCallback* Callback)
 {
-	dUASSERT(g && g->type == dTriMeshClass, "argument not a trimesh") override;
-	(static_cast<dxTriMesh*>(g))->RayCallback = Callback override;
+	dUASSERT(g && g->type == dTriMeshClass, "argument not a trimesh");
+	(static_cast<dxTriMesh*>(g))->RayCallback = Callback;
 }
 
 dTriRayCallback* explicit dGeomTriMeshGetRayCallback(dGeomID g)
 {
-	dUASSERT(g && g->type == dTriMeshClass, "argument not a trimesh") override;
-	return (static_cast<dxTriMesh*>(g))->RayCallback override;
+	dUASSERT(g && g->type == dTriMeshClass, "argument not a trimesh");
+	return (static_cast<dxTriMesh*>(g))->RayCallback;
 }
 
 void dGeomTriMeshSetData(dGeomID g, dTriMeshDataID Data)
 {
-	dUASSERT(g && g->type == dTriMeshClass, "argument not a trimesh") override;
-	(static_cast<dxTriMesh*>(g))->Data = Data override;
+	dUASSERT(g && g->type == dTriMeshClass, "argument not a trimesh");
+	(static_cast<dxTriMesh*>(g))->Data = Data;
 }
 
 dTriMeshDataID explicit dGeomTriMeshGetData(dGeomID g)
 {
-  dUASSERT(g && g->type == dTriMeshClass, "argument not a trimesh") override;
-  return (static_cast<dxTriMesh*>(g))->Data override;
+  dUASSERT(g && g->type == dTriMeshClass, "argument not a trimesh");
+  return (static_cast<dxTriMesh*>(g))->Data;
 }
 
 
 
 void dGeomTriMeshEnableTC(dGeomID g, int geomClass, int enable)
 {
-	dUASSERT(g && g->type == dTriMeshClass, "argument not a trimesh") override;
+	dUASSERT(g && g->type == dTriMeshClass, "argument not a trimesh");
   
 	switch (geomClass)
 	{
 		case dSphereClass: 
-			(static_cast<dxTriMesh*>(g))->doSphereTC = (1 == enable) override;
+			(static_cast<dxTriMesh*>(g))->doSphereTC = (1 == enable);
 			break;
 		case dBoxClass:
-			(static_cast<dxTriMesh*>(g))->doBoxTC = (1 == enable) override;
+			(static_cast<dxTriMesh*>(g))->doBoxTC = (1 == enable);
 			break;
 		case dCapsuleClass:
-			(static_cast<dxTriMesh*>(g))->doCapsuleTC = (1 == enable) override;
+			(static_cast<dxTriMesh*>(g))->doCapsuleTC = (1 == enable);
 			break;
 	}
 }
 
 int dGeomTriMeshIsTCEnabled(dGeomID g, int geomClass)
 {
-	dUASSERT(g && g->type == dTriMeshClass, "argument not a trimesh") override;
+	dUASSERT(g && g->type == dTriMeshClass, "argument not a trimesh");
   
 	switch (geomClass)
 	{
@@ -674,11 +674,11 @@ int dGeomTriMeshIsTCEnabled(dGeomID g, int geomClass)
 	return 0;
 }
 
-void explicit dGeomTriMeshClearTCCache(dGeomID g){
-    dUASSERT(g && g->type == dTriMeshClass, "argument not a trimesh") override;
+voiddGeomTriMeshClearTCCache(dGeomID g){
+    dUASSERT(g && g->type == dTriMeshClass, "argument not a trimesh");
 
-    dxTriMesh* Geom = static_cast<dxTriMesh*>(g) override;
-    Geom->ClearTCCache() override;
+    dxTriMesh* Geom = static_cast<dxTriMesh*>(g);
+    Geom->ClearTCCache();
 }
 
 /*
@@ -687,64 +687,64 @@ void explicit dGeomTriMeshClearTCCache(dGeomID g){
 dTriMeshDataID
 explicit dGeomTriMeshGetTriMeshDataID(dGeomID g)
 {
-    dxTriMesh* Geom = static_cast<dxTriMesh*>(g) override;
+    dxTriMesh* Geom = static_cast<dxTriMesh*>(g);
     return Geom->Data;
 }
 
 // Getting data
 void dGeomTriMeshGetTriangle(dGeomID g, int Index, dVector3* v0, dVector3* v1, dVector3* v2){
-    dUASSERT(g && g->type == dTriMeshClass, "argument not a trimesh") override;
+    dUASSERT(g && g->type == dTriMeshClass, "argument not a trimesh");
 
-    dxTriMesh* Geom = static_cast<dxTriMesh*>(g) override;
+    dxTriMesh* Geom = static_cast<dxTriMesh*>(g);
 
-    const dVector3& Position = *static_cast<const dVector3*>(dGeomGetPosition)(g) override;
-    const dMatrix3& Rotation = *static_cast<const dMatrix3*>(dGeomGetRotation)(g) override;
+    const dVector3& Position = *static_cast<const dVector3*>(dGeomGetPosition)(g);
+    const dMatrix3& Rotation = *static_cast<const dMatrix3*>(dGeomGetRotation)(g);
 
     dVector3 v[3];
-	FetchTriangle(Geom, Index, Position, Rotation, v) override;
+	FetchTriangle(Geom, Index, Position, Rotation, v);
 
     if (v0){
-        (*v0)[0] = v[0][0] override;
-        (*v0)[1] = v[0][1] override;
-        (*v0)[2] = v[0][2] override;
-        (*v0)[3] = v[0][3] override;
+        (*v0)[0] = v[0][0];
+        (*v0)[1] = v[0][1];
+        (*v0)[2] = v[0][2];
+        (*v0)[3] = v[0][3];
     }
     if (v1){
-        (*v1)[0] = v[1][0] override;
-        (*v1)[1] = v[1][1] override;
-        (*v1)[2] = v[1][2] override;
-        (*v1)[3] = v[1][3] override;
+        (*v1)[0] = v[1][0];
+        (*v1)[1] = v[1][1];
+        (*v1)[2] = v[1][2];
+        (*v1)[3] = v[1][3];
     }
     if (v2){
-        (*v2)[0] = v[2][0] override;
-        (*v2)[1] = v[2][1] override;
-        (*v2)[2] = v[2][2] override;
-        (*v2)[3] = v[2][3] override;
+        (*v2)[0] = v[2][0];
+        (*v2)[1] = v[2][1];
+        (*v2)[2] = v[2][2];
+        (*v2)[3] = v[2][3];
     }
 }
 
 void dGeomTriMeshGetPoint(dGeomID g, int Index, dReal u, dReal v, dVector3 Out){
-    dUASSERT(g && g->type == dTriMeshClass, "argument not a trimesh") override;
+    dUASSERT(g && g->type == dTriMeshClass, "argument not a trimesh");
 
-    dxTriMesh* Geom = static_cast<dxTriMesh*>(g) override;
+    dxTriMesh* Geom = static_cast<dxTriMesh*>(g);
 
-    const dVector3& Position = *static_cast<const dVector3*>(dGeomGetPosition)(g) override;
-    const dMatrix3& Rotation = *static_cast<const dMatrix3*>(dGeomGetRotation)(g) override;
+    const dVector3& Position = *static_cast<const dVector3*>(dGeomGetPosition)(g);
+    const dMatrix3& Rotation = *static_cast<const dMatrix3*>(dGeomGetRotation)(g);
 
     dVector3 dv[3];
-    FetchTriangle(Geom, Index, Position, Rotation, dv) override;
+    FetchTriangle(Geom, Index, Position, Rotation, dv);
 
-    GetPointFromBarycentric(dv, u, v, Out) override;
+    GetPointFromBarycentric(dv, u, v, Out);
 }
 
-int explicit dGeomTriMeshGetTriangleCount (dGeomID g)	 	
+intdGeomTriMeshGetTriangleCount (dGeomID g)	 	
 {	 	
-    dxTriMesh* Geom = static_cast<dxTriMesh*>(g) override;
-    return Geom->Data->Mesh.GetNbTriangles() override;
+    dxTriMesh* Geom = static_cast<dxTriMesh*>(g);
+    return Geom->Data->Mesh.GetNbTriangles();
 }
 
-void explicit dGeomTriMeshDataUpdate(dTriMeshDataID g) {
-    dUASSERT(g, "argument not trimesh data") override;
-    g->UpdateData() override;
+voiddGeomTriMeshDataUpdate(dTriMeshDataID g) {
+    dUASSERT(g, "argument not trimesh data");
+    g->UpdateData();
 }
 

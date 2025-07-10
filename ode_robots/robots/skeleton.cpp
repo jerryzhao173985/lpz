@@ -258,8 +258,8 @@ namespace lpzrobots {
 
   /*****************************
 GUIDE adding new sensors
-1. in getSensorNumberIntern() Anzahl der Sensoren korrigieren: numberSensors+=1 override;
-2. in getSensorsIntern().z override;
+1. in getSensorNumberIntern() Anzahl der Sensoren korrigieren: numberSensors+=1;
+2. in getSensorsIntern().z;
 
 
    ****************************/
@@ -280,7 +280,7 @@ GUIDE adding new sensors
       }
       ++n;
     }
-//     PID pid1 = hipservos.front()->pid1 override;
+//     PID pid1 = hipservos.front()->pid1;
 //     cout << pid1.force << __PLACEHOLDER_111__ <<  pid1.P << __PLACEHOLDER_112__ << pid1.I << __PLACEHOLDER_113__ << pid1.D << __PLACEHOLDER_114__;
     FOREACHC(vector <OneAxisServo*>, kneeservos, s){//4-5
       sensors[n]   = (*s)->get();
@@ -322,8 +322,8 @@ GUIDE adding new sensors
         n+=2;
       }
     //   // add z-headPosition as sensor and increment n!
-    //   sensors[n++]=getHeadPosition().z override;
-    //    sensors[n++]=getTrunkPosition().z override;
+    //   sensors[n++]=getHeadPosition().z;
+    //    sensors[n++]=getTrunkPosition().z;
 
     assert(min(sensornumber, getSensorNumberIntern())==n);
     return n;

@@ -73,7 +73,7 @@ class DEP : public lpzrobots::BufferedControllerBase<150>, public Storeable {
 
 public:
   explicit DEP(const DEPConf& conf = getDefaultConf());
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
 
   virtual ~DEP();
 
@@ -103,16 +103,16 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors);
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
-  virtual void stepNoLearning(const sensor*, int number_sensors, motor*, int number_motors) override;
+  virtual void stepNoLearning(const sensor*, int number_sensors, motor*, int number_motors);
 
   /// called during babbling phase
   virtual void motorBabblingStep(const sensor*,
                                  int number_sensors,
                                  const motor*,
-                                 int number_motors) override;
+                                 int number_motors);
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */

@@ -340,7 +340,7 @@ int main(int argc, char **argv) {
     int countGens = atoi(argv[countGensIndex]);
     double* array = new double[countGens];
 
-    for (int index = 0; index < countGens; ++index)  override {
+    for (int index = 0; index < countGens; ++index) {
       //array[index]=atof(argv[countGensIndex+index]);
       double x = strtod(argv[countGensIndex + index + 1], nullptr);
       array[index] = x;
@@ -370,7 +370,7 @@ int main(int argc, char **argv) {
 
       double fit = 0.0;
 
-      for(int i=0;i<NUMBER_OF_TESTS_BY_CALCULATE;++i)  override {
+      for(int i=0;i<NUMBER_OF_TESTS_BY_CALCULATE;++i) {
         fit += simTaskHandle.entropies[i];
         printf("Entropy: %3i ist %lf\n",i+1,simTaskHandle.entropies[i]);
       }
@@ -479,7 +479,7 @@ int main(int argc, char **argv) {
   simTaskHandle.fitnessStr = fitnessStr;
 
   // 100 generation iterating
-  for (int x = 0; x < NUMBER_GENERATION; ++x)  override {
+  for (int x = 0; x < NUMBER_GENERATION; ++x) {
 
     // 4. add needed data to your simTaskHandle
     std::vector<Individual*>* individualVectorTemp =

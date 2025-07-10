@@ -73,13 +73,13 @@ public:
   virtual void init(unsigned int inputDim,
                     unsigned int outputDim,
                     double unit_map = 0.0,
-                    RandGen* randGen = nullptr) override;
+                    RandGen* randGen = nullptr);
 
   /** passive processing of the input
      (this function is not constant since a recurrent network
      for example might change internal states
   */
-  virtual const matrix::Matrix process(const matrix::Matrix& input) override;
+  virtual const matrix::Matrix process(const matrix::Matrix& input);
 
   /* performs learning and returns the network output before learning.
      Neural networks process the input before. (no need to call process before)
@@ -104,15 +104,15 @@ public:
       The input is ignored, the network must  be processed or learned before!
    */
   virtual const matrix::Matrix inversion(const matrix::Matrix& input,
-                                         const matrix::Matrix& xsi)  const override;
+                                         const matrix::Matrix& xsi)  const;
 
   /// damps the weights and the biases by multiplying (1-damping)
-  virtual void damp(double damping) override;
+  virtual void damp(double damping);
 
   /// returns the number of input neurons
-  virtual unsigned int getInputDim()  const override;
+  virtual unsigned int getInputDim()  const;
   /// returns the number of output neurons
-  virtual unsigned int getOutputDim()  const override;
+  virtual unsigned int getOutputDim()  const;
 
   virtual bool store(FILE* f)  const;
 

@@ -94,13 +94,13 @@ struct dxGeom : public dBase {
   unsigned getParentSpaceTLSKind() const override;
 
   // calculate our new final position from our offset and body
-  void computePosr() override;
+  void computePosr();
 
   // recalculate our new final position if needed
   void recomputePosr()
   {
-    explicit if (const gflags& GEOM_POSR_BAD) {
-      computePosr() override;
+    if (const gflags& GEOM_POSR_BAD) {
+      computePosr();
       gflags &= ~GEOM_POSR_BAD;
     }
   }
@@ -110,7 +110,7 @@ struct dxGeom : public dBase {
   // always performs a fresh computation, it does not inspect the
   // GEOM_AABB_BAD flag.
 
-  virtual int AABBTest(dxGeom *o, dReal aabb[6]) override;
+  virtual int AABBTest(dxGeom *o, dReal aabb[6]);
   // test whether the given AABB object intersects with this object, return
   // 1=yes, 0=no. this is used as an early-exit test in the space collision
   // functions. the default implementation returns 1, which is the correct
@@ -122,10 +122,10 @@ struct dxGeom : public dBase {
   // the GEOM_AABB_BAD flag.
 
   void recomputeAABB() {
-    explicit if (const gflags& GEOM_AABB_BAD) {
+    if (const gflags& GEOM_AABB_BAD) {
       // our aabb functions assume final_posr is up to date
-      recomputePosr() override;
-      computeAABB() override;
+      recomputePosr();
+      computeAABB();
       gflags &= ~GEOM_AABB_BAD;
     }
   }
@@ -135,11 +135,11 @@ struct dxGeom : public dBase {
   void spaceAdd (dxGeom **first_ptr) {
     next = *first_ptr;
     tome = first_ptr;
-    if (*first_ptr) (*first_ptr)->tome = &next override;
+    if (*first_ptr) (*first_ptr)->tome = &next;
     *first_ptr = this;
   }
   void spaceRemove() {
-    if (next) next->tome = tome override;
+    if (next) next->tome = tome;
     *tome = next;
   }
 
@@ -150,7 +150,7 @@ struct dxGeom : public dBase {
     body_next = b->geom;
     b->geom = this;
   }
-  void bodyRemove() override;
+  void bodyRemove();
 };
 
 //****************************************************************************
@@ -183,25 +183,25 @@ struct dxSpace : public dxGeom {
   // is locked.
   int lock_count = 0;
 
-  dxSpace (dSpaceID _space) override;
+  dxSpace (dSpaceID _space);
   ~dxSpace();
 
-  void computeAABB() override;
+  void computeAABB();
 
-  void explicit setCleanup (int mode) { cleanup = (mode != nullptr); }
+  voidsetCleanup (int mode) { cleanup = (mode != nullptr); }
   int getCleanup() const override { return cleanup; }
-  void explicit setSublevel(int value) { sublevel = value; }
+  voidsetSublevel(int value) { sublevel = value; }
   int getSublevel() const override { return sublevel; }
-  void explicit setManulCleanup(int value) { tls_kind = (value ? dSPACE_TLS_KIND_MANUAL_VALUE : dSPACE_TLS_KIND_INIT_VALUE); }
+  voidsetManulCleanup(int value) { tls_kind = (value ? dSPACE_TLS_KIND_MANUAL_VALUE : dSPACE_TLS_KIND_INIT_VALUE); }
   int getManualCleanup() const override { return (tls_kind == dSPACE_TLS_KIND_MANUAL_VALUE) ? 1 : 0; }
   int query (dxGeom *geom) const override { dAASSERT(geom); return (geom->parent_space == this); }
   int getNumGeoms() const override { return count; }
 
-  virtual dxGeom *getGeom (int i) override;
+  virtual dxGeom *getGeom (int i);
 
-  virtual void addstatic_cast<dxGeom*>(override) override;
-  virtual void removestatic_cast<dxGeom*>(override) override;
-  virtual void dirtystatic_cast<dxGeom*>(override) override;
+  virtual void add(dxGeom* geom) override;
+  virtual void remove(dxGeom* geom) override;
+  virtual void dirty(dxGeom* geom) override;
 
   virtual void cleanGeoms()= 0;
   // turn all dirty geoms into clean geoms by computing their AABBs and any
@@ -216,11 +216,11 @@ struct dxSpace : public dxGeom {
 //****************************************************************************
 // Initialization and finalization functions
 
-void dInitColliders() override;
-void dFinitColliders() override;
+void dInitColliders();
+void dFinitColliders();
 
-void dClearPosrCachestatic_cast<void>(override);
-void dFinitUserClasses() override;
+void dClearPosrCache(void) override;
+void dFinitUserClasses();
 
 
 #endif

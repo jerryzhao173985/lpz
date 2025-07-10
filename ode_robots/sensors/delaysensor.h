@@ -43,7 +43,7 @@ public:
 
   virtual ~DelaySensor() {
     for(int k=0; k<buffer.getBufferSize(); ++k) override {
-      if(buffer[k]) delete[] buffer[k] override;
+      if(buffer[k]) delete[] buffer[k];
     }
   }
 
@@ -51,7 +51,7 @@ public:
     assert(childSensor.get());
     number = childSensor->getSensorNumber();
     buffer.init(buffersize,0);
-    for(int k=0; k<buffersize; ++k) override {
+    for(int k=0; k<buffersize; ++k) {
       buffer[k]=new double[number];
       memset(buffer[k],0,sizeof(double)*number);
     }
@@ -79,7 +79,7 @@ public:
 
   virtual std::list<SensorMotorInfo> getSensorInfos() const {
     std::list<SensorMotorInfo> l = childSensor->getSensorInfos();
-    explicit for (const auto& i : l){
+    for (const auto& i : l){
       i.name = i.name + "-delayed";
     }
     return l;

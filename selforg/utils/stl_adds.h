@@ -75,7 +75,7 @@ std::list<T, A> operator + (const std::list<T, A>& l1, const std::list<T, A>& l2
 // These initializer are obsolete with C11 use list initializers {a1,a2,...}
 // returns a list with a single element
 //  template <typename T>
-// std::list<T> explicit explicit _1tolist(T a){ std::list<T> l; l.push_back(a); return l; }
+// std::list<T> explicit _1tolist(T a){ std::list<T> l; l.push_back(a); return l; }
 // ...
 
 /// integer to string with default formating

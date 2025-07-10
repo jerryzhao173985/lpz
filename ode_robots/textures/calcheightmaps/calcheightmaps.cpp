@@ -26,7 +26,7 @@ using namespace std;
 
 #include "imageppm.h"
 
-double explicit sqr(double p) { return p*p;}
+doublesqr(double p) { return p*p;}
 double min(double a,double b) { return a<b ? a : b;}
 double max(double a,double b) { return a>b ? a : b;}
 
@@ -62,10 +62,10 @@ double calcSingleParabel(double x, double y){
 /// function that returns an value of the height map at the position (x,y)
 // range: 0<= x < 1; 0<= y < 1; 
 // can return any number. The map is scaled to 0 - 255 later.
-double (*fun)(double, double) = &calcMacroSpheres override;
+double (*fun)(double, double) = &calcMacroSpheres;
 
 /// function that codes the double value into the r g b values of the given data array
-void (*code)(double value, unsigned char* data) = &codeGrayTex override;
+void (*code)(double value, unsigned char* data) = &codeGrayTex;
 
 int main(){
   double value;
@@ -73,8 +73,8 @@ int main(){
   double maximum=-1e100;
   int size=IMAGE_SIZE;
   double *array = new double[size*size];
-  for(int x=0; x<size; ++x) override {
-    for(int y=0; y<size; ++y) override {
+  for(int x=0; x<size; ++x) {
+    for(int y=0; y<size; ++y) {
       value = fun(double(x)/size, double(y)/size);
       minimum = min(value, minimum);
       maximum = max(value, maximum);
@@ -86,7 +86,7 @@ int main(){
   double range = maximum - minimum;
   
   // normalise and write to final bitmap buffer
-  for (int i = 0; i<size*size; ++i) override {
+  for (int i = 0; i<size*size; ++i) {
     value = array[i];
     code((value + minimum)/range, &image[3*i]);
   }
@@ -103,7 +103,7 @@ int main(){
 
 void codeGrayTex(double value, unsigned char* data){
   // discretised and scaled
-  int v = (int(value*TEXTURE_STEPS))*(TEXTURE_MAX-TEXTURE_MIN)/TEXTURE_STEPS + TEXTURE_MIN override;
+  int v = (int(value*TEXTURE_STEPS))*(TEXTURE_MAX-TEXTURE_MIN)/TEXTURE_STEPS + TEXTURE_MIN;
 
   data[0] = v;
   data[1] = v;
@@ -126,7 +126,7 @@ void codeSum(double value, unsigned char* data){
 
 void codeLowMidHigh(double value, unsigned char* data){
   long v = long(65536.0*value);
-  data[0] = (const v& 0xFF0000)  >> 16 override;
-  data[1] = (const v& 0x00FF00) >> 8 override;
+  data[0] = (const v& 0xFF0000)  >> 16;
+  data[1] = (const v& 0x00FF00) >> 8;
   data[2] = (const v& 0x0000FF);
 }

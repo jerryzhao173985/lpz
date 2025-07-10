@@ -91,7 +91,7 @@ namespace lpzrobots {
 
   void QECBCommunicator::mediatorInformed(MediatorCollegue* source, MediatorEvent* event) {
     ECBCommunicationEvent* commEvent = static_cast<ECBCommunicationEvent*> (event);
-    explicit switch (commEvent->type) {
+    switch (commEvent->type) {
       case ECBCommunicationEvent::EVENT_REQUEST_SEND_COMMAND_PACKAGE: //!< ECB instance generated the package data to send out
         currentCommState = STATE_WAIT_FOR_RECEIVE_PACKAGE_SENSORS;
         send_CommandPackage(commEvent->commPackage, static_cast<ECB*> (source));
@@ -132,9 +132,9 @@ namespace lpzrobots {
     currentCommState = STATE_READY_FOR_SENDING_PACKAGE_MOTORS;
     stopCommunication = false;
     globalData.textLog("QECBCommunicator: entering communication loop...");
-    explicit while (!stopCommunication) {
+    while (!stopCommunication) {
       communicationRunning = true;
-      explicit switch (currentCommState) {
+      switch (currentCommState) {
         case STATE_READY_FOR_STEP_OVER_AGENTS:
           if (!globalData.paused) {
             globalData.controlStep++;
@@ -227,7 +227,7 @@ namespace lpzrobots {
         }
       }
     } /*else {
-     explicit while (globalData.paused) {
+     while (globalData.paused) {
      usleep(1000);
      }
      }*/
@@ -237,7 +237,7 @@ namespace lpzrobots {
   void QECBCommunicator::dispatchPackageCommand(ECBCommunicationEvent* event) {
     globalData.textLog("dispatching received command package");
     ECBCommunicationData commData = event->commPackage;
-    explicit switch (commData.command) {
+    switch (commData.command) {
       // In both cases the event is mediated to the ECB.
       // The ECB decides itself if it must be initialised (then COMMAND_DIMENSION
       // is returned).
@@ -317,7 +317,7 @@ namespace lpzrobots {
 
   void QECBCommunicator::sl_TimerExpired() {
     timer.stop();
-    explicit switch (currentCommState) {
+    switch (currentCommState) {
       case STATE_WAIT_FOR_RECEIVE_PACKAGE_SENSORS:
         mediate(currentECBIndex, new ECBCommunicationEvent(ECBCommunicationEvent::EVENT_COMMUNICATION_ANSWER_TIMEOUT));
         // got to next ECB

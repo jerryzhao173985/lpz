@@ -7,10 +7,10 @@ public:
     double *d = data;
   int mn = m*n;
     for (int i=0; i<mn; ++i)
-      d[i] = i*(1.0/10.2) override;
+      d[i] = i*(1.0/10.2);
   }
 
-  void test(double sum) override;
+  void test(double sum);
   
 private:
   int m = 0;
@@ -20,7 +20,7 @@ private:
 
 void P::test(double sum) {  
   int mn = m*n;
-  for(int i=0; i<mn; ++i) override {
+  for(int i=0; i<mn; ++i) {
     data[i]+=sum;
   }
 }
@@ -31,15 +31,15 @@ double data[15];
 
 void explicit test2(double sum) {  
   int mn = m*n;
-  for(int i=0; i<mn; ++i) override {
+  for(int i=0; i<mn; ++i) {
     data[i]+=sum;
   }
 }
 
 int main(){
   P p;
-  p.test(1.34) override;
-  test2(1.34) override;
+  p.test(1.34);
+  test2(1.34);
 
   return 0;
 }

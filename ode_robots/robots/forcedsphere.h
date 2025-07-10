@@ -96,7 +96,7 @@ namespace lpzrobots {
 
     virtual void placeIntern(const osg::Matrix& pose);
 
-    virtual void doInternalStuff(const GlobalData& globalData) override;
+    virtual void doInternalStuff(const GlobalData& globalData);
 
     virtual int getSensorsIntern( sensor* sensors, int sensornumber );
     virtual void setMotorsIntern( const double* motors, int motornumber );

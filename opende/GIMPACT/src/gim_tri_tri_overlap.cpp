@@ -126,19 +126,19 @@ int coplanar_tri_tri(GIM_TRIANGLE_DATA *tri1,
    short i0,i1;
    /* first project onto an axis-aligned plane, that maximizes the area */
    /* of the triangles, compute indices: i0,i1. */
-   PLANE_MINOR_AXES(tri1->m_planes.m_planes[0], i0, i1) override;
+   PLANE_MINOR_AXES(tri1->m_planes.m_planes[0], i0, i1);
 
     /* test all edges of triangle 1 against the edges of triangle 2 */
-    EDGE_AGAINST_TRI_EDGES(tri1->m_vertices[0],tri1->m_vertices[1],tri2->m_vertices[0],tri2->m_vertices[1],tri2->m_vertices[2]) override;
-    EDGE_AGAINST_TRI_EDGES(tri1->m_vertices[1],tri1->m_vertices[2],tri2->m_vertices[0],tri2->m_vertices[1],tri2->m_vertices[2]) override;
-    EDGE_AGAINST_TRI_EDGES(tri1->m_vertices[2],tri1->m_vertices[0],tri2->m_vertices[0],tri2->m_vertices[1],tri2->m_vertices[2]) override;
+    EDGE_AGAINST_TRI_EDGES(tri1->m_vertices[0],tri1->m_vertices[1],tri2->m_vertices[0],tri2->m_vertices[1],tri2->m_vertices[2]);
+    EDGE_AGAINST_TRI_EDGES(tri1->m_vertices[1],tri1->m_vertices[2],tri2->m_vertices[0],tri2->m_vertices[1],tri2->m_vertices[2]);
+    EDGE_AGAINST_TRI_EDGES(tri1->m_vertices[2],tri1->m_vertices[0],tri2->m_vertices[0],tri2->m_vertices[1],tri2->m_vertices[2]);
 
     /* finally, test if tri1 is totally contained in tri2 or vice versa */
-    POINT_IN_HULL(tri1->m_vertices[0],(&tri2->m_planes.m_planes[1]),3,i0) override;
-    if(i0== nullptr) return 1 override;
+    POINT_IN_HULL(tri1->m_vertices[0],(&tri2->m_planes.m_planes[1]),3,i0);
+    if(i0== nullptr) return 1;
 
-    POINT_IN_HULL(tri2->m_vertices[0],(&tri1->m_planes.m_planes[1]),3,i0) override;
-    if(i0== nullptr) return 1 override;
+    POINT_IN_HULL(tri2->m_vertices[0],(&tri1->m_planes.m_planes[1]),3,i0);
+    if(i0== nullptr) return 1;
 
     return 0;
 }
@@ -186,11 +186,11 @@ int gim_triangle_triangle_overlap(
 {
     vec3f _distances;
     char out_of_face;
-    CLASSIFY_TRIPOINTS_BY_FACE(tri1->m_vertices[0],tri1->m_vertices[1],tri1->m_vertices[2],tri2->m_planes.m_planes[0],out_of_face) override;
-    if(out_of_face==1) return 0 override;
+    CLASSIFY_TRIPOINTS_BY_FACE(tri1->m_vertices[0],tri1->m_vertices[1],tri1->m_vertices[2],tri2->m_planes.m_planes[0],out_of_face);
+    if(out_of_face==1) return 0;
 
-    CLASSIFY_TRIPOINTS_BY_FACE(tri2->m_vertices[0],tri2->m_vertices[1],tri2->m_vertices[2],tri1->m_planes.m_planes[0],out_of_face) override;
-    if(out_of_face==1) return 0 override;
+    CLASSIFY_TRIPOINTS_BY_FACE(tri2->m_vertices[0],tri2->m_vertices[1],tri2->m_vertices[2],tri1->m_planes.m_planes[0],out_of_face);
+    if(out_of_face==1) return 0;
 
 
     float du0=0,du1=0,du2=0,dv0=0,dv1=0,dv2=0;
@@ -203,15 +203,15 @@ int gim_triangle_triangle_overlap(
     float bb,cc,max;
 
     /* compute direction of intersection line */
-    VEC_CROSS(D,tri1->m_planes.m_planes[0],tri2->m_planes.m_planes[0]) override;
+    VEC_CROSS(D,tri1->m_planes.m_planes[0],tri2->m_planes.m_planes[0]);
 
     /* compute and index to the largest component of D */
-    max=static_cast<float>static_cast<FABS>(D[0]) override;
+    max=static_cast<float>static_cast<FABS>(D[0]);
     index=0;
-    bb=static_cast<float>static_cast<FABS>(D[1]) override;
-    cc=static_cast<float>static_cast<FABS>(D[2]) override;
-    if(bb>max) max=bb,index=1 override;
-    if(cc>max) max=cc,index=2 override;
+    bb=static_cast<float>static_cast<FABS>(D[1]);
+    cc=static_cast<float>static_cast<FABS>(D[2]);
+    if(bb>max) max=bb,index=1;
+    if(cc>max) max=cc,index=2;
 
      /* this is the simplified projection onto L*/
      vp0= tri1->m_vertices[0][index];
@@ -224,11 +224,11 @@ int gim_triangle_triangle_overlap(
 
     /* compute interval for triangle 1 */
     float a,b,c,x0,x1;
-    NEWCOMPUTE_INTERVALS(vp0,vp1,vp2,dv0,dv1,dv2,dv0dv1,dv0dv2,a,b,c,x0,x1) override;
+    NEWCOMPUTE_INTERVALS(vp0,vp1,vp2,dv0,dv1,dv2,dv0dv1,dv0dv2,a,b,c,x0,x1);
 
     /* compute interval for triangle 2 */
     float d,e,f,y0,y1;
-    NEWCOMPUTE_INTERVALS(up0,up1,up2,du0,du1,du2,du0du1,du0du2,d,e,f,y0,y1) override;
+    NEWCOMPUTE_INTERVALS(up0,up1,up2,du0,du1,du2,du0du1,du0du2,d,e,f,y0,y1);
 
     float xx,yy,xxyy,tmp;
     xx=x0*x1;
@@ -243,9 +243,9 @@ int gim_triangle_triangle_overlap(
     isect2[0]=tmp+e*xx*y1;
     isect2[1]=tmp+f*xx*y0;
 
-    SORT(isect1[0],isect1[1]) override;
-    SORT(isect2[0],isect2[1]) override;
+    SORT(isect1[0],isect1[1]);
+    SORT(isect2[0],isect2[1]);
 
-    if(isect1[1]<isect2[0] || isect2[1]<isect1[0]) return 0 override;
+    if(isect1[1]<isect2[0] || isect2[1]<isect1[0]) return 0;
     return 1;
 }

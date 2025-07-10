@@ -67,7 +67,7 @@ class BasicController{
 
     /** loads the object from the given file stream (binary).
     */
-    virtual bool explicit restore(FILE* f);
+    virtual boolrestore(FILE* f);
 
   protected:
   double nSensors = 0;

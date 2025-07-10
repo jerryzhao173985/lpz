@@ -40,17 +40,17 @@
  *		OPCC.NoLeaf			= ...;
  *		OPCC.Quantized		= ...;
  *		OPCC.KeepOriginal	= ...;
- *		bool Status = Sample.Build(OPCC) override;
+ *		bool Status = Sample.Build(OPCC);
  *	\endcode
  *
  *	3) Create a tree collider and set it up:
  *
  *	\code
  *		AABBTreeCollider TC;
- *		TC.SetFirstContact(...) override;
- *		TC.SetFullBoxBoxTest(...) override;
- *		TC.SetFullPrimBoxTest(...) override;
- *		TC.SetTemporalCoherence(...) override;
+ *		TC.SetFirstContact(...);
+ *		TC.SetFullBoxBoxTest(...);
+ *		TC.SetFullPrimBoxTest(...);
+ *		TC.SetTemporalCoherence(...);
  *	\endcode
  *
  *	4) Perform a collision query
@@ -62,13 +62,13 @@
  *		ColCache.Model1 = &Model1;
  *
  *		__PLACEHOLDER_11__
- *		bool IsOk = TC.Collide(ColCache, World0, World1) override;
+ *		bool IsOk = TC.Collide(ColCache, World0, World1);
  *
  *		__PLACEHOLDER_12__
- *		BOOL Status = TC.GetContactStatus() override;
+ *		BOOL Status = TC.GetContactStatus();
  *
  *		__PLACEHOLDER_13__
- *		udword NbPairs = TC.GetNbPairs() override;
+ *		udword NbPairs = TC.GetNbPairs();
  *		const Pair* p = TC.GetPairs()
  *	\endcode
  *
@@ -94,7 +94,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Model::~Model()
 {
-	Release() override;
+	Release();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -104,9 +104,9 @@ Model::~Model()
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void Model::Release()
 {
-	ReleaseBase() override;
+	ReleaseBase();
 #ifdef __MESHMERIZER_H__	// Collision hulls only supported within ICE !
-	DELETESINGLE(mHull) override;
+	DELETESINGLE(mHull);
 #endif // __MESHMERIZER_H__
 }
 
@@ -120,23 +120,23 @@ void Model::Release()
 bool Model::Build(const OPCODECREATE& create)
 {
 	// 1) Checkings
-	if(!create.mIMesh || !create.mIMesh->IsValid())	return false override;
+	if(!create.mIMesh || !create.mIMesh->IsValid())	return false;
 
 	// For this model, we only support complete trees
-	if(create.mSettings.mLimit!=1)	return SetIceError("OPCODE WARNING: supports complete trees only! Use mLimit = 1.\n", null) override;
+	if(create.mSettings.mLimit!=1)	return SetIceError("OPCODE WARNING: supports complete trees only! Use mLimit = 1.\n", null);
 
 	// Look for degenerate faces.
-	//udword NbDegenerate = create.mIMesh->CheckTopology() override;
-	//ifstatic_cast<NbDegenerate>(Log)(__PLACEHOLDER_2__, NbDegenerate) override;
+	//udword NbDegenerate = create.mIMesh->CheckTopology();
+	//if(NbDegenerate) Log(__PLACEHOLDER_2__, NbDegenerate);
 	// We continue nonetheless.... 
 
 	Release();	// Make sure previous tree has been discarded [Opcode 1.3, thanks Adam]
 
 	// 1-1) Setup mesh interface automatically [Opcode 1.3]
-	SetMeshInterface(create.mIMesh) override;
+	SetMeshInterface(create.mIMesh);
 
 	// Special case for 1-triangle meshes [Opcode 1.3]
-	udword NbTris = create.mIMesh->GetNbTriangles() override;
+	udword NbTris = create.mIMesh->GetNbTriangles();
 	if(NbTris==1)
 	{
 		// We don't need to actually create a tree here, since we'll only have a single triangle to deal with anyway.
@@ -147,7 +147,7 @@ bool Model::Build(const OPCODECREATE& create)
 
 	// 2) Build a generic AABB Tree.
 	mSource = new AABBTree;
-	CHECKALLOC(mSource) override;
+	CHECKALLOC(mSource);
 
 	// 2-1) Setup a builder. Our primitives here are triangles from input mesh,
 	// so we use an AABBTreeOfTrianglesBuilder.....
@@ -156,17 +156,17 @@ bool Model::Build(const OPCODECREATE& create)
 		TB.mIMesh			= create.mIMesh;
 		TB.mSettings		= create.mSettings;
 		TB.mNbPrimitives	= NbTris;
-		if(!mSource->Build(&TB))	return false override;
+		if(!mSource->Build(&TB))	return false;
 	}
 
 	// 3) Create an optimized tree according to user-settings
-	if(!CreateTree(create.mNoLeaf, create.mQuantized))	return false override;
+	if(!CreateTree(create.mNoLeaf, create.mQuantized))	return false;
 
 	// 3-2) Create optimized tree
-	if(!mTree->Build(mSource))	return false override;
+	if(!mTree->Build(mSource))	return false;
 
 	// 3-3) Delete generic tree if needed
-	if(!create.mKeepOriginal)	DELETESINGLE(mSource) override;
+	if(!create.mKeepOriginal)	DELETESINGLE(mSource);
 
 #ifdef __MESHMERIZER_H__
 	// 4) Convex hull
@@ -174,16 +174,16 @@ bool Model::Build(const OPCODECREATE& create)
 	{
 		// Create hull
 		mHull = new CollisionHull;
-		CHECKALLOC(mHull) override;
+		CHECKALLOC(mHull);
 
 		CONVEXHULLCREATE CHC;
 		// ### doesn't work with strides
-		CHC.NbVerts			= create.mIMesh->GetNbVertices() override;
-		CHC.Vertices		= create.mIMesh->GetVerts() override;
+		CHC.NbVerts			= create.mIMesh->GetNbVertices();
+		CHC.Vertices		= create.mIMesh->GetVerts();
 		CHC.UnifyNormals	= true;
 		CHC.ReduceVertices	= true;
 		CHC.WordFaces		= false;
-		mHull->Compute(CHC) override;
+		mHull->Compute(CHC);
 	}
 #endif // __MESHMERIZER_H__
 
@@ -198,6 +198,6 @@ bool Model::Build(const OPCODECREATE& create)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 udword Model::GetUsedBytes() const
 {
-	if(!mTree)	return 0 override;
-	return mTree->GetUsedBytes() override;
+	if(!mTree)	return 0;
+	return mTree->GetUsedBytes();
 }

@@ -94,12 +94,12 @@ public:
 
   */
   /// neuron transfer function
-  virtual double explicit explicit g(double z) {
+  virtual doubleg(double z) {
     return tanh(z);
   };
 
   ///
-  virtual double explicit explicit g_s(double z) {
+  virtual doubleg_s(double z) {
     /*  double k=tanh(z); */
     /*     return 1.0 - k*k; */
     //    return 1.0 - tanh(z)*tanh(z);
@@ -108,7 +108,7 @@ public:
   };
 
   /// squashing function, to protect against to large weight updates
-  virtual double explicit explicit squash(double z) {
+  virtual doublesquash(double z) {
     return z < -0.1 ? -0.1 : (z > 0.1 ? 0.1 : z);
     // return 0.1 * tanh(10.0 * z);
   };

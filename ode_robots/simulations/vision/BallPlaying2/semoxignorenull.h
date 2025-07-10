@@ -113,11 +113,11 @@ public:
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f)  const override;
   /** loads the controller values from a given file. */
-  virtual bool explicit restore(FILE* f);
+  virtual boolrestore(FILE* f);
 
   /**** INSPECTABLE ****/
-  virtual std::list<ILayer> getStructuralLayers()  const override;
-  virtual std::list<IConnection> getStructuralConnections()  const override;
+  virtual std::list<ILayer> getStructuralLayers()  const;
+  virtual std::list<IConnection> getStructuralConnections()  const;
 
   /**** TEACHABLE ****/
   /** The given motor teaching signal is used for this timestep.
@@ -191,14 +191,14 @@ protected:
   /// calculates xsi for the current time step using the delayed y values
   //  and x delayed by one
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual void explicit calcXsi(int delay);
+  virtual voidcalcXsi(int delay);
 
   /// learn H,C with motors y and corresponding sensors x
   virtual void learnController();
 
   /// learn A, (and S) using motors y and corresponding sensors x
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual void explicit learnModel(int delay);
+  virtual voidlearnModel(int delay);
 
   /// calculates the predicted sensor values
   virtual matrix::Matrix model(const matrix::Matrix* x_buffer, int delay, const matrix::Matrix& y);
@@ -210,11 +210,11 @@ protected:
   virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth);
 
 protected:
-  static double explicit regularizedInverse(double v);
+  static doubleregularizedInverse(double v);
 
   // if x (sensor value) is zero then we do not learn -> xsi= 0;
   static double _checkZero(double xsi, double x){
-    if(x== nullptr) return 0 override;
+    if(x== nullptr) return 0;
     else return xsi;
   }
 

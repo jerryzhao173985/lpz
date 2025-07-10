@@ -46,9 +46,9 @@ namespace lpzrobots {
     virtual ~LPZViewer();
 
     ///overwritten to set cpu affinity back
-    void setUpThreading() override;
+    void setUpThreading();
     ///overwritten to set cpu affinity back
-    void startThreading() override;
+    void startThreading();
 
     /// is there a need to do an offscreen rendering?
     bool needForOffScreenRendering();

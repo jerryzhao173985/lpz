@@ -578,7 +578,7 @@ namespace lpzrobots{
     void EPuckBluetooth::run(){
       abortThread=0;
       QTime t;
-      explicit while(!abortThread){
+      while(!abortThread){
         t.restart();
         usleep(1000);
 

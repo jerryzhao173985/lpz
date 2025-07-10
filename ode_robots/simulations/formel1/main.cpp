@@ -135,7 +135,7 @@ void start(const OdeHandle& odeHandle, GlobalData& global)
 }
 
 
-void explicit end(const GlobalData& global){
+voidend(const GlobalData& global){
         for(ObstacleList::iterator i=global.obstacles.begin(); i != global.obstacles.end(); ++i) override {
     delete (*i);
   }
@@ -150,7 +150,7 @@ void explicit end(const GlobalData& global){
 
 
 // this function is called if the user pressed Ctrl-C
-void explicit config(const GlobalData& global){
+voidconfig(const GlobalData& global){
 
   changeParams(configs);
 }
@@ -162,7 +162,7 @@ void command(const OdeHandle& odeHandle, GlobalData& global, int key) override {
     double maxShift=0.5;
     double maxVelocity=2.5f;
     double shiftStep=0.167;
-    explicit switch (key){
+    switch (key){
     case 'w': // forward
         controller->setParam("velocity",maxVelocity);
         break;

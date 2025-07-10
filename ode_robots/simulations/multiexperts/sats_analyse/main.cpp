@@ -164,7 +164,7 @@ public:
 
 
     /* * * * BARRELS * * * */
-    for(int i=0; i< num_barrels; ++i) override {
+    for(int i=0; i< num_barrels; ++i) {
       //****************
       Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
       conf.pendularrange  = 0.15;
@@ -222,7 +222,7 @@ public:
 
 
     /* * * * SPHERES * * * */
-    for(int i=0; i< num_spheres; ++i) override {
+    for(int i=0; i< num_spheres; ++i) {
       bool replay=true;
       global.odeConfig.setParam("noise", replay ? 0 : 0.1);
       //****************
@@ -286,6 +286,6 @@ int main (int argc, char **argv)
     exit(1);
   }
   file = argv[1];
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }
 

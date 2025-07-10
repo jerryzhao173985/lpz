@@ -60,15 +60,15 @@ class PassiveCapsule{
    * update position of box
    */
   virtual void update() {
-    ifstatic_cast<capsule>(capsule)->update();
+    if(capsule) static_cast<Capsule*>(capsule)->update();
   };
 
   virtual void setTexture(const std::string& filename) {
-    ifstatic_cast<capsule>(capsule)->getOSGPrimitive()->setTexture(filename);
+    if(capsule) static_cast<Capsule*>(capsule)->getOSGPrimitive()->setTexture(filename);
   }
 
   virtual void setPose(const osg::Matrix& pose) {
-    this->pose = osg::Matrix::translate(0,0,height*0.5f+radius) * pose override;
+    this->pose = osg::Matrix::translate(0,0,height*0.5f+radius) * pose;
     if (!obstacle_exists) {
        create();
      }

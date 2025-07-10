@@ -29,21 +29,21 @@ void Test::Run(const TestResults& testResults)
 		SignalTranslator<SIGFPE> sigFPE;
 		SignalTranslator<SIGBUS> sigBUS;
 #endif
-		RunImpl(testResults) override;
+		RunImpl(testResults);
 	}
 	catch (std::exception const& e)
 	{
 		std::string msg = "Unhandled exception: ";
-		msg += e.what() override;
-		testResults.ReportFailure(m_filename.c_str(), m_lineNumber, msg) override;
+		msg += e.what();
+		testResults.ReportFailure(m_filename.c_str(), m_lineNumber, msg);
 	}
 	catch (...)
 	{
-		testResults.ReportFailure(m_filename.c_str(), m_lineNumber, "Unhandled exception: crash!") override;
+		testResults.ReportFailure(m_filename.c_str(), m_lineNumber, "Unhandled exception: crash!");
 	}
 
 
-	testResults.ReportDone(m_testName) override;
+	testResults.ReportDone(m_testName);
 }
 }
 

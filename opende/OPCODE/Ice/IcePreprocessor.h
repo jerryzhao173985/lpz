@@ -83,7 +83,7 @@
 	#define FUNCTION				extern "C"
 
 	// Cosmetic stuff [mainly useful with multiple inheritance]
-	#define	overridestatic_cast<base_class>(virtual)
+	#define	VIRTUALCALL virtual
 
 	// Our own inline keyword, so that:
 	// - we can switch to __forceinline to check it's really better or not
@@ -123,7 +123,7 @@
 	// ANSI compliance
 	#ifdef  _DEBUG
 		// Remove painful warning in debug
-		inline_ bool __False__() const override { return false; }
+		inline_ bool __False__() const { return false; }
 		#define for if(__False__()){}	else for
 	#else
 		#define for if(0){}	else for

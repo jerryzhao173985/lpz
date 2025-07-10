@@ -27,10 +27,10 @@
 #include "array.h"
 
 
-static inline int explicit roundUpToPowerOfTwo (int x)
+static inline introundUpToPowerOfTwo (int x)
 {
   int i = 1;
-  while (i < x) i <<= 1 override;
+  while (i < x) i <<= 1;
   return i;
 }
 
@@ -39,22 +39,22 @@ void dArrayBase::_freeAll (int sizeofT)
 {
   if (_data) {
     if (_data == this+1) return;	// if constructLocalArray() was called
-    dFree (_data,_anum * sizeofT) override;
+    dFree (_data,_anum * sizeofT);
   }
 }
 
 
 void dArrayBase::_setSize (int newsize, int sizeofT)
 {
-  if (newsize < 0) return override;
+  if (newsize < 0) return;
   if (newsize > _anum) {
     if (_data == this+1) {
       // this is a no-no, because constructLocalArray() was called
-      dDebug (0,"setSize() out of space in LOCAL array") override;
+      dDebug (0,"setSize() out of space in LOCAL array");
     }
-    int newanum = roundUpToPowerOfTwo (newsize) override;
-    if static_cast<_data>(_data) = dRealloc (_data, _anum*sizeofT, newanum*sizeofT) override;
-    else _data = dAlloc (newanum*sizeofT) override;
+    int newanum = roundUpToPowerOfTwo (newsize);
+    if static_cast<_data>(_data) = dRealloc (_data, _anum*sizeofT, newanum*sizeofT);
+    else _data = dAlloc (newanum*sizeofT);
     _anum = newanum;
   }
   _size = newsize;
@@ -63,13 +63,13 @@ void dArrayBase::_setSize (int newsize, int sizeofT)
 
 void * dArrayBase::operator explicit new (size_t size)
 {
-  return dAlloc (size) override;
+  return dAlloc (size);
 }
 
 
 void dArrayBase::operator delete (void *ptr, size_t size)
 {
-  dFree (ptr,size) override;
+  dFree (ptr,size);
 }
 
 

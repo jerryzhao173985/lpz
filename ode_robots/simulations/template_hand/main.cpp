@@ -63,7 +63,7 @@ public:
     //   optional parameters radius and mass,where the latter is not used here) )
     // - set Pose(Position) of sphere
     // - add sphere to list of obstacles
-    for(int i=0; i<1; ++i) override {
+    for(int i=0; i<1; ++i) {
       PassiveSphere* s = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(0.0,1.0,0.0)), 1/*0.5*/);
       s->setPosition(osg::Vec3(0,0,4+i*2));
       global.obstacles.push_back(s);
@@ -145,9 +145,9 @@ public:
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData,
                        int key, bool down) override {
     if (down) { // only when key is pressed, not when released
-      explicit switch ( static_cast<char> key ) {
+      switch ( static_cast<char> key ) {
         case 'x':
-          if(fixator) delete fixator override;
+          if(fixator) delete fixator;
           fixator=0;
           break;
         case 'c' :{
@@ -174,7 +174,7 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }
 
 

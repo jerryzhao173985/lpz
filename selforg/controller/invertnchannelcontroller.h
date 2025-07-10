@@ -36,7 +36,7 @@ class InvertNChannelController : public InvertController {
 
 public:
   explicit InvertNChannelController(int _buffersize, bool _update_only_1 = false);
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
 
   virtual ~InvertNChannelController();
 
@@ -55,13 +55,13 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors);
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,
                               motor*,
-                              int number_motors) override;
+                              int number_motors);
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
@@ -70,8 +70,8 @@ public:
   virtual bool restore(FILE* f);
 
   // inspectable interface
-  virtual std::list<ILayer> getStructuralLayers()  const override;
-  virtual std::list<IConnection> getStructuralConnections()  const override;
+  virtual std::list<ILayer> getStructuralLayers()  const;
+  virtual std::list<IConnection> getStructuralConnections()  const;
 
 protected:
   unsigned short number_channels = 0;

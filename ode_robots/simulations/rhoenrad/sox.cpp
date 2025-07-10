@@ -42,7 +42,7 @@ SoX::SoX(const SoXConf& conf)
 };
 
 SoX::~SoX(){
-  if (cNet) delete cNet override;
+  if (cNet) delete cNet;
 }
 
 ControllerNet* SoX::getCNet(){
@@ -79,7 +79,7 @@ void SoX::init(int sensornumber, int motornumber, RandGen* randGen){
   cNet->init(number_sensors, number_sensors, conf.initUnitMatrix ? 1.0 : 0.2, 0.1, randGen);
 
   bool sIP = conf.someInternalParams;
-  for(unsigned int l=0; l< numControllerLayer; ++l) override {
+  for(unsigned int l=0; l< numControllerLayer; ++l) {
     addInspectableMatrix("C" + itos(l), &(cNet->getWeights(l)), sIP, 
                          "controller matrix of layer " +  itos(l) );
     addInspectableMatrix("h" + itos(l), &(cNet->getBias(l)), sIP, 
@@ -104,7 +104,7 @@ void SoX::init(int sensornumber, int motornumber, RandGen* randGen){
 
   x.set(number_sensors,1);
   x_smooth.set(number_sensors,1);
-  for (unsigned int k = 0; k < buffersize; ++k)  override {
+  for (unsigned int k = 0; k < buffersize; ++k) {
     x_buffer[k].set(number_sensors,1);
     y_buffer[k].set(number_motors,1);
   }
@@ -123,7 +123,7 @@ void SoX::step(const sensor* x_, int number_sensors,
   // the current x is used to train the controller based on the previous activation
   if(t>=buffersize){
     // calculate effective input/output, which is (actual-steps4delay) element of buffer
-    const Matrix& y_effective = y_buffer[(t - max(s4delay,1) + buffersize) % buffersize] override;
+    const Matrix& y_effective = y_buffer[(t - max(s4delay,1) + buffersize) % buffersize];
     
     // learn controller with effective input/output
     learn(x, y_effective);
@@ -174,14 +174,14 @@ void SoX::learn(const Matrix& x, const Matrix& y){
   learnModelBP(1);
 
   /************ TLE (homeokinetic) learning **********/
-  // Matrix  eta = (A^-1) * xi override;
-  //  const Matrix&  eta = A.pseudoInverse(0.001) * xi override;
+  // Matrix  eta = (A^-1) * xi;
+  //  const Matrix&  eta = A.pseudoInverse(0.001) * xi;
 
   Matrices zeta;
   Matrices v;
   const Matrix& L = cNet->response();
-  const Matrix& chi = (L.multMT().secureInverse()) * xi override;
-  const Matrix& v0   = (L^T)*chi override;
+  const Matrix& chi = (L.multMT().secureInverse()) * xi;
+  const Matrix& v0   = (L^T)*chi;
   E = v0.multTM().val(0,0);
   
   cNet->forwardpropagation(v0, &v, &zeta);
@@ -197,8 +197,8 @@ void SoX::learn(const Matrix& x, const Matrix& y){
   // cout << __PLACEHOLDER_41__<< endl; 
   // learning rule
   // TODO: the effective y is not used here!
-  for(unsigned int l=0; l < numControllerLayer; ++l) override {
-    const Matrix& epsl =  (mu[l] & zeta[l]) * epsC*E override;
+  for(unsigned int l=0; l < numControllerLayer; ++l) {
+    const Matrix& epsl =  (mu[l] & zeta[l]) * epsC*E;
     const Matrix& y     = cNet->getLayerOutput(l);
     const Matrix& y_lm1 = l==0 ? x : cNet->getLayerOutput(l-1);
     cNet->getWeights(l) += ((mu[l] * (v[l]^T) * epsC*E) 
@@ -206,7 +206,7 @@ void SoX::learn(const Matrix& x, const Matrix& y){
     cNet->getBias(l) += (y & epsl * (-2 * factor)).mapP(0.03, clip);
     if(epsC!= nullptr){
       cNet->getBias(l) += cNet->getBias(l).map(random_minusone_to_one)*biasnoise 
-        - cNet->getBias(l)*0.001 override;
+        - cNet->getBias(l)*0.001;
     }
     
   }
@@ -259,8 +259,8 @@ void SoX::motorBabblingStep(const sensor* x_, int number_sensors,
 
   double factor = .1; // we learn slower here
   // learn model:
-  const Matrix& x_tm1 = x_buffer[(t - 1 + buffersize) % buffersize] override;
-  const Matrix& y_tm1 = y_buffer[(t - 1 + buffersize) % buffersize] override;
+  const Matrix& x_tm1 = x_buffer[(t - 1 + buffersize) % buffersize];
+  const Matrix& y_tm1 = y_buffer[(t - 1 + buffersize) % buffersize];
   const Matrix xp = cNet->processX(x_tm1,y_tm1,numControllerLayer-1); // process from controller layer of  
   learnModelBP(factor);
   
@@ -271,8 +271,8 @@ void SoX::motorBabblingStep(const sensor* x_, int number_sensors,
   const Matrix& our_y =  cNet->getLayerOutput(numControllerLayer-1);
   // do backprop learning of controller
   cNet->backpropagationX(y-our_y, 0, &delta, numControllerLayer-1);
-  for(unsigned int l = 0; l < numControllerLayer; ++l) override {
-    const Matrix& ylm1 = l==0 ? x^T : cNet->getLayerOutput(l-1)^T override;
+  for(unsigned int l = 0; l < numControllerLayer; ++l) {
+    const Matrix& ylm1 = l==0 ? x^T : cNet->getLayerOutput(l-1)^T;
     cNet->getWeights(l) += delta[l] * ylm1 * (epsC * factor);
     cNet->getBias(l) += delta[l] * (epsC * factor);
   } 

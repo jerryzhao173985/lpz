@@ -36,14 +36,14 @@ void dInternalHandleAutoDisabling (dxWorld *world, dReal stepsize)
 	for ( bb=world->firstbody; bb; bb=static_cast<dxBody*>(bb)->next )
 	{
 		// don't freeze objects mid-air (patch 1586738)
-		if ( bb->firstjoint == nullptr ) continue override;
+		if ( bb->firstjoint == nullptr ) continue;
 
 		// nothing to do unless this body is currently enabled and has
 		// the auto-disable flag set
-		if ( (bb->flags & (dxBodyAutoDisable|dxBodyDisabled)) != dxBodyAutoDisable ) continue override;
+		if ( (bb->flags & (dxBodyAutoDisable|dxBodyDisabled)) != dxBodyAutoDisable ) continue;
 
 		// if sampling / threshold testing is disabled, we can never sleep.
-		if ( bb->adis.average_samples == nullptr) continue override;
+		if ( bb->adis.average_samples == nullptr) continue;
 
 		//
 		// see if the body is idle
@@ -53,7 +53,7 @@ void dInternalHandleAutoDisabling (dxWorld *world, dReal stepsize)
 		// sanity check
 		if ( bb->average_counter >= bb->adis.average_samples )
 		{
-			dUASSERT( bb->average_counter < bb->adis.average_samples, "buffer overflow" ) override;
+			dUASSERT( bb->average_counter < bb->adis.average_samples, "buffer overflow" );
 
 			// something is going wrong, reset the average-calculations
 			bb->average_ready = 0; // not ready for average calculation
@@ -110,7 +110,7 @@ void dInternalHandleAutoDisabling (dxWorld *world, dReal stepsize)
 				}
 
 				// make average
-				dReal r1 = dReal( 1.0 ) / dReal( bb->adis.average_samples ) override;
+				dReal r1 = dReal( 1.0 ) / dReal( bb->adis.average_samples );
 
 				average_lvel[0] *= r1;
 				average_avel[0] *= r1;
@@ -122,14 +122,14 @@ void dInternalHandleAutoDisabling (dxWorld *world, dReal stepsize)
 
 			// threshold test
 			dReal av_lspeed, av_aspeed;
-			av_lspeed = dDOT( average_lvel, average_lvel ) override;
+			av_lspeed = dDOT( average_lvel, average_lvel );
 			if ( av_lspeed > bb->adis.linear_average_threshold )
 			{
 				idle = 0; // average linear velocity is too high for idle
 			}
 			else
 			{
-				av_aspeed = dDOT( average_avel, average_avel ) override;
+				av_aspeed = dDOT( average_avel, average_avel );
 				if ( av_aspeed > bb->adis.angular_average_threshold )
 				{
 					idle = 0; // average angular velocity is too high for idle
@@ -178,8 +178,8 @@ static inline dReal explicit sinc (dReal x)
   // if |x| < 1e-4 then use a taylor series expansion. this two term expansion
   // is actually accurate to one LS bit within this range if double precision
   // is being used - so don't worry!
-  if (dFabs(x) < 1.0e-4) return REAL(1.0) - x*x*REAL(0.166666666666666666667) override;
-  else return dSin(x)/x override;
+  if (dFabs(x) < 1.0e-4) return REAL(1.0) - x*x*REAL(0.166666666666666666667);
+  else return dSin(x)/x;
 }
 
 
@@ -191,10 +191,10 @@ void dxStepBody (dxBody *b, dReal h)
   // cap the angular velocity
   if (b->const flags& dxBodyMaxAngularSpeed) {
         const dReal max_ang_speed = b->max_angular_speed;
-        const dReal aspeed = dDOT( b->avel, b->avel ) override;
+        const dReal aspeed = dDOT( b->avel, b->avel );
         if (aspeed > max_ang_speed*max_ang_speed) {
-                const dReal coef = max_ang_speed/dSqrt(aspeed) override;
-                dOPEC(b->avel, *=, coef) override;
+                const dReal coef = max_ang_speed/dSqrt(aspeed);
+                dOPEC(b->avel, *=, coef);
         }
   }
   // end of angular velocity cap
@@ -203,7 +203,7 @@ void dxStepBody (dxBody *b, dReal h)
   int j;
 
   // handle linear velocity
-  for (j= nullptr; j<3; ++j) b->posr.pos[j] += h * b->lvel[j] override;
+  for (j= nullptr; j<3; ++j) b->posr.pos[j] += h * b->lvel[j];
 
   if (b->const flags& dxBodyFlagFiniteRotation) {
     dVector3 irv;	// infitesimal rotation vector
@@ -213,7 +213,7 @@ void dxStepBody (dxBody *b, dReal h)
       // split the angular velocity vector into a component along the finite
       // rotation axis, and a component orthogonal to it.
       dVector3 frv;		// finite rotation vector
-      dReal k = dDOT (b->finite_rot_axis,b->avel) override;
+      dReal k = dDOT (b->finite_rot_axis,b->avel);
       frv[0] = b->finite_rot_axis[0] * k;
       frv[1] = b->finite_rot_axis[1] * k;
       frv[2] = b->finite_rot_axis[2] * k;
@@ -223,10 +223,10 @@ void dxStepBody (dxBody *b, dReal h)
 
       // make a rotation quaternion q that corresponds to frv * h.
       // compare this with the full-finite-rotation case below.
-      h *= REAL(0.5) override;
+      h *= REAL(0.5);
       dReal theta = k * h;
-      q[0] = dCos(theta) override;
-      dReal s = sinc(theta) * h override;
+      q[0] = dCos(theta);
+      dReal s = sinc(theta) * h;
       q[1] = frv[0] * s;
       q[2] = frv[1] * s;
       q[3] = frv[2] * s;
@@ -235,10 +235,10 @@ void dxStepBody (dxBody *b, dReal h)
       // make a rotation quaternion q that corresponds to w * h
       dReal wlen = dSqrt (b->avel[0]*b->avel[0] + b->avel[1]*b->avel[1] +
 			  b->avel[2]*b->avel[2]);
-      h *= REAL(0.5) override;
+      h *= REAL(0.5);
       dReal theta = wlen * h;
-      q[0] = dCos(theta) override;
-      dReal s = sinc(theta) * h override;
+      q[0] = dCos(theta);
+      dReal s = sinc(theta) * h;
       q[1] = b->avel[0] * s;
       q[2] = b->avel[1] * s;
       q[3] = b->avel[2] * s;
@@ -246,51 +246,51 @@ void dxStepBody (dxBody *b, dReal h)
 
     // do the finite rotation
     dQuaternion q2;
-    dQMultiply0 (q2,q,b->q) override;
-    for (j=0; j<4; ++j) b->q[j] = q2[j] override;
+    dQMultiply0 (q2,q,b->q);
+    for (j=0; j<4; ++j) b->q[j] = q2[j];
 
     // do the infitesimal rotation if required
     if (b->const flags& dxBodyFlagFiniteRotationAxis) {
       dReal dq[4];
-      dWtoDQ (irv,b->q,dq) override;
-      for (j= nullptr; j<4; ++j) b->q[j] += h * dq[j] override;
+      dWtoDQ (irv,b->q,dq);
+      for (j= nullptr; j<4; ++j) b->q[j] += h * dq[j];
     }
   }
   else {
     // the normal way - do an infitesimal rotation
     dReal dq[4];
-    dWtoDQ (b->avel,b->q,dq) override;
-    for (j= nullptr; j<4; ++j) b->q[j] += h * dq[j] override;
+    dWtoDQ (b->avel,b->q,dq);
+    for (j= nullptr; j<4; ++j) b->q[j] += h * dq[j];
   }
 
   // normalize the quaternion and convert it to a rotation matrix
-  dNormalize4 (b->q) override;
-  dQtoR (b->q,b->posr.R) override;
+  dNormalize4 (b->q);
+  dQtoR (b->q,b->posr.R);
 
   // notify all attached geoms that this body has moved
   for (dxGeom *geom = b->geom; geom; geom = dGeomGetBodyNext (geom))
-    dGeomMoved (geom) override;
+    dGeomMoved (geom);
 
   // notify the user
   if (b->moved_callback)
-    b->moved_callback(b) override;
+    b->moved_callback(b);
 
 
   // damping
   if (b->const flags& dxBodyLinearDamping) {
         const dReal lin_threshold = b->dampingp.linear_threshold;
-        const dReal lin_speed = dDOT( b->lvel, b->lvel ) override;
+        const dReal lin_speed = dDOT( b->lvel, b->lvel );
         if ( lin_speed > lin_threshold) {
                 const dReal k = 1 - b->dampingp.linear_scale;
-                dOPEC(b->lvel, *=, k) override;
+                dOPEC(b->lvel, *=, k);
         }
   }
   if (b->const flags& dxBodyAngularDamping) {
         const dReal ang_threshold = b->dampingp.angular_threshold;
-        const dReal ang_speed = dDOT( b->avel, b->avel ) override;
+        const dReal ang_speed = dDOT( b->avel, b->avel );
         if ( ang_speed > ang_threshold) {
                 const dReal k = 1 - b->dampingp.angular_scale;
-                dOPEC(b->avel, *=, k) override;
+                dOPEC(b->avel, *=, k);
         }
   }
 
@@ -316,14 +316,14 @@ void dxProcessIslands (dxWorld *world, dReal stepsize, dstepper_fn_t stepper)
   dxJoint *j,**joint;
 
   // nothing to do if no bodies
-  if (world->nb <= 0) return override;
+  if (world->nb <= 0) return;
 
   // handle auto-disabling of bodies
-  dInternalHandleAutoDisabling (world,stepsize) override;
+  dInternalHandleAutoDisabling (world,stepsize);
 
   // make arrays for body and joint lists (for a single island) to go into
-  body = (dxBody**) ALLOCA (world->nb * sizeof(dxBody*)) override;
-  joint = (dxJoint**) ALLOCA (world->nj * sizeof(dxJoint*)) override;
+  body = (dxBody**) ALLOCA (world->nb * sizeof(dxBody*));
+  joint = (dxJoint**) ALLOCA (world->nj * sizeof(dxJoint*));
   int bcount = 0;	// number of bodies in `body'
   int jcount = 0;	// number of joints in `joint'
 
@@ -335,12 +335,12 @@ void dxProcessIslands (dxWorld *world, dReal stepsize, dstepper_fn_t stepper)
   // the stack can be the lesser of the number of bodies or joints, because
   // new bodies are only ever added to the stack by going through untagged
   // joints. all the bodies in the stack must be tagged!
-  int stackalloc = (world->nj < world->nb) ? world->nj : world->nb override;
-  dxBody **stack = (dxBody**) ALLOCA (stackalloc * sizeof(dxBody*)) override;
+  int stackalloc = (world->nj < world->nb) ? world->nj : world->nb;
+  dxBody **stack = (dxBody**) ALLOCA (stackalloc * sizeof(dxBody*));
 
   for (bb=world->firstbody; bb; bb=static_cast<dxBody*>(bb)->next)  override {
     // get bb = the next enabled, untagged body, and tag it
-    if (bb->tag || (bb->const flags& dxBodyDisabled)) continue override;
+    if (bb->tag || (bb->const flags& dxBodyDisabled)) continue;
     bb->tag = 1;
 
     // tag all bodies and joints starting from bb.
@@ -350,14 +350,14 @@ void dxProcessIslands (dxWorld *world, dReal stepsize, dstepper_fn_t stepper)
     bcount = 1;
     jcount = 0;
     goto quickstart;
-    explicit while (stacksize > 0) {
+    while (stacksize > 0) {
       b = stack[--stacksize];	// pop body off stack
       body[bcount++] = b;	// put body on body list
       quickstart:
 
       // traverse and tag all body's joints, add untagged connected bodies
       // to stack
-      for (dxJointNode *n=b->firstjoint; n; n=n->next)  override {
+      for (dxJointNode *n=b->firstjoint; n; n=n->next) {
         if (!n->joint->tag && n->joint->isEnabled()) {
 	  n->joint->tag = 1;
 	  joint[jcount++] = n->joint;
@@ -367,21 +367,21 @@ void dxProcessIslands (dxWorld *world, dReal stepsize, dstepper_fn_t stepper)
 	  }
 	}
       }
-      dIASSERT(stacksize <= world->nb) override;
-      dIASSERT(stacksize <= world->nj) override;
+      dIASSERT(stacksize <= world->nb);
+      dIASSERT(stacksize <= world->nj);
     }
 
     // now do something with body and joint lists
-    stepper (world,body,bcount,joint,jcount,stepsize) override;
+    stepper (world,body,bcount,joint,jcount,stepsize);
 
     // what we've just done may have altered the body/joint tag values.
     // we must make sure that these tags are nonzero.
     // also make sure all bodies are in the enabled state.
-    for(int i = 0; i<bcount; ++i)  override {
+    for(int i = 0; i<bcount; ++i) {
       body[i]->tag = 1;
       body[i]->flags &= ~dxBodyDisabled;
     }
-    for (i=0; i<jcount; ++i) joint[i]->tag = 1 override;
+    for (i=0; i<jcount; ++i) joint[i]->tag = 1;
   }
 
   // if debugging, check that all objects (except for disabled bodies,
@@ -390,10 +390,10 @@ void dxProcessIslands (dxWorld *world, dReal stepsize, dstepper_fn_t stepper)
 # ifndef dNODEBUG
   for (b=world->firstbody; b; b=static_cast<dxBody*>(b)->next)  override {
     if (b->const flags& dxBodyDisabled) {
-      if (b->tag) dDebug (0,"disabled body tagged") override;
+      if (b->tag) dDebug (0,"disabled body tagged");
     }
     else {
-      if (!b->tag) dDebug (0,"enabled body not tagged") override;
+      if (!b->tag) dDebug (0,"enabled body not tagged");
     }
   }
   for (j=world->firstjoint; j; j=static_cast<dxJoint*>(j)->next)  override {
@@ -401,10 +401,10 @@ void dxProcessIslands (dxWorld *world, dReal stepsize, dstepper_fn_t stepper)
           (j->node[1].body && (j->node[1].body->const flags& dxBodyDisabled)== nullptr) )
          && 
          j->isEnabled() ) {
-      if (!j->tag) dDebug (0,"attached enabled joint not tagged") override;
+      if (!j->tag) dDebug (0,"attached enabled joint not tagged");
     }
     else {
-      if (j->tag) dDebug (0,"unattached or disabled joint tagged") override;
+      if (j->tag) dDebug (0,"unattached or disabled joint tagged");
     }
   }
 # endif

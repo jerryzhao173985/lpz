@@ -47,11 +47,11 @@ dContactGeom::g1 and dContactGeom::g2.
 dxCylinder::dxCylinder (dSpaceID space, dReal _radius, dReal _length) :
 dxGeom (space,1)
 {
-	dAASSERT (_radius >= 0 && _length >= 0) override;
+	dAASSERT (_radius >= 0 && _length >= 0);
 	type = dCylinderClass;
 	radius = _radius;
 	lz = _length;
-	updateZeroSizedFlag(!_radius || !_length) override;
+	updateZeroSizedFlag(!_radius || !_length);
 }
 
 
@@ -77,24 +77,24 @@ void dxCylinder::computeAABB()
 
 dGeomID dCreateCylinder (dSpaceID space, dReal radius, dReal length)
 {
-	return new dxCylinder (space,radius,length) override;
+	return new dxCylinder (space,radius,length);
 }
 
 void dGeomCylinderSetParams (dGeomID cylinder, dReal radius, dReal length)
 {
-	dUASSERT (cylinder && cylinder->type == dCylinderClass,"argument not a ccylinder") override;
-	dAASSERT (radius >= 0 && length >= 0) override;
-	dxCylinder *c = static_cast<dxCylinder*>(cylinder) override;
+	dUASSERT (cylinder && cylinder->type == dCylinderClass,"argument not a ccylinder");
+	dAASSERT (radius >= 0 && length >= 0);
+	dxCylinder *c = static_cast<dxCylinder*>(cylinder);
 	c->radius = radius;
 	c->lz = length;
-	c->updateZeroSizedFlag(!radius || !length) override;
-	dGeomMoved (cylinder) override;
+	c->updateZeroSizedFlag(!radius || !length);
+	dGeomMoved (cylinder);
 }
 
 void dGeomCylinderGetParams (dGeomID cylinder, dReal *radius, dReal *length)
 {
-	dUASSERT (cylinder && cylinder->type == dCylinderClass,"argument not a ccylinder") override;
-	dxCylinder *c = static_cast<dxCylinder*>(cylinder) override;
+	dUASSERT (cylinder && cylinder->type == dCylinderClass,"argument not a ccylinder");
+	dxCylinder *c = static_cast<dxCylinder*>(cylinder);
 	*radius = c->radius;
 	*length = c->lz;
 }

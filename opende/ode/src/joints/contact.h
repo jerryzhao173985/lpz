@@ -32,9 +32,9 @@ struct dxJointContact : public dxJoint
     int the_m = 0;   // number of rows computed by getInfo1
     dContact contact;
 
-    dxJointContact( dxWorld* w ) override;
-    virtual void getInfo1( Info1* info ) override;
-    virtual void getInfo2( Info2* info ) override;
+    dxJointContact( dxWorld* w );
+    virtual void getInfo1( Info1* info );
+    virtual void getInfo2( Info2* info );
     virtual dJointType type() const override;
     virtual size_t size() const override;
 };

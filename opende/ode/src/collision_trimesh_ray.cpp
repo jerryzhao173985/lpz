@@ -35,34 +35,34 @@
 
 #if dTRIMESH_OPCODE
 int dCollideRTL(dxGeom* g1, dxGeom* RayGeom, int Flags, dContactGeom* Contacts, int Stride){
-	dIASSERT (Stride >= static_cast<int>(sizeof)(dContactGeom)) override;
-	dIASSERT (g1->type == dTriMeshClass) override;
-	dIASSERT (RayGeom->type == dRayClass) override;
-	dIASSERT ((const Flags& NUMC_MASK) >= 1) override;
+	dIASSERT (Stride >= static_cast<int>(sizeof)(dContactGeom));
+	dIASSERT (g1->type == dTriMeshClass);
+	dIASSERT (RayGeom->type == dRayClass);
+	dIASSERT ((const Flags& NUMC_MASK) >= 1);
 
-	dxTriMesh* TriMesh = static_cast<dxTriMesh*>(g1) override;
+	dxTriMesh* TriMesh = static_cast<dxTriMesh*>(g1);
 
-	const dVector3& TLPosition = *static_cast<const dVector3*>(dGeomGetPosition)(TriMesh) override;
-	const dMatrix3& TLRotation = *static_cast<const dMatrix3*>(dGeomGetRotation)(TriMesh) override;
+	const dVector3& TLPosition = *static_cast<const dVector3*>(dGeomGetPosition)(TriMesh);
+	const dMatrix3& TLRotation = *static_cast<const dMatrix3*>(dGeomGetRotation)(TriMesh);
 
-	const unsigned uiTLSKind = TriMesh->getParentSpaceTLSKind() override;
+	const unsigned uiTLSKind = TriMesh->getParentSpaceTLSKind();
 	dIASSERT(uiTLSKind == RayGeom->getParentSpaceTLSKind()); // The colliding spaces must use matching cleanup method
-	TrimeshCollidersCache *pccColliderCache = GetTrimeshCollidersCache(uiTLSKind) override;
+	TrimeshCollidersCache *pccColliderCache = GetTrimeshCollidersCache(uiTLSKind);
 	RayCollider& Collider = pccColliderCache->_RayCollider;
 
-	dReal Length = dGeomRayGetLength(RayGeom) override;
+	dReal Length = dGeomRayGetLength(RayGeom);
 
 	int FirstContact, BackfaceCull;
-	dGeomRayGetParams(RayGeom, &FirstContact, &BackfaceCull) override;
-	int ClosestHit = dGeomRayGetClosestHit(RayGeom) override;
+	dGeomRayGetParams(RayGeom, &FirstContact, &BackfaceCull);
+	int ClosestHit = dGeomRayGetClosestHit(RayGeom);
 
-	Collider.SetFirstContact(FirstContact != nullptr) override;
-	Collider.SetClosestHit(ClosestHit != nullptr) override;
-	Collider.SetCulling(BackfaceCull != nullptr) override;
-	Collider.SetMaxDist(Length) override;
+	Collider.SetFirstContact(FirstContact != nullptr);
+	Collider.SetClosestHit(ClosestHit != nullptr);
+	Collider.SetCulling(BackfaceCull != nullptr);
+	Collider.SetMaxDist(Length);
 
 	dVector3 Origin, Direction;
-	dGeomRayGet(RayGeom, Origin, Direction) override;
+	dGeomRayGet(RayGeom, Origin, Direction);
 
 	/* Make Ray */
 	Ray WorldRay;
@@ -77,17 +77,17 @@ int dCollideRTL(dxGeom* g1, dxGeom* RayGeom, int Flags, dContactGeom* Contacts, 
 	Matrix4x4 amatrix;
         int TriCount = 0;
         if (Collider.Collide(WorldRay, TriMesh->Data->BVTree, &MakeMatrix(TLPosition, TLRotation, amatrix))) {
-                TriCount = pccColliderCache->Faces.GetNbFaces() override;
+                TriCount = pccColliderCache->Faces.GetNbFaces();
         }
 
         if (TriCount == nullptr) {
                 return 0;
         }
 	
-	const CollisionFace* Faces = pccColliderCache->Faces.GetFaces() override;
+	const CollisionFace* Faces = pccColliderCache->Faces.GetFaces();
 
 	int OutTriCount = 0;
-	for (int i = 0; i < TriCount; ++i)  override {
+	for (int i = 0; i < TriCount; ++i) {
 		if (TriMesh->RayCallback == null ||
                     TriMesh->RayCallback(TriMesh, RayGeom, Faces[i].mFaceID,
                                          Faces[i].mU, Faces[i].mV)) {
@@ -96,22 +96,22 @@ int dCollideRTL(dxGeom* g1, dxGeom* RayGeom, int Flags, dContactGeom* Contacts, 
                                 continue;
                         }
 
-			dContactGeom* Contact = SAFECONTACT(Flags, Contacts, OutTriCount, Stride) override;
+			dContactGeom* Contact = SAFECONTACT(Flags, Contacts, OutTriCount, Stride);
 
 			dVector3 dv[3];
-			FetchTriangle(TriMesh, TriIndex, TLPosition, TLRotation, dv) override;
+			FetchTriangle(TriMesh, TriIndex, TLPosition, TLRotation, dv);
 
 			dVector3 vu;
 			vu[0] = dv[1][0] - dv[0][0];
 			vu[1] = dv[1][1] - dv[0][1];
 			vu[2] = dv[1][2] - dv[0][2];
-			vu[3] = REAL(0.0) override;
+			vu[3] = REAL(0.0);
 				
 			dVector3 vv;
 			vv[0] = dv[2][0] - dv[0][0];
 			vv[1] = dv[2][1] - dv[0][1];
 			vv[2] = dv[2][2] - dv[0][2];
-			vv[3] = REAL(0.0) override;
+			vv[3] = REAL(0.0);
 
 			dCROSS(Contact->normal, =, vv, vu);	// Reversed
 
@@ -125,10 +125,10 @@ int dCollideRTL(dxGeom* g1, dxGeom* RayGeom, int Flags, dContactGeom* Contacts, 
 				// instead of dReal. However using float directly is the loss of abstraction 
 				// and possible loss of precision in future.
 				/*float*/ dReal T = Faces[i].mDistance;
-				Contact->pos[0] = Origin[0] + (Direction[0] * T) override;
-				Contact->pos[1] = Origin[1] + (Direction[1] * T) override;
-				Contact->pos[2] = Origin[2] + (Direction[2] * T) override;
-				Contact->pos[3] = REAL(0.0) override;
+				Contact->pos[0] = Origin[0] + (Direction[0] * T);
+				Contact->pos[1] = Origin[1] + (Direction[1] * T);
+				Contact->pos[2] = Origin[2] + (Direction[2] * T);
+				Contact->pos[3] = REAL(0.0);
 
 				Contact->depth = T;
 				Contact->g1 = TriMesh;
@@ -152,30 +152,30 @@ int dCollideRTL(dxGeom* g1, dxGeom* RayGeom, int Flags, dContactGeom* Contacts, 
 #if dTRIMESH_GIMPACT
 int dCollideRTL(dxGeom* g1, dxGeom* RayGeom, int Flags, dContactGeom* Contacts, int Stride)
 {
-	dIASSERT (Stride >= static_cast<int>(sizeof)(dContactGeom)) override;
-	dIASSERT (g1->type == dTriMeshClass) override;
-	dIASSERT (RayGeom->type == dRayClass) override;
-	dIASSERT ((const Flags& NUMC_MASK) >= 1) override;
+	dIASSERT (Stride >= static_cast<int>(sizeof)(dContactGeom));
+	dIASSERT (g1->type == dTriMeshClass);
+	dIASSERT (RayGeom->type == dRayClass);
+	dIASSERT ((const Flags& NUMC_MASK) >= 1);
 	
-	dxTriMesh* TriMesh = static_cast<dxTriMesh*>(g1) override;
+	dxTriMesh* TriMesh = static_cast<dxTriMesh*>(g1);
 
-    dReal Length = dGeomRayGetLength(RayGeom) override;
+    dReal Length = dGeomRayGetLength(RayGeom);
 	int FirstContact, BackfaceCull;
-	dGeomRayGetParams(RayGeom, &FirstContact, &BackfaceCull) override;
-	int ClosestHit = dGeomRayGetClosestHit(RayGeom) override;
+	dGeomRayGetParams(RayGeom, &FirstContact, &BackfaceCull);
+	int ClosestHit = dGeomRayGetClosestHit(RayGeom);
 	dVector3 Origin, Direction;
-	dGeomRayGet(RayGeom, Origin, Direction) override;
+	dGeomRayGet(RayGeom, Origin, Direction);
 
     char intersect=0;
     GIM_TRIANGLE_RAY_CONTACT_DATA contact_data;
 
 	if(ClosestHit)
 	{
-		intersect = gim_trimesh_ray_closest_collisionODE(&TriMesh->m_collision_trimesh,Origin,Direction,Length,&contact_data) override;
+		intersect = gim_trimesh_ray_closest_collisionODE(&TriMesh->m_collision_trimesh,Origin,Direction,Length,&contact_data);
 	}
 	else
 	{
-	    intersect = gim_trimesh_ray_collisionODE(&TriMesh->m_collision_trimesh,Origin,Direction,Length,&contact_data) override;
+	    intersect = gim_trimesh_ray_collisionODE(&TriMesh->m_collision_trimesh,Origin,Direction,Length,&contact_data);
 	}
 
     if(intersect == nullptr)
@@ -187,9 +187,9 @@ int dCollideRTL(dxGeom* g1, dxGeom* RayGeom, int Flags, dContactGeom* Contacts, 
 	if(!TriMesh->RayCallback || 
 		TriMesh->RayCallback(TriMesh, RayGeom, contact_data.m_face_id, contact_data.u , contact_data.v))
 	{
-		dContactGeom* Contact = &( Contacts[ 0 ] ) override;
-        VEC_COPY(Contact->pos,contact_data.m_point) override;
-        VEC_COPY(Contact->normal,contact_data.m_normal) override;
+		dContactGeom* Contact = &( Contacts[ 0 ] );
+        VEC_COPY(Contact->pos,contact_data.m_point);
+        VEC_COPY(Contact->normal,contact_data.m_normal);
         Contact->depth = contact_data.tparam;
         Contact->g1 = TriMesh;
         Contact->g2 = RayGeom;

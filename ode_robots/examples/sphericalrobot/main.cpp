@@ -53,7 +53,7 @@ public:
     //   optional parameters radius and mass,where the latter is not used here) )
     // - set Pose(Position) of sphere
     // - add sphere to list of obstacles
-    for(int i=0; i<8; ++i) override {
+    for(int i=0; i<8; ++i) {
       PassiveSphere* s = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(0.0,1.0,0.0)), 0.5);
       s->setPosition(osg::Vec3(5,0,i*3));
       global.obstacles.push_back(s);
@@ -114,9 +114,9 @@ public:
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData,
                        int key, bool down) override {
     if (down) { // only when key is pressed, not when released
-      explicit switch ( static_cast<char> key ) {
-      case 'T' : robot->getMainPrimitive()->applyTorque(0 , 0 , 3 ); break override;
-      case 't' : robot->getMainPrimitive()->applyTorque(0 , 0 , -3 ); break override;
+      switch ( static_cast<char> key ) {
+      case 'T' : robot->getMainPrimitive()->applyTorque(0 , 0 , 3 ); break;
+      case 't' : robot->getMainPrimitive()->applyTorque(0 , 0 , -3 ); break;
       default:
         return false;
       }
@@ -138,5 +138,5 @@ int main (int argc, char **argv)
 {
   ThisSim sim;
   track = sim.contains(argv, argc, "-track"); // check whether cmd-line contains -track
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }

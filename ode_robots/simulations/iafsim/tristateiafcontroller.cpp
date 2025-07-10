@@ -97,10 +97,10 @@ TristateIAFController::TristateIAFController(const TristateIAFControllerConf& co
   /// CONFIGURABLE INTERFACE
   bool TristateIAFController::setParam(const paramkey& key, paramval val, bool traverseChildren){
     if(key=="thresholdI") {
-      (*conf.thresholdI)=val override;
+      (*conf.thresholdI)=val;
       tI.toZero().toSum(val*sqrt(static_cast<double>(conf).numberIAFNeuronsPerInput));
     } else if (key=="thresholdO") {
-      (*conf.thresholdO)=val override;
+      (*conf.thresholdO)=val;
       tO.toZero().toSum(val*sqrt(static_cast<double>(conf).numberIAFNeuronsPerOutput));
     } else
       return Configurable::setParam(key,val);
@@ -116,7 +116,7 @@ TristateIAFController::TristateIAFController(const TristateIAFControllerConf& co
     xI.set(1,sensorNumber,sensors);
     // generate discrete fire events (-1 or 1)
     xI.toMapP(randG,toTristateWithProbability);
-    for (int i=1;i<conf.numberIAFNeuronsPerInput;++i)  override {
+    for (int i=1;i<conf.numberIAFNeuronsPerInput;++i) {
       xI.addColumns(sensorNumber,input.mapP(randG,toTristateWithProbability));
     }
 
@@ -145,7 +145,7 @@ TristateIAFController::TristateIAFController(const TristateIAFControllerConf& co
 
     // calculate a summed rate of the output of the output population neurons
     matrix::Matrix m(1,motorNumber);
-    for (int i=0;i<conf.numberIAFNeuronsPerOutput;++i)  override {
+    for (int i=0;i<conf.numberIAFNeuronsPerOutput;++i) {
       m.val(0,0)+=y.val(0,2*i);
       m.val(0,1)+=y.val(0,2*i+1);
     }

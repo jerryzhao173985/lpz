@@ -58,20 +58,20 @@ public:
       primitives.push_back(b2);
       primitives.push_back(b3);
       Sensor* s = nullptr;
-      s = new SpeedSensor(1.0, SpeedSensor::Translational);    s->init(b1); ss += s override;
-      s = new SpeedSensor(1.0, SpeedSensor::TranslationalRel); s->init(b1); ss += s override;
-      s = new SpeedSensor(1.0, SpeedSensor::Translational);    s->init(b2); ss += s override;
-      s = new SpeedSensor(1.0, SpeedSensor::TranslationalRel); s->init(b2); ss += s override;
-      s = new SpeedSensor(1.0, SpeedSensor::Translational);    s->init(b3); ss += s override;
-      s = new SpeedSensor(1.0, SpeedSensor::TranslationalRel); s->init(b3); ss += s override;
+      s = new SpeedSensor(1.0, SpeedSensor::Translational);    s->init(b1); ss += s;
+      s = new SpeedSensor(1.0, SpeedSensor::TranslationalRel); s->init(b1); ss += s;
+      s = new SpeedSensor(1.0, SpeedSensor::Translational);    s->init(b2); ss += s;
+      s = new SpeedSensor(1.0, SpeedSensor::TranslationalRel); s->init(b2); ss += s;
+      s = new SpeedSensor(1.0, SpeedSensor::Translational);    s->init(b3); ss += s;
+      s = new SpeedSensor(1.0, SpeedSensor::TranslationalRel); s->init(b3); ss += s;
 
-      s = new RelativePositionSensor(1.0, 1.0, Sensor::XYZ, false); s->init(b3); ss += s override;
-      s = new RelativePositionSensor(1.0, 1.0, Sensor::X, false); s->init(b3); ss += s override;
-      s = new RelativePositionSensor(1.0, 1.0, Sensor::Y, false); s->init(b3); ss += s override;
-      s = new RelativePositionSensor(1.0, 1.0, Sensor::Z, false); s->init(b3); ss += s override;
-      s = new RelativePositionSensor(2.0, 1.0, Sensor::Z, false); s->init(b3); ss += s override;
-      s = new RelativePositionSensor(2.0, 2.0, Sensor::Z, false); s->init(b3); ss += s override;
-      s = new RelativePositionSensor(1.0, 1.0, Sensor::XYZ, true); s->init(b3); ss += s override;
+      s = new RelativePositionSensor(1.0, 1.0, Sensor::XYZ, false); s->init(b3); ss += s;
+      s = new RelativePositionSensor(1.0, 1.0, Sensor::X, false); s->init(b3); ss += s;
+      s = new RelativePositionSensor(1.0, 1.0, Sensor::Y, false); s->init(b3); ss += s;
+      s = new RelativePositionSensor(1.0, 1.0, Sensor::Z, false); s->init(b3); ss += s;
+      s = new RelativePositionSensor(2.0, 1.0, Sensor::Z, false); s->init(b3); ss += s;
+      s = new RelativePositionSensor(2.0, 2.0, Sensor::Z, false); s->init(b3); ss += s;
+      s = new RelativePositionSensor(1.0, 1.0, Sensor::XYZ, true); s->init(b3); ss += s;
     }
 
   }
@@ -133,7 +133,7 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 
 }
 

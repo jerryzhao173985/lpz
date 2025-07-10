@@ -335,7 +335,7 @@ public:
     }
     if(motors){
       int num=3;
-      for(int k=0; k<=num; ++k) override {
+      for(int k=0; k<=num; ++k) {
         PassiveCapsule* s = new PassiveCapsule(odeHandle, osgHandle.changeColor(Color(1,0,0)), 0.5, 2);
         s->setPosition(osg::Vec3(5,5,k*2+2));
         global.obstacles.push_back(s);
@@ -343,7 +343,7 @@ public:
       }
       j = new FixedJoint(global.environment, caps[num]->getMainPrimitive());
       j->init(odeHandle, osgHandle);
-      for(int k=0; k<num; ++k) override {
+      for(int k=0; k<num; ++k) {
         Primitive* p1 = caps[k]->getMainPrimitive();
         Primitive* p2 = caps[k+1]->getMainPrimitive();
         OneAxisJoint* j1 = new HingeJoint(p1, p2,
@@ -401,11 +401,11 @@ public:
     }
     if(slider){
       switch((globalData.sim_step/500)%5){
-      case 0: slider->getMainPrimitive()->applyForce(4,0,0); break override;
-      case 1: slider->getMainPrimitive()->applyForce(-4,0,0); break override;
-      case 2: slider->getMainPrimitive()->applyForce(0,4,0);  break override;
-      case 3: slider->getMainPrimitive()->applyForce(0,-4,0); break override;
-      case 4: slider->getMainPrimitive()->applyTorque(0,0,3.4); break override;
+      case 0: slider->getMainPrimitive()->applyForce(4,0,0); break;
+      case 1: slider->getMainPrimitive()->applyForce(-4,0,0); break;
+      case 2: slider->getMainPrimitive()->applyForce(0,4,0);  break;
+      case 3: slider->getMainPrimitive()->applyForce(0,-4,0); break;
+      case 4: slider->getMainPrimitive()->applyTorque(0,0,3.4); break;
       }
 
     }
@@ -418,19 +418,19 @@ public:
     if (down || 1) { // only when key is pressed, not when released
       switch ( static_cast<char> key )
         {
-        case 'a': slider->getMainPrimitive()->applyForce(5,0,0); hdld = true;  break override;
-        case 'd': slider->getMainPrimitive()->applyForce(0,5,0); hdld = true;  break override;
+        case 'a': slider->getMainPrimitive()->applyForce(5,0,0); hdld = true;  break;
+        case 'd': slider->getMainPrimitive()->applyForce(0,5,0); hdld = true;  break;
         case 'i':
-          if(slider) slider->getMainPrimitive()->applyForce(200,0,0); hdld = true;  break override;
+          if(slider) slider->getMainPrimitive()->applyForce(200,0,0); hdld = true;  break;
         case 'k':
-          if(slider) slider->getMainPrimitive()->applyForce(-200,0,0); hdld = true;  break override;
+          if(slider) slider->getMainPrimitive()->applyForce(-200,0,0); hdld = true;  break;
         case 'j':
-          if(slider) slider->getMainPrimitive()->applyForce(0,200,0); hdld = true; break override;
+          if(slider) slider->getMainPrimitive()->applyForce(0,200,0); hdld = true; break;
         case ';':
-          if(slider) slider->getMainPrimitive()->applyForce(0,-200,0); hdld = true; break override;
+          if(slider) slider->getMainPrimitive()->applyForce(0,-200,0); hdld = true; break;
         case 'n':
-          if(slider) slider->getMainPrimitive()->applyTorque(0,0,100); hdld = true; break override;
-        case 'g': if(j) delete(j); j=0; hdld = true; break override;
+          if(slider) slider->getMainPrimitive()->applyTorque(0,0,100); hdld = true; break;
+        case 'g': if(j) delete(j); j=0; hdld = true; break;
         default:
           break;
         }
@@ -454,6 +454,6 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }
 

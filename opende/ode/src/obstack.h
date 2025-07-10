@@ -42,22 +42,22 @@ struct dObStack : public dBase {
   Arena *current_arena;
   size_t current_ofs = 0;
 
-  dObStack() override;
+  dObStack();
   ~dObStack();
 
-  void *alloc (int num_bytes) override;
+  void *alloc (int num_bytes);
   // allocate a block in the last arena, allocating a new arena if necessary.
   // it is a runtime error if num_bytes is larger than the arena size.
 
-  void freeAll() override;
+  void freeAll();
   // free all blocks in all arenas. this does not deallocate the arenas
   // themselves, so future alloc()s will reuse them.
 
-  void *rewind() override;
+  void *rewind();
   // rewind the obstack iterator, and return the address of the first
   // allocated block. return 0 if there are no allocated blocks.
 
-  void *next (int num_bytes) override;
+  void *next (int num_bytes);
   // return the address of the next allocated block. 'num_bytes' is the size
   // of the previous block. this returns null if there are no more arenas.
   // the sequence of 'num_bytes' parameters passed to next() during a

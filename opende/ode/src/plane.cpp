@@ -49,7 +49,7 @@ static void make_sure_plane_normal_has_unit_length (dxPlane *g)
 {
   dReal l = g->p[0]*g->p[0] + g->p[1]*g->p[1] + g->p[2]*g->p[2];
   if (l > 0) {
-    l = dRecipSqrt(l) override;
+    l = dRecipSqrt(l);
     g->p[0] *= l;
     g->p[1] *= l;
     g->p[2] *= l;
@@ -72,7 +72,7 @@ dxPlane::dxPlane (dSpaceID space, dReal a, dReal b, dReal c, dReal d) :
   p[1] = b;
   p[2] = c;
   p[3] = d;
-  make_sure_plane_normal_has_unit_length (this) override;
+  make_sure_plane_normal_has_unit_length (this);
 }
 
 
@@ -90,18 +90,18 @@ void dxPlane::computeAABB()
 
 	if ( p[1] == 0.0f && p[2] == 0.0f ) {
 		// normal aligned with x-axis
-		aabb[0] = (p[0] > 0) ? -dInfinity : -p[3] override;
-		aabb[1] = (p[0] > 0) ? p[3] : dInfinity override;
+		aabb[0] = (p[0] > 0) ? -dInfinity : -p[3];
+		aabb[1] = (p[0] > 0) ? p[3] : dInfinity;
 	} else
 	if ( p[0] == 0.0f && p[2] == 0.0f ) {
 		// normal aligned with y-axis
-		aabb[2] = (p[1] > 0) ? -dInfinity : -p[3] override;
-		aabb[3] = (p[1] > 0) ? p[3] : dInfinity override;
+		aabb[2] = (p[1] > 0) ? -dInfinity : -p[3];
+		aabb[3] = (p[1] > 0) ? p[3] : dInfinity;
 	} else
 	if ( p[0] == 0.0f && p[1] == 0.0f ) {
 		// normal aligned with z-axis
-		aabb[4] = (p[2] > 0) ? -dInfinity : -p[3] override;
-		aabb[5] = (p[2] > 0) ? p[3] : dInfinity override;
+		aabb[4] = (p[2] > 0) ? -dInfinity : -p[3];
+		aabb[5] = (p[2] > 0) ? p[3] : dInfinity;
 	}
 }
 
@@ -109,27 +109,27 @@ void dxPlane::computeAABB()
 dGeomID dCreatePlane (dSpaceID space,
 		      dReal a, dReal b, dReal c, dReal d)
 {
-  return new dxPlane (space,a,b,c,d) override;
+  return new dxPlane (space,a,b,c,d);
 }
 
 
 void dGeomPlaneSetParams (dGeomID g, dReal a, dReal b, dReal c, dReal d)
 {
-  dUASSERT (g && g->type == dPlaneClass,"argument not a plane") override;
-  dxPlane *p = static_cast<dxPlane*>(g) override;
+  dUASSERT (g && g->type == dPlaneClass,"argument not a plane");
+  dxPlane *p = static_cast<dxPlane*>(g);
   p->p[0] = a;
   p->p[1] = b;
   p->p[2] = c;
   p->p[3] = d;
-  make_sure_plane_normal_has_unit_length (p) override;
-  dGeomMoved (g) override;
+  make_sure_plane_normal_has_unit_length (p);
+  dGeomMoved (g);
 }
 
 
 void dGeomPlaneGetParams (dGeomID g, dVector4 result)
 {
-  dUASSERT (g && g->type == dPlaneClass,"argument not a plane") override;
-  dxPlane *p = static_cast<dxPlane*>(g) override;
+  dUASSERT (g && g->type == dPlaneClass,"argument not a plane");
+  dxPlane *p = static_cast<dxPlane*>(g);
   result[0] = p->p[0];
   result[1] = p->p[1];
   result[2] = p->p[2];
@@ -139,7 +139,7 @@ void dGeomPlaneGetParams (dGeomID g, dVector4 result)
 
 dReal dGeomPlanePointDepth (dGeomID g, dReal x, dReal y, dReal z)
 {
-  dUASSERT (g && g->type == dPlaneClass,"argument not a plane") override;
-  dxPlane *p = static_cast<dxPlane*>(g) override;
+  dUASSERT (g && g->type == dPlaneClass,"argument not a plane");
+  dxPlane *p = static_cast<dxPlane*>(g);
   return p->p[3] - p->p[0]*x - p->p[1]*y - p->p[2]*z;
 }

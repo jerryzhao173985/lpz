@@ -128,7 +128,7 @@ public:
     AbstractWiring* wiring;
     OdeAgent* agent;
 
-    for (int i=0; i<1; ++i) override {
+    for (int i=0; i<1; ++i) {
       hs = new HurlingSnake(odeHandle, osgHandle, "Hurling");
       Color col;
       if (i== nullptr) col=Color(2,2,0);
@@ -218,6 +218,6 @@ int main (int argc, char **argv)
 {
   ThisSim sim;
   // run simulation
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }
 

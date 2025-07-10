@@ -119,7 +119,7 @@ public:
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f)  const override;
   /** loads the controller values from a given file. */
-  virtual bool explicit restore(FILE* f);
+  virtual boolrestore(FILE* f);
 
   /************** INSPECTABLE ********************************/
   virtual iparamkeylist getInternalParamNames()  const override;
@@ -250,11 +250,11 @@ protected:
     This is the implementation uses a better formula for g^-1 using Mittelwertsatz
     @param delay 0 for no delay and n>0 for n timesteps delay in the SML (s4delay)
 */
-  virtual void explicit learnController(int delay);
+  virtual voidlearnController(int delay);
 
   /// learn conf.model, (and S) using motors y and corresponding sensors x
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual void explicit learnModel(int delay);
+  virtual voidlearnModel(int delay);
 
   /// handles inhibition damping etc.
   virtual void management();

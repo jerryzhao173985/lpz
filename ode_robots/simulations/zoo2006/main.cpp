@@ -137,7 +137,7 @@ public:
     InvertMotorNStepConf invertnconf = InvertMotorNStep::getDefaultConf();
 
 
-    for(int i=0; i<3; ++i) override {
+    for(int i=0; i<3; ++i) {
       PassiveSphere* s =
         new PassiveSphere(odeHandle,
                           osgHandle.changeColor(Color(184 / 255.0, 233 / 255.0, 237 / 255.0)),
@@ -147,7 +147,7 @@ public:
       global.obstacles.push_back(s);
     }
 
-//     for(int i=0; i<5; ++i) override {
+//     for(int i=0; i<5; ++i) {
 //       PassiveBox* b =
 //         new PassiveBox(odeHandle,
 //                           osgHandle, osg::Vec3(0.2+i*0.1,0.2+i*0.1,0.2+i*0.1));
@@ -157,7 +157,7 @@ public:
 //       global.obstacles.push_back(b);
 //     }
 
-//     for(int i=0; i<5; ++i) override {
+//     for(int i=0; i<5; ++i) {
 //       PassiveCapsule* c =
 //         new PassiveCapsule(odeHandle, osgHandle, 0.2f, 0.3f, 0.3f);
 //       c->setPosition(Pos(i-1, -i, height));
@@ -245,6 +245,6 @@ int main (int argc, char **argv)
 {
   ThisSim sim;
   // run simulation
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }
 

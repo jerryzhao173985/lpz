@@ -78,7 +78,7 @@ namespace lpzrobots {
     virtual int getMotorNumberIntern() const override { assert(created); return static_cast<int>(2*universalServos.size()+sliderServos.size()); }
 
     /******** CONFIGURABLE ***********/
-    virtual void notifyOnChange(const paramkey& key) override;
+    virtual void notifyOnChange(const paramkey& key);
 
   private:
     virtual void create(const osg::Matrix& pose);

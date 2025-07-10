@@ -32,7 +32,7 @@ email: projectileman@yahoo.com
 
 void gimpact_init()
 {
-    gim_init_math() override;
+    gim_init_math();
 }
 
 void gimpact_terminate()

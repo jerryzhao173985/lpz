@@ -226,12 +226,12 @@ public:
   virtual ~Plane();
   virtual void init(const OdeHandle& odeHandle, double mass,
                     const OsgHandle& osgHandle,
-                    char mode = Body | Geom | Draw) override;
+                    char mode = Body | Geom | Draw);
 
-  virtual void update() override;
-  virtual const OSGPrimitive* getOSGPrimitive()  const override;
+  virtual void update();
+  virtual const OSGPrimitive* getOSGPrimitive()  const;
 
-  virtual void setMass(double mass, bool density = false) override;
+  virtual void setMass(double mass, bool density = false);
 
 protected:
   OSGPlane* osgplane = nullptr;
@@ -249,12 +249,12 @@ public:
 
   virtual void init(const OdeHandle& odeHandle, double mass,
                     const OsgHandle& osgHandle,
-                    char mode = Body | Geom | Draw) override;
+                    char mode = Body | Geom | Draw);
 
-  virtual void update() override;
-  virtual const OSGPrimitive* getOSGPrimitive()  const override;
+  virtual void update();
+  virtual const OSGPrimitive* getOSGPrimitive()  const;
 
-  virtual void setMass(double mass, bool density = false) override;
+  virtual void setMass(double mass, bool density = false);
 protected:
   OSGBoxTex* osgbox = nullptr;
 };
@@ -268,12 +268,12 @@ public:
 
   virtual void init(const OdeHandle& odeHandle, double mass,
                     const OsgHandle& osgHandle,
-                    char mode = Body | Geom | Draw) override;
+                    char mode = Body | Geom | Draw);
 
-  virtual void update() override;
-  virtual const OSGPrimitive* getOSGPrimitive()  const override;
+  virtual void update();
+  virtual const OSGPrimitive* getOSGPrimitive()  const;
 
-  virtual void setMass(double mass, bool density = false) override;
+  virtual void setMass(double mass, bool density = false);
 
 protected:
   OSGSphere* osgsphere = nullptr;
@@ -286,12 +286,12 @@ public:
   virtual ~Capsule();
   virtual void init(const OdeHandle& odeHandle, double mass,
                     const OsgHandle& osgHandle,
-                    char mode = Body | Geom | Draw) override;
+                    char mode = Body | Geom | Draw);
 
-  virtual void update() override;
-  virtual const OSGPrimitive* getOSGPrimitive()  const override;
+  virtual void update();
+  virtual const OSGPrimitive* getOSGPrimitive()  const;
 
-  virtual void setMass(double mass, bool density = false) override;
+  virtual void setMass(double mass, bool density = false);
 
 protected:
   OSGCapsule* osgcapsule = nullptr;
@@ -304,12 +304,12 @@ public:
   virtual ~Cylinder();
   virtual void init(const OdeHandle& odeHandle, double mass,
                     const OsgHandle& osgHandle,
-                    char mode = Body | Geom | Draw) override;
+                    char mode = Body | Geom | Draw);
 
-  virtual void update() override;
-  virtual const OSGPrimitive* getOSGPrimitive()  const override;
+  virtual void update();
+  virtual const OSGPrimitive* getOSGPrimitive()  const;
 
-  virtual void setMass(double mass, bool density = false) override;
+  virtual void setMass(double mass, bool density = false);
 protected:
   OSGCylinder* osgcylinder = nullptr;
 };
@@ -328,13 +328,13 @@ public:
   virtual ~Ray();
   virtual void init(const OdeHandle& odeHandle, double mass,
       const OsgHandle& osgHandle,
-      char mode = Geom | Draw) override;
+      char mode = Geom | Draw);
 
   void setLength(float len);
-  virtual void update() override;
-  virtual const OSGPrimitive* getOSGPrimitive()  const override;
+  virtual void update();
+  virtual const OSGPrimitive* getOSGPrimitive()  const;
 
-  virtual void setMass(double mass, bool density = false) override;
+  virtual void setMass(double mass, bool density = false);
 protected:
   double range = 0;
   float thickness = 0;
@@ -352,12 +352,12 @@ public:
   virtual ~Mesh();
   virtual void init(const OdeHandle& odeHandle, double mass,
                     const OsgHandle& osgHandle,
-                    char mode = Body | Geom | Draw) override;
-  virtual void update() override;
-  virtual const OSGPrimitive* getOSGPrimitive()  const override;
+                    char mode = Body | Geom | Draw);
+  virtual void update();
+  virtual const OSGPrimitive* getOSGPrimitive()  const;
   virtual float getRadius() const;
 
-  virtual void setMass(double mass, bool density = false) override;
+  virtual void setMass(double mass, bool density = false);
 
   /**
    * Sets the BoundingShape externally (e.g. XMLBoundingShape).
@@ -365,7 +365,7 @@ public:
    */
   virtual void setBoundingShape(BoundingShape* boundingShape);
 
-  virtual void setPose(const Pose& pose) override;
+  virtual void setPose(const Pose& pose);
 
 protected:
   OSGMesh* osgmesh = nullptr;
@@ -401,12 +401,12 @@ public:
    */
   virtual void init(const OdeHandle& odeHandle, double mass,
                     const OsgHandle& osgHandle,
-                    char mode = Body | Geom | Draw) override;
+                    char mode = Body | Geom | Draw);
 
-  virtual void update() override;
-  virtual const OSGPrimitive* getOSGPrimitive()  const override;
+  virtual void update();
+  virtual const OSGPrimitive* getOSGPrimitive()  const;
 
-  virtual void setMass(double mass, bool density = false) override;
+  virtual void setMass(double mass, bool density = false);
 
   // setting the pose is not supported
   virtual void setPose(const Pose& p) override {}

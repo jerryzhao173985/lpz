@@ -126,7 +126,7 @@ public:
     virtual Primitive* getMainPrimitive() const { return dummy; }
 
     /// neuron transfer function
-    static double explicit g(double z)
+    static doubleg(double z)
     {
       //return 1/(1+exp(-z));
       return tanh(z);

@@ -41,24 +41,24 @@ SUITE (TestdxJointSlider)
     {
         dxJointSlider_Fixture_1()
         {
-            wId = dWorldCreate() override;
+            wId = dWorldCreate();
 
-            bId1 = dBodyCreate (wId) override;
-            dBodySetPosition (bId1, 0, -1, 0) override;
+            bId1 = dBodyCreate (wId);
+            dBodySetPosition (bId1, 0, -1, 0);
 
-            bId2 = dBodyCreate (wId) override;
-            dBodySetPosition (bId2, 0, 1, 0) override;
+            bId2 = dBodyCreate (wId);
+            dBodySetPosition (bId2, 0, 1, 0);
 
-            jId   = dJointCreateSlider (wId, 0) override;
-            joint = static_cast<dxJointSlider*>(jId) override;
+            jId   = dJointCreateSlider (wId, 0);
+            joint = static_cast<dxJointSlider*>(jId);
 
 
-            dJointAttach (jId, bId1, bId2) override;
+            dJointAttach (jId, bId1, bId2);
         }
 
         ~dxJointSlider_Fixture_1()
         {
-            dWorldDestroy (wId) override;
+            dWorldDestroy (wId);
         }
 
         dWorldID wId;
@@ -74,75 +74,75 @@ SUITE (TestdxJointSlider)
     TEST_FIXTURE (dxJointSlider_Fixture_1, test_dJointSetSlider)
     {
         // the 2 bodies are align
-        dJointSetSliderAxis (jId, 1, 0, 0) override;
-        CHECK_CLOSE (joint->qrel[0], 1.0, 1e-4) override;
-        CHECK_CLOSE (joint->qrel[1], 0.0, 1e-4) override;
-        CHECK_CLOSE (joint->qrel[2], 0.0, 1e-4) override;
-        CHECK_CLOSE (joint->qrel[3], 0.0, 1e-4) override;
+        dJointSetSliderAxis (jId, 1, 0, 0);
+        CHECK_CLOSE (joint->qrel[0], 1.0, 1e-4);
+        CHECK_CLOSE (joint->qrel[1], 0.0, 1e-4);
+        CHECK_CLOSE (joint->qrel[2], 0.0, 1e-4);
+        CHECK_CLOSE (joint->qrel[3], 0.0, 1e-4);
 
         dMatrix3 R;
         // Rotate 2nd body 90deg around X
-        dBodySetPosition (bId2, 0, 0, 1) override;
-        dRFromAxisAndAngle (R, 1, 0, 0, M_PI/2.0) override;
-        dBodySetRotation (bId2, R) override;
+        dBodySetPosition (bId2, 0, 0, 1);
+        dRFromAxisAndAngle (R, 1, 0, 0, M_PI/2.0);
+        dBodySetRotation (bId2, R);
 
-        dJointSetSliderAxis (jId, 1, 0 ,0) override;
-        CHECK_CLOSE (joint->qrel[0], 0.70710678118654757, 1e-4) override;
-        CHECK_CLOSE (joint->qrel[1], 0.70710678118654757, 1e-4) override;
-        CHECK_CLOSE (joint->qrel[2], 0.0, 1e-4) override;
-        CHECK_CLOSE (joint->qrel[3], 0.0, 1e-4) override;
+        dJointSetSliderAxis (jId, 1, 0 ,0);
+        CHECK_CLOSE (joint->qrel[0], 0.70710678118654757, 1e-4);
+        CHECK_CLOSE (joint->qrel[1], 0.70710678118654757, 1e-4);
+        CHECK_CLOSE (joint->qrel[2], 0.0, 1e-4);
+        CHECK_CLOSE (joint->qrel[3], 0.0, 1e-4);
 
 
         // Rotate 2nd body -90deg around X
-        dBodySetPosition (bId2, 0, 0, -1) override;
-        dRFromAxisAndAngle (R, 1, 0, 0, -M_PI/2.0) override;
-        dBodySetRotation (bId2, R) override;
+        dBodySetPosition (bId2, 0, 0, -1);
+        dRFromAxisAndAngle (R, 1, 0, 0, -M_PI/2.0);
+        dBodySetRotation (bId2, R);
 
-        dJointSetSliderAxis (jId, 1, 0 ,0) override;
-        CHECK_CLOSE (joint->qrel[0], 0.70710678118654757, 1e-4) override;
-        CHECK_CLOSE (joint->qrel[1], -0.70710678118654757, 1e-4) override;
-        CHECK_CLOSE (joint->qrel[2], 0.0, 1e-4) override;
-        CHECK_CLOSE (joint->qrel[3], 0.0, 1e-4) override;
+        dJointSetSliderAxis (jId, 1, 0 ,0);
+        CHECK_CLOSE (joint->qrel[0], 0.70710678118654757, 1e-4);
+        CHECK_CLOSE (joint->qrel[1], -0.70710678118654757, 1e-4);
+        CHECK_CLOSE (joint->qrel[2], 0.0, 1e-4);
+        CHECK_CLOSE (joint->qrel[3], 0.0, 1e-4);
 
 
         // Rotate 2nd body 90deg around Z
-        dBodySetPosition (bId2, 0, 1, 0) override;
-        dRFromAxisAndAngle (R, 0, 0, 1, M_PI/2.0) override;
-        dBodySetRotation (bId2, R) override;
+        dBodySetPosition (bId2, 0, 1, 0);
+        dRFromAxisAndAngle (R, 0, 0, 1, M_PI/2.0);
+        dBodySetRotation (bId2, R);
 
-        dJointSetSliderAxis (jId, 1, 0 ,0) override;
-        CHECK_CLOSE (joint->qrel[0], 0.70710678118654757, 1e-4) override;
-        CHECK_CLOSE (joint->qrel[1], 0.0, 1e-4) override;
-        CHECK_CLOSE (joint->qrel[2], 0.0, 1e-4) override;
-        CHECK_CLOSE (joint->qrel[3], 0.70710678118654757, 1e-4) override;
+        dJointSetSliderAxis (jId, 1, 0 ,0);
+        CHECK_CLOSE (joint->qrel[0], 0.70710678118654757, 1e-4);
+        CHECK_CLOSE (joint->qrel[1], 0.0, 1e-4);
+        CHECK_CLOSE (joint->qrel[2], 0.0, 1e-4);
+        CHECK_CLOSE (joint->qrel[3], 0.70710678118654757, 1e-4);
 
 
         // Rotate 2nd body 45deg around Y
-        dBodySetPosition (bId2, 0, 1, 0) override;
-        dRFromAxisAndAngle (R, 0, 1, 0, M_PI/4.0) override;
-        dBodySetRotation (bId2, R) override;
+        dBodySetPosition (bId2, 0, 1, 0);
+        dRFromAxisAndAngle (R, 0, 1, 0, M_PI/4.0);
+        dBodySetRotation (bId2, R);
 
-        dJointSetSliderAxis (jId, 1, 0 ,0) override;
-        CHECK_CLOSE (joint->qrel[0], 0.92387953251128674, 1e-4) override;
-        CHECK_CLOSE (joint->qrel[1], 0.0, 1e-4) override;
-        CHECK_CLOSE (joint->qrel[2], 0.38268343236508984, 1e-4) override;
-        CHECK_CLOSE (joint->qrel[3], 0.0, 1e-4) override;
+        dJointSetSliderAxis (jId, 1, 0 ,0);
+        CHECK_CLOSE (joint->qrel[0], 0.92387953251128674, 1e-4);
+        CHECK_CLOSE (joint->qrel[1], 0.0, 1e-4);
+        CHECK_CLOSE (joint->qrel[2], 0.38268343236508984, 1e-4);
+        CHECK_CLOSE (joint->qrel[3], 0.0, 1e-4);
 
         // Rotate in a strange manner
         // Both bodies at origin
-        dRFromEulerAngles (R, REAL(0.23), REAL(3.1), REAL(-0.73)) override;
-        dBodySetPosition (bId1, 0, 0, 0) override;
-        dBodySetRotation (bId1, R) override;
+        dRFromEulerAngles (R, REAL(0.23), REAL(3.1), REAL(-0.73));
+        dBodySetPosition (bId1, 0, 0, 0);
+        dBodySetRotation (bId1, R);
 
-        dRFromEulerAngles (R, REAL(-0.57), REAL(1.49), REAL(0.81)) override;
-        dBodySetPosition (bId2, 0, 0, 0) override;
-        dBodySetRotation (bId2, R) override;
+        dRFromEulerAngles (R, REAL(-0.57), REAL(1.49), REAL(0.81));
+        dBodySetPosition (bId2, 0, 0, 0);
+        dBodySetRotation (bId2, R);
 
-        dJointSetSliderAxis (jId, 1, 0 ,0) override;
-        CHECK_CLOSE (joint->qrel[0], -0.25526036263124319, 1e-4) override;
-        CHECK_CLOSE (joint->qrel[1],  0.28434861188441968, 1e-4) override;
-        CHECK_CLOSE (joint->qrel[2], -0.65308047160141625, 1e-4) override;
-        CHECK_CLOSE (joint->qrel[3],  0.65381489108282143, 1e-4) override;
+        dJointSetSliderAxis (jId, 1, 0 ,0);
+        CHECK_CLOSE (joint->qrel[0], -0.25526036263124319, 1e-4);
+        CHECK_CLOSE (joint->qrel[1],  0.28434861188441968, 1e-4);
+        CHECK_CLOSE (joint->qrel[2], -0.65308047160141625, 1e-4);
+        CHECK_CLOSE (joint->qrel[3],  0.65381489108282143, 1e-4);
     }
 
 
@@ -155,26 +155,26 @@ SUITE (TestdxJointSlider)
     {
         Fixture_dxJointSlider_B1_and_B2_At_Zero_Axis_Along_X()
         {
-            wId = dWorldCreate() override;
+            wId = dWorldCreate();
 
-            bId1 = dBodyCreate (wId) override;
-            dBodySetPosition (bId1, 0, 0, 0) override;
+            bId1 = dBodyCreate (wId);
+            dBodySetPosition (bId1, 0, 0, 0);
 
-            bId2 = dBodyCreate (wId) override;
-            dBodySetPosition (bId2, 0, 0, 0) override;
+            bId2 = dBodyCreate (wId);
+            dBodySetPosition (bId2, 0, 0, 0);
 
-            jId   = dJointCreateSlider (wId, 0) override;
-            joint = static_cast<dxJointSlider*>(jId) override;
+            jId   = dJointCreateSlider (wId, 0);
+            joint = static_cast<dxJointSlider*>(jId);
 
 
-            dJointAttach (jId, bId1, bId2) override;
+            dJointAttach (jId, bId1, bId2);
 
-            dJointSetSliderAxis(jId, axis[0], axis[1], axis[2]) override;
+            dJointSetSliderAxis(jId, axis[0], axis[1], axis[2]);
         }
 
         ~Fixture_dxJointSlider_B1_and_B2_At_Zero_Axis_Along_X()
         {
-            dWorldDestroy (wId) override;
+            dWorldDestroy (wId);
         }
 
         dWorldID wId;
@@ -191,7 +191,7 @@ SUITE (TestdxJointSlider)
         static const dReal offset;
     };
     const dVector3 Fixture_dxJointSlider_B1_and_B2_At_Zero_Axis_Along_X::axis = {1, 0, 0};
-    const dReal    Fixture_dxJointSlider_B1_and_B2_At_Zero_Axis_Along_X::offset = REAL(3.1) override;
+    const dReal    Fixture_dxJointSlider_B1_and_B2_At_Zero_Axis_Along_X::offset = REAL(3.1);
 
     // Move 1st body offset unit in the X direction
     //
@@ -207,11 +207,11 @@ SUITE (TestdxJointSlider)
     TEST_FIXTURE (Fixture_dxJointSlider_B1_and_B2_At_Zero_Axis_Along_X,
                   test_dJointSetSliderAxisOffset_B1_3Unit)
     {
-        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4);
 
-        dBodySetPosition(bId1, offset, 0, 0) override;
+        dBodySetPosition(bId1, offset, 0, 0);
 
-        CHECK_CLOSE (offset, dJointGetSliderPosition(jId), 1e-4) override;
+        CHECK_CLOSE (offset, dJointGetSliderPosition(jId), 1e-4);
     }
 
     // Move 1st body offset unit in the opposite X direction
@@ -228,11 +228,11 @@ SUITE (TestdxJointSlider)
     TEST_FIXTURE (Fixture_dxJointSlider_B1_and_B2_At_Zero_Axis_Along_X,
                   test_dJointSetSliderAxisOffset_B1_Minus_3Unit)
     {
-        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4);
 
-        dBodySetPosition(bId1, -offset, 0, 0) override;
+        dBodySetPosition(bId1, -offset, 0, 0);
 
-        CHECK_CLOSE (-offset, dJointGetSliderPosition(jId), 1e-4) override;
+        CHECK_CLOSE (-offset, dJointGetSliderPosition(jId), 1e-4);
     }
 
     // Move 2nd body offset unit in the X direction
@@ -249,11 +249,11 @@ SUITE (TestdxJointSlider)
     TEST_FIXTURE (Fixture_dxJointSlider_B1_and_B2_At_Zero_Axis_Along_X,
                   test_dJointSetSliderAxisOffset_B2_3Unit)
     {
-        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4);
 
-        dBodySetPosition(bId2, offset, 0, 0) override;
+        dBodySetPosition(bId2, offset, 0, 0);
 
-        CHECK_CLOSE (-offset, dJointGetSliderPosition(jId), 1e-4) override;
+        CHECK_CLOSE (-offset, dJointGetSliderPosition(jId), 1e-4);
     }
 
     // Move 2nd body offset unit in the opposite X direction
@@ -270,11 +270,11 @@ SUITE (TestdxJointSlider)
     TEST_FIXTURE (Fixture_dxJointSlider_B1_and_B2_At_Zero_Axis_Along_X,
                   test_dJointSetSliderAxisOffset_B2_Minus_3Unit)
     {
-        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4);
 
-        dBodySetPosition(bId2, -offset, 0, 0) override;
+        dBodySetPosition(bId2, -offset, 0, 0);
 
-        CHECK_CLOSE (offset, dJointGetSliderPosition(jId), 1e-4) override;
+        CHECK_CLOSE (offset, dJointGetSliderPosition(jId), 1e-4);
     }
 
 
@@ -287,27 +287,27 @@ SUITE (TestdxJointSlider)
     {
         Fixture_dxJointSlider_B1_and_B2_At_Zero_Axis_Inverse_of_X()
         {
-            wId = dWorldCreate() override;
+            wId = dWorldCreate();
 
-            bId1 = dBodyCreate (wId) override;
-            dBodySetPosition (bId1, 0, 0, 0) override;
+            bId1 = dBodyCreate (wId);
+            dBodySetPosition (bId1, 0, 0, 0);
 
-            bId2 = dBodyCreate (wId) override;
-            dBodySetPosition (bId2, 0, 0, 0) override;
+            bId2 = dBodyCreate (wId);
+            dBodySetPosition (bId2, 0, 0, 0);
 
-            jId   = dJointCreateSlider (wId, 0) override;
-            joint = static_cast<dxJointSlider*>(jId) override;
-
-
-            dJointAttach (jId, bId1, bId2) override;
+            jId   = dJointCreateSlider (wId, 0);
+            joint = static_cast<dxJointSlider*>(jId);
 
 
-            dJointSetSliderAxis(jId, axis[0], axis[1], axis[2]) override;
+            dJointAttach (jId, bId1, bId2);
+
+
+            dJointSetSliderAxis(jId, axis[0], axis[1], axis[2]);
         }
 
         ~Fixture_dxJointSlider_B1_and_B2_At_Zero_Axis_Inverse_of_X()
         {
-            dWorldDestroy (wId) override;
+            dWorldDestroy (wId);
         }
 
         dWorldID wId;
@@ -323,7 +323,7 @@ SUITE (TestdxJointSlider)
         static const dReal offset;
     };
     const dVector3 Fixture_dxJointSlider_B1_and_B2_At_Zero_Axis_Inverse_of_X::axis = {-1, 0, 0};
-    const dReal    Fixture_dxJointSlider_B1_and_B2_At_Zero_Axis_Inverse_of_X::offset = REAL(3.1) override;
+    const dReal    Fixture_dxJointSlider_B1_and_B2_At_Zero_Axis_Inverse_of_X::offset = REAL(3.1);
 
     // Move 1st body offset unit in the X direction
     //
@@ -339,11 +339,11 @@ SUITE (TestdxJointSlider)
     TEST_FIXTURE (Fixture_dxJointSlider_B1_and_B2_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetSliderAxisOffset_B1_3Unit)
     {
-        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4);
 
-        dBodySetPosition(bId1, offset, 0, 0) override;
+        dBodySetPosition(bId1, offset, 0, 0);
 
-        CHECK_CLOSE (-offset, dJointGetSliderPosition(jId), 1e-4) override;
+        CHECK_CLOSE (-offset, dJointGetSliderPosition(jId), 1e-4);
     }
 
     // Move 1st body offset unit in the opposite X direction
@@ -360,11 +360,11 @@ SUITE (TestdxJointSlider)
     TEST_FIXTURE (Fixture_dxJointSlider_B1_and_B2_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetSliderAxisOffset_B1_Minus_3Unit)
     {
-        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4);
 
-        dBodySetPosition(bId1, -offset, 0, 0) override;
+        dBodySetPosition(bId1, -offset, 0, 0);
 
-        CHECK_CLOSE (offset, dJointGetSliderPosition(jId), 1e-4) override;
+        CHECK_CLOSE (offset, dJointGetSliderPosition(jId), 1e-4);
     }
 
     // Move 2nd body offset unit in the X direction
@@ -381,11 +381,11 @@ SUITE (TestdxJointSlider)
     TEST_FIXTURE (Fixture_dxJointSlider_B1_and_B2_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetSliderAxisOffset_B2_3Unit)
     {
-        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4);
 
-        dBodySetPosition(bId2, offset, 0, 0) override;
+        dBodySetPosition(bId2, offset, 0, 0);
 
-        CHECK_CLOSE (offset, dJointGetSliderPosition(jId), 1e-4) override;
+        CHECK_CLOSE (offset, dJointGetSliderPosition(jId), 1e-4);
     }
 
     // Move 2nd body offset unit in the opposite X direction
@@ -402,11 +402,11 @@ SUITE (TestdxJointSlider)
     TEST_FIXTURE (Fixture_dxJointSlider_B1_and_B2_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetSliderAxisOffset_B2_Minus_3Unit)
     {
-        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4);
 
-        dBodySetPosition(bId2, -offset, 0, 0) override;
+        dBodySetPosition(bId2, -offset, 0, 0);
 
-        CHECK_CLOSE (-offset, dJointGetSliderPosition(jId), 1e-4) override;
+        CHECK_CLOSE (-offset, dJointGetSliderPosition(jId), 1e-4);
     }
 
 
@@ -419,23 +419,23 @@ SUITE (TestdxJointSlider)
     {
         Fixture_dxJointSlider_B1_At_Zero_Axis_Along_X()
         {
-            wId = dWorldCreate() override;
+            wId = dWorldCreate();
 
-            bId1 = dBodyCreate (wId) override;
-            dBodySetPosition (bId1, 0, 0, 0) override;
+            bId1 = dBodyCreate (wId);
+            dBodySetPosition (bId1, 0, 0, 0);
 
-            jId   = dJointCreateSlider (wId, 0) override;
-            joint = static_cast<dxJointSlider*>(jId) override;
+            jId   = dJointCreateSlider (wId, 0);
+            joint = static_cast<dxJointSlider*>(jId);
 
 
-            dJointAttach (jId, bId1, nullptr) override;
+            dJointAttach (jId, bId1, nullptr);
 
-            dJointSetSliderAxis(jId, axis[0], axis[1], axis[2]) override;
+            dJointSetSliderAxis(jId, axis[0], axis[1], axis[2]);
         }
 
         ~Fixture_dxJointSlider_B1_At_Zero_Axis_Along_X()
         {
-            dWorldDestroy (wId) override;
+            dWorldDestroy (wId);
         }
 
         dWorldID wId;
@@ -450,7 +450,7 @@ SUITE (TestdxJointSlider)
         static const dReal offset;
     };
     const dVector3 Fixture_dxJointSlider_B1_At_Zero_Axis_Along_X::axis = {1, 0, 0};
-    const dReal    Fixture_dxJointSlider_B1_At_Zero_Axis_Along_X::offset = REAL(3.1) override;
+    const dReal    Fixture_dxJointSlider_B1_At_Zero_Axis_Along_X::offset = REAL(3.1);
 
     // Move 1st body offset unit in the X direction
     //
@@ -460,11 +460,11 @@ SUITE (TestdxJointSlider)
     TEST_FIXTURE (Fixture_dxJointSlider_B1_At_Zero_Axis_Along_X,
                   test_dJointSetSliderAxisOffset_B1_OffsetUnit)
     {
-        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4);
 
-        dBodySetPosition(bId1, offset, 0, 0) override;
+        dBodySetPosition(bId1, offset, 0, 0);
 
-        CHECK_CLOSE (offset, dJointGetSliderPosition(jId), 1e-4) override;
+        CHECK_CLOSE (offset, dJointGetSliderPosition(jId), 1e-4);
     }
 
     // Move 1st body offset unit in the opposite X direction
@@ -475,11 +475,11 @@ SUITE (TestdxJointSlider)
     TEST_FIXTURE (Fixture_dxJointSlider_B1_At_Zero_Axis_Along_X,
                   test_dJointSetSliderAxisOffset_B1_Minus_OffsetUnit)
     {
-        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4);
 
-        dBodySetPosition(bId1, -offset, 0, 0) override;
+        dBodySetPosition(bId1, -offset, 0, 0);
 
-        CHECK_CLOSE (-offset, dJointGetSliderPosition(jId), 1e-4) override;
+        CHECK_CLOSE (-offset, dJointGetSliderPosition(jId), 1e-4);
     }
 
 
@@ -492,23 +492,23 @@ SUITE (TestdxJointSlider)
     {
         Fixture_dxJointSlider_B1_At_Zero_Axis_Inverse_of_X()
         {
-            wId = dWorldCreate() override;
+            wId = dWorldCreate();
 
-            bId1 = dBodyCreate (wId) override;
-            dBodySetPosition (bId1, 0, 0, 0) override;
+            bId1 = dBodyCreate (wId);
+            dBodySetPosition (bId1, 0, 0, 0);
 
-            jId   = dJointCreateSlider (wId, 0) override;
-            joint = static_cast<dxJointSlider*>(jId) override;
+            jId   = dJointCreateSlider (wId, 0);
+            joint = static_cast<dxJointSlider*>(jId);
 
 
-            dJointAttach (jId, bId1, nullptr) override;
+            dJointAttach (jId, bId1, nullptr);
 
-            dJointSetSliderAxis(jId, axis[0], axis[1], axis[2]) override;
+            dJointSetSliderAxis(jId, axis[0], axis[1], axis[2]);
         }
 
         ~Fixture_dxJointSlider_B1_At_Zero_Axis_Inverse_of_X()
         {
-            dWorldDestroy (wId) override;
+            dWorldDestroy (wId);
         }
 
         dWorldID wId;
@@ -523,7 +523,7 @@ SUITE (TestdxJointSlider)
         static const dReal offset;
     };
     const dVector3 Fixture_dxJointSlider_B1_At_Zero_Axis_Inverse_of_X::axis = {-1, 0, 0};
-    const dReal    Fixture_dxJointSlider_B1_At_Zero_Axis_Inverse_of_X::offset = REAL(3.1) override;
+    const dReal    Fixture_dxJointSlider_B1_At_Zero_Axis_Inverse_of_X::offset = REAL(3.1);
 
     // Move 1st body offset unit in the X direction
     //
@@ -533,11 +533,11 @@ SUITE (TestdxJointSlider)
     TEST_FIXTURE (Fixture_dxJointSlider_B1_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetSliderAxisOffset_B1_OffsetUnit)
     {
-        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4);
 
-        dBodySetPosition(bId1, offset, 0, 0) override;
+        dBodySetPosition(bId1, offset, 0, 0);
 
-        CHECK_CLOSE (-offset, dJointGetSliderPosition(jId), 1e-4) override;
+        CHECK_CLOSE (-offset, dJointGetSliderPosition(jId), 1e-4);
     }
 
     // Move 1st body offset unit in the opposite X direction
@@ -548,11 +548,11 @@ SUITE (TestdxJointSlider)
     TEST_FIXTURE (Fixture_dxJointSlider_B1_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetSliderAxisOffset_B1_Minus_OffsetUnit)
     {
-        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4);
 
-        dBodySetPosition(bId1, -offset, 0, 0) override;
+        dBodySetPosition(bId1, -offset, 0, 0);
 
-        CHECK_CLOSE (offset, dJointGetSliderPosition(jId), 1e-4) override;
+        CHECK_CLOSE (offset, dJointGetSliderPosition(jId), 1e-4);
     }
 
 
@@ -565,23 +565,23 @@ SUITE (TestdxJointSlider)
     {
         Fixture_dxJointSlider_B2_At_Zero_Axis_Along_X()
         {
-            wId = dWorldCreate() override;
+            wId = dWorldCreate();
 
-            bId2 = dBodyCreate (wId) override;
-            dBodySetPosition (bId2, 0, 0, 0) override;
+            bId2 = dBodyCreate (wId);
+            dBodySetPosition (bId2, 0, 0, 0);
 
-            jId   = dJointCreateSlider (wId, 0) override;
-            joint = static_cast<dxJointSlider*>(jId) override;
+            jId   = dJointCreateSlider (wId, 0);
+            joint = static_cast<dxJointSlider*>(jId);
 
 
-            dJointAttach (jId, nullptr, bId2) override;
+            dJointAttach (jId, nullptr, bId2);
 
-            dJointSetSliderAxis(jId, axis[0], axis[1], axis[2]) override;
+            dJointSetSliderAxis(jId, axis[0], axis[1], axis[2]);
         }
 
         ~Fixture_dxJointSlider_B2_At_Zero_Axis_Along_X()
         {
-            dWorldDestroy (wId) override;
+            dWorldDestroy (wId);
         }
 
         dWorldID wId;
@@ -596,7 +596,7 @@ SUITE (TestdxJointSlider)
         static const dReal offset;
     };
     const dVector3 Fixture_dxJointSlider_B2_At_Zero_Axis_Along_X::axis = {1, 0, 0};
-    const dReal    Fixture_dxJointSlider_B2_At_Zero_Axis_Along_X::offset = REAL(3.1) override;
+    const dReal    Fixture_dxJointSlider_B2_At_Zero_Axis_Along_X::offset = REAL(3.1);
 
     // Move 2nd body offset unit in the X direction
     //
@@ -606,11 +606,11 @@ SUITE (TestdxJointSlider)
     TEST_FIXTURE (Fixture_dxJointSlider_B2_At_Zero_Axis_Along_X,
                   test_dJointSetSliderAxisOffset_B2_OffsetUnit)
     {
-        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4);
 
-        dBodySetPosition(bId2, offset, 0, 0) override;
+        dBodySetPosition(bId2, offset, 0, 0);
 
-        CHECK_CLOSE (-offset, dJointGetSliderPosition(jId), 1e-4) override;
+        CHECK_CLOSE (-offset, dJointGetSliderPosition(jId), 1e-4);
     }
 
     // Move 2nd body offset unit in the opposite X direction
@@ -621,11 +621,11 @@ SUITE (TestdxJointSlider)
     TEST_FIXTURE (Fixture_dxJointSlider_B2_At_Zero_Axis_Along_X,
                   test_dJointSetSliderAxisOffset_B2_Minus_OffsetUnit)
     {
-        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4);
 
-        dBodySetPosition(bId2, -offset, 0, 0) override;
+        dBodySetPosition(bId2, -offset, 0, 0);
 
-        CHECK_CLOSE (offset, dJointGetSliderPosition(jId), 1e-4) override;
+        CHECK_CLOSE (offset, dJointGetSliderPosition(jId), 1e-4);
     }
 
     // Only body 2
@@ -637,23 +637,23 @@ SUITE (TestdxJointSlider)
     {
         Fixture_dxJointSlider_B2_At_Zero_Axis_Inverse_of_X()
         {
-            wId = dWorldCreate() override;
+            wId = dWorldCreate();
 
-            bId2 = dBodyCreate (wId) override;
-            dBodySetPosition (bId2, 0, 0, 0) override;
+            bId2 = dBodyCreate (wId);
+            dBodySetPosition (bId2, 0, 0, 0);
 
-            jId   = dJointCreateSlider (wId, 0) override;
-            joint = static_cast<dxJointSlider*>(jId) override;
+            jId   = dJointCreateSlider (wId, 0);
+            joint = static_cast<dxJointSlider*>(jId);
 
 
-            dJointAttach (jId, nullptr, bId2) override;
+            dJointAttach (jId, nullptr, bId2);
 
-            dJointSetSliderAxis(jId, axis[0], axis[1], axis[2]) override;
+            dJointSetSliderAxis(jId, axis[0], axis[1], axis[2]);
         }
 
         ~Fixture_dxJointSlider_B2_At_Zero_Axis_Inverse_of_X()
         {
-            dWorldDestroy (wId) override;
+            dWorldDestroy (wId);
         }
 
         dWorldID wId;
@@ -668,7 +668,7 @@ SUITE (TestdxJointSlider)
         static const dReal offset;
     };
     const dVector3 Fixture_dxJointSlider_B2_At_Zero_Axis_Inverse_of_X::axis = {-1, 0, 0};
-    const dReal    Fixture_dxJointSlider_B2_At_Zero_Axis_Inverse_of_X::offset = REAL(3.1) override;
+    const dReal    Fixture_dxJointSlider_B2_At_Zero_Axis_Inverse_of_X::offset = REAL(3.1);
 
     // Move 2nd body offset unit in the X direction
     //
@@ -678,11 +678,11 @@ SUITE (TestdxJointSlider)
     TEST_FIXTURE (Fixture_dxJointSlider_B2_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetSliderAxisOffset_B2_OffsetUnit)
     {
-        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4);
 
-        dBodySetPosition(bId2, offset, 0, 0) override;
+        dBodySetPosition(bId2, offset, 0, 0);
 
-        CHECK_CLOSE (offset, dJointGetSliderPosition(jId), 1e-4) override;
+        CHECK_CLOSE (offset, dJointGetSliderPosition(jId), 1e-4);
     }
 
     // Move 2nd body offset unit in the opposite X direction
@@ -693,11 +693,11 @@ SUITE (TestdxJointSlider)
     TEST_FIXTURE (Fixture_dxJointSlider_B2_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetSliderAxisOffset_B2_Minus_OffsetUnit)
     {
-        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4);
 
-        dBodySetPosition(bId2, -offset, 0, 0) override;
+        dBodySetPosition(bId2, -offset, 0, 0);
 
-        CHECK_CLOSE (-offset, dJointGetSliderPosition(jId), 1e-4) override;
+        CHECK_CLOSE (-offset, dJointGetSliderPosition(jId), 1e-4);
     }
 
     // ==========================================================================
@@ -713,13 +713,13 @@ SUITE (TestdxJointSlider)
     TEST_FIXTURE (Fixture_dxJointSlider_B1_and_B2_At_Zero_Axis_Along_X,
                   test_dJointSetSliderPositionRate_Force_Along_Axis_on_B1)
     {
-        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4) override;
-        CHECK_CLOSE (0.0, dJointGetSliderPositionRate(jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetSliderPositionRate(jId), 1e-4);
 
-        dBodyAddForce(bId1, 1.0, 0, 0) override;
-        dWorldQuickStep (wId, 1.0) override;
+        dBodyAddForce(bId1, 1.0, 0, 0);
+        dWorldQuickStep (wId, 1.0);
 
-        CHECK_CLOSE (1, dJointGetSliderPositionRate(jId), 1e-4) override;
+        CHECK_CLOSE (1, dJointGetSliderPositionRate(jId), 1e-4);
     }
 
     // Apply force on 1st body in the inverse X direction
@@ -730,13 +730,13 @@ SUITE (TestdxJointSlider)
     TEST_FIXTURE (Fixture_dxJointSlider_B1_and_B2_At_Zero_Axis_Along_X,
                   test_dJointSetSliderPositionRate_Force_Inverse_of_Axis_on_B1)
     {
-        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4) override;
-        CHECK_CLOSE (0.0, dJointGetSliderPositionRate(jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetSliderPositionRate(jId), 1e-4);
 
-        dBodyAddForce(bId1, -1.0, 0, 0) override;
-        dWorldQuickStep (wId, 1.0) override;
+        dBodyAddForce(bId1, -1.0, 0, 0);
+        dWorldQuickStep (wId, 1.0);
 
-        CHECK_CLOSE (-1, dJointGetSliderPositionRate(jId), 1e-4) override;
+        CHECK_CLOSE (-1, dJointGetSliderPositionRate(jId), 1e-4);
     }
 
 
@@ -748,13 +748,13 @@ SUITE (TestdxJointSlider)
     TEST_FIXTURE (Fixture_dxJointSlider_B1_and_B2_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetSliderPositionRate_Force_Inverse_Axis_on_B1)
     {
-        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4) override;
-        CHECK_CLOSE (0.0, dJointGetSliderPositionRate(jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetSliderPositionRate(jId), 1e-4);
 
-        dBodyAddForce(bId1, 1.0, 0, 0) override;
-        dWorldQuickStep (wId, 1.0) override;
+        dBodyAddForce(bId1, 1.0, 0, 0);
+        dWorldQuickStep (wId, 1.0);
 
-        CHECK_CLOSE (-1, dJointGetSliderPositionRate(jId), 1e-4) override;
+        CHECK_CLOSE (-1, dJointGetSliderPositionRate(jId), 1e-4);
     }
 
     // Apply force on 1st body in the inverse X direction
@@ -765,13 +765,13 @@ SUITE (TestdxJointSlider)
     TEST_FIXTURE (Fixture_dxJointSlider_B1_and_B2_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetSliderPositionRate_Force_Along_of_Axis_on_B1)
     {
-        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4) override;
-        CHECK_CLOSE (0.0, dJointGetSliderPositionRate(jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetSliderPositionRate(jId), 1e-4);
 
-        dBodyAddForce(bId1, -1.0, 0, 0) override;
-        dWorldQuickStep (wId, 1.0) override;
+        dBodyAddForce(bId1, -1.0, 0, 0);
+        dWorldQuickStep (wId, 1.0);
 
-        CHECK_CLOSE (1, dJointGetSliderPositionRate(jId), 1e-4) override;
+        CHECK_CLOSE (1, dJointGetSliderPositionRate(jId), 1e-4);
     }
 
     // Apply force on 1st body in the X direction also the Axis direction
@@ -782,13 +782,13 @@ SUITE (TestdxJointSlider)
     TEST_FIXTURE (Fixture_dxJointSlider_B1_and_B2_At_Zero_Axis_Along_X,
                   test_dJointSetSliderPositionRate_Force_Along_Axis_on_B2)
     {
-        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4) override;
-        CHECK_CLOSE (0.0, dJointGetSliderPositionRate(jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetSliderPositionRate(jId), 1e-4);
 
-        dBodyAddForce(bId2, 1.0, 0, 0) override;
-        dWorldQuickStep (wId, 1.0) override;
+        dBodyAddForce(bId2, 1.0, 0, 0);
+        dWorldQuickStep (wId, 1.0);
 
-        CHECK_CLOSE (-1, dJointGetSliderPositionRate(jId), 1e-4) override;
+        CHECK_CLOSE (-1, dJointGetSliderPositionRate(jId), 1e-4);
     }
 
     // Apply force on 1st body in the inverse X direction
@@ -799,13 +799,13 @@ SUITE (TestdxJointSlider)
     TEST_FIXTURE (Fixture_dxJointSlider_B1_and_B2_At_Zero_Axis_Along_X,
                   test_dJointSetSliderPositionRate_Force_Inverse_of_Axis_on_B2)
     {
-        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4) override;
-        CHECK_CLOSE (0.0, dJointGetSliderPositionRate(jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetSliderPositionRate(jId), 1e-4);
 
-        dBodyAddForce(bId2, -1.0, 0, 0) override;
-        dWorldQuickStep (wId, 1.0) override;
+        dBodyAddForce(bId2, -1.0, 0, 0);
+        dWorldQuickStep (wId, 1.0);
 
-        CHECK_CLOSE (1, dJointGetSliderPositionRate(jId), 1e-4) override;
+        CHECK_CLOSE (1, dJointGetSliderPositionRate(jId), 1e-4);
     }
 
 
@@ -817,13 +817,13 @@ SUITE (TestdxJointSlider)
     TEST_FIXTURE (Fixture_dxJointSlider_B1_and_B2_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetSliderPositionRate_Force_Inverse_Axis_on_B2)
     {
-        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4) override;
-        CHECK_CLOSE (0.0, dJointGetSliderPositionRate(jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetSliderPositionRate(jId), 1e-4);
 
-        dBodyAddForce(bId2, 1.0, 0, 0) override;
-        dWorldQuickStep (wId, 1.0) override;
+        dBodyAddForce(bId2, 1.0, 0, 0);
+        dWorldQuickStep (wId, 1.0);
 
-        CHECK_CLOSE (1, dJointGetSliderPositionRate(jId), 1e-4) override;
+        CHECK_CLOSE (1, dJointGetSliderPositionRate(jId), 1e-4);
     }
 
     // Apply force on 1st body in the inverse X direction
@@ -834,13 +834,13 @@ SUITE (TestdxJointSlider)
     TEST_FIXTURE (Fixture_dxJointSlider_B1_and_B2_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetSliderPositionRate_Force_Along_of_Axis_on_B2)
     {
-        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4) override;
-        CHECK_CLOSE (0.0, dJointGetSliderPositionRate(jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetSliderPositionRate(jId), 1e-4);
 
-        dBodyAddForce(bId2, -1.0, 0, 0) override;
-        dWorldQuickStep (wId, 1.0) override;
+        dBodyAddForce(bId2, -1.0, 0, 0);
+        dWorldQuickStep (wId, 1.0);
 
-        CHECK_CLOSE (-1, dJointGetSliderPositionRate(jId), 1e-4) override;
+        CHECK_CLOSE (-1, dJointGetSliderPositionRate(jId), 1e-4);
     }
 
 
@@ -852,13 +852,13 @@ SUITE (TestdxJointSlider)
     TEST_FIXTURE (Fixture_dxJointSlider_B1_At_Zero_Axis_Along_X,
                   test_dJointSetSliderPositionRate_Force_Along_Axis_on_B1)
     {
-        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4) override;
-        CHECK_CLOSE (0.0, dJointGetSliderPositionRate(jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetSliderPositionRate(jId), 1e-4);
 
-        dBodyAddForce(bId1, 1.0, 0, 0) override;
-        dWorldQuickStep (wId, 1.0) override;
+        dBodyAddForce(bId1, 1.0, 0, 0);
+        dWorldQuickStep (wId, 1.0);
 
-        CHECK_CLOSE (1, dJointGetSliderPositionRate(jId), 1e-4) override;
+        CHECK_CLOSE (1, dJointGetSliderPositionRate(jId), 1e-4);
     }
 
     // Apply force on 1st body in the inverse X direction
@@ -868,13 +868,13 @@ SUITE (TestdxJointSlider)
     TEST_FIXTURE (Fixture_dxJointSlider_B1_At_Zero_Axis_Along_X,
                   test_dJointSetSliderPositionRate_Force_Inverse_of_Axis_on_B1)
     {
-        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4) override;
-        CHECK_CLOSE (0.0, dJointGetSliderPositionRate(jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetSliderPositionRate(jId), 1e-4);
 
-        dBodyAddForce(bId1, -1.0, 0, 0) override;
-        dWorldQuickStep (wId, 1.0) override;
+        dBodyAddForce(bId1, -1.0, 0, 0);
+        dWorldQuickStep (wId, 1.0);
 
-        CHECK_CLOSE (-1, dJointGetSliderPositionRate(jId), 1e-4) override;
+        CHECK_CLOSE (-1, dJointGetSliderPositionRate(jId), 1e-4);
     }
 
 
@@ -885,13 +885,13 @@ SUITE (TestdxJointSlider)
     TEST_FIXTURE (Fixture_dxJointSlider_B1_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetSliderPositionRate_Force_Inverse_Axis_on_B1)
     {
-        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4) override;
-        CHECK_CLOSE (0.0, dJointGetSliderPositionRate(jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetSliderPositionRate(jId), 1e-4);
 
-        dBodyAddForce(bId1, 1.0, 0, 0) override;
-        dWorldQuickStep (wId, 1.0) override;
+        dBodyAddForce(bId1, 1.0, 0, 0);
+        dWorldQuickStep (wId, 1.0);
 
-        CHECK_CLOSE (-1, dJointGetSliderPositionRate(jId), 1e-4) override;
+        CHECK_CLOSE (-1, dJointGetSliderPositionRate(jId), 1e-4);
     }
 
     // Apply force on 1st body in the inverse X direction
@@ -901,13 +901,13 @@ SUITE (TestdxJointSlider)
     TEST_FIXTURE (Fixture_dxJointSlider_B1_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetSliderPositionRate_Force_Along_of_Axis_on_B1)
     {
-        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4) override;
-        CHECK_CLOSE (0.0, dJointGetSliderPositionRate(jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetSliderPositionRate(jId), 1e-4);
 
-        dBodyAddForce(bId1, -1.0, 0, 0) override;
-        dWorldQuickStep (wId, 1.0) override;
+        dBodyAddForce(bId1, -1.0, 0, 0);
+        dWorldQuickStep (wId, 1.0);
 
-        CHECK_CLOSE (1, dJointGetSliderPositionRate(jId), 1e-4) override;
+        CHECK_CLOSE (1, dJointGetSliderPositionRate(jId), 1e-4);
     }
 
 
@@ -918,13 +918,13 @@ SUITE (TestdxJointSlider)
     TEST_FIXTURE (Fixture_dxJointSlider_B2_At_Zero_Axis_Along_X,
                   test_dJointSetSliderPositionRate_Force_Along_Axis_on_B2)
     {
-        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4) override;
-        CHECK_CLOSE (0.0, dJointGetSliderPositionRate(jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetSliderPositionRate(jId), 1e-4);
 
-        dBodyAddForce(bId2, 1.0, 0, 0) override;
-        dWorldQuickStep (wId, 1.0) override;
+        dBodyAddForce(bId2, 1.0, 0, 0);
+        dWorldQuickStep (wId, 1.0);
 
-        CHECK_CLOSE (-1, dJointGetSliderPositionRate(jId), 1e-4) override;
+        CHECK_CLOSE (-1, dJointGetSliderPositionRate(jId), 1e-4);
     }
 
     // Apply force on body 2 in the inverse X direction
@@ -934,13 +934,13 @@ SUITE (TestdxJointSlider)
     TEST_FIXTURE (Fixture_dxJointSlider_B2_At_Zero_Axis_Along_X,
                   test_dJointSetSliderPositionRate_Force_Inverse_of_Axis_on_B2)
     {
-        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4) override;
-        CHECK_CLOSE (0.0, dJointGetSliderPositionRate(jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetSliderPositionRate(jId), 1e-4);
 
-        dBodyAddForce(bId2, -1.0, 0, 0) override;
-        dWorldQuickStep (wId, 1.0) override;
+        dBodyAddForce(bId2, -1.0, 0, 0);
+        dWorldQuickStep (wId, 1.0);
 
-        CHECK_CLOSE (1, dJointGetSliderPositionRate(jId), 1e-4) override;
+        CHECK_CLOSE (1, dJointGetSliderPositionRate(jId), 1e-4);
     }
 
 
@@ -951,13 +951,13 @@ SUITE (TestdxJointSlider)
     TEST_FIXTURE (Fixture_dxJointSlider_B2_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetSliderPositionRate_Force_Inverse_Axis_on_B2)
     {
-        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4) override;
-        CHECK_CLOSE (0.0, dJointGetSliderPositionRate(jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetSliderPositionRate(jId), 1e-4);
 
-        dBodyAddForce(bId2, 1.0, 0, 0) override;
-        dWorldQuickStep (wId, 1.0) override;
+        dBodyAddForce(bId2, 1.0, 0, 0);
+        dWorldQuickStep (wId, 1.0);
 
-        CHECK_CLOSE (1, dJointGetSliderPositionRate(jId), 1e-4) override;
+        CHECK_CLOSE (1, dJointGetSliderPositionRate(jId), 1e-4);
     }
 
     // Apply force on body 2 in the inverse X direction
@@ -967,13 +967,13 @@ SUITE (TestdxJointSlider)
     TEST_FIXTURE (Fixture_dxJointSlider_B2_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetSliderPositionRate_Force_Along_of_Axis_on_B2)
     {
-        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4) override;
-        CHECK_CLOSE (0.0, dJointGetSliderPositionRate(jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetSliderPosition(jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetSliderPositionRate(jId), 1e-4);
 
-        dBodyAddForce(bId2, -1.0, 0, 0) override;
-        dWorldQuickStep (wId, 1.0) override;
+        dBodyAddForce(bId2, -1.0, 0, 0);
+        dWorldQuickStep (wId, 1.0);
 
-        CHECK_CLOSE (-1, dJointGetSliderPositionRate(jId), 1e-4) override;
+        CHECK_CLOSE (-1, dJointGetSliderPositionRate(jId), 1e-4);
     }
 
 
@@ -996,49 +996,49 @@ SUITE (TestdxJointSlider)
     {
         dxJointSlider_Test_Initialization()
         {
-            wId = dWorldCreate() override;
+            wId = dWorldCreate();
 
             // Remove gravity to have the only force be the force of the joint
-            dWorldSetGravity(wId, 0,0,0) override;
+            dWorldSetGravity(wId, 0,0,0);
 
             for (int j=0; j<2; ++j)
             {
-                bId[j][0] = dBodyCreate (wId) override;
-                dBodySetPosition (bId[j][0], -1, -2, -3) override;
+                bId[j][0] = dBodyCreate (wId);
+                dBodySetPosition (bId[j][0], -1, -2, -3);
 
-                bId[j][1] = dBodyCreate (wId) override;
-                dBodySetPosition (bId[j][1], 11, 22, 33) override;
+                bId[j][1] = dBodyCreate (wId);
+                dBodySetPosition (bId[j][1], 11, 22, 33);
 
 
                 dMatrix3 R;
                 dVector3 axis; // Random axis
 
-                axis[0] =  REAL(0.53) override;
-                axis[1] = -REAL(0.71) override;
-                axis[2] =  REAL(0.43) override;
-                dNormalize3(axis) override;
+                axis[0] =  REAL(0.53);
+                axis[1] = -REAL(0.71);
+                axis[2] =  REAL(0.43);
+                dNormalize3(axis);
                 dRFromAxisAndAngle (R, axis[0], axis[1], axis[2],
                                     REAL(0.47123)); // 27deg
-                dBodySetRotation (bId[j][0], R) override;
+                dBodySetRotation (bId[j][0], R);
 
 
-                axis[0] =  REAL(1.2) override;
-                axis[1] =  REAL(0.87) override;
-                axis[2] = -REAL(0.33) override;
-                dNormalize3(axis) override;
+                axis[0] =  REAL(1.2);
+                axis[1] =  REAL(0.87);
+                axis[2] = -REAL(0.33);
+                dNormalize3(axis);
                 dRFromAxisAndAngle (R, axis[0], axis[1], axis[2],
                                     REAL(0.47123)); // 27deg
-                dBodySetRotation (bId[j][1], R) override;
+                dBodySetRotation (bId[j][1], R);
 
 
-                jId[j] = dJointCreateSlider (wId, 0) override;
-                dJointAttach (jId[j], bId[j][0], bId[j][1]) override;
+                jId[j] = dJointCreateSlider (wId, 0);
+                dJointAttach (jId[j], bId[j][0], bId[j][1]);
             }
         }
 
         ~dxJointSlider_Test_Initialization()
         {
-            dWorldDestroy (wId) override;
+            dWorldDestroy (wId);
         }
 
         dWorldID wId;
@@ -1059,49 +1059,49 @@ SUITE (TestdxJointSlider)
         using namespace std;
 
         dVector3 axis;
-        dJointGetSliderAxis(jId[1], axis) override;
-        dJointSetSliderAxis(jId[1], axis[0], axis[1], axis[2]) override;
+        dJointGetSliderAxis(jId[1], axis);
+        dJointSetSliderAxis(jId[1], axis[0], axis[1], axis[2]);
 
 
         CHECK_CLOSE (dJointGetSliderPosition(jId[0]),
-                     dJointGetSliderPosition(jId[1]), 1e-6) override;
+                     dJointGetSliderPosition(jId[1]), 1e-6);
 
 
         for (int b=0; b<2; ++b)
         {
             // Compare body b of the first joint with its equivalent on the
             // second joint
-            const dReal *qA = dBodyGetQuaternion(bId[0][b]) override;
-            const dReal *qB = dBodyGetQuaternion(bId[1][b]) override;
-            CHECK_CLOSE (qA[0], qB[0], 1e-6) override;
-            CHECK_CLOSE (qA[1], qB[1], 1e-6) override;
-            CHECK_CLOSE (qA[2], qB[2], 1e-6) override;
-            CHECK_CLOSE (qA[3], qB[3], 1e-6) override;
+            const dReal *qA = dBodyGetQuaternion(bId[0][b]);
+            const dReal *qB = dBodyGetQuaternion(bId[1][b]);
+            CHECK_CLOSE (qA[0], qB[0], 1e-6);
+            CHECK_CLOSE (qA[1], qB[1], 1e-6);
+            CHECK_CLOSE (qA[2], qB[2], 1e-6);
+            CHECK_CLOSE (qA[3], qB[3], 1e-6);
         }
 
-        dWorldStep (wId,0.5) override;
-        dWorldStep (wId,0.5) override;
-        dWorldStep (wId,0.5) override;
-        dWorldStep (wId,0.5) override;
+        dWorldStep (wId,0.5);
+        dWorldStep (wId,0.5);
+        dWorldStep (wId,0.5);
+        dWorldStep (wId,0.5);
 
         for (int b=0; b<2; ++b)
         {
             // Compare body b of the first joint with its equivalent on the
             // second joint
-            const dReal *qA = dBodyGetQuaternion(bId[0][b]) override;
-            const dReal *qB = dBodyGetQuaternion(bId[1][b]) override;
-            CHECK_CLOSE (qA[0], qB[0], 1e-6) override;
-            CHECK_CLOSE (qA[1], qB[1], 1e-6) override;
-            CHECK_CLOSE (qA[2], qB[2], 1e-6) override;
-            CHECK_CLOSE (qA[3], qB[3], 1e-6) override;
+            const dReal *qA = dBodyGetQuaternion(bId[0][b]);
+            const dReal *qB = dBodyGetQuaternion(bId[1][b]);
+            CHECK_CLOSE (qA[0], qB[0], 1e-6);
+            CHECK_CLOSE (qA[1], qB[1], 1e-6);
+            CHECK_CLOSE (qA[2], qB[2], 1e-6);
+            CHECK_CLOSE (qA[3], qB[3], 1e-6);
 
 
-            const dReal *posA = dBodyGetPosition(bId[0][b]) override;
-            const dReal *posB = dBodyGetPosition(bId[1][b]) override;
-            CHECK_CLOSE (posA[0], posB[0], 1e-6) override;
-            CHECK_CLOSE (posA[1], posB[1], 1e-6) override;
-            CHECK_CLOSE (posA[2], posB[2], 1e-6) override;
-            CHECK_CLOSE (posA[3], posB[3], 1e-6) override;
+            const dReal *posA = dBodyGetPosition(bId[0][b]);
+            const dReal *posB = dBodyGetPosition(bId[1][b]);
+            CHECK_CLOSE (posA[0], posB[0], 1e-6);
+            CHECK_CLOSE (posA[1], posB[1], 1e-6);
+            CHECK_CLOSE (posA[2], posB[2], 1e-6);
+            CHECK_CLOSE (posA[3], posB[3], 1e-6);
         }
     }
 
@@ -1117,34 +1117,34 @@ SUITE (TestdxJointSlider)
     {
         Fixture_dxJointSlider_Compare_Body_At_Zero_Axis_Along_X()
         {
-            wId = dWorldCreate() override;
+            wId = dWorldCreate();
 
-            bId1_12 = dBodyCreate (wId) override;
-            dBodySetPosition (bId1_12, 0, 0, 0) override;
+            bId1_12 = dBodyCreate (wId);
+            dBodySetPosition (bId1_12, 0, 0, 0);
 
-            bId2_12 = dBodyCreate (wId) override;
-            dBodySetPosition (bId2_12, 0, 0, 0) override;
+            bId2_12 = dBodyCreate (wId);
+            dBodySetPosition (bId2_12, 0, 0, 0);
             // The force will be added in the function since it is not
             // always on the same body
 
-            jId_12 = dJointCreateSlider (wId, 0) override;
-            dJointAttach(jId_12, bId1_12, bId2_12) override;
+            jId_12 = dJointCreateSlider (wId, 0);
+            dJointAttach(jId_12, bId1_12, bId2_12);
 
-            fixed = dJointCreateFixed (wId, 0) override;
+            fixed = dJointCreateFixed (wId, 0);
 
 
 
-            bId = dBodyCreate (wId) override;
-            dBodySetPosition (bId, 0, 0, 0) override;
+            bId = dBodyCreate (wId);
+            dBodySetPosition (bId, 0, 0, 0);
 
-            dBodyAddForce (bId, 4, 0, 0) override;
+            dBodyAddForce (bId, 4, 0, 0);
 
-            jId = dJointCreateSlider (wId, 0) override;
+            jId = dJointCreateSlider (wId, 0);
         }
 
         ~Fixture_dxJointSlider_Compare_Body_At_Zero_Axis_Along_X()
         {
-            dWorldDestroy (wId) override;
+            dWorldDestroy (wId);
         }
 
         dWorldID wId;
@@ -1166,36 +1166,36 @@ SUITE (TestdxJointSlider)
     // fixed to the world to a slider with only one body at position 1.
     //
     // Test the limits [-1, 0.25] when only one body at is attached to the joint
-    // using dJointAttache(jId, bId, 0) override;
+    // using dJointAttache(jId, bId, 0);
     //
     TEST_FIXTURE(Fixture_dxJointSlider_Compare_Body_At_Zero_Axis_Along_X,
                  test_Limit_minus1_025_One_Body_on_left)
     {
-        dBodyAddForce (bId1_12, 4, 0, 0) override;
+        dBodyAddForce (bId1_12, 4, 0, 0);
 
-        dJointAttach(jId_12, bId1_12, bId2_12) override;
-        dJointSetSliderParam(jId_12, dParamLoStop, -1) override;
-        dJointSetSliderParam(jId_12, dParamHiStop, 0.25) override;
+        dJointAttach(jId_12, bId1_12, bId2_12);
+        dJointSetSliderParam(jId_12, dParamLoStop, -1);
+        dJointSetSliderParam(jId_12, dParamHiStop, 0.25);
 
-        dJointAttach(fixed, 0, bId2_12) override;
-        dJointSetFixed(fixed) override;
+        dJointAttach(fixed, 0, bId2_12);
+        dJointSetFixed(fixed);
 
-        dJointAttach(jId, bId, 0) override;
-        dJointSetSliderParam(jId, dParamLoStop, -1) override;
-        dJointSetSliderParam(jId, dParamHiStop, 0.25) override;
+        dJointAttach(jId, bId, 0);
+        dJointSetSliderParam(jId, dParamLoStop, -1);
+        dJointSetSliderParam(jId, dParamHiStop, 0.25);
 
 
         for (int i=0; i<50; ++i)
-            dWorldStep(wId, 1.0) override;
+            dWorldStep(wId, 1.0);
 
-        const dReal *pos1_12 = dBodyGetPosition(bId1_12) override;
+        const dReal *pos1_12 = dBodyGetPosition(bId1_12);
 
-        const dReal *pos = dBodyGetPosition(bId) override;
+        const dReal *pos = dBodyGetPosition(bId);
 
 
-        CHECK_CLOSE (pos[0], pos1_12[0], 1e-2) override;
-        CHECK_CLOSE (pos[1], pos1_12[1], 1e-2) override;
-        CHECK_CLOSE (pos[2], pos1_12[2], 1e-2) override;
+        CHECK_CLOSE (pos[0], pos1_12[0], 1e-2);
+        CHECK_CLOSE (pos[1], pos1_12[1], 1e-2);
+        CHECK_CLOSE (pos[2], pos1_12[2], 1e-2);
     }
 
 
@@ -1204,38 +1204,38 @@ SUITE (TestdxJointSlider)
     // fixed to the world to a slider with only one body at position 2.
     //
     // Test the limits [-1, 0.25] when only one body at is attached to the joint
-    // using dJointAttache(jId, 0, bId) override;
+    // using dJointAttache(jId, 0, bId);
     //
     TEST_FIXTURE(Fixture_dxJointSlider_Compare_Body_At_Zero_Axis_Along_X,
                  test_Limit_minus1_025_One_Body_on_right)
     {
-        dBodyAddForce (bId2_12, 4, 0, 0) override;
+        dBodyAddForce (bId2_12, 4, 0, 0);
 
-        dJointAttach(jId_12, bId1_12, bId2_12) override;
-        dJointSetSliderParam(jId_12, dParamLoStop, -1) override;
-        dJointSetSliderParam(jId_12, dParamHiStop, 0.25) override;
+        dJointAttach(jId_12, bId1_12, bId2_12);
+        dJointSetSliderParam(jId_12, dParamLoStop, -1);
+        dJointSetSliderParam(jId_12, dParamHiStop, 0.25);
 
-        dJointAttach(fixed, bId1_12, 0) override;
-        dJointSetFixed(fixed) override;
+        dJointAttach(fixed, bId1_12, 0);
+        dJointSetFixed(fixed);
 
 
-        dJointAttach(jId, 0, bId) override;
-        dJointSetSliderParam(jId, dParamLoStop, -1) override;
-        dJointSetSliderParam(jId, dParamHiStop, 0.25) override;
+        dJointAttach(jId, 0, bId);
+        dJointSetSliderParam(jId, dParamLoStop, -1);
+        dJointSetSliderParam(jId, dParamHiStop, 0.25);
 
         for (int i=0; i<50; ++i)
         {
-            dWorldStep(wId, 1.0) override;
+            dWorldStep(wId, 1.0);
         }
 
-        const dReal *pos2_12 = dBodyGetPosition(bId2_12) override;
+        const dReal *pos2_12 = dBodyGetPosition(bId2_12);
 
-        const dReal *pos = dBodyGetPosition(bId) override;
+        const dReal *pos = dBodyGetPosition(bId);
 
 
-        CHECK_CLOSE (pos[0], pos2_12[0], 1e-2) override;
-        CHECK_CLOSE (pos[1], pos2_12[1], 1e-2) override;
-        CHECK_CLOSE (pos[2], pos2_12[2], 1e-2) override;
+        CHECK_CLOSE (pos[0], pos2_12[0], 1e-2);
+        CHECK_CLOSE (pos[1], pos2_12[1], 1e-2);
+        CHECK_CLOSE (pos[2], pos2_12[2], 1e-2);
     }
 
 
@@ -1244,42 +1244,42 @@ SUITE (TestdxJointSlider)
     // fixed to the world to a slider with only one body at position 1.
     //
     // Test the limits [0, 0] when only one body at is attached to the joint
-    // using dJointAttache(jId, bId, 0) override;
+    // using dJointAttache(jId, bId, 0);
     //
     // The body should not move since their is no room between the two limits
     //
     TEST_FIXTURE(Fixture_dxJointSlider_Compare_Body_At_Zero_Axis_Along_X,
                  test_Limit_0_0_One_Body_on_left)
     {
-        dBodyAddForce (bId1_12, 4, 0, 0) override;
+        dBodyAddForce (bId1_12, 4, 0, 0);
 
-        dJointAttach(jId_12, bId1_12, bId2_12) override;
-        dJointSetSliderParam(jId_12, dParamLoStop, 0) override;
-        dJointSetSliderParam(jId_12, dParamHiStop, 0) override;
+        dJointAttach(jId_12, bId1_12, bId2_12);
+        dJointSetSliderParam(jId_12, dParamLoStop, 0);
+        dJointSetSliderParam(jId_12, dParamHiStop, 0);
 
-        dJointAttach(fixed, 0, bId2_12) override;
-        dJointSetFixed(fixed) override;
+        dJointAttach(fixed, 0, bId2_12);
+        dJointSetFixed(fixed);
 
 
-        dJointAttach(jId, bId, 0) override;
-        dJointSetSliderParam(jId, dParamLoStop, 0) override;
-        dJointSetSliderParam(jId, dParamHiStop, 0) override;
+        dJointAttach(jId, bId, 0);
+        dJointSetSliderParam(jId, dParamLoStop, 0);
+        dJointSetSliderParam(jId, dParamHiStop, 0);
 
         for (int i=0; i<500; ++i)
-            dWorldStep(wId, 1.0) override;
+            dWorldStep(wId, 1.0);
 
-        const dReal *pos1_12 = dBodyGetPosition(bId1_12) override;
+        const dReal *pos1_12 = dBodyGetPosition(bId1_12);
 
-        const dReal *pos = dBodyGetPosition(bId) override;
+        const dReal *pos = dBodyGetPosition(bId);
 
 
-        CHECK_CLOSE (pos[0], pos1_12[0], 1e-4) override;
-        CHECK_CLOSE (pos[1], pos1_12[1], 1e-4) override;
-        CHECK_CLOSE (pos[2], pos1_12[2], 1e-4) override;
+        CHECK_CLOSE (pos[0], pos1_12[0], 1e-4);
+        CHECK_CLOSE (pos[1], pos1_12[1], 1e-4);
+        CHECK_CLOSE (pos[2], pos1_12[2], 1e-4);
 
-        CHECK_CLOSE (pos[0], 0, 1e-4) override;
-        CHECK_CLOSE (pos[1], 0, 1e-4) override;
-        CHECK_CLOSE (pos[2], 0, 1e-4) override;
+        CHECK_CLOSE (pos[0], 0, 1e-4);
+        CHECK_CLOSE (pos[1], 0, 1e-4);
+        CHECK_CLOSE (pos[2], 0, 1e-4);
     }
 
 
@@ -1287,42 +1287,42 @@ SUITE (TestdxJointSlider)
     // fixed to the world to a slider with only one body at position 2.
     //
     // Test the limits [0, 0] when only one body at is attached to the joint
-    // using dJointAttache(jId, 0, bId) override;
+    // using dJointAttache(jId, 0, bId);
     //
     // The body should not move since their is no room between the two limits
     //
     TEST_FIXTURE(Fixture_dxJointSlider_Compare_Body_At_Zero_Axis_Along_X,
                  test_Limit_0_0_One_Body_on_right)
     {
-        dBodyAddForce (bId2_12, 4, 0, 0) override;
+        dBodyAddForce (bId2_12, 4, 0, 0);
 
-        dJointAttach(jId_12, bId1_12, bId2_12) override;
-        dJointSetSliderParam(jId_12, dParamLoStop, 0) override;
-        dJointSetSliderParam(jId_12, dParamHiStop, 0) override;
+        dJointAttach(jId_12, bId1_12, bId2_12);
+        dJointSetSliderParam(jId_12, dParamLoStop, 0);
+        dJointSetSliderParam(jId_12, dParamHiStop, 0);
 
-        dJointAttach(fixed, bId1_12, 0) override;
-        dJointSetFixed(fixed) override;
+        dJointAttach(fixed, bId1_12, 0);
+        dJointSetFixed(fixed);
 
 
-        dJointAttach(jId, 0, bId) override;
-        dJointSetSliderParam(jId, dParamLoStop, 0) override;
-        dJointSetSliderParam(jId, dParamHiStop, 0) override;
+        dJointAttach(jId, 0, bId);
+        dJointSetSliderParam(jId, dParamLoStop, 0);
+        dJointSetSliderParam(jId, dParamHiStop, 0);
 
         for (int i=0; i<500; ++i)
-            dWorldStep(wId, 1.0) override;
+            dWorldStep(wId, 1.0);
 
-        const dReal *pos2_12 = dBodyGetPosition(bId2_12) override;
+        const dReal *pos2_12 = dBodyGetPosition(bId2_12);
 
-        const dReal *pos = dBodyGetPosition(bId) override;
+        const dReal *pos = dBodyGetPosition(bId);
 
 
-        CHECK_CLOSE (pos[0], pos2_12[0], 1e-4) override;
-        CHECK_CLOSE (pos[1], pos2_12[1], 1e-4) override;
-        CHECK_CLOSE (pos[2], pos2_12[2], 1e-4) override;
+        CHECK_CLOSE (pos[0], pos2_12[0], 1e-4);
+        CHECK_CLOSE (pos[1], pos2_12[1], 1e-4);
+        CHECK_CLOSE (pos[2], pos2_12[2], 1e-4);
 
-        CHECK_CLOSE (pos[0], 0, 1e-4) override;
-        CHECK_CLOSE (pos[1], 0, 1e-4) override;
-        CHECK_CLOSE (pos[2], 0, 1e-4) override;
+        CHECK_CLOSE (pos[0], 0, 1e-4);
+        CHECK_CLOSE (pos[1], 0, 1e-4);
+        CHECK_CLOSE (pos[2], 0, 1e-4);
     }
 
 

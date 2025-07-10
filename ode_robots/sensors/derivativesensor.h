@@ -23,9 +23,9 @@ namespace lpzrobots {
 
     virtual int getSensorNumber()  const override;
 
-    virtual bool sense(const GlobalData& globaldata) override;
+    virtual bool sense(const GlobalData& globaldata);
 
-    virtual std::list<sensor> getList()  const override;
+    virtual std::list<sensor> getList()  const;
 
   protected:
     //Current time step of the simulation

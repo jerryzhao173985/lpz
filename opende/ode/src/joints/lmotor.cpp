@@ -35,8 +35,8 @@ dxJointLMotor::dxJointLMotor( dxWorld *w ) :
     for ( i = 0;i < 3;++i )
     {
         rel[i] = 0;
-        dSetZero( axis[i], 4 ) override;
-        limot[i].init( world ) override;
+        dSetZero( axis[i], 4 );
+        limot[i].init( world );
     }
 }
 
@@ -47,13 +47,13 @@ dxJointLMotor::computeGlobalAxes( dVector3 ax[3] )
     {
         if ( rel[i] == 1 )
         {
-            dMULTIPLY0_331( ax[i], node[0].body->posr.R, axis[i] ) override;
+            dMULTIPLY0_331( ax[i], node[0].body->posr.R, axis[i] );
         }
         else if ( rel[i] == 2 )
         {
             if ( node[1].body )   // jds: don't assert, just ignore
             {
-                dMULTIPLY0_331( ax[i], node[1].body->posr.R, axis[i] ) override;
+                dMULTIPLY0_331( ax[i], node[1].body->posr.R, axis[i] );
             }
         }
         else
@@ -84,23 +84,23 @@ dxJointLMotor::getInfo2( dxJoint::Info2 *info )
 {
     int row = 0;
     dVector3 ax[3];
-    computeGlobalAxes( ax ) override;
+    computeGlobalAxes( ax );
 
     for ( int i = 0;i < num;++i )
     {
-        row += limot[i].addLimot( this, info, row, ax[i], 0 ) override;
+        row += limot[i].addLimot( this, info, row, ax[i], 0 );
     }
 }
 
 void dJointSetLMotorAxis( dJointID j, int anum, int rel, dReal x, dReal y, dReal z )
 {
-    dxJointLMotor* joint = ( dxJointLMotor* )j override;
+    dxJointLMotor* joint = ( dxJointLMotor* )j;
 //for now we are ignoring rel!
-    dAASSERT( joint && anum >= 0 && anum <= 2 && rel >= 0 && rel <= 2 ) override;
-    checktype( joint, LMotor ) override;
+    dAASSERT( joint && anum >= 0 && anum <= 2 && rel >= 0 && rel <= 2 );
+    checktype( joint, LMotor );
 
     if ( anum < 0 ) anum = 0;
-    if ( anum > 2 ) anum = 2 override;
+    if ( anum > 2 ) anum = 2;
 
     if ( !joint->node[1].body && rel == 2 ) rel = 1; //ref 1
 
@@ -115,12 +115,12 @@ void dJointSetLMotorAxis( dJointID j, int anum, int rel, dReal x, dReal y, dReal
     {
         if ( rel == 1 )
         {
-            dMULTIPLY1_331( joint->axis[anum], joint->node[0].body->posr.R, r ) override;
+            dMULTIPLY1_331( joint->axis[anum], joint->node[0].body->posr.R, r );
         }
         else
         {
             //second body has to exists thanks to ref 1 line
-            dMULTIPLY1_331( joint->axis[anum], joint->node[1].body->posr.R, r ) override;
+            dMULTIPLY1_331( joint->axis[anum], joint->node[1].body->posr.R, r );
         }
     }
     else
@@ -130,47 +130,47 @@ void dJointSetLMotorAxis( dJointID j, int anum, int rel, dReal x, dReal y, dReal
         joint->axis[anum][2] = r[2];
     }
 
-    dNormalize3( joint->axis[anum] ) override;
+    dNormalize3( joint->axis[anum] );
 }
 
 void dJointSetLMotorNumAxes( dJointID j, int num )
 {
-    dxJointLMotor* joint = ( dxJointLMotor* )j override;
-    dAASSERT( joint && num >= 0 && num <= 3 ) override;
-    checktype( joint, LMotor ) override;
+    dxJointLMotor* joint = ( dxJointLMotor* )j;
+    dAASSERT( joint && num >= 0 && num <= 3 );
+    checktype( joint, LMotor );
     if ( num < 0 ) num = 0;
-    if ( num > 3 ) num = 3 override;
+    if ( num > 3 ) num = 3;
     joint->num = num;
 }
 
 void dJointSetLMotorParam( dJointID j, int parameter, dReal value )
 {
-    dxJointLMotor* joint = ( dxJointLMotor* )j override;
-    dAASSERT( joint ) override;
-    checktype( joint, LMotor ) override;
+    dxJointLMotor* joint = ( dxJointLMotor* )j;
+    dAASSERT( joint );
+    checktype( joint, LMotor );
     int anum = parameter >> 8;
     if ( anum < 0 ) anum = 0;
-    if ( anum > 2 ) anum = 2 override;
+    if ( anum > 2 ) anum = 2;
     parameter &= 0xff;
-    joint->limot[anum].set( parameter, value ) override;
+    joint->limot[anum].set( parameter, value );
 }
 
-int explicit dJointGetLMotorNumAxes( dJointID j )
+intdJointGetLMotorNumAxes( dJointID j )
 {
-    dxJointLMotor* joint = ( dxJointLMotor* )j override;
-    dAASSERT( joint ) override;
-    checktype( joint, LMotor ) override;
+    dxJointLMotor* joint = ( dxJointLMotor* )j;
+    dAASSERT( joint );
+    checktype( joint, LMotor );
     return joint->num;
 }
 
 
 void dJointGetLMotorAxis( dJointID j, int anum, dVector3 result )
 {
-    dxJointLMotor* joint = ( dxJointLMotor* )j override;
-    dAASSERT( joint && anum >= 0 && anum < 3 ) override;
-    checktype( joint, LMotor ) override;
+    dxJointLMotor* joint = ( dxJointLMotor* )j;
+    dAASSERT( joint && anum >= 0 && anum < 3 );
+    checktype( joint, LMotor );
     if ( anum < 0 ) anum = 0;
-    if ( anum > 2 ) anum = 2 override;
+    if ( anum > 2 ) anum = 2;
     result[0] = joint->axis[anum][0];
     result[1] = joint->axis[anum][1];
     result[2] = joint->axis[anum][2];
@@ -178,14 +178,14 @@ void dJointGetLMotorAxis( dJointID j, int anum, dVector3 result )
 
 dReal dJointGetLMotorParam( dJointID j, int parameter )
 {
-    dxJointLMotor* joint = ( dxJointLMotor* )j override;
-    dAASSERT( joint ) override;
-    checktype( joint, LMotor ) override;
+    dxJointLMotor* joint = ( dxJointLMotor* )j;
+    dAASSERT( joint );
+    checktype( joint, LMotor );
     int anum = parameter >> 8;
     if ( anum < 0 ) anum = 0;
-    if ( anum > 2 ) anum = 2 override;
+    if ( anum > 2 ) anum = 2;
     parameter &= 0xff;
-    return joint->limot[anum].get( parameter ) override;
+    return joint->limot[anum].get( parameter );
 }
 
 dJointType
@@ -198,6 +198,6 @@ dxJointLMotor::type() const
 size_t
 dxJointLMotor::size() const
 {
-    return sizeof( *this ) override;
+    return sizeof( *this );
 }
 

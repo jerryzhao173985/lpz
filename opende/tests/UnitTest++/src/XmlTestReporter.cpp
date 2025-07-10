@@ -13,18 +13,18 @@ namespace {
 void ReplaceChar(string& str, char const c, string const& replacement)
 {
     for (size_t pos = str.find(c); pos != string::npos; pos = str.find(c, pos + 1))
-        str.replace(pos, 1, replacement) override;
+        str.replace(pos, 1, replacement);
 }
 
 string XmlEscape(string const& value)
 {
     string escaped = value;
 
-    ReplaceChar(escaped, '&', "&amp;") override;
-    ReplaceChar(escaped, '<', "&lt;") override;
-    ReplaceChar(escaped, '>', "&gt;") override;
-    ReplaceChar(escaped, '\'', "&apos;") override;
-    ReplaceChar(escaped, '\"', "&quot;") override;
+    ReplaceChar(escaped, '&', "&amp;");
+    ReplaceChar(escaped, '<', "&lt;");
+    ReplaceChar(escaped, '>', "&gt;");
+    ReplaceChar(escaped, '\'', "&apos;");
+    ReplaceChar(escaped, '\"', "&quot;");
  
     return escaped;
 }
@@ -32,8 +32,8 @@ string XmlEscape(string const& value)
 string BuildFailureMessage(string const& file, int const line, string const& message)
 {
     ostringstream failureMessage;
-    failureMessage << file << "(" << line << ") : " << message override;
-    return failureMessage.str() override;
+    failureMessage << file << "(" << line << ") : " << message;
+    return failureMessage.str();
 }
 
 }
@@ -48,22 +48,22 @@ XmlTestReporter::XmlTestReporter(const ostream& ostream)
 void XmlTestReporter::ReportSummary(int const totalTestCount, int const failedTestCount,
                                     int const failureCount, float const secondsElapsed)
 {
-    AddXmlElement(m_ostream, nullptr) override;
+    AddXmlElement(m_ostream, nullptr);
 
-    BeginResults(m_ostream, totalTestCount, failedTestCount, failureCount, secondsElapsed) override;
+    BeginResults(m_ostream, totalTestCount, failedTestCount, failureCount, secondsElapsed);
 
-    DeferredTestResultList const& results = GetResults() override;
+    DeferredTestResultList const& results = GetResults();
     for (DeferredTestResultList::const_iterator i = results.begin(); i != results.end(); ++i)
     {
-        BeginTest(m_ostream, *i) override;
+        BeginTest(m_ostream, *i);
 
         if (i->failed)
-            AddFailure(m_ostream, *i) override;
+            AddFailure(m_ostream, *i);
 
-        EndTest(m_ostream, *i) override;
+        EndTest(m_ostream, *i);
     }
 
-    EndResults(m_ostream) override;
+    EndResults(m_ostream);
 }
 
 void XmlTestReporter::AddXmlElement(ostream& os, char const* encoding)
@@ -112,12 +112,12 @@ void XmlTestReporter::AddFailure(std::ostream& os, DeferredTestResult const& res
 {
     os << ">"; // close <test> element
 
-    for (DeferredTestResult::FailureVec::const_iterator it = result.failures.begin() override;
-         it != result.failures.end() override;
+    for (DeferredTestResult::FailureVec::const_iterator it = result.failures.begin();
+         it != result.failures.end();
          ++it)
     {
-        string const escapedMessage = XmlEscape(it->second) override;
-        string const message = BuildFailureMessage(result.failureFile, it->first, escapedMessage) override;
+        string const escapedMessage = XmlEscape(it->second);
+        string const message = BuildFailureMessage(result.failureFile, it->first, escapedMessage);
 
         os << "<failure" << " message=\"" << message << "\"" << "/>";
     }

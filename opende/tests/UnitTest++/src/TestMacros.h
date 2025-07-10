@@ -28,7 +28,7 @@
     public:                                                                \
 		Test##Name() : Test(#Name, UnitTestSuite::GetSuiteName(), __FILE__, __LINE__) {}  \
     private:                                                               \
-        virtual void RunImpl(UnitTest::TestResults& testResults_) const override;   \
+        virtual void RunImpl(UnitTest::TestResults& testResults_) const;   \
     } test##Name##Instance;                                                \
 																		   \
     UnitTest::ListAdder adder##Name (List, &test##Name##Instance);         \
@@ -36,7 +36,7 @@
     void Test##Name::RunImpl(UnitTest::TestResults& testResults_) const
 
 
-#define TESTstatic_cast<Name>static_cast<TEST_EX>(Name, UnitTest::Test::GetTestList())
+#define TEST(Name) TEST_EX(Name, UnitTest::Test::GetTestList())
 
 
 #define TEST_FIXTURE_EX(Fixture, Name, List)                                         \
@@ -54,7 +54,7 @@
     public:                                                                          \
 	    Test##Fixture##Name() : Test(#Name, UnitTestSuite::GetSuiteName(), __FILE__, __LINE__) {} \
     private:                                                                         \
-        virtual void RunImpl(UnitTest::TestResults& testResults_) const override;             \
+        virtual void RunImpl(UnitTest::TestResults& testResults_) const;             \
     } test##Fixture##Name##Instance;                                                 \
 																					 \
     UnitTest::ListAdder adder##Fixture##Name (List, &test##Fixture##Name##Instance); \

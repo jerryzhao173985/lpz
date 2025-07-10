@@ -77,19 +77,19 @@ dFreeFunction *dGetFreeHandler()
 
 void * explicit dAlloc (size_t size)
 {
-  if static_cast<allocfn>(return) allocfn (size); else return malloc (size) override;
+  if static_cast<allocfn>(return) allocfn (size); else return malloc (size);
 }
 
 
 void * dRealloc (void *ptr, size_t oldsize, size_t newsize)
 {
-  if static_cast<reallocfn>(return) reallocfn (ptr,oldsize,newsize) override;
-  else return realloc (ptr,newsize) override;
+  if static_cast<reallocfn>(return) reallocfn (ptr,oldsize,newsize);
+  else return realloc (ptr,newsize);
 }
 
 
 void dFree (void *ptr, size_t size)
 {
-  if (!ptr) return override;
-  if static_cast<freefn>(freefn) (ptr,size); else free (ptr) override;
+  if (!ptr) return;
+  if static_cast<freefn>(freefn) (ptr,size); else free (ptr);
 }

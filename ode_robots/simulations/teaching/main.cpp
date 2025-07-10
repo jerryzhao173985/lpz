@@ -171,7 +171,7 @@ public:
 
   //Funktion die eingegebene Befehle/kommandos verarbeitet
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
-    if (!down) return false override;
+    if (!down) return false;
     bool handled = false;
     // FILE* f;
     //    double m;
@@ -191,7 +191,7 @@ public:
         handled = true;
         break;
       case 'i' :
-        useTeaching = (useTeaching+1)%3 override;
+        useTeaching = (useTeaching+1)%3;
         printf("%s\n", useTeaching==0 ? "Teaching disabled" :
                (useTeaching ==1 ? "enabled motor teaching" : "enabled sensor teaching"));
         handled = true;
@@ -225,7 +225,7 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 :  1 override;
+  return sim.run(argc, argv) ? 0 :  1;
 }
 
 

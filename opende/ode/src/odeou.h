@@ -61,8 +61,8 @@ using namespace _OU_NAMESPACE;
 
 class COdeOu{
 public:
-	static bool DoOUCustomizations() override;
-	static void UndoOUCustomizations() override;
+	static bool DoOUCustomizations();
+	static void UndoOUCustomizations();
 
 #if dATOMICS_ENABLED
 	static bool InitializeAtomics() { return InitializeAtomicAPI(); }

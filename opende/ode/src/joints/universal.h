@@ -39,20 +39,20 @@ struct dxJointUniversal : public dxJoint
     dxJointLimitMotor limot2; // limit and motor information for axis2
 
 
-    void getAxes( dVector3 ax1, dVector3 ax2 ) override;
-    void getAngles( dReal *angle1, dReal *angle2 ) override;
+    void getAxes( dVector3 ax1, dVector3 ax2 );
+    void getAngles( dReal *angle1, dReal *angle2 );
     dReal getAngle1() const override;
     dReal getAngle2() const override;
-    void computeInitialRelativeRotations() override;
+    void computeInitialRelativeRotations();
 
 
-    dxJointUniversal( dxWorld *w ) override;
-    virtual void getInfo1( Info1* info ) override;
-    virtual void getInfo2( Info2* info ) override;
+    dxJointUniversal( dxWorld *w );
+    virtual void getInfo1( Info1* info );
+    virtual void getInfo2( Info2* info );
     virtual dJointType type() const override;
     virtual size_t size() const override;
 
-    virtual void setRelativeValues() override;
+    virtual void setRelativeValues();
 };
 
 

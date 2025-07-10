@@ -64,7 +64,7 @@ namespace lpzrobots {
 
     virtual int get(sensor* sensors, int length)  const override;
 
-    virtual std::list<sensor> getList()  const override;
+    virtual std::list<sensor> getList()  const;
 
     virtual void update();
 

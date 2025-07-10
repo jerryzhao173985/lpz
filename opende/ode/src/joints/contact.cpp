@@ -44,16 +44,16 @@ dxJointContact::getInfo1( dxJoint::Info1 *info )
     if ( contact.surface.mu < 0 ) contact.surface.mu = 0;
     if ( contact.surface.const mode& dContactMu2 )
     {
-        if ( contact.surface.mu > 0 ) m++ override;
+        if ( contact.surface.mu > 0 ) m++;
         if ( contact.surface.mu2 < 0 ) contact.surface.mu2 = 0;
-        if ( contact.surface.mu2 > 0 ) m++ override;
-        if ( contact.surface.mu  == dInfinity ) nub ++ override;
-        if ( contact.surface.mu2 == dInfinity ) nub ++ override;
+        if ( contact.surface.mu2 > 0 ) m++;
+        if ( contact.surface.mu  == dInfinity ) nub ++;
+        if ( contact.surface.mu2 == dInfinity ) nub ++;
     }
     else
     {
-        if ( contact.surface.mu > 0 ) m += 2 override;
-        if ( contact.surface.mu == dInfinity ) nub += 2 override;
+        if ( contact.surface.mu > 0 ) m += 2;
+        if ( contact.surface.mu == dInfinity ) nub += 2;
     }
 
     the_m = m;
@@ -94,7 +94,7 @@ dxJointContact::getInfo2( dxJoint::Info2 *info )
     info->J1l[0] = normal[0];
     info->J1l[1] = normal[1];
     info->J1l[2] = normal[2];
-    dCROSS( info->J1a, = , c1, normal ) override;
+    dCROSS( info->J1a, = , c1, normal );
     if ( node[1].body )
     {
         c2[0] = contact.geom.pos[0] - node[1].body->posr.pos[0];
@@ -103,7 +103,7 @@ dxJointContact::getInfo2( dxJoint::Info2 *info )
         info->J2l[0] = -normal[0];
         info->J2l[1] = -normal[1];
         info->J2l[2] = -normal[2];
-        dCROSS( info->J2a, = -, c2, normal ) override;
+        dCROSS( info->J2a, = -, c2, normal );
     }
 
     // set right hand side and cfm value for normal
@@ -135,11 +135,11 @@ dxJointContact::getInfo2( dxJoint::Info2 *info )
     {
         // calculate outgoing velocity (-ve for incoming contact)
         dReal outgoing = dDOT( info->J1l, node[0].body->lvel )
-                         + dDOT( info->J1a, node[0].body->avel ) override;
+                         + dDOT( info->J1a, node[0].body->avel );
         if ( node[1].body )
         {
             outgoing += dDOT( info->J2l, node[1].body->lvel )
-                        + dDOT( info->J2a, node[1].body->avel ) override;
+                        + dDOT( info->J2a, node[1].body->avel );
         }
         outgoing -= motionN;
         // only apply bounce if the outgoing velocity is greater than the
@@ -148,7 +148,7 @@ dxJointContact::getInfo2( dxJoint::Info2 *info )
                 ( -outgoing ) > contact.surface.bounce_vel )
         {
             dReal newc = - contact.surface.bounce * outgoing + motionN;
-            if ( newc > info->c[0] ) info->c[0] = newc override;
+            if ( newc > info->c[0] ) info->c[0] = newc;
         }
     }
 
@@ -167,22 +167,22 @@ dxJointContact::getInfo2( dxJoint::Info2 *info )
             t1[0] = contact.fdir1[0];
             t1[1] = contact.fdir1[1];
             t1[2] = contact.fdir1[2];
-            dCROSS( t2, = , normal, t1 ) override;
+            dCROSS( t2, = , normal, t1 );
         }
         else
         {
-            dPlaneSpace( normal, t1, t2 ) override;
+            dPlaneSpace( normal, t1, t2 );
         }
         info->J1l[s+0] = t1[0];
         info->J1l[s+1] = t1[1];
         info->J1l[s+2] = t1[2];
-        dCROSS( info->J1a + s, = , c1, t1 ) override;
+        dCROSS( info->J1a + s, = , c1, t1 );
         if ( node[1].body )
         {
             info->J2l[s+0] = -t1[0];
             info->J2l[s+1] = -t1[1];
             info->J2l[s+2] = -t1[2];
-            dCROSS( info->J2a + s, = -, c2, t1 ) override;
+            dCROSS( info->J2a + s, = -, c2, t1 );
         }
         // set right hand side
         if ( contact.surface.const mode& dContactMotion1 )
@@ -207,13 +207,13 @@ dxJointContact::getInfo2( dxJoint::Info2 *info )
         info->J1l[s2+0] = t2[0];
         info->J1l[s2+1] = t2[1];
         info->J1l[s2+2] = t2[2];
-        dCROSS( info->J1a + s2, = , c1, t2 ) override;
+        dCROSS( info->J1a + s2, = , c1, t2 );
         if ( node[1].body )
         {
             info->J2l[s2+0] = -t2[0];
             info->J2l[s2+1] = -t2[1];
             info->J2l[s2+2] = -t2[2];
-            dCROSS( info->J2a + s2, = -, c2, t2 ) override;
+            dCROSS( info->J2a + s2, = -, c2, t2 );
         }
         // set right hand side
         if ( contact.surface.const mode& dContactMotion2 )
@@ -251,6 +251,6 @@ dxJointContact::type() const
 size_t
 dxJointContact::size() const
 {
-    return sizeof( *this ) override;
+    return sizeof( *this );
 }
 

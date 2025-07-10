@@ -75,7 +75,7 @@ public:
     return c;
   }
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
 
   virtual int getSensorNumber() const override {
     return number_sensors;
@@ -88,12 +88,12 @@ public:
   virtual void step(const sensor* sensors,
                     int sensornumber,
                     motor* motors,
-                    int motornumber) override;
+                    int motornumber);
 
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,
                               motor*,
-                              int number_motors) override;
+                              int number_motors);
 
 protected:
   /** puts the sensors in the ringbuffer,
@@ -120,8 +120,8 @@ protected:
   static double calcErrorFactor(const matrix::Matrix& e, int Enorm);
 
   /********* INSPECTABLE INTERFACE ******/
-  virtual std::list<AbstractController::iparamkey> getInternalParamNames()  const override;
-  virtual std::list<AbstractController::iparamval> getInternalParams()  const override;
+  virtual std::list<AbstractController::iparamkey> getInternalParamNames()  const;
+  virtual std::list<AbstractController::iparamval> getInternalParams()  const;
   virtual AbstractController::ilayerlist getStructuralLayers()  const override;
   virtual AbstractController::iconnectionlist getStructuralConnections()  const override;
 

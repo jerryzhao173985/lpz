@@ -98,9 +98,9 @@ public:
 
 
   virtual void destroy() {
-    ifstatic_cast<mesh>(delete)(mesh);
-    ifstatic_cast<bound>(delete)(bound);
-    ifstatic_cast<boundshape>(delete)(boundshape);
+    if(mesh) delete mesh;
+    if(bound) delete bound;
+    if(boundshape) delete boundshape;
     mesh=0;
     bound=0;
     boundshape=0;

@@ -233,7 +233,7 @@ class MyECBManager : public ECBManager {
 //        ecbConf.maxMotorCurrent = 100;
         ecbConf.maxNumberSensors = 2; // no infrared sensors
         string* DNSName;
-        explicit switch (nimm2Index) {
+        switch (nimm2Index) {
           case 0:
 //            DNSName = new string("NIMM2_PRIMUS");
             DNSName = new string("NIMM2_PRIMUS");

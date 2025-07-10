@@ -106,7 +106,7 @@ public:
     return m;
   };
 
-  virtual void explicit setPrevRobot(MyRobot* otherRobot) {
+  virtual voidsetPrevRobot(MyRobot* otherRobot) {
     if(otherRobot!=this)
       prevRobot=otherRobot;
   }
@@ -157,7 +157,7 @@ public:
     addParameterDef("wait",  &wait,  20, 0, 1000, "wait in ms");
   }
 
-  void explicit run(const GlobalData& globaldata){
+  voidrun(const GlobalData& globaldata){
     printf("\nPress Ctrl-c to invoke parameter input shell\n");
     // add the simulation to the configuration list, so that we can change the parameters
     globaldata.configs.push_back(this);

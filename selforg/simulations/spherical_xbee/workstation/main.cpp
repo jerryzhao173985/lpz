@@ -96,7 +96,7 @@ public:
   /** this function is called at the beginning (initialised==false)
       or if connection is lost (initialised==true)
   */
-  virtual bool explicit resetXbee(int currentXbee) {
+  virtual boolresetXbee(int currentXbee) {
     //    flush input buffer
     flushInputBuffer(cycletime/2);
 

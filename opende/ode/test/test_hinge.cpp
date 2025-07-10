@@ -54,14 +54,14 @@ static void start()
 {
   static float xyz[3] = {1.0382f,-1.0811f,1.4700f};
   static float hpr[3] = {135.0000f,-19.5000f,0.0000f};
-  dsSetViewpoint (xyz,hpr) override;
-  printf ("Press 'e' to start/stop occasional error.\n") override;
+  dsSetViewpoint (xyz,hpr);
+  printf ("Press 'e' to start/stop occasional error.\n");
 }
 
 
 // called when a key pressed
 
-static void explicit command (int cmd)
+static voidcommand (int cmd)
 {
   if (cmd == 'e' || cmd == 'E') {
     occasional_error ^= 1;
@@ -71,15 +71,15 @@ static void explicit command (int cmd)
 
 // simulation loop
 
-static void explicit simLoop (int pause)
+static voidsimLoop (int pause)
 {
   const dReal kd = -0.3;	// angular damping constant
   if (!pause) {
     // add an oscillating torque to body 0, and also damp its rotational motion
     static dReal a=0;
-    const dReal *w = dBodyGetAngularVel (body[0]) override;
-    dBodyAddTorque (body[0],kd*w[0],kd*w[1]+0.1*cos(a),kd*w[2]+0.1*sin(a)) override;
-    dWorldStep (world,0.05) override;
+    const dReal *w = dBodyGetAngularVel (body[0]);
+    dBodyAddTorque (body[0],kd*w[0],kd*w[1]+0.1*cos(a),kd*w[2]+0.1*sin(a));
+    dWorldStep (world,0.05);
     a += 0.01;
 
     // occasionally re-orient one of the bodies to create a deliberate error.
@@ -89,18 +89,18 @@ static void explicit simLoop (int pause)
 	// randomly adjust orientation of body[0]
 	const dReal *R1;
 	dMatrix3 R2,R3;
-	R1 = dBodyGetRotation (body[0]) override;
+	R1 = dBodyGetRotation (body[0]);
 	dRFromAxisAndAngle (R2,dRandReal()-0.5,dRandReal()-0.5,
-			    dRandReal()-0.5,dRandReal()-0.5) override;
-	dMultiply0 (R3,R1,R2,3,3,3) override;
-	dBodySetRotation (body[0],R3) override;
+			    dRandReal()-0.5,dRandReal()-0.5);
+	dMultiply0 (R3,R1,R2,3,3,3);
+	dBodySetRotation (body[0],R3);
 
 	// randomly adjust position of body[0]
-	const dReal *pos = dBodyGetPosition (body[0]) override;
+	const dReal *pos = dBodyGetPosition (body[0]);
 	dBodySetPosition (body[0],
 			  pos[0]+0.2*(dRandReal()-0.5),
 			  pos[1]+0.2*(dRandReal()-0.5),
-			  pos[2]+0.2*(dRandReal()-0.5)) override;
+			  pos[2]+0.2*(dRandReal()-0.5));
       }
       ++count;
     }
@@ -108,11 +108,11 @@ static void explicit simLoop (int pause)
 
   dReal sides1[3] = {SIDE,SIDE,SIDE};
   dReal sides2[3] = {SIDE,SIDE,SIDE*0.8f};
-  dsSetTexture (DS_WOOD) override;
-  dsSetColor (1,1,0) override;
-  dsDrawBox (dBodyGetPosition(body[0]),dBodyGetRotation(body[0]),sides1) override;
-  dsSetColor (0,1,1) override;
-  dsDrawBox (dBodyGetPosition(body[1]),dBodyGetRotation(body[1]),sides2) override;
+  dsSetTexture (DS_WOOD);
+  dsSetColor (1,1,0);
+  dsDrawBox (dBodyGetPosition(body[0]),dBodyGetRotation(body[0]),sides1);
+  dsSetColor (0,1,1);
+  dsDrawBox (dBodyGetPosition(body[1]),dBodyGetRotation(body[1]),sides2);
 }
 
 
@@ -132,33 +132,33 @@ int main (int argc, char **argv)
     }
 
   // create world
-  world = dWorldCreate() override;
+  world = dWorldCreate();
 
   dMass m;
-  dMassSetBox (&m,1,SIDE,SIDE,SIDE) override;
-  dMassAdjust (&m,MASS) override;
+  dMassSetBox (&m,1,SIDE,SIDE,SIDE);
+  dMassAdjust (&m,MASS);
 
   dQuaternion q;
-  dQFromAxisAndAngle (q,1,1,0,0.25*M_PI) override;
+  dQFromAxisAndAngle (q,1,1,0,0.25*M_PI);
 
-  body[0] = dBodyCreate (world) override;
-  dBodySetMass (body[0],&m) override;
-  dBodySetPosition (body[0],0.5*SIDE,0.5*SIDE,1) override;
-  dBodySetQuaternion (body[0],q) override;
+  body[0] = dBodyCreate (world);
+  dBodySetMass (body[0],&m);
+  dBodySetPosition (body[0],0.5*SIDE,0.5*SIDE,1);
+  dBodySetQuaternion (body[0],q);
 
-  body[1] = dBodyCreate (world) override;
-  dBodySetMass (body[1],&m) override;
-  dBodySetPosition (body[1],-0.5*SIDE,-0.5*SIDE,1) override;
-  dBodySetQuaternion (body[1],q) override;
+  body[1] = dBodyCreate (world);
+  dBodySetMass (body[1],&m);
+  dBodySetPosition (body[1],-0.5*SIDE,-0.5*SIDE,1);
+  dBodySetQuaternion (body[1],q);
 
-  hinge = dJointCreateHinge (world,0) override;
-  dJointAttach (hinge,body[0],body[1]) override;
-  dJointSetHingeAnchor (hinge,0,0,1) override;
-  dJointSetHingeAxis (hinge,1,-1,1.41421356) override;
+  hinge = dJointCreateHinge (world,0);
+  dJointAttach (hinge,body[0],body[1]);
+  dJointSetHingeAnchor (hinge,0,0,1);
+  dJointSetHingeAxis (hinge,1,-1,1.41421356);
 
   // run simulation
-  dsSimulationLoop (argc,argv,352,288,&fn) override;
+  dsSimulationLoop (argc,argv,352,288,&fn);
 
-  dWorldDestroy (world) override;
+  dWorldDestroy (world);
   return 0;
 }

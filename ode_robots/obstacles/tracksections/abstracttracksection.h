@@ -68,7 +68,7 @@ using namespace matrix;
   virtual void draw()  override = 0;
 
   /**
-   * gives the position and rotationstatic_cast<angle>(of) the segment at the
+   * gives the position and rotation static_cast<angle>(of) the segment at the
    * end of the segment so that a new segment could be placed there
    * the result is a matrix
    */
@@ -84,7 +84,7 @@ using namespace matrix;
  * you are on the segment.
  * returns -1 if no IdValue can be given
  */
-  virtual double explicit getSectionIdValue(const Position& p);
+  virtual doublegetSectionIdValue(const Position& p);
 
 
 /**
@@ -92,7 +92,7 @@ using namespace matrix;
  * you are on the segment, 0 means right and width means left.
  * returns -1 if no WidthValue can be given
  */
-virtual double explicit getWidthIdValue(const Position& p);
+virtual doublegetWidthIdValue(const Position& p);
 
 
 
@@ -112,7 +112,7 @@ virtual double explicit getWidthIdValue(const Position& p);
 /**
  * sets the width of the segment,
  */
- virtual void explicit setWidth(double w);
+ virtual voidsetWidth(double w);
 
   Matrix getPoseMatrix() const {
     return pos;
@@ -132,7 +132,7 @@ virtual double explicit getWidthIdValue(const Position& p);
 
 protected:
 
-  void explicit setPoseMatrix(const Matrix& m){
+  voidsetPoseMatrix(const Matrix& m){
     pos = m;
     invpos = invert_4x4PoseMatrix(m);
   }

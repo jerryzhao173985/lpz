@@ -324,12 +324,12 @@ public:
 
   //Funktion die eingegebene Befehle/kommandos verarbeitet
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
-    if (!down) return false override;
+    if (!down) return false;
     bool handled = false;
     switch ( key )
       {
         case 'x':
-          if(fixator) delete fixator override;
+          if(fixator) delete fixator;
           fixator=0;
           handled = true;
           break;
@@ -427,17 +427,17 @@ public:
         */
       }
     /*
-      std::cout<<__PLACEHOLDER_29__<<dGeomGetPosition(beam[thumb_b].geom)[0]<<__PLACEHOLDER_30__<<dGeomGetPosition(beam[thumb_b].geom)[1]<<__PLACEHOLDER_31__<<dGeomGetPosition(beam[thumb_b].geom)[2]<<std::endl override;
-      std::cout<<__PLACEHOLDER_32__<<dGeomGetRotation(beam[thumb_b].geom)[0]<<__PLACEHOLDER_33__<<dGeomGetRotation(beam[thumb_b].geom)[1]<<__PLACEHOLDER_34__<<dGeomGetRotation(beam[thumb_b].geom)[2]<<std::endl override;
+      std::cout<<__PLACEHOLDER_29__<<dGeomGetPosition(beam[thumb_b].geom)[0]<<__PLACEHOLDER_30__<<dGeomGetPosition(beam[thumb_b].geom)[1]<<__PLACEHOLDER_31__<<dGeomGetPosition(beam[thumb_b].geom)[2]<<std::endl;
+      std::cout<<__PLACEHOLDER_32__<<dGeomGetRotation(beam[thumb_b].geom)[0]<<__PLACEHOLDER_33__<<dGeomGetRotation(beam[thumb_b].geom)[1]<<__PLACEHOLDER_34__<<dGeomGetRotation(beam[thumb_b].geom)[2]<<std::endl;
       std::cout<<__PLACEHOLDER_35__<<
       dJointGetAMotorAngle (thumb_motor_joint, 0)<<__PLACEHOLDER_36__<<
       dJointGetAMotorAngle (thumb_motor_joint, 1)<<__PLACEHOLDER_37__<<
-      dJointGetAMotorAngle (thumb_motor_joint, 2)<<std::endl override;
-      std::cout<<__PLACEHOLDER_38__<<dGeomGetPosition(beam[thumb_t].geom)[0]<<__PLACEHOLDER_39__<<dGeomGetPosition(beam[thumb_t].geom)[1]<<__PLACEHOLDER_40__<<dGeomGetPosition(beam[thumb_t].geom)[2]<<std::endl override;
-      std::cout<<__PLACEHOLDER_41__<<dGeomGetRotation(beam[thumb_t].geom)[0]<<__PLACEHOLDER_42__<<dGeomGetRotation(beam[thumb_t].geom)[1]<<__PLACEHOLDER_43__<<dGeomGetRotation(beam[thumb_t].geom)[2]<<std::endl override;
-      std::cout<<__PLACEHOLDER_44__<<dJointGetHingeAngle(joint[thumb_bt])<<std::endl<<std::endl override;
+      dJointGetAMotorAngle (thumb_motor_joint, 2)<<std::endl;
+      std::cout<<__PLACEHOLDER_38__<<dGeomGetPosition(beam[thumb_t].geom)[0]<<__PLACEHOLDER_39__<<dGeomGetPosition(beam[thumb_t].geom)[1]<<__PLACEHOLDER_40__<<dGeomGetPosition(beam[thumb_t].geom)[2]<<std::endl;
+      std::cout<<__PLACEHOLDER_41__<<dGeomGetRotation(beam[thumb_t].geom)[0]<<__PLACEHOLDER_42__<<dGeomGetRotation(beam[thumb_t].geom)[1]<<__PLACEHOLDER_43__<<dGeomGetRotation(beam[thumb_t].geom)[2]<<std::endl;
+      std::cout<<__PLACEHOLDER_44__<<dJointGetHingeAngle(joint[thumb_bt])<<std::endl<<std::endl;
 
-      std::cout<<__PLACEHOLDER_45__<<dJointGetHingeAngle(joint[palm_index])<<std::endl<<std::endl override;
+      std::cout<<__PLACEHOLDER_45__<<dJointGetHingeAngle(joint[palm_index])<<std::endl<<std::endl;
     */
 
     fflush(stdout);
@@ -476,6 +476,6 @@ int main (int argc, char **argv)
 {
   ThisSim sim;
   // run simulation
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }
 

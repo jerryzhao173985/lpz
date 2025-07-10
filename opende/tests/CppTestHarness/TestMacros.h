@@ -7,7 +7,7 @@
 	public: \
 		Test##Name() : Test(#Name, __FILE__, __LINE__) {} \
 	private: \
-		virtual void RunImpl(CppTestHarness::const TestResults& testResults_) override; \
+		virtual void RunImpl(CppTestHarness::const TestResults& testResults_); \
 	}; \
 	CppTestHarness::TypedTestLauncher< Test##Name > \
 		staticInitTest##Name##Creator(CppTestHarness::TestLauncher::GetHeadAddr()); \
@@ -20,7 +20,7 @@
 	public: \
 		Test##Name() : Test(#Name, __FILE__, __LINE__) {} \
 	private: \
-		virtual void RunImpl(CppTestHarness::const TestResults& testResults_) override; \
+		virtual void RunImpl(CppTestHarness::const TestResults& testResults_); \
 	}; \
 	CppTestHarness::TypedTestLauncher< Test##Name > \
 		staticInitTest##Name##Creator(CppTestHarness::TestLauncher::GetHeadAddr()); \
@@ -33,7 +33,7 @@
 	public: \
 		Test##Name() : Test(#Name, __FILE__, __LINE__), Fixture CtorParams {} \
 	private: \
-		virtual void RunImpl(CppTestHarness::const TestResults& testResults_) override; \
+		virtual void RunImpl(CppTestHarness::const TestResults& testResults_); \
 	}; \
 	CppTestHarness::TypedTestLauncher< Test##Name > \
 		staticInitTest##Name##Creator(CppTestHarness::TestLauncher::GetHeadAddr()); \

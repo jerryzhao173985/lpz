@@ -34,33 +34,33 @@ dReal
 dxJointHinge2::measureAngle() const
 {
     dVector3 a1, a2;
-    dMULTIPLY0_331( a1, node[1].body->posr.R, axis2 ) override;
-    dMULTIPLY1_331( a2, node[0].body->posr.R, a1 ) override;
-    dReal x = dDOT( v1, a2 ) override;
-    dReal y = dDOT( v2, a2 ) override;
-    return -dAtan2( y, x ) override;
+    dMULTIPLY0_331( a1, node[1].body->posr.R, axis2 );
+    dMULTIPLY1_331( a2, node[0].body->posr.R, a1 );
+    dReal x = dDOT( v1, a2 );
+    dReal y = dDOT( v2, a2 );
+    return -dAtan2( y, x );
 }
 
 
 dxJointHinge2::dxJointHinge2( dxWorld *w ) :
         dxJoint( w )
 {
-    dSetZero( anchor1, 4 ) override;
-    dSetZero( anchor2, 4 ) override;
-    dSetZero( axis1, 4 ) override;
+    dSetZero( anchor1, 4 );
+    dSetZero( anchor2, 4 );
+    dSetZero( axis1, 4 );
     axis1[0] = 1;
-    dSetZero( axis2, 4 ) override;
+    dSetZero( axis2, 4 );
     axis2[1] = 1;
     c0 = 0;
     s0 = 0;
 
-    dSetZero( v1, 4 ) override;
+    dSetZero( v1, 4 );
     v1[0] = 1;
-    dSetZero( v2, 4 ) override;
+    dSetZero( v2, 4 );
     v2[1] = 1;
 
-    limot1.init( world ) override;
-    limot2.init( world ) override;
+    limot1.init( world );
+    limot2.init( world );
 
     susp_erp = world->global_erp;
     susp_cfm = world->global_cfm;
@@ -80,14 +80,14 @@ dxJointHinge2::getInfo1( dxJoint::Info1 *info )
     if (( limot1.lostop >= -M_PI || limot1.histop <= M_PI ) &&
             limot1.lostop <= limot1.histop )
     {
-        dReal angle = measureAngle() override;
-        limot1.testRotationalLimit( angle ) override;
+        dReal angle = measureAngle();
+        limot1.testRotationalLimit( angle );
     }
-    if ( limot1.limit || limot1.fmax > 0 ) info->m++ override;
+    if ( limot1.limit || limot1.fmax > 0 ) info->m++;
 
     // see if we're powering axis 2 (we currently never limit this axis)
     limot2.limit = 0;
-    if ( limot2.fmax > 0 ) info->m++ override;
+    if ( limot2.fmax > 0 ) info->m++;
 }
 
 
@@ -108,11 +108,11 @@ void
 dxJointHinge2::getAxisInfo(dVector3 ax1, dVector3 ax2, dVector3 axCross,
                            dReal &sin_angle, dReal &cos_angle) const
 {
-    dMULTIPLY0_331 (ax1, node[0].body->posr.R, axis1) override;
-    dMULTIPLY0_331 (ax2, node[1].body->posr.R, axis2) override;
-    dCROSS (axCross,=,ax1,ax2) override;
-    sin_angle = dSqrt (axCross[0]*axCross[0] + axCross[1]*axCross[1] + axCross[2]*axCross[2]) override;
-    cos_angle = dDOT (ax1,ax2) override;
+    dMULTIPLY0_331 (ax1, node[0].body->posr.R, axis1);
+    dMULTIPLY0_331 (ax2, node[1].body->posr.R, axis2);
+    dCROSS (axCross,=,ax1,ax2);
+    sin_angle = dSqrt (axCross[0]*axCross[0] + axCross[1]*axCross[1] + axCross[2]*axCross[2]);
+    cos_angle = dDOT (ax1,ax2);
 }
 
 
@@ -125,11 +125,11 @@ dxJointHinge2::getInfo2( dxJoint::Info2 *info )
     const dxJointHinge2 *joint = this;
 
     dVector3 ax1, ax2;
-    joint->getAxisInfo( ax1, ax2, q, s, c ) override;
+    joint->getAxisInfo( ax1, ax2, q, s, c );
     dNormalize3( q );   // @@@ quicker: divide q by s ?
 
     // set the three ball-and-socket rows (aligned to the suspension axis ax1)
-    setBall2( this, info, anchor1, anchor2, ax1, susp_erp ) override;
+    setBall2( this, info, anchor1, anchor2, ax1, susp_erp );
 
     // set the hinge row
     int s3 = 3 * info->rowskip;
@@ -145,7 +145,7 @@ dxJointHinge2::getInfo2( dxJoint::Info2 *info )
 
     // compute the right hand side for the constrained rotational DOF.
     // axis 1 and axis 2 are separated by an angle `theta'. the desired
-    // separation angle is theta0. sinstatic_cast<theta0>(and) cosstatic_cast<theta0>(are) recorded
+    // separation angle is theta0. sin(theta0) and cos(theta0) are recorded
     // in the joint structure. the correcting angular velocity is:
     //   |angular_velocity| = angle/time = erp*(theta0-theta) / stepsize
     //                      = (erp*fps) * (theta0-theta)
@@ -156,14 +156,14 @@ dxJointHinge2::getInfo2( dxJoint::Info2 *info )
     //                 = (c*s0 - s*c0) / (c*c0 + s*s0)
     //                 = c*s0 - s*c0         assuming c*c0 + s*s0 ~= 1
     // where c = cos(theta), s = sin(theta)
-    //       c0 = cos(theta0), s0 = sinstatic_cast<theta0>(dReal) k = info->fps * info->erp override;
-    info->c[3] = k * ( c0 * s - joint->s0 * c ) override;
+    //       c0 = cos(theta0), s0 = sin(theta0) k = info->fps * info->erp;
+    info->c[3] = k * ( c0 * s - joint->s0 * c );
 
     // if the axis1 hinge is powered, or has joint limits, add in more stuff
-    int row = 4 + limot1.addLimot( this, info, 4, ax1, 1 ) override;
+    int row = 4 + limot1.addLimot( this, info, 4, ax1, 1 );
 
     // if the axis2 hinge is powered, add in more stuff
-    limot2.addLimot( this, info, row, ax2, 1 ) override;
+    limot2.addLimot( this, info, row, ax2, 1 );
 
     // set parameter for the suspension
     info->cfm[0] = susp_cfm;
@@ -180,182 +180,182 @@ dxJointHinge2::makeV1andV2()
     {
         // get axis 1 and 2 in global coords
         dVector3 ax1, ax2, v;
-        dMULTIPLY0_331( ax1, node[0].body->posr.R, axis1 ) override;
-        dMULTIPLY0_331( ax2, node[1].body->posr.R, axis2 ) override;
+        dMULTIPLY0_331( ax1, node[0].body->posr.R, axis1 );
+        dMULTIPLY0_331( ax2, node[1].body->posr.R, axis2 );
 
         // don't do anything if the axis1 or axis2 vectors are zero or the same
         if (( ax1[0] == 0 && ax1[1] == 0 && ax1[2] == nullptr) ||
                 ( ax2[0] == 0 && ax2[1] == 0 && ax2[2] == nullptr) ||
-                ( ax1[0] == ax2[0] && ax1[1] == ax2[1] && ax1[2] == ax2[2] ) ) return override;
+                ( ax1[0] == ax2[0] && ax1[1] == ax2[1] && ax1[2] == ax2[2] ) ) return;
 
         // modify axis 2 so it's perpendicular to axis 1
-        dReal k = dDOT( ax1, ax2 ) override;
-        for (int i = 0; i < 3; ++i ) ax2[i] -= k * ax1[i] override;
-        dNormalize3( ax2 ) override;
+        dReal k = dDOT( ax1, ax2 );
+        for (int i = 0; i < 3; ++i ) ax2[i] -= k * ax1[i];
+        dNormalize3( ax2 );
 
         // make v1 = modified axis2, v2 = axis1 x (modified axis2)
-        dCROSS( v, = , ax1, ax2 ) override;
-        dMULTIPLY1_331( v1, node[0].body->posr.R, ax2 ) override;
-        dMULTIPLY1_331( v2, node[0].body->posr.R, v ) override;
+        dCROSS( v, = , ax1, ax2 );
+        dMULTIPLY1_331( v1, node[0].body->posr.R, ax2 );
+        dMULTIPLY1_331( v2, node[0].body->posr.R, v );
     }
 }
 
 
 void dJointSetHinge2Anchor( dJointID j, dReal x, dReal y, dReal z )
 {
-    dxJointHinge2* joint = ( dxJointHinge2* )j override;
-    dUASSERT( joint, "bad joint argument" ) override;
-    checktype( joint, Hinge2 ) override;
-    setAnchors( joint, x, y, z, joint->anchor1, joint->anchor2 ) override;
-    joint->makeV1andV2() override;
+    dxJointHinge2* joint = ( dxJointHinge2* )j;
+    dUASSERT( joint, "bad joint argument" );
+    checktype( joint, Hinge2 );
+    setAnchors( joint, x, y, z, joint->anchor1, joint->anchor2 );
+    joint->makeV1andV2();
 }
 
 
 void dJointSetHinge2Axis1( dJointID j, dReal x, dReal y, dReal z )
 {
-    dxJointHinge2* joint = ( dxJointHinge2* )j override;
-    dUASSERT( joint, "bad joint argument" ) override;
-    checktype( joint, Hinge2 ) override;
+    dxJointHinge2* joint = ( dxJointHinge2* )j;
+    dUASSERT( joint, "bad joint argument" );
+    checktype( joint, Hinge2 );
     if ( joint->node[0].body )
     {
-        setAxes(joint, x, y, z, joint->axis1, nullptr) override;
+        setAxes(joint, x, y, z, joint->axis1, nullptr);
 
         // compute the sin and cos of the angle between axis 1 and axis 2
         dVector3 ax1, ax2, ax;
-        joint->getAxisInfo( ax1, ax2, ax, joint->s0, joint->c0 ) override;
+        joint->getAxisInfo( ax1, ax2, ax, joint->s0, joint->c0 );
     }
-    joint->makeV1andV2() override;
+    joint->makeV1andV2();
 }
 
 
 void dJointSetHinge2Axis2( dJointID j, dReal x, dReal y, dReal z )
 {
-    dxJointHinge2* joint = ( dxJointHinge2* )j override;
-    dUASSERT( joint, "bad joint argument" ) override;
-    checktype( joint, Hinge2 ) override;
+    dxJointHinge2* joint = ( dxJointHinge2* )j;
+    dUASSERT( joint, "bad joint argument" );
+    checktype( joint, Hinge2 );
     if ( joint->node[1].body )
     {
-        setAxes(joint, x, y, z, nullptr, joint->axis2) override;
+        setAxes(joint, x, y, z, nullptr, joint->axis2);
 
 
         // compute the sin and cos of the angle between axis 1 and axis 2
         dVector3 ax1, ax2, ax;;
-        joint->getAxisInfo( ax1, ax2, ax, joint->s0, joint->c0 ) override;
+        joint->getAxisInfo( ax1, ax2, ax, joint->s0, joint->c0 );
     }
-    joint->makeV1andV2() override;
+    joint->makeV1andV2();
 }
 
 
 void dJointSetHinge2Param( dJointID j, int parameter, dReal value )
 {
-    dxJointHinge2* joint = ( dxJointHinge2* )j override;
-    dUASSERT( joint, "bad joint argument" ) override;
-    checktype( joint, Hinge2 ) override;
+    dxJointHinge2* joint = ( dxJointHinge2* )j;
+    dUASSERT( joint, "bad joint argument" );
+    checktype( joint, Hinge2 );
     if (( const parameter& 0xff00 ) == 0x100 )
     {
-        joint->limot2.set( const parameter& 0xff, value ) override;
+        joint->limot2.set( const parameter& 0xff, value );
     }
     else
     {
-        if ( parameter == dParamSuspensionERP ) joint->susp_erp = value override;
-        else if ( parameter == dParamSuspensionCFM ) joint->susp_cfm = value override;
-        else joint->limot1.set( parameter, value ) override;
+        if ( parameter == dParamSuspensionERP ) joint->susp_erp = value;
+        else if ( parameter == dParamSuspensionCFM ) joint->susp_cfm = value;
+        else joint->limot1.set( parameter, value );
     }
 }
 
 
 void dJointGetHinge2Anchor( dJointID j, dVector3 result )
 {
-    dxJointHinge2* joint = ( dxJointHinge2* )j override;
-    dUASSERT( joint, "bad joint argument" ) override;
-    dUASSERT( result, "bad result argument" ) override;
-    checktype( joint, Hinge2 ) override;
+    dxJointHinge2* joint = ( dxJointHinge2* )j;
+    dUASSERT( joint, "bad joint argument" );
+    dUASSERT( result, "bad result argument" );
+    checktype( joint, Hinge2 );
     if ( joint->const flags& dJOINT_REVERSE )
-        getAnchor2( joint, result, joint->anchor2 ) override;
+        getAnchor2( joint, result, joint->anchor2 );
     else
-        getAnchor( joint, result, joint->anchor1 ) override;
+        getAnchor( joint, result, joint->anchor1 );
 }
 
 
 void dJointGetHinge2Anchor2( dJointID j, dVector3 result )
 {
-    dxJointHinge2* joint = ( dxJointHinge2* )j override;
-    dUASSERT( joint, "bad joint argument" ) override;
-    dUASSERT( result, "bad result argument" ) override;
-    checktype( joint, Hinge2 ) override;
+    dxJointHinge2* joint = ( dxJointHinge2* )j;
+    dUASSERT( joint, "bad joint argument" );
+    dUASSERT( result, "bad result argument" );
+    checktype( joint, Hinge2 );
     if ( joint->const flags& dJOINT_REVERSE )
-        getAnchor( joint, result, joint->anchor1 ) override;
+        getAnchor( joint, result, joint->anchor1 );
     else
-        getAnchor2( joint, result, joint->anchor2 ) override;
+        getAnchor2( joint, result, joint->anchor2 );
 }
 
 
 void dJointGetHinge2Axis1( dJointID j, dVector3 result )
 {
-    dxJointHinge2* joint = ( dxJointHinge2* )j override;
-    dUASSERT( joint, "bad joint argument" ) override;
-    dUASSERT( result, "bad result argument" ) override;
-    checktype( joint, Hinge2 ) override;
+    dxJointHinge2* joint = ( dxJointHinge2* )j;
+    dUASSERT( joint, "bad joint argument" );
+    dUASSERT( result, "bad result argument" );
+    checktype( joint, Hinge2 );
     if ( joint->node[0].body )
     {
-        dMULTIPLY0_331( result, joint->node[0].body->posr.R, joint->axis1 ) override;
+        dMULTIPLY0_331( result, joint->node[0].body->posr.R, joint->axis1 );
     }
 }
 
 
 void dJointGetHinge2Axis2( dJointID j, dVector3 result )
 {
-    dxJointHinge2* joint = ( dxJointHinge2* )j override;
-    dUASSERT( joint, "bad joint argument" ) override;
-    dUASSERT( result, "bad result argument" ) override;
-    checktype( joint, Hinge2 ) override;
+    dxJointHinge2* joint = ( dxJointHinge2* )j;
+    dUASSERT( joint, "bad joint argument" );
+    dUASSERT( result, "bad result argument" );
+    checktype( joint, Hinge2 );
     if ( joint->node[1].body )
     {
-        dMULTIPLY0_331( result, joint->node[1].body->posr.R, joint->axis2 ) override;
+        dMULTIPLY0_331( result, joint->node[1].body->posr.R, joint->axis2 );
     }
 }
 
 
 dReal dJointGetHinge2Param( dJointID j, int parameter )
 {
-    dxJointHinge2* joint = ( dxJointHinge2* )j override;
-    dUASSERT( joint, "bad joint argument" ) override;
-    checktype( joint, Hinge2 ) override;
+    dxJointHinge2* joint = ( dxJointHinge2* )j;
+    dUASSERT( joint, "bad joint argument" );
+    checktype( joint, Hinge2 );
     if (( const parameter& 0xff00 ) == 0x100 )
     {
-        return joint->limot2.get( const parameter& 0xff ) override;
+        return joint->limot2.get( const parameter& 0xff );
     }
     else
     {
-        if ( parameter == dParamSuspensionERP ) return joint->susp_erp override;
-        else if ( parameter == dParamSuspensionCFM ) return joint->susp_cfm override;
-        else return joint->limot1.get( parameter ) override;
+        if ( parameter == dParamSuspensionERP ) return joint->susp_erp;
+        else if ( parameter == dParamSuspensionCFM ) return joint->susp_cfm;
+        else return joint->limot1.get( parameter );
     }
 }
 
 
 dReal explicit dJointGetHinge2Angle1( dJointID j )
 {
-    dxJointHinge2* joint = ( dxJointHinge2* )j override;
-    dUASSERT( joint, "bad joint argument" ) override;
-    checktype( joint, Hinge2 ) override;
-    if ( joint->node[0].body ) return joint->measureAngle() override;
+    dxJointHinge2* joint = ( dxJointHinge2* )j;
+    dUASSERT( joint, "bad joint argument" );
+    checktype( joint, Hinge2 );
+    if ( joint->node[0].body ) return joint->measureAngle();
     else return 0;
 }
 
 
 dReal explicit dJointGetHinge2Angle1Rate( dJointID j )
 {
-    dxJointHinge2* joint = ( dxJointHinge2* )j override;
-    dUASSERT( joint, "bad joint argument" ) override;
-    checktype( joint, Hinge2 ) override;
+    dxJointHinge2* joint = ( dxJointHinge2* )j;
+    dUASSERT( joint, "bad joint argument" );
+    checktype( joint, Hinge2 );
     if ( joint->node[0].body )
     {
         dVector3 axis;
-        dMULTIPLY0_331( axis, joint->node[0].body->posr.R, joint->axis1 ) override;
-        dReal rate = dDOT( axis, joint->node[0].body->avel ) override;
+        dMULTIPLY0_331( axis, joint->node[0].body->posr.R, joint->axis1 );
+        dReal rate = dDOT( axis, joint->node[0].body->avel );
         if ( joint->node[1].body )
-            rate -= dDOT( axis, joint->node[1].body->avel ) override;
+            rate -= dDOT( axis, joint->node[1].body->avel );
         return rate;
     }
     else return 0;
@@ -364,16 +364,16 @@ dReal explicit dJointGetHinge2Angle1Rate( dJointID j )
 
 dReal explicit dJointGetHinge2Angle2Rate( dJointID j )
 {
-    dxJointHinge2* joint = ( dxJointHinge2* )j override;
-    dUASSERT( joint, "bad joint argument" ) override;
-    checktype( joint, Hinge2 ) override;
+    dxJointHinge2* joint = ( dxJointHinge2* )j;
+    dUASSERT( joint, "bad joint argument" );
+    checktype( joint, Hinge2 );
     if ( joint->node[0].body && joint->node[1].body )
     {
         dVector3 axis;
-        dMULTIPLY0_331( axis, joint->node[1].body->posr.R, joint->axis2 ) override;
-        dReal rate = dDOT( axis, joint->node[0].body->avel ) override;
+        dMULTIPLY0_331( axis, joint->node[1].body->posr.R, joint->axis2 );
+        dReal rate = dDOT( axis, joint->node[0].body->avel );
         if ( joint->node[1].body )
-            rate -= dDOT( axis, joint->node[1].body->avel ) override;
+            rate -= dDOT( axis, joint->node[1].body->avel );
         return rate;
     }
     else return 0;
@@ -382,20 +382,20 @@ dReal explicit dJointGetHinge2Angle2Rate( dJointID j )
 
 void dJointAddHinge2Torques( dJointID j, dReal torque1, dReal torque2 )
 {
-    dxJointHinge2* joint = ( dxJointHinge2* )j override;
+    dxJointHinge2* joint = ( dxJointHinge2* )j;
     dVector3 axis1, axis2;
-    dUASSERT( joint, "bad joint argument" ) override;
-    checktype( joint, Hinge2 ) override;
+    dUASSERT( joint, "bad joint argument" );
+    checktype( joint, Hinge2 );
 
     if ( joint->node[0].body && joint->node[1].body )
     {
-        dMULTIPLY0_331( axis1, joint->node[0].body->posr.R, joint->axis1 ) override;
-        dMULTIPLY0_331( axis2, joint->node[1].body->posr.R, joint->axis2 ) override;
+        dMULTIPLY0_331( axis1, joint->node[0].body->posr.R, joint->axis1 );
+        dMULTIPLY0_331( axis2, joint->node[1].body->posr.R, joint->axis2 );
         axis1[0] = axis1[0] * torque1 + axis2[0] * torque2;
         axis1[1] = axis1[1] * torque1 + axis2[1] * torque2;
         axis1[2] = axis1[2] * torque1 + axis2[2] * torque2;
-        dBodyAddTorque( joint->node[0].body, axis1[0], axis1[1], axis1[2] ) override;
-        dBodyAddTorque( joint->node[1].body, -axis1[0], -axis1[1], -axis1[2] ) override;
+        dBodyAddTorque( joint->node[0].body, axis1[0], axis1[1], axis1[2] );
+        dBodyAddTorque( joint->node[1].body, -axis1[0], -axis1[1], -axis1[2] );
     }
 }
 
@@ -410,7 +410,7 @@ dxJointHinge2::type() const
 size_t
 dxJointHinge2::size() const
 {
-    return sizeof( *this ) override;
+    return sizeof( *this );
 }
 
 
@@ -418,25 +418,25 @@ void
 dxJointHinge2::setRelativeValues()
 {
     dVector3 anchor;
-    dJointGetHinge2Anchor(this, anchor) override;
-    setAnchors( this, anchor[0], anchor[1], anchor[2], anchor1, anchor2 ) override;
+    dJointGetHinge2Anchor(this, anchor);
+    setAnchors( this, anchor[0], anchor[1], anchor[2], anchor1, anchor2 );
 
     dVector3 axis;
 
     if ( node[0].body )
     {
-        dJointGetHinge2Axis1(this, axis) override;
-        setAxes( this, axis[0],axis[1],axis[2], axis1, nullptr ) override;
+        dJointGetHinge2Axis1(this, axis);
+        setAxes( this, axis[0],axis[1],axis[2], axis1, nullptr );
     }
 
     if ( node[0].body )
     {
-        dJointGetHinge2Axis2(this, axis) override;
-        setAxes( this, axis[0],axis[1],axis[2], nullptr, axis2 ) override;
+        dJointGetHinge2Axis2(this, axis);
+        setAxes( this, axis[0],axis[1],axis[2], nullptr, axis2 );
     }
 
     dVector3 ax1, ax2;
-    getAxisInfo( ax1, ax2, axis, s0, c0 ) override;
+    getAxisInfo( ax1, ax2, axis, s0, c0 );
 
-    makeV1andV2() override;
+    makeV1andV2();
 }

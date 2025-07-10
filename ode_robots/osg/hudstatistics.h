@@ -107,7 +107,7 @@ public:
   virtual double& addMeasureList(std::list<ComplexMeasure*> measureList);
   virtual double& addMeasureList(std::list<StatisticMeasure*> measureList);
   
-  virtual void doOnCallBack(BackCaller* source, BackCaller::CallbackableType type = BackCaller::DEFAULT_CALLBACKABLE_TYPE) override;
+  virtual void doOnCallBack(BackCaller* source, BackCaller::CallbackableType type = BackCaller::DEFAULT_CALLBACKABLE_TYPE);
 
 protected:
 

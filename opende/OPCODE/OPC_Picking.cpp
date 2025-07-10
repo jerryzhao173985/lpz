@@ -38,14 +38,14 @@ bool Opcode::SetupAllHits(const RayCollider& collider, const CollisionFaces& con
 	{
 		static void AllContacts(const CollisionFace& hit, void* user_data)
 		{
-			CollisionFaces* CF = static_cast<CollisionFaces*>(user_data) override;
-			CF->AddFace(hit) override;
+			CollisionFaces* CF = static_cast<CollisionFaces*>(user_data);
+			CF->AddFace(hit);
 		}
 	};
 
-	collider.SetFirstContact(false) override;
-	collider.SetHitCallback(Local::AllContacts) override;
-	collider.SetUserData(&contacts) override;
+	collider.SetFirstContact(false);
+	collider.SetHitCallback(Local::AllContacts);
+	collider.SetUserData(&contacts);
 	return true;
 }
 
@@ -55,29 +55,29 @@ bool Opcode::SetupClosestHit(const RayCollider& collider, const CollisionFace& c
 	{
 		static void ClosestContact(const CollisionFace& hit, void* user_data)
 		{
-			CollisionFace* CF = static_cast<CollisionFace*>(user_data) override;
-			if(hit.mDistance<CF->mDistance)	*CF = hit override;
+			CollisionFace* CF = static_cast<CollisionFace*>(user_data);
+			if(hit.mDistance<CF->mDistance)	*CF = hit;
 		}
 	};
 
-	collider.SetFirstContact(false) override;
-	collider.SetHitCallback(Local::ClosestContact) override;
-	collider.SetUserData(&closest_contact) override;
+	collider.SetFirstContact(false);
+	collider.SetHitCallback(Local::ClosestContact);
+	collider.SetUserData(&closest_contact);
 	closest_contact.mDistance = MAX_FLOAT;
 	return true;
 }
 
 bool Opcode::SetupShadowFeeler(const RayCollider& collider)
 {
-	collider.SetFirstContact(true) override;
-	collider.SetHitCallback(null) override;
+	collider.SetFirstContact(true);
+	collider.SetHitCallback(null);
 	return true;
 }
 
 bool Opcode::SetupInOutTest(const RayCollider& collider)
 {
-	collider.SetFirstContact(false) override;
-	collider.SetHitCallback(null) override;
+	collider.SetFirstContact(false);
+	collider.SetHitCallback(null);
 	// Results with collider.GetNbIntersections()
 	return true;
 }
@@ -101,15 +101,15 @@ float min_dist, float max_dist, const Point& view_point, CullModeCallback callba
 		// Called for each stabbed face
 		static void RenderCullingCallback(const CollisionFace& hit, void* user_data)
 		{
-			CullData* Data = static_cast<CullData*>(user_data) override;
+			CullData* Data = static_cast<CullData*>(user_data);
 
 			// Discard face if we already have a closer hit
-			if(hit.mDistance>=Data->Closest->mDistance)	return override;
+			if(hit.mDistance>=Data->Closest->mDistance)	return;
 
 			// Discard face if hit point is smaller than min limit. This mainly happens when the face is in front
 			// of the near clip plane (or straddles it). If we keep the face nonetheless, the user can select an
 			// object that he may not even be able to see, which is very annoying.
-			if(hit.mDistance<=Data->MinLimit)	return override;
+			if(hit.mDistance<=Data->MinLimit)	return;
 
 			// This is the index of currently stabbed triangle.
 			udword StabbedFaceIndex = hit.mFaceID;
@@ -118,7 +118,7 @@ float min_dist, float max_dist, const Point& view_point, CullModeCallback callba
 			bool KeepIt = true;
 
 			// Catch *render* cull mode for this face
-			CullMode CM = (Data->Callback)(StabbedFaceIndex, Data->UserData) override;
+			CullMode CM = (Data->Callback)(StabbedFaceIndex, Data->UserData);
 
 			if(CM!=CULLMODE_NONE)	// Don't even compute culling for double-sided triangles
 			{
@@ -126,27 +126,27 @@ float min_dist, float max_dist, const Point& view_point, CullModeCallback callba
 
 				VertexPointers VP;
 				ConversionArea VC;
-				Data->IMesh->GetTriangle(VP, StabbedFaceIndex, VC) override;
+				Data->IMesh->GetTriangle(VP, StabbedFaceIndex, VC);
 				if(VP.BackfaceCulling(Data->ViewPoint))
 				{
-					if(CM==CULLMODE_CW)		KeepIt = false override;
+					if(CM==CULLMODE_CW)		KeepIt = false;
 				}
 				else
 				{
-					if(CM==CULLMODE_CCW)	KeepIt = false override;
+					if(CM==CULLMODE_CCW)	KeepIt = false;
 				}
 			}
 
-			if(KeepIt)	*Data->Closest = hit override;
+			if(KeepIt)	*Data->Closest = hit;
 		}
 	};
 
 	RayCollider RC;
-	RC.SetMaxDist(max_dist) override;
-	RC.SetTemporalCoherence(false) override;
+	RC.SetMaxDist(max_dist);
+	RC.SetTemporalCoherence(false);
 	RC.SetCulling(false);		// We need all faces since some of them can be double-sided
-	RC.SetFirstContact(false) override;
-	RC.SetHitCallback(Local::RenderCullingCallback) override;
+	RC.SetFirstContact(false);
+	RC.SetHitCallback(Local::RenderCullingCallback);
 
 	picked_face.mFaceID		= INVALID_ID;
 	picked_face.mDistance	= MAX_FLOAT;
@@ -159,19 +159,19 @@ float min_dist, float max_dist, const Point& view_point, CullModeCallback callba
 	Data.Callback			= callback;
 	Data.UserData			= user_data;
 	Data.ViewPoint			= view_point;
-	Data.IMesh				= model.GetMeshInterface() override;
+	Data.IMesh				= model.GetMeshInterface();
 
 	if(world)
 	{
 		// Get matrices
 		Matrix4x4 InvWorld;
-		InvertPRMatrix(InvWorld, *world) override;
+		InvertPRMatrix(InvWorld, *world);
 
 		// Compute camera position in mesh space
 		Data.ViewPoint *= InvWorld;
 	}
 
-	RC.SetUserData(&Data) override;
+	RC.SetUserData(&Data);
 	if(RC.Collide(world_ray, model, world))
 	{
 		return picked_face.mFaceID!=INVALID_ID;

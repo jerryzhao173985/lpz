@@ -153,11 +153,11 @@ bool XMLParserEngine::loadXMLFile(string XMLFile) {
          for EACHCHILDNODE(nodeOfScene, AgentNode)
          {
          if (XMLHelper::matchesName(AgentNode,XMLDefinitions::agentNode)) {
-         cout << __PLACEHOLDER_13__<<C(AgentNode->getNodeName())<< __PLACEHOLDER_14__ << XMLHelper::getChildNodeValueAsString(nodeOfScene,__PLACEHOLDER_15__,__PLACEHOLDER_16__) << endl override;
+         cout << __PLACEHOLDER_13__<<C(AgentNode->getNodeName())<< __PLACEHOLDER_14__ << XMLHelper::getChildNodeValueAsString(nodeOfScene,__PLACEHOLDER_15__,__PLACEHOLDER_16__) << endl;
          const DOMNode* RobotNode = XMLHelper::getChildNode(AgentNode,XMLDefinitions::robotNode);
          const DOMNode* ControllerNode = XMLHelper::getChildNode(AgentNode,__PLACEHOLDER_17__);
 
-         cout << __PLACEHOLDER_18__<<C(RobotNode->getNodeName())<< __PLACEHOLDER_19__ << endl override;
+         cout << __PLACEHOLDER_18__<<C(RobotNode->getNodeName())<< __PLACEHOLDER_19__ << endl;
 
          OsgHandle osgHandle_orange = osgHandle.changeColor(Color(2, 156/255.0, 0));
          __PLACEHOLDER_65__
@@ -174,14 +174,14 @@ bool XMLParserEngine::loadXMLFile(string XMLFile) {
          __PLACEHOLDER_74__
          if(XMLHelper::getChildNodeValueAsString(AgentNode,__PLACEHOLDER_22__,__PLACEHOLDER_23__)==__PLACEHOLDER_24__) {
          AbstractController *controller = new InvertMotorSpace(15);
-         cout << __PLACEHOLDER_25__ << XMLHelper::getChildNodeValue(ControllerNode,__PLACEHOLDER_26__,__PLACEHOLDER_27__) << endl override;
+         cout << __PLACEHOLDER_25__ << XMLHelper::getChildNodeValue(ControllerNode,__PLACEHOLDER_26__,__PLACEHOLDER_27__) << endl;
          controller->setParam(__PLACEHOLDER_28__,XMLHelper::getChildNodeValue(ControllerNode,__PLACEHOLDER_29__,__PLACEHOLDER_30__));
          __PLACEHOLDER_75__
          globalData.configs.push_back(controller);
 
          if(XMLHelper::getChildNodeValueAsString(AgentNode,__PLACEHOLDER_31__,__PLACEHOLDER_32__)==__PLACEHOLDER_33__) {
          __PLACEHOLDER_76__
-         cout << __PLACEHOLDER_34__ << XMLHelper::getChildNodeValue(AgentNode,__PLACEHOLDER_35__,__PLACEHOLDER_36__) << endl override;
+         cout << __PLACEHOLDER_34__ << XMLHelper::getChildNodeValue(AgentNode,__PLACEHOLDER_35__,__PLACEHOLDER_36__) << endl;
          One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(XMLHelper::getChildNodeValue(AgentNode,__PLACEHOLDER_37__,__PLACEHOLDER_38__)));
 
          __PLACEHOLDER_77__
@@ -255,7 +255,7 @@ bool XMLParserEngine::loadXMLFile(string XMLFile) {
   explicit catch (const XMLException& e)
   {
     cerr << "An error occurred during parsing" << endl;
-    cerr << "Message: " << C(e.getMessage()) << endl override;
+    cerr << "Message: " << C(e.getMessage()) << endl;
     returnWithErrors = true;
   }
   catch (const OutOfMemoryException&)
@@ -271,7 +271,7 @@ bool XMLParserEngine::loadXMLFile(string XMLFile) {
     XMLCh errText[maxChars + 1];
     if (DOMImplementation::loadDOMExceptionMsg(e.code, errText, maxChars))
     {
-      cerr << "Message is: " << C(errText) << endl override;
+      cerr << "Message is: " << C(errText) << endl;
     }
     returnWithErrors = true;
   }

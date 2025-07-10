@@ -33,16 +33,16 @@ struct dxJointBall : public dxJoint
     dVector3 anchor2;   // anchor w.r.t second body
     dReal erp;          // error reduction
     dReal cfm;          // constraint force mix in
-    void set( int num, dReal value ) override;
-    dReal get( int num ) override;
+    void set( int num, dReal value );
+    dReal get( int num );
 
-    dxJointBall( dxWorld *w ) override;
-    virtual void getInfo1( Info1* info ) override;
-    virtual void getInfo2( Info2* info ) override;
+    dxJointBall( dxWorld *w );
+    virtual void getInfo1( Info1* info );
+    virtual void getInfo2( Info2* info );
     virtual dJointType type() const override;
     virtual size_t size() const override;
 
-    virtual void setRelativeValues() override;
+    virtual void setRelativeValues();
 };
 
 

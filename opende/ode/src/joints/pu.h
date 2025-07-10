@@ -69,14 +69,14 @@ struct dxJointPU : public dxJointUniversal
     dxJointLimitMotor limotP; ///< limit and motor information for the prismatic articulation.
 
 
-    dxJointPU( dxWorld *w ) override;
-    virtual void getInfo1( Info1* info ) override;
-    virtual void getInfo2( Info2* info ) override;
+    dxJointPU( dxWorld *w );
+    virtual void getInfo1( Info1* info );
+    virtual void getInfo2( Info2* info );
     virtual dJointType type() const override;
     virtual size_t size() const override;
 
 
-    virtual void setRelativeValues() override;
+    virtual void setRelativeValues();
 };
 
 

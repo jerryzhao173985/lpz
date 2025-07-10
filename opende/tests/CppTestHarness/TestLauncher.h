@@ -7,20 +7,20 @@ class TestResults{
 public:
 	virtual void Launch(TestResults& results_) const = 0;
 
-	static TestLauncher** GetHeadAddr() override;
-	TestLauncher const* GetNext() const override;
+	static TestLauncher** GetHeadAddr();
+	TestLauncher const* GetNext() const;
 
 protected:
-	TestLauncher(TestLauncher** listHead) override;
+	TestLauncher(TestLauncher** listHead);
 	virtual ~TestLauncher();
 
 private:
 	TestLauncher const* m_next = nullptr;
 
 	// revoked
-	TestLauncher() override;
-	TestLauncher(TestLauncher const&) override;
-	TestLauncher& operator =(TestLauncher const&) override;
+	TestLauncher();
+	TestLauncher(TestLauncher const&);
+	TestLauncher& operator =(TestLauncher const&);
 };
 }
 

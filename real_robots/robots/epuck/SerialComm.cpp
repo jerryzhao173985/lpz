@@ -89,7 +89,7 @@ int SerialComm::writeData(char *buf, int num_bytes, int usleep_time) {
 	int current_bytes_written=0;
 	errno=0;
 	int timeout = usleep_time/70;		//wait 70 useconds between every read; the loop lasts for usleep_time/70 times
-	explicit while(bytes_written<num_bytes) {
+	while(bytes_written<num_bytes) {
 		current_bytes_written=write(fd, &buf[bytes_written], num_bytes-bytes_written);
 		if(current_bytes_written>=0) {	//if write ok
 			bytes_written+=current_bytes_written;
@@ -115,7 +115,7 @@ int SerialComm::readData(char *buf, int num_bytes, int usleep_time) {
 	int current_bytes_red=0;
 	errno=0;
 	int timeout = usleep_time/70;		//wait 70 useconds between every read; the loop lasts for usleep_time/70 times
-	explicit while(bytes_red<num_bytes) {
+	while(bytes_red<num_bytes) {
 		current_bytes_red=read(fd,&buf[bytes_red],num_bytes-bytes_red);
 		if(current_bytes_red>=0) {	//if read ok
 			bytes_red+=current_bytes_red;
@@ -141,7 +141,7 @@ void SerialComm::discard(int num_bytes) {
 	int bytes_red=0;
 	int current_bytes_red=0;
 	errno=0;
-	explicit while(bytes_red<num_bytes) {
+	while(bytes_red<num_bytes) {
 		current_bytes_red=read(fd,&temp[bytes_red],num_bytes-bytes_red);
 		if(current_bytes_red>=0) {	//if read ok
 			bytes_red+=current_bytes_red;

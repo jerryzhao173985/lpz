@@ -55,14 +55,14 @@ namespace lpzrobots {
 
     virtual void init(Primitive* own, Joint* joint = nullptr) override { this->own = own;}
 
-    virtual bool sense(const GlobalData& globaldata) override;
+    virtual bool sense(const GlobalData& globaldata);
 
     /// default implementation is a linear decrease in intensity until it is 0 at maxDistance
     virtual float distanceDependency(const Sound& s, double distance);
 
     virtual int getSensorNumber()  const override;
 
-    virtual std::list<sensor> getList()  const override;
+    virtual std::list<sensor> getList()  const;
 
     virtual int get(sensor* sensors, int length)  const override;
 

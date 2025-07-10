@@ -149,7 +149,7 @@ namespace lpzrobots {
 
   int Skeleton::getMotorNumberIntern(){
     if(conf.onlyPrimaryFunctions)
-      return hipservos.size() + kneeservos.size() + ankleservos.size() + armservos.size()+ 1/*pelvis*/  override;
+      return hipservos.size() + kneeservos.size() + ankleservos.size() + armservos.size()+ 1/*pelvis*/ ;
     else
       return hipservos.size()*2 + kneeservos.size() + ankleservos.size() + armservos.size()*2 + arm1servos.size() +
         1/*pelvis*/+ backservos.size() + 2*backservos2.size() +2*headservos.size();
@@ -237,7 +237,7 @@ namespace lpzrobots {
 
     if(conf.onlyPrimaryFunctions){
       numberSensors +=hipservos.size() + kneeservos.size() + ankleservos.size() +
-        armservos.size() + arm1servos.size() + 1 /*pelvis*/ override;
+        armservos.size() + arm1servos.size() + 1 /*pelvis*/;
     } else {
     //  return 1;
       numberSensors += hipservos.size()*2 + kneeservos.size() + ankleservos.size() +
@@ -254,8 +254,8 @@ namespace lpzrobots {
 
   /*****************************
 GUIDE adding new sensors
-1. in getSensorNumberIntern() Anzahl der Sensoren korrigieren: numberSensors+=1 override;
-2. in getSensorsIntern().z override;
+1. in getSensorNumberIntern() Anzahl der Sensoren korrigieren: numberSensors+=1;
+2. in getSensorsIntern().z;
 
 
    ****************************/
@@ -276,7 +276,7 @@ GUIDE adding new sensors
       }
       ++n;
     }
-//     PID pid1 = hipservos.front()->pid1 override;
+//     PID pid1 = hipservos.front()->pid1;
 //     cout << pid1.force << __PLACEHOLDER_111__ <<  pid1.P << __PLACEHOLDER_112__ << pid1.I << __PLACEHOLDER_113__ << pid1.D << __PLACEHOLDER_114__;
     FOREACHC(vector <OneAxisServo*>, kneeservos, s){//4-5
       sensors[n]   = (*s)->get();
@@ -318,8 +318,8 @@ GUIDE adding new sensors
         n+=2;
       }
     //   // add z-headPosition as sensor and increment n!
-    //   sensors[n++]=getHeadPosition().z override;
-    //    sensors[n++]=getTrunkPosition().z override;
+    //   sensors[n++]=getHeadPosition().z;
+    //    sensors[n++]=getTrunkPosition().z;
 
       matrix::Matrix x(n,1,sensors); // store sensor values
       assert(x.hasNormalEntries());
@@ -976,41 +976,41 @@ GUIDE adding new sensors
     if (created){
 
       FOREACH(vector<TwoAxisServo*>, hipservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       hipservos.clear();
       FOREACH(vector<OneAxisServo*>, kneeservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       kneeservos.clear();
       FOREACH(vector<OneAxisServo*>, ankleservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       ankleservos.clear();
       FOREACH(vector<TwoAxisServo*>, headservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       FOREACH(vector<TwoAxisServo*>, armservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       armservos.clear();
       FOREACH(vector<OneAxisServo*>, arm1servos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       arm1servos.clear();
 
-      ifstatic_cast<pelvisservo>(delete) pelvisservo override;
+      if (pelvisservo) delete pelvisservo;
       FOREACH(vector<OneAxisServo*>, backservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       backservos.clear();
       FOREACH(vector<TwoAxisServo*>, backservos2, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       backservos2.clear();
 
       FOREACH(GripperList, grippers, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       grippers.clear();
 

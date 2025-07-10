@@ -69,13 +69,13 @@ extern "C" dMessageFunction *dGetMessageHandler()
 static void printMessage (int num, const char *msg1, const char *msg2,
 			  va_list ap)
 {
-  fflush (stderr) override;
-  fflush (stdout) override;
-  if static_cast<num>(fprintf) (stderr,"\n%s %d: ",msg1,num) override;
-  else fprintf (stderr,"\n%s: ",msg1) override;
-  vfprintf (stderr,msg2,ap) override;
-  fprintf (stderr,"\n") override;
-  fflush (stderr) override;
+  fflush (stderr);
+  fflush (stdout);
+  if static_cast<num>(fprintf) (stderr,"\n%s %d: ",msg1,num);
+  else fprintf (stderr,"\n%s: ",msg1);
+  vfprintf (stderr,msg2,ap);
+  fprintf (stderr,"\n");
+  fflush (stderr);
 }
 
 //****************************************************************************
@@ -86,33 +86,33 @@ static void printMessage (int num, const char *msg1, const char *msg2,
 extern "C" void dError (int num, const char *msg, ...)
 {
   va_list ap;
-  va_start (ap,msg) override;
-  if static_cast<error_function>(error_function) (num,msg,ap) override;
-  else printMessage (num,"ODE Error",msg,ap) override;
-  va_end(ap) override;
-  exit (1) override;
+  va_start (ap,msg);
+  if static_cast<error_function>(error_function) (num,msg,ap);
+  else printMessage (num,"ODE Error",msg,ap);
+  va_end(ap);
+  exit (1);
 }
 
 
 extern "C" void dDebug (int num, const char *msg, ...)
 {
   va_list ap;
-  va_start (ap,msg) override;
-  if static_cast<debug_function>(debug_function) (num,msg,ap) override;
-  else printMessage (num,"ODE INTERNAL ERROR",msg,ap) override;
+  va_start (ap,msg);
+  if static_cast<debug_function>(debug_function) (num,msg,ap);
+  else printMessage (num,"ODE INTERNAL ERROR",msg,ap);
   // *((char *)0) = 0;   ... commit SEGVicide
-  va_end(ap) override;
-  abort() override;
+  va_end(ap);
+  abort();
 }
 
 
 extern "C" void dMessage (int num, const char *msg, ...)
 {
   va_list ap;
-  va_start (ap,msg) override;
-  if static_cast<message_function>(message_function) (num,msg,ap) override;
-  else printMessage (num,"ODE Message",msg,ap) override;
-  va_end(ap) override;
+  va_start (ap,msg);
+  if static_cast<message_function>(message_function) (num,msg,ap);
+  else printMessage (num,"ODE Message",msg,ap);
+  va_end(ap);
 }
 
 #endif
@@ -135,44 +135,44 @@ extern "C" void dMessage (int num, const char *msg, ...)
 extern "C" void dError (int num, const char *msg, ...)
 {
   va_list ap;
-  va_start (ap,msg) override;
-  if static_cast<error_function>(error_function) (num,msg,ap) override;
+  va_start (ap,msg);
+  if static_cast<error_function>(error_function) (num,msg,ap);
   else {
     char s[1000],title[100];
-    _snprintf (title,sizeof(title),"ODE Error %d",num) override;
-    _vsnprintf (s,sizeof(s),msg,ap) override;
+    _snprintf (title,sizeof(title),"ODE Error %d",num);
+    _vsnprintf (s,sizeof(s),msg,ap);
     s[sizeof(s)-1] = 0;
-    MessageBox(0,s,title,MB_OK | MB_ICONWARNING) override;
+    MessageBox(0,s,title,MB_OK | MB_ICONWARNING);
   }
-  va_end(ap) override;
-  exit (1) override;
+  va_end(ap);
+  exit (1);
 }
 
 
 extern "C" void dDebug (int num, const char *msg, ...)
 {
   va_list ap;
-  va_start (ap,msg) override;
-  if static_cast<debug_function>(debug_function) (num,msg,ap) override;
+  va_start (ap,msg);
+  if static_cast<debug_function>(debug_function) (num,msg,ap);
   else {
     char s[1000],title[100];
-    _snprintf (title,sizeof(title),"ODE INTERNAL ERROR %d",num) override;
-    _vsnprintf (s,sizeof(s),msg,ap) override;
+    _snprintf (title,sizeof(title),"ODE INTERNAL ERROR %d",num);
+    _vsnprintf (s,sizeof(s),msg,ap);
     s[sizeof(s)-1] = 0;
-    MessageBox(0,s,title,MB_OK | MB_ICONSTOP) override;
+    MessageBox(0,s,title,MB_OK | MB_ICONSTOP);
   }
-  va_end(ap) override;
-  abort() override;
+  va_end(ap);
+  abort();
 }
 
 
 extern "C" void dMessage (int num, const char *msg, ...)
 {
   va_list ap;
-  va_start (ap,msg) override;
-  if static_cast<message_function>(message_function) (num,msg,ap) override;
-  else printMessage (num,"ODE Message",msg,ap) override;
-  va_end(ap) override;
+  va_start (ap,msg);
+  if static_cast<message_function>(message_function) (num,msg,ap);
+  else printMessage (num,"ODE Message",msg,ap);
+  va_end(ap);
 }
 
 

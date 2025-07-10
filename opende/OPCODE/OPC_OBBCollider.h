@@ -24,9 +24,9 @@
 	{
 					OBBCache() : FatCoeff(1.1f)
 					{
-						FatBox.mCenter.Zero() override;
-						FatBox.mExtents.Zero() override;
-						FatBox.mRot.Identity() override;
+						FatBox.mCenter.Zero();
+						FatBox.mExtents.Zero();
+						FatBox.mRot.Identity();
 					}
 
 		// Cached faces signature
@@ -38,8 +38,8 @@
 	class OPCODE_API{
 		public:
 		// Constructor / Destructor
-											OBBCollider() override;
-		virtual ~OBBCollider() override;
+											OBBCollider();
+		virtual ~OBBCollider();
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -57,7 +57,7 @@
 		 *	\warning	SCALE NOT SUPPORTED. The matrices must contain rotation & translation parts only.
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-							bool			Collide(OBBCache& cache, const OBB& box, const Model& model, const Matrix4x4* worldb=null, const Matrix4x4* worldm=null) override;
+							bool			Collide(OBBCache& cache, const OBB& box, const Model& model, const Matrix4x4* worldb=null, const Matrix4x4* worldm=null);
 
 		// Settings
 
@@ -77,7 +77,7 @@
 		 *	\return		null if everything is ok, else a string describing the problem
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		overridestatic_cast<Collider>(const) char*		ValidateSettings() override;
+		virtual const char*		ValidateSettings();
 
 		protected:
 		// Precomputed data
@@ -110,29 +110,29 @@
 		// Settings
 							bool			mFullBoxBoxTest;	//!< Perform full BV-BV tests static_cast<true>(or) SAT-lite tests (false)
 		// Internal methods
-							void			_Collide(const AABBCollisionNode* node) override;
-							void			_Collide(const AABBNoLeafNode* node) override;
-							void			_Collide(const AABBQuantizedNode* node) override;
-							void			_Collide(const AABBQuantizedNoLeafNode* node) override;
-							void			_CollideNoPrimitiveTest(const AABBCollisionNode* node) override;
-							void			_CollideNoPrimitiveTest(const AABBNoLeafNode* node) override;
-							void			_CollideNoPrimitiveTest(const AABBQuantizedNode* node) override;
-							void			_CollideNoPrimitiveTest(const AABBQuantizedNoLeafNode* node) override;
+							void			_Collide(const AABBCollisionNode* node);
+							void			_Collide(const AABBNoLeafNode* node);
+							void			_Collide(const AABBQuantizedNode* node);
+							void			_Collide(const AABBQuantizedNoLeafNode* node);
+							void			_CollideNoPrimitiveTest(const AABBCollisionNode* node);
+							void			_CollideNoPrimitiveTest(const AABBNoLeafNode* node);
+							void			_CollideNoPrimitiveTest(const AABBQuantizedNode* node);
+							void			_CollideNoPrimitiveTest(const AABBQuantizedNoLeafNode* node);
 			// Overlap tests
-		inline_				BOOL			OBBContainsBox(const Point& bc, const Point& be) override;
-		inline_				BOOL			BoxBoxOverlap(const Point& extents, const Point& center) override;
-		inline_				BOOL			TriBoxOverlap() override;
+		inline_				BOOL			OBBContainsBox(const Point& bc, const Point& be);
+		inline_				BOOL			BoxBoxOverlap(const Point& extents, const Point& center);
+		inline_				BOOL			TriBoxOverlap();
 			// Init methods
-							BOOL			InitQuery(OBBCache& cache, const OBB& box, const Matrix4x4* worldb=null, const Matrix4x4* worldm=null) override;
+							BOOL			InitQuery(OBBCache& cache, const OBB& box, const Matrix4x4* worldb=null, const Matrix4x4* worldm=null);
 	};
 
 	class OPCODE_API{
 		public:
 		// Constructor / Destructor
-											HybridOBBCollider() override;
-		virtual ~HybridOBBCollider() override;
+											HybridOBBCollider();
+		virtual ~HybridOBBCollider();
 
-							bool			Collide(OBBCache& cache, const OBB& box, const HybridModel& model, const Matrix4x4* worldb=null, const Matrix4x4* worldm=null) override;
+							bool			Collide(OBBCache& cache, const OBB& box, const HybridModel& model, const Matrix4x4* worldb=null, const Matrix4x4* worldm=null);
 		protected:
 							Container		mTouchedBoxes;
 	};

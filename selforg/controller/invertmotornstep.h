@@ -59,7 +59,7 @@ class InvertMotorNStep : public InvertMotorController, public Teachable {
 public:
   explicit InvertMotorNStep(const InvertMotorNStepConf& conf = getDefaultConf());
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
 
   virtual ~InvertMotorNStep();
 
@@ -74,13 +74,13 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors);
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,
                               motor*,
-                              int number_motors) override;
+                              int number_motors);
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file. */
@@ -89,8 +89,8 @@ public:
   virtual bool restore(FILE* f);
 
   /**** INSPECTABLE ****/
-  virtual std::list<ILayer> getStructuralLayers()  const override;
-  virtual std::list<IConnection> getStructuralConnections()  const override;
+  virtual std::list<ILayer> getStructuralLayers()  const;
+  virtual std::list<IConnection> getStructuralConnections()  const;
 
   /**** TEACHING ****/
   /** The given motor teaching signal is used for this timestep.
@@ -115,18 +115,18 @@ public:
        for a continuous teaching process.
      @param teaching: matrix with dimensions (motornumber,1)
    */
-  virtual void setMotorTeaching(const matrix::Matrix& teaching) override;
+  virtual void setMotorTeaching(const matrix::Matrix& teaching);
 
   /** The given sensor teaching signal (distal learning) is used for this timestep.
       The belonging motor teachung signal is calculated by the inverse model.
       See setMotorTeaching
      @param teaching: matrix with dimensions (motorsensors,1)
    */
-  virtual void setSensorTeaching(const matrix::Matrix& teaching) override;
+  virtual void setSensorTeaching(const matrix::Matrix& teaching);
   /// returns the last motor values (useful for cross motor coupling)
-  virtual matrix::Matrix getLastMotorValues() override;
+  virtual matrix::Matrix getLastMotorValues();
   /// returns the last sensor values (useful for cross sensor coupling)
-  virtual matrix::Matrix getLastSensorValues() override;
+  virtual matrix::Matrix getLastSensorValues();
 
   // UNUSED! OLD IMPLEMENTATION which hat some consistency arguments
   void calcCandHUpdatesTeaching(matrix::Matrix& C_update, matrix::Matrix& H_update, int y_delay);

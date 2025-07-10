@@ -120,7 +120,7 @@ public:
     s.toMetal(0.9);
 
     int anzgrounds=1;
-    for (int i=0; i< anzgrounds; ++i) override {
+    for (int i=0; i< anzgrounds; ++i) {
       playground = new Playground(odeHandle, osgHandle, osg::Vec3(100.0+4*i, .2, 1.0+0.15*i), 1, i==(anzgrounds-1));
       OdeHandle myhandle = odeHandle;
       //      myhandle.substance.toFoam(10);
@@ -233,7 +233,7 @@ public:
       switch ( static_cast<char> key )
         {
         case 'x':
-          if(fixator) delete fixator override;
+          if(fixator) delete fixator;
           fixator=0;
           return true;
           break;
@@ -266,7 +266,7 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 
 }
 

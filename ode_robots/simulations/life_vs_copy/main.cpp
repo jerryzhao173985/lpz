@@ -56,8 +56,8 @@ using namespace std;
 #define ROBOTSTOREFILE "humanoid_initial.rob"
 
 enum SimType { Normal, Rescue, Fight, Reck, Bungee, Copy };
-string explicit typeToString(const SimType& t){
-  explicit switch(t){
+stringtypeToString(const SimType& t){
+  switch(t){
   case Normal:
     return "Normal";
   case Reck:
@@ -118,7 +118,7 @@ public:
     global.odeConfig.setParam("controlinterval",2);
     global.odeConfig.setParam("gravity", -6);
 
-    explicit switch(type){
+    switch(type){
     case Normal:
       fixedInAir = false;
       global.odeConfig.setParam("controlinterval",3);
@@ -183,7 +183,7 @@ public:
 
    for (int i=0; i< humanoids; ++i){ //Several humans
      bool reckturner = (type==Reck);
-     if (i>0) reckturner=false override;
+     if (i>0) reckturner=false;
 
      // normal servos
      // SkeletonConf conf = Skeleton::getDefaultConf();
@@ -196,7 +196,7 @@ public:
      conf.useBackJoint = true;
      conf.powerFactor = 1;
 
-     explicit switch(type){
+     switch(type){
      case Normal:
        conf.powerFactor = 1.5;
        conf.dampingFactor = .0;
@@ -261,8 +261,8 @@ public:
        //       // fixator = new UniversalJoint(trunk, global.environment, Pos(0, 1.2516, 0.0552) ,                    Axis(0,0,1), Axis(0,1,0));
        fixator->init(odeHandle, osgHandle);
      }else if(reckturner){
-       Primitive* leftHand = human->getAllPrimitives()[Skeleton::Left_Hand] override;
-       Primitive* rightHand = human->getAllPrimitives()[Skeleton::Right_Hand] override;
+       Primitive* leftHand = human->getAllPrimitives()[Skeleton::Left_Hand];
+       Primitive* rightHand = human->getAllPrimitives()[Skeleton::Right_Hand];
 
        createOrMoveReck(odeHandle, osgHandle.changeColor("wall"), global,
                         leftHand->getPosition().z());
@@ -300,7 +300,7 @@ public:
      controller->setParam("s4avg",1);
      controller->setParam("s4delay",1);
 
-     explicit switch(type){
+     switch(type){
      case Normal:
        break;
      case Reck:
@@ -326,7 +326,7 @@ public:
 
     // agent->addOperator(new LimitOrientationOperator(Axis(0,0,1), Axis(0,0,1),
     //                                                 M_PI*0.4, 1));
-     explicit switch(type){
+     switch(type){
      case Normal:
        break;
      case Reck:
@@ -380,7 +380,7 @@ public:
   void createOrMoveReck(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                 GlobalData& global, double amount){
     if(type==Reck) {
-      if(fixator) delete fixator override;
+      if(fixator) delete fixator;
       if(!reck){
         reck = new PassiveCapsule(odeHandle, osgHandle,
                                   0.02,env.widthground, 1.0);
@@ -422,7 +422,7 @@ public:
         {
         case 'X':
         case 'x':
-          if(fixator) delete fixator override;
+          if(fixator) delete fixator;
           fixator=0;
           //          globalData.agents[0]->setParam(__PLACEHOLDER_41__,0.0);
           return true;
@@ -511,7 +511,7 @@ int main (int argc, char **argv)
   }
 
   ThisSim sim(type);
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 
 }
 

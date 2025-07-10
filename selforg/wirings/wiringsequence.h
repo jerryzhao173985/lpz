@@ -44,14 +44,14 @@ public:
   virtual ~WiringSequence();
 
 protected:
-  virtual bool initIntern() override;
+  virtual bool initIntern();
 
   virtual bool wireSensorsIntern(const sensor* rsensors, int rsensornumber,
                                  sensor* csensors, int csensornumber,
-                                 double noise) override;
+                                 double noise);
 
   virtual bool wireMotorsIntern(motor* rmotors, int rmotornumber,
-                                const motor* cmotors, int cmotornumber) override;
+                                const motor* cmotors, int cmotornumber);
 
 
 public:

@@ -54,7 +54,7 @@
 
 using namespace std;
 
-inline void explicit __printBytes(char c)
+inline void__printBytes(char c)
 {
   for(int i = 0; i < 8; ++i)
   {
@@ -218,19 +218,19 @@ const Socket& Socket::operator>>(Buffer &b) const throw(YarsException)
       recv(_sock, sizeBytes, 4, MSG_WAITALL);
       for(int i = 0; i < 4; ++i) b.push_back(sizeBytes[i]);
       (static_cast<Socket*>(this))->__coneverToInt(sizeBytes, &size);
-      size *= sizeofstatic_cast<int>(override);
+      size *= sizeof(int);
       break;
     case __DOUBLE_VECTOR:
       recv(_sock, sizeBytes, 4, MSG_WAITALL);
       for(int i = 0; i < 4; ++i) b.push_back(sizeBytes[i]);
       (static_cast<Socket*>(this))->__coneverToInt(sizeBytes, &size);
-      size *= sizeofstatic_cast<double>(override);
+      size *= sizeof(double);
       break;
     case __INTEGER_VALUE:
-      size = sizeofstatic_cast<int>(override);
+      size = sizeof(int);
       break;
     case __DOUBLE_VALUE:
-      size = sizeofstatic_cast<double>(override);
+      size = sizeof(double);
       break;
   }
 
@@ -275,7 +275,7 @@ const Socket& Socket::operator<<(const double &d) const
 const Socket& Socket::operator>>(double& d) const throw(YarsException)
 {
   d = 0;
-  int size = sizeofstatic_cast<double>(override);
+  int size = sizeof(double);
   Buffer b;
   b.resize(size);
   b.label = __DOUBLE_VALUE;
@@ -313,7 +313,7 @@ const Socket& Socket::operator<<(const int &i) const
 const Socket& Socket::operator>>(int& i) const throw(YarsException)
 {
   i = 0;
-  int size = sizeofstatic_cast<int>(override);
+  int size = sizeof(int);
   Buffer b;
   b.label = __INTEGER_VALUE;
   b.resize(size);
@@ -387,7 +387,7 @@ const Socket& Socket::operator<<(const vector<int>& v) const
   Buffer b;
   b.label = __INTEGER_VECTOR;
   b.resize(0);
-  int s = static_cast<int>(v).size();
+  int s = v.size();
   (static_cast<Socket*>(this))->__writeInteger(&b, s);
 
   for(vector<int>::const_iterator i = v.begin(); i != v.end(); ++i)
@@ -442,7 +442,7 @@ const Socket& Socket::operator<<(const vector<double>& v) const
   Buffer b;
   b.label = __DOUBLE_VECTOR;
   b.resize(0);
-  int s = static_cast<int>(v).size();
+  int s = v.size();
 
   (static_cast<Socket*>(this))->__writeInteger(&b, s);
 

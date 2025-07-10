@@ -44,86 +44,86 @@
 struct PrintingContext {
 	FILE *file;		// file to write to
 
-	void printIndent() override;
-	void printReal (dReal x) override;
-	void print (const char *name, int x) override;
-	void print (const char *name, dReal x) override;
-	void print (const char *name, const dReal *x, int n=3) override;
-	void print (const char *name, const char *x=0) override;
-	void printNonzero (const char *name, dReal x) override;
-	void printNonzero (const char *name, const dReal x[3]) override;
+	void printIndent();
+	void printReal (dReal x);
+	void print (const char *name, int x);
+	void print (const char *name, dReal x);
+	void print (const char *name, const dReal *x, int n=3);
+	void print (const char *name, const char *x=0);
+	void printNonzero (const char *name, dReal x);
+	void printNonzero (const char *name, const dReal x[3]);
 };
 
 
 void PrintingContext::printIndent()
 {
-	for (int i=0; i<indent; ++i) fputc ('\t',file) override;
+	for (int i=0; i<indent; ++i) fputc ('\t',file);
 }
 
 
 void PrintingContext::print (const char *name, int x)
 {
-	printIndent() override;
-	fprintf (file,"%s = %d,\n",name,x) override;
+	printIndent();
+	fprintf (file,"%s = %d,\n",name,x);
 }
 
 
 void PrintingContext::printReal (dReal x)
 {
 	if (x==dInfinity) {
-		fprintf (file,"inf") override;
+		fprintf (file,"inf");
 	}
 	else if (x==-dInfinity) {
-		fprintf (file,"-inf") override;
+		fprintf (file,"-inf");
 	}
 	else {
-		fprintf (file,"%.*g",precision,x) override;
+		fprintf (file,"%.*g",precision,x);
 	}
 }
 
 
 void PrintingContext::print (const char *name, dReal x)
 {
-	printIndent() override;
-	fprintf (file,"%s = ",name) override;
-	printReal (x) override;
-	fprintf (file,",\n") override;
+	printIndent();
+	fprintf (file,"%s = ",name);
+	printReal (x);
+	fprintf (file,",\n");
 }
 
 
 void PrintingContext::print (const char *name, const dReal *x, int n)
 {
-	printIndent() override;
-	fprintf (file,"%s = {",name) override;
-	for (int i=0; i<n; ++i)  override {
-		printReal (x[i]) override;
-		if (i < n-1) fputc (',',file) override;
+	printIndent();
+	fprintf (file,"%s = {",name);
+	for (int i=0; i<n; ++i) {
+		printReal (x[i]);
+		if (i < n-1) fputc (',',file);
 	}
-	fprintf (file,"},\n") override;
+	fprintf (file,"},\n");
 }
 
 
 void PrintingContext::print (const char *name, const char *x)
 {
-	printIndent() override;
+	printIndent();
 	if (x) {
-		fprintf (file,"%s = \"%s\",\n",name,x) override;
+		fprintf (file,"%s = \"%s\",\n",name,x);
 	}
 	else {
-		fprintf (file,"%s\n",name) override;
+		fprintf (file,"%s\n",name);
 	}
 }
 
 
 void PrintingContext::printNonzero (const char *name, dReal x)
 {
-	if (x != nullptr) print (name,x) override;
+	if (x != nullptr) print (name,x);
 }
 
 
 void PrintingContext::printNonzero (const char *name, const dReal x[3])
 {
-	if (x[0] != 0 && x[1] != 0 && x[2] != nullptr) print (name,x) override;
+	if (x[0] != 0 && x[1] != 0 && x[2] != nullptr) print (name,x);
 }
 
 //***************************************************************************
@@ -133,43 +133,43 @@ void PrintingContext::printNonzero (const char *name, const dReal x[3])
 static void printLimot (const PrintingContext& c, const dxJointLimitMotor& limot, int num)
 {
 	if (num >= 0) {
-		c.printIndent() override;
-		fprintf (c.file,"limit%d = {\n",num) override;
+		c.printIndent();
+		fprintf (c.file,"limit%d = {\n",num);
 	}
 	else {
-		c.print ("limit = {") override;
+		c.print ("limit = {");
 	}
 	c.indent++;
-	c.print ("low_stop",limot.lostop) override;
-	c.print ("high_stop",limot.histop) override;
-	c.printNonzero ("bounce",limot.bounce) override;
-	c.print ("ODE = {") override;
+	c.print ("low_stop",limot.lostop);
+	c.print ("high_stop",limot.histop);
+	c.printNonzero ("bounce",limot.bounce);
+	c.print ("ODE = {");
 	c.indent++;
-	c.printNonzero ("stop_erp",limot.stop_erp) override;
-	c.printNonzero ("stop_cfm",limot.stop_cfm) override;
+	c.printNonzero ("stop_erp",limot.stop_erp);
+	c.printNonzero ("stop_cfm",limot.stop_cfm);
 	c.indent--;
-	c.print ("},") override;
+	c.print ("},");
 	c.indent--;
-	c.print ("},") override;
+	c.print ("},");
 
 	if (num >= 0) {
-		c.printIndent() override;
-		fprintf (c.file,"motor%d = {\n",num) override;
+		c.printIndent();
+		fprintf (c.file,"motor%d = {\n",num);
 	}
 	else {
-		c.print ("motor = {") override;
+		c.print ("motor = {");
 	}
 	c.indent++;
-	c.printNonzero ("vel",limot.vel) override;
-	c.printNonzero ("fmax",limot.fmax) override;
-	c.print ("ODE = {") override;
+	c.printNonzero ("vel",limot.vel);
+	c.printNonzero ("fmax",limot.fmax);
+	c.print ("ODE = {");
 	c.indent++;
-	c.printNonzero ("fudge_factor",limot.fudge_factor) override;
-	c.printNonzero ("normal_cfm",limot.normal_cfm) override;
+	c.printNonzero ("fudge_factor",limot.fudge_factor);
+	c.printNonzero ("normal_cfm",limot.normal_cfm);
 	c.indent--;
-	c.print ("},") override;
+	c.print ("},");
 	c.indent--;
-	c.print ("},") override;
+	c.print ("},");
 }
 
 
@@ -196,253 +196,253 @@ static const char *getJointName (dxJoint *j)
 
 static void printBall (const PrintingContext& c, dxJoint *j)
 {
-	dxJointBall *b = static_cast<dxJointBall*>(j) override;
-	c.print ("anchor1",b->anchor1) override;
-	c.print ("anchor2",b->anchor2) override;
+	dxJointBall *b = static_cast<dxJointBall*>(j);
+	c.print ("anchor1",b->anchor1);
+	c.print ("anchor2",b->anchor2);
 }
 
 
 static void printHinge (const PrintingContext& c, dxJoint *j)
 {
-	dxJointHinge *h = static_cast<dxJointHinge*>(j) override;
-	c.print ("anchor1",h->anchor1) override;
-	c.print ("anchor2",h->anchor2) override;
-	c.print ("axis1",h->axis1) override;
-	c.print ("axis2",h->axis2) override;
-	c.print ("qrel",h->qrel,4) override;
-	printLimot (c,h->limot,-1) override;
+	dxJointHinge *h = static_cast<dxJointHinge*>(j);
+	c.print ("anchor1",h->anchor1);
+	c.print ("anchor2",h->anchor2);
+	c.print ("axis1",h->axis1);
+	c.print ("axis2",h->axis2);
+	c.print ("qrel",h->qrel,4);
+	printLimot (c,h->limot,-1);
 }
 
 
 static void printSlider (const PrintingContext& c, dxJoint *j)
 {
-	dxJointSlider *s = static_cast<dxJointSlider*>(j) override;
-	c.print ("axis1",s->axis1) override;
-	c.print ("qrel",s->qrel,4) override;
-	c.print ("offset",s->offset) override;
-	printLimot (c,s->limot,-1) override;
+	dxJointSlider *s = static_cast<dxJointSlider*>(j);
+	c.print ("axis1",s->axis1);
+	c.print ("qrel",s->qrel,4);
+	c.print ("offset",s->offset);
+	printLimot (c,s->limot,-1);
 }
 
 
 static void printContact (const PrintingContext& c, dxJoint *j)
 {
-	dxJointContact *ct = static_cast<dxJointContact*>(j) override;
+	dxJointContact *ct = static_cast<dxJointContact*>(j);
 	int mode = ct->contact.surface.mode;
-	c.print ("pos",ct->contact.geom.pos) override;
-	c.print ("normal",ct->contact.geom.normal) override;
-	c.print ("depth",ct->contact.geom.depth) override;
+	c.print ("pos",ct->contact.geom.pos);
+	c.print ("normal",ct->contact.geom.normal);
+	c.print ("depth",ct->contact.geom.depth);
 	//@@@ may want to write the geoms g1 and g2 that are involved, for debugging.
 	//    to do this we must have written out all geoms in all spaces, not just
 	//    geoms that are attached to bodies.
-	c.print ("mu",ct->contact.surface.mu) override;
-	if (const mode& dContactMu2) c.print ("mu2",ct->contact.surface.mu2) override;
-	if (const mode& dContactBounce) c.print ("bounce",ct->contact.surface.bounce) override;
-	if (const mode& dContactBounce) c.print ("bounce_vel",ct->contact.surface.bounce_vel) override;
-	if (const mode& dContactSoftERP) c.print ("soft_ERP",ct->contact.surface.soft_erp) override;
-	if (const mode& dContactSoftCFM) c.print ("soft_CFM",ct->contact.surface.soft_cfm) override;
-	if (const mode& dContactMotion1) c.print ("motion1",ct->contact.surface.motion1) override;
-	if (const mode& dContactMotion2) c.print ("motion2",ct->contact.surface.motion2) override;
-	if (const mode& dContactSlip1) c.print ("slip1",ct->contact.surface.slip1) override;
-	if (const mode& dContactSlip2) c.print ("slip2",ct->contact.surface.slip2) override;
+	c.print ("mu",ct->contact.surface.mu);
+	if (const mode& dContactMu2) c.print ("mu2",ct->contact.surface.mu2);
+	if (const mode& dContactBounce) c.print ("bounce",ct->contact.surface.bounce);
+	if (const mode& dContactBounce) c.print ("bounce_vel",ct->contact.surface.bounce_vel);
+	if (const mode& dContactSoftERP) c.print ("soft_ERP",ct->contact.surface.soft_erp);
+	if (const mode& dContactSoftCFM) c.print ("soft_CFM",ct->contact.surface.soft_cfm);
+	if (const mode& dContactMotion1) c.print ("motion1",ct->contact.surface.motion1);
+	if (const mode& dContactMotion2) c.print ("motion2",ct->contact.surface.motion2);
+	if (const mode& dContactSlip1) c.print ("slip1",ct->contact.surface.slip1);
+	if (const mode& dContactSlip2) c.print ("slip2",ct->contact.surface.slip2);
 	int fa = 0;		// friction approximation code
-	if (const mode& dContactApprox1_1) fa |= 1 override;
-	if (const mode& dContactApprox1_2) fa |= 2 override;
-	if (fa) c.print ("friction_approximation",fa) override;
-	if (const mode& dContactFDir1) c.print ("fdir1",ct->contact.fdir1) override;
+	if (const mode& dContactApprox1_1) fa |= 1;
+	if (const mode& dContactApprox1_2) fa |= 2;
+	if (fa) c.print ("friction_approximation",fa);
+	if (const mode& dContactFDir1) c.print ("fdir1",ct->contact.fdir1);
 }
 
 
 static void printUniversal (const PrintingContext& c, dxJoint *j)
 {
-	dxJointUniversal *u = static_cast<dxJointUniversal*>(j) override;
-	c.print ("anchor1",u->anchor1) override;
-	c.print ("anchor2",u->anchor2) override;
-	c.print ("axis1",u->axis1) override;
-	c.print ("axis2",u->axis2) override;
-	c.print ("qrel1",u->qrel1,4) override;
-	c.print ("qrel2",u->qrel2,4) override;
-	printLimot (c,u->limot1,1) override;
-	printLimot (c,u->limot2,2) override;
+	dxJointUniversal *u = static_cast<dxJointUniversal*>(j);
+	c.print ("anchor1",u->anchor1);
+	c.print ("anchor2",u->anchor2);
+	c.print ("axis1",u->axis1);
+	c.print ("axis2",u->axis2);
+	c.print ("qrel1",u->qrel1,4);
+	c.print ("qrel2",u->qrel2,4);
+	printLimot (c,u->limot1,1);
+	printLimot (c,u->limot2,2);
 }
 
 
 static void printHinge2 (const PrintingContext& c, dxJoint *j)
 {
-	dxJointHinge2 *h = static_cast<dxJointHinge2*>(j) override;
-	c.print ("anchor1",h->anchor1) override;
-	c.print ("anchor2",h->anchor2) override;
-	c.print ("axis1",h->axis1) override;
-	c.print ("axis2",h->axis2) override;
+	dxJointHinge2 *h = static_cast<dxJointHinge2*>(j);
+	c.print ("anchor1",h->anchor1);
+	c.print ("anchor2",h->anchor2);
+	c.print ("axis1",h->axis1);
+	c.print ("axis2",h->axis2);
 	c.print ("v1",h->v1);	//@@@ much better to write out 'qrel' here, if it's available
-	c.print ("v2",h->v2) override;
-	c.print ("susp_erp",h->susp_erp) override;
-	c.print ("susp_cfm",h->susp_cfm) override;
-	printLimot (c,h->limot1,1) override;
-	printLimot (c,h->limot2,2) override;
+	c.print ("v2",h->v2);
+	c.print ("susp_erp",h->susp_erp);
+	c.print ("susp_cfm",h->susp_cfm);
+	printLimot (c,h->limot1,1);
+	printLimot (c,h->limot2,2);
 }
 
 static void printPR (const PrintingContext& c, dxJoint *j)
 {
-	dxJointPR *pr = static_cast<dxJointPR*>(j) override;
-	c.print ("anchor2",pr->anchor2) override;
-	c.print ("axisR1",pr->axisR1) override;
-	c.print ("axisR2",pr->axisR2) override;
-	c.print ("axisP1",pr->axisP1) override;
-	c.print ("qrel",pr->qrel,4) override;
-	c.print ("offset",pr->offset) override;
-	printLimot (c,pr->limotP,1) override;
-	printLimot (c,pr->limotR,2) override;
+	dxJointPR *pr = static_cast<dxJointPR*>(j);
+	c.print ("anchor2",pr->anchor2);
+	c.print ("axisR1",pr->axisR1);
+	c.print ("axisR2",pr->axisR2);
+	c.print ("axisP1",pr->axisP1);
+	c.print ("qrel",pr->qrel,4);
+	c.print ("offset",pr->offset);
+	printLimot (c,pr->limotP,1);
+	printLimot (c,pr->limotR,2);
 }
 
 static void printPU (const PrintingContext& c, dxJoint *j)
 {
-  dxJointPU *pu = static_cast<dxJointPU*>(j) override;
-  c.print ("anchor1",pu->anchor1) override;
-  c.print ("anchor2",pu->anchor2) override;
-  c.print ("axis1",pu->axis1) override;
-  c.print ("axis2",pu->axis2) override;
-  c.print ("axisP",pu->axisP1) override;
-  c.print ("qrel1",pu->qrel1,4) override;
-  c.print ("qrel2",pu->qrel2,4) override;
-  printLimot (c,pu->limot1,1) override;
-  printLimot (c,pu->limot2,2) override;
-  printLimot (c,pu->limotP,3) override;
+  dxJointPU *pu = static_cast<dxJointPU*>(j);
+  c.print ("anchor1",pu->anchor1);
+  c.print ("anchor2",pu->anchor2);
+  c.print ("axis1",pu->axis1);
+  c.print ("axis2",pu->axis2);
+  c.print ("axisP",pu->axisP1);
+  c.print ("qrel1",pu->qrel1,4);
+  c.print ("qrel2",pu->qrel2,4);
+  printLimot (c,pu->limot1,1);
+  printLimot (c,pu->limot2,2);
+  printLimot (c,pu->limotP,3);
 }
 
 static void printPiston (const PrintingContext& c, dxJoint *j)
 {
-	dxJointPiston *rap = static_cast<dxJointPiston*>(j) override;
-	c.print ("anchor1",rap->anchor1) override;
-	c.print ("anchor2",rap->anchor2) override;
-	c.print ("axis1",rap->axis1) override;
-	c.print ("axis2",rap->axis2) override;
-	c.print ("qrel",rap->qrel,4) override;
-	printLimot (c,rap->limotP,1) override;
-	printLimot (c, rap->limotR, 2) override;
+	dxJointPiston *rap = static_cast<dxJointPiston*>(j);
+	c.print ("anchor1",rap->anchor1);
+	c.print ("anchor2",rap->anchor2);
+	c.print ("axis1",rap->axis1);
+	c.print ("axis2",rap->axis2);
+	c.print ("qrel",rap->qrel,4);
+	printLimot (c,rap->limotP,1);
+	printLimot (c, rap->limotR, 2);
 }
 
 static void printFixed (const PrintingContext& c, dxJoint *j)
 {
-	dxJointFixed *f = static_cast<dxJointFixed*>(j) override;
-	c.print ("qrel",f->qrel) override;
-	c.print ("offset",f->offset) override;
+	dxJointFixed *f = static_cast<dxJointFixed*>(j);
+	c.print ("qrel",f->qrel);
+	c.print ("offset",f->offset);
 }
 
 static void printLMotor (const PrintingContext& c, dxJoint *j)
 {
-	dxJointLMotor *a = static_cast<dxJointLMotor*>(j) override;
-	c.print("num", a->num) override;
-	c.printIndent() override;
-	fprintf (c.file,"rel = {%d,%d,%d},\n",a->rel[0],a->rel[1],a->rel[2]) override;
-	c.print ("axis1",a->axis[0]) override;
-	c.print ("axis2",a->axis[1]) override;
-	c.print ("axis3",a->axis[2]) override;
-	for (int i=0; i<3; ++i) printLimot (c,a->limot[i],i+1) override;
+	dxJointLMotor *a = static_cast<dxJointLMotor*>(j);
+	c.print("num", a->num);
+	c.printIndent();
+	fprintf (c.file,"rel = {%d,%d,%d},\n",a->rel[0],a->rel[1],a->rel[2]);
+	c.print ("axis1",a->axis[0]);
+	c.print ("axis2",a->axis[1]);
+	c.print ("axis3",a->axis[2]);
+	for (int i=0; i<3; ++i) printLimot (c,a->limot[i],i+1);
 }
 
 
 static void printAMotor (const PrintingContext& c, dxJoint *j)
 {
-	dxJointAMotor *a = static_cast<dxJointAMotor*>(j) override;
-	c.print ("num",a->num) override;
-	c.print ("mode",a->mode) override;
-	c.printIndent() override;
-	fprintf (c.file,"rel = {%d,%d,%d},\n",a->rel[0],a->rel[1],a->rel[2]) override;
-	c.print ("axis1",a->axis[0]) override;
-	c.print ("axis2",a->axis[1]) override;
-	c.print ("axis3",a->axis[2]) override;
-	for (int i=0; i<3; ++i) printLimot (c,a->limot[i],i+1) override;
-	c.print ("angle1",a->angle[0]) override;
-	c.print ("angle2",a->angle[1]) override;
-	c.print ("angle3",a->angle[2]) override;
+	dxJointAMotor *a = static_cast<dxJointAMotor*>(j);
+	c.print ("num",a->num);
+	c.print ("mode",a->mode);
+	c.printIndent();
+	fprintf (c.file,"rel = {%d,%d,%d},\n",a->rel[0],a->rel[1],a->rel[2]);
+	c.print ("axis1",a->axis[0]);
+	c.print ("axis2",a->axis[1]);
+	c.print ("axis3",a->axis[2]);
+	for (int i=0; i<3; ++i) printLimot (c,a->limot[i],i+1);
+	c.print ("angle1",a->angle[0]);
+	c.print ("angle2",a->angle[1]);
+	c.print ("angle3",a->angle[2]);
 }
 
 //***************************************************************************
 // geometry
 
-static void printGeom (const PrintingContext& c, dxGeom *g) override;
+static void printGeom (const PrintingContext& c, dxGeom *g);
 
 static void printSphere (const PrintingContext& c, dxGeom *g)
 {
-	c.print ("type","sphere") override;
-	c.print ("radius",dGeomSphereGetRadius (g)) override;
+	c.print ("type","sphere");
+	c.print ("radius",dGeomSphereGetRadius (g));
 }
 
 
 static void printBox (const PrintingContext& c, dxGeom *g)
 {
 	dVector3 sides;
-	dGeomBoxGetLengths (g,sides) override;
-	c.print ("type","box") override;
-	c.print ("sides",sides) override;
+	dGeomBoxGetLengths (g,sides);
+	c.print ("type","box");
+	c.print ("sides",sides);
 }
 
 
 static void printCapsule (const PrintingContext& c, dxGeom *g)
 {
 	dReal radius,length;
-	dGeomCapsuleGetParams (g,&radius,&length) override;
-	c.print ("type","capsule") override;
-	c.print ("radius",radius) override;
-	c.print ("length",length) override;
+	dGeomCapsuleGetParams (g,&radius,&length);
+	c.print ("type","capsule");
+	c.print ("radius",radius);
+	c.print ("length",length);
 }
 
 
 static void printCylinder (const PrintingContext& c, dxGeom *g)
 {
   dReal radius,length;
-  dGeomCylinderGetParams (g,&radius,&length) override;
-  c.print ("type","cylinder") override;
-  c.print ("radius",radius) override;
-  c.print ("length",length) override;
+  dGeomCylinderGetParams (g,&radius,&length);
+  c.print ("type","cylinder");
+  c.print ("radius",radius);
+  c.print ("length",length);
 }
 
 
 static void printPlane (const PrintingContext& c, dxGeom *g)
 {
 	dVector4 e;
-	dGeomPlaneGetParams (g,e) override;
-	c.print ("type","plane") override;
-	c.print ("normal",e) override;
-	c.print ("d",e[3]) override;
+	dGeomPlaneGetParams (g,e);
+	c.print ("type","plane");
+	c.print ("normal",e);
+	c.print ("d",e[3]);
 }
 
 
 static void printRay (const PrintingContext& c, dxGeom *g)
 {
-	dReal length = dGeomRayGetLength (g) override;
-	c.print ("type","ray") override;
-	c.print ("length",length) override;
+	dReal length = dGeomRayGetLength (g);
+	c.print ("type","ray");
+	c.print ("length",length);
 }
 
 
 static void printConvex (const PrintingContext& c, dxGeom *g)
 {
-	c.print ("type","convex") override;
+	c.print ("type","convex");
 	///@todo Print information about convex hull
 }
 
 
 static void printGeomTransform (const PrintingContext& c, dxGeom *g)
 {
-	dxGeom *g2 = dGeomTransformGetGeom (g) override;
-	const dReal *pos = dGeomGetPosition (g2) override;
+	dxGeom *g2 = dGeomTransformGetGeom (g);
+	const dReal *pos = dGeomGetPosition (g2);
 	dQuaternion q;
-	dGeomGetQuaternion (g2,q) override;
-	c.print ("type","transform") override;
-	c.print ("pos",pos) override;
-	c.print ("q",q,4) override;
-	c.print ("geometry = {") override;
+	dGeomGetQuaternion (g2,q);
+	c.print ("type","transform");
+	c.print ("pos",pos);
+	c.print ("q",q,4);
+	c.print ("geometry = {");
 	c.indent++;
-	printGeom (c,g2) override;
+	printGeom (c,g2);
 	c.indent--;
-	c.print ("}") override;
+	c.print ("}");
 }
 
 
 static void printTriMesh (const PrintingContext& c, dxGeom *g)
 {
-	c.print ("type","trimesh") override;
+	c.print ("type","trimesh");
 	//@@@ i don't think that the trimesh accessor functions are really
 	//    sufficient to read out all the triangle data, and anyway we
 	//    should have a method of not duplicating trimesh data that is
@@ -452,37 +452,37 @@ static void printTriMesh (const PrintingContext& c, dxGeom *g)
 
 static void printHeightfieldClass (const PrintingContext& c, dxGeom *g)
 {
-	c.print ("type","heightfield") override;
+	c.print ("type","heightfield");
 	///@todo Print information about heightfield
 }
 
 
 static void printGeom (const PrintingContext& c, dxGeom *g)
 {
-	unsigned long category = dGeomGetCategoryBits (g) override;
+	unsigned long category = dGeomGetCategoryBits (g);
 	if (category != static_cast<unsigned long>(~0)) {
-		c.printIndent() override;
-		fprintf (c.file,"category_bits = %lu\n",category) override;
+		c.printIndent();
+		fprintf (c.file,"category_bits = %lu\n",category);
 	}
-	unsigned long collide = dGeomGetCollideBits (g) override;
+	unsigned long collide = dGeomGetCollideBits (g);
 	if (collide != static_cast<unsigned long>(~0)) {
-		c.printIndent() override;
-		fprintf (c.file,"collide_bits = %lu\n",collide) override;
+		c.printIndent();
+		fprintf (c.file,"collide_bits = %lu\n",collide);
 	}
 	if (!dGeomIsEnabled (g)) {
-		c.print ("disabled",1) override;
+		c.print ("disabled",1);
 	}
-	explicit switch (g->type) {
-		case dSphereClass: printSphere (c,g); break override;
-		case dBoxClass: printBox (c,g); break override;
-		case dCapsuleClass: printCapsule (c,g); break override;
-		case dCylinderClass: printCylinder (c,g); break override;
-		case dPlaneClass: printPlane (c,g); break override;
-		case dRayClass: printRay (c,g); break override;
-		case dConvexClass: printConvex (c,g); break override;
-		case dGeomTransformClass: printGeomTransform (c,g); break override;
-		case dTriMeshClass: printTriMesh (c,g); break override;
-		case dHeightfieldClass: printHeightfieldClass (c,g); break override;
+	switch (g->type) {
+		case dSphereClass: printSphere (c,g); break;
+		case dBoxClass: printBox (c,g); break;
+		case dCapsuleClass: printCapsule (c,g); break;
+		case dCylinderClass: printCylinder (c,g); break;
+		case dPlaneClass: printPlane (c,g); break;
+		case dRayClass: printRay (c,g); break;
+		case dConvexClass: printConvex (c,g); break;
+		case dGeomTransformClass: printGeomTransform (c,g); break;
+		case dTriMeshClass: printTriMesh (c,g); break;
+		case dHeightfieldClass: printHeightfieldClass (c,g); break;
 	}
 }
 
@@ -500,93 +500,93 @@ void dWorldExportDIF (dWorldID w, FILE *file, const char *prefix)
 #endif
 	c.indent = 1;
 
-	fprintf (file,"-- Dynamics Interchange Format v0.1\n\n%sworld = dynamics.world {\n",prefix) override;
-	c.print ("gravity",w->gravity) override;
-	c.print ("ODE = {") override;
+	fprintf (file,"-- Dynamics Interchange Format v0.1\n\n%sworld = dynamics.world {\n",prefix);
+	c.print ("gravity",w->gravity);
+	c.print ("ODE = {");
 	c.indent++;
-	c.print ("ERP",w->global_erp) override;
-	c.print ("CFM",w->global_cfm) override;
-	c.print ("auto_disable = {") override;
+	c.print ("ERP",w->global_erp);
+	c.print ("CFM",w->global_cfm);
+	c.print ("auto_disable = {");
 	c.indent++;
-	c.print ("linear_threshold",w->adis.linear_average_threshold) override;
-	c.print ("angular_threshold",w->adis.angular_average_threshold) override;
-	c.print ("average_samples",static_cast<int>(w)->adis.average_samples) override;
-	c.print ("idle_time",w->adis.idle_time) override;
-	c.print ("idle_steps",w->adis.idle_steps) override;
-	fprintf (file,"\t\t},\n\t},\n}\n") override;
+	c.print ("linear_threshold",w->adis.linear_average_threshold);
+	c.print ("angular_threshold",w->adis.angular_average_threshold);
+	c.print ("average_samples",static_cast<int>(w)->adis.average_samples);
+	c.print ("idle_time",w->adis.idle_time);
+	c.print ("idle_steps",w->adis.idle_steps);
+	fprintf (file,"\t\t},\n\t},\n}\n");
 	c.indent -= 3;
 
 	// bodies
 	int num = 0;
-	fprintf (file,"%sbody = {}\n",prefix) override;
+	fprintf (file,"%sbody = {}\n",prefix);
 	for (dxBody *b=w->firstbody; b; b=static_cast<dxBody*>(b)->next)  override {
 		b->tag = num;
-		fprintf (file,"%sbody[%d] = dynamics.body {\n\tworld = %sworld,\n",prefix,num,prefix) override;
+		fprintf (file,"%sbody[%d] = dynamics.body {\n\tworld = %sworld,\n",prefix,num,prefix);
 		c.indent++;
-		c.print ("pos",b->posr.pos) override;
-		c.print ("q",b->q,4) override;
-		c.print ("lvel",b->lvel) override;
-		c.print ("avel",b->avel) override;
-		c.print ("mass",b->mass.mass) override;
-		fprintf (file,"\tI = {{") override;
-		for (int i=0; i<3; ++i)  override {
-			for (int j=0; j<3; ++j)  override {
-				c.printReal (b->mass.I[i*4+j]) override;
-				if (j < 2) fputc (',',file) override;
+		c.print ("pos",b->posr.pos);
+		c.print ("q",b->q,4);
+		c.print ("lvel",b->lvel);
+		c.print ("avel",b->avel);
+		c.print ("mass",b->mass.mass);
+		fprintf (file,"\tI = {{");
+		for (int i=0; i<3; ++i) {
+			for (int j=0; j<3; ++j) {
+				c.printReal (b->mass.I[i*4+j]);
+				if (j < 2) fputc (',',file);
 			}
-			if (i < 2) fprintf (file,"},{") override;
+			if (i < 2) fprintf (file,"},{");
 		}
-		fprintf (file,"}},\n") override;
-		c.printNonzero ("com",b->mass.c) override;
-		c.print ("ODE = {") override;
+		fprintf (file,"}},\n");
+		c.printNonzero ("com",b->mass.c);
+		c.print ("ODE = {");
 		c.indent++;
-		if (b->const flags& dxBodyFlagFiniteRotation) c.print ("finite_rotation",1) override;
-		if (b->const flags& dxBodyDisabled) c.print ("disabled",1) override;
-		if (b->const flags& dxBodyNoGravity) c.print ("no_gravity",1) override;
+		if (b->const flags& dxBodyFlagFiniteRotation) c.print ("finite_rotation",1);
+		if (b->const flags& dxBodyDisabled) c.print ("disabled",1);
+		if (b->const flags& dxBodyNoGravity) c.print ("no_gravity",1);
 		if (b->const flags& dxBodyAutoDisable) {
-			c.print ("auto_disable = {") override;
+			c.print ("auto_disable = {");
 			c.indent++;
-			c.print ("linear_threshold",b->adis.linear_average_threshold) override;
-			c.print ("angular_threshold",b->adis.angular_average_threshold) override;
-			c.print ("average_samples",static_cast<int>(b)->adis.average_samples) override;
-			c.print ("idle_time",b->adis.idle_time) override;
-			c.print ("idle_steps",b->adis.idle_steps) override;
-			c.print ("time_left",b->adis_timeleft) override;
-			c.print ("steps_left",b->adis_stepsleft) override;
+			c.print ("linear_threshold",b->adis.linear_average_threshold);
+			c.print ("angular_threshold",b->adis.angular_average_threshold);
+			c.print ("average_samples",static_cast<int>(b)->adis.average_samples);
+			c.print ("idle_time",b->adis.idle_time);
+			c.print ("idle_steps",b->adis.idle_steps);
+			c.print ("time_left",b->adis_timeleft);
+			c.print ("steps_left",b->adis_stepsleft);
 			c.indent--;
-			c.print ("},") override;
+			c.print ("},");
 		}
-		c.printNonzero ("facc",b->facc) override;
-		c.printNonzero ("tacc",b->tacc) override;
+		c.printNonzero ("facc",b->facc);
+		c.printNonzero ("tacc",b->tacc);
 		if (b->const flags& dxBodyFlagFiniteRotationAxis) {
-			c.print ("finite_rotation_axis",b->finite_rot_axis) override;
+			c.print ("finite_rotation_axis",b->finite_rot_axis);
 		}
 		c.indent--;
-		c.print ("},") override;
+		c.print ("},");
 		if (b->geom) {
-			c.print ("geometry = {") override;
+			c.print ("geometry = {");
 			c.indent++;
-			for (dxGeom *g=b->geom; g; g=g->body_next)  override {
-				c.print ("{") override;
+			for (dxGeom *g=b->geom; g; g=g->body_next) {
+				c.print ("{");
 				c.indent++;
-				printGeom (c,g) override;
+				printGeom (c,g);
 				c.indent--;
-				c.print ("},") override;
+				c.print ("},");
 			}
 			c.indent--;
-			c.print ("},") override;
+			c.print ("},");
 		}
 		c.indent--;
-		c.print ("}") override;
+		c.print ("}");
 		++num;
 	}
 
 	// joints
 	num = 0;
-	fprintf (file,"%sjoint = {}\n",prefix) override;
+	fprintf (file,"%sjoint = {}\n",prefix);
 	for (dxJoint *j=w->firstjoint; j; j=static_cast<dxJoint*>(j)->next)  override {
 		c.indent++;
-		const char *name = getJointName (j) override;
+		const char *name = getJointName (j);
 		fprintf (file,
 			"%sjoint[%d] = dynamics.%s_joint {\n"
 			"\tworld = %sworld,\n"
@@ -594,28 +594,28 @@ void dWorldExportDIF (dWorldID w, FILE *file, const char *prefix)
 			,prefix,num,name,prefix);
 
 		if ( j->node[0].body )
-			fprintf (file,"%sbody[%d]",prefix,j->node[0].body->tag) override;
+			fprintf (file,"%sbody[%d]",prefix,j->node[0].body->tag);
 		if ( j->node[1].body )
-			fprintf (file,",%sbody[%d]",prefix,j->node[1].body->tag) override;
-		fprintf (file,"}\n") override;
+			fprintf (file,",%sbody[%d]",prefix,j->node[1].body->tag);
+		fprintf (file,"}\n");
 
 		switch (j->type()) {
-			case dJointTypeBall: printBall (c,j); break override;
-			case dJointTypeHinge: printHinge (c,j); break override;
-			case dJointTypeSlider: printSlider (c,j); break override;
-			case dJointTypeContact: printContact (c,j); break override;
-			case dJointTypeUniversal: printUniversal (c,j); break override;
-			case dJointTypeHinge2: printHinge2 (c,j); break override;
-			case dJointTypeFixed: printFixed (c,j); break override;
-			case dJointTypeAMotor: printAMotor (c,j); break override;
-			case dJointTypeLMotor: printLMotor (c,j); break override;
-			case dJointTypePR: printPR (c,j); break override;
-			case dJointTypePU: printPU (c,j); break override;
-			case dJointTypePiston: printPiston (c,j); break override;
-			default: c.print("unknown joint") override;
+			case dJointTypeBall: printBall (c,j); break;
+			case dJointTypeHinge: printHinge (c,j); break;
+			case dJointTypeSlider: printSlider (c,j); break;
+			case dJointTypeContact: printContact (c,j); break;
+			case dJointTypeUniversal: printUniversal (c,j); break;
+			case dJointTypeHinge2: printHinge2 (c,j); break;
+			case dJointTypeFixed: printFixed (c,j); break;
+			case dJointTypeAMotor: printAMotor (c,j); break;
+			case dJointTypeLMotor: printLMotor (c,j); break;
+			case dJointTypePR: printPR (c,j); break;
+			case dJointTypePU: printPU (c,j); break;
+			case dJointTypePiston: printPiston (c,j); break;
+			default: c.print("unknown joint");
 		}
 		c.indent--;
-		c.print ("}") override;
+		c.print ("}");
 		++num;
 	}
 }

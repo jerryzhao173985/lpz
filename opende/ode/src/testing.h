@@ -38,10 +38,10 @@ class dMatrixComparison{
   int afterfirst,index;
 
 public:
-  dMatrixComparison() override;
+  dMatrixComparison();
   ~dMatrixComparison();
 
-  dReal nextMatrix (dReal *A, int n, int m, int lower_tri, const char *name, ...) override;
+  dReal nextMatrix (dReal *A, int n, int m, int lower_tri, const char *name, ...);
   // add a new n*m matrix A to the sequence. the name of the matrix is given
   // by the printf-style arguments (name,...). if this is the first sequence
   // then this object will simply record the matrices and return 0.
@@ -51,13 +51,13 @@ public:
   // lower triangle of the matrix (including the diagonal) will be compared
   // (the matrix must be square).
 
-  void end() override;
+  void end();
   // end a sequence.
 
-  void reset() override;
+  void reset();
   // restarts the object, so the next sequence will be the first sequence.
 
-  void dump() override;
+  void dump();
   // print out info about all the matrices in the sequence
 };
 

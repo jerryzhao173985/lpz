@@ -248,16 +248,16 @@ namespace lpzrobots {
     /** sets the pose of the vehicle
         @param pose desired pose matrix
     */
-    virtual void placeIntern(const osg::Matrix& pose) override;
+    virtual void placeIntern(const osg::Matrix& pose);
 
-    virtual int getSensorsIntern(double* sensors, int sensornumber) override;
-    virtual void setMotorsIntern(const double* motors, int motornumber) override;
+    virtual int getSensorsIntern(double* sensors, int sensornumber);
+    virtual void setMotorsIntern(const double* motors, int motornumber);
     virtual int getSensorNumberIntern()  const override;
     virtual int getMotorNumberIntern()  const override;
 
 
     /******** CONFIGURABLE ***********/
-    virtual void notifyOnChange(const paramkey& key) override;
+    virtual void notifyOnChange(const paramkey& key);
 
     /** the main object of the robot, which is used for position and speed tracking */
     virtual const Primitive* getMainPrimitive() const { return objects[Thorax]; } // Trunk_comp

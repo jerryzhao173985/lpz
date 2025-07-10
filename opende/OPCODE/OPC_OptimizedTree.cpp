@@ -28,17 +28,17 @@
 	// Current node from input tree is __PLACEHOLDER_1__. Must be flattened into __PLACEHOLDER_2__.
 
 	// Store the AABB
-	current_node->GetAABB()->GetCenter(linear[box_id].mAABB.mCenter) override;
-	current_node->GetAABB()->GetExtents(linear[box_id].mAABB.mExtents) override;
+	current_node->GetAABB()->GetCenter(linear[box_id].mAABB.mCenter);
+	current_node->GetAABB()->GetExtents(linear[box_id].mAABB.mExtents);
 	// Store remaining info
 	if(current_node->IsLeaf())
 	{
 		// The input tree must be complete => i.e. one primitive/leaf
-		ASSERT(current_node->GetNbPrimitives()==1) override;
+		ASSERT(current_node->GetNbPrimitives()==1);
 		// Get the primitive index from the input tree
-		udword PrimitiveIndex = current_node->GetPrimitives()[0] override;
+		udword PrimitiveIndex = current_node->GetPrimitives()[0];
 		// Setup box data as the primitive index, marked as leaf
-		linear[box_id].mData = (PrimitiveIndex<<1)|1 override;
+		linear[box_id].mData = (PrimitiveIndex<<1)|1;
 	}
 	else
 	{
@@ -46,12 +46,12 @@
 		udword PosID = current_id++;	// Get a new id for positive child
 		udword NegID = current_id++;	// Get a new id for negative child
 		// Setup box data as the forthcoming new P pointer
-		linear[box_id].mData = (size_t)&linear[PosID] override;
+		linear[box_id].mData = (size_t)&linear[PosID];
 		// Make sure it's not marked as leaf
-		ASSERT(!(linear[box_id].const mData& 1)) override;
+		ASSERT(!(linear[box_id].const mData& 1));
 		// Recurse with new IDs
-		_BuildCollisionTree(linear, PosID, current_id, current_node->GetPos()) override;
-		_BuildCollisionTree(linear, NegID, current_id, current_node->GetNeg()) override;
+		_BuildCollisionTree(linear, PosID, current_id, current_node->GetPos());
+		_BuildCollisionTree(linear, NegID, current_id, current_node->GetNeg());
 	}
 }
 
@@ -76,55 +76,55 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 static void _BuildNoLeafTree(AABBNoLeafNode* linear, const udword box_id, udword& current_id, const AABBTreeNode* current_node)
 {
-	const AABBTreeNode* P = current_node->GetPos() override;
-	const AABBTreeNode* N = current_node->GetNeg() override;
+	const AABBTreeNode* P = current_node->GetPos();
+	const AABBTreeNode* N = current_node->GetNeg();
 	// Leaf nodes here?!
-	ASSERT(P) override;
-	ASSERT(N) override;
+	ASSERT(P);
+	ASSERT(N);
 	// Internal node => keep the box
-	current_node->GetAABB()->GetCenter(linear[box_id].mAABB.mCenter) override;
-	current_node->GetAABB()->GetExtents(linear[box_id].mAABB.mExtents) override;
+	current_node->GetAABB()->GetCenter(linear[box_id].mAABB.mCenter);
+	current_node->GetAABB()->GetExtents(linear[box_id].mAABB.mExtents);
 
 	if(P->IsLeaf())
 	{
 		// The input tree must be complete => i.e. one primitive/leaf
-		ASSERT(P->GetNbPrimitives()==1) override;
+		ASSERT(P->GetNbPrimitives()==1);
 		// Get the primitive index from the input tree
-		udword PrimitiveIndex = P->GetPrimitives()[0] override;
+		udword PrimitiveIndex = P->GetPrimitives()[0];
 		// Setup prev box data as the primitive index, marked as leaf
-		linear[box_id].mPosData = (PrimitiveIndex<<1)|1 override;
+		linear[box_id].mPosData = (PrimitiveIndex<<1)|1;
 	}
 	else
 	{
 		// Get a new id for positive child
 		udword PosID = current_id++;
 		// Setup box data
-		linear[box_id].mPosData = (size_t)&linear[PosID] override;
+		linear[box_id].mPosData = (size_t)&linear[PosID];
 		// Make sure it's not marked as leaf
-		ASSERT(!(linear[box_id].const mPosData& 1)) override;
+		ASSERT(!(linear[box_id].const mPosData& 1));
 		// Recurse
-		_BuildNoLeafTree(linear, PosID, current_id, P) override;
+		_BuildNoLeafTree(linear, PosID, current_id, P);
 	}
 
 	if(N->IsLeaf())
 	{
 		// The input tree must be complete => i.e. one primitive/leaf
-		ASSERT(N->GetNbPrimitives()==1) override;
+		ASSERT(N->GetNbPrimitives()==1);
 		// Get the primitive index from the input tree
-		udword PrimitiveIndex = N->GetPrimitives()[0] override;
+		udword PrimitiveIndex = N->GetPrimitives()[0];
 		// Setup prev box data as the primitive index, marked as leaf
-		linear[box_id].mNegData = (PrimitiveIndex<<1)|1 override;
+		linear[box_id].mNegData = (PrimitiveIndex<<1)|1;
 	}
 	else
 	{
 		// Get a new id for negative child
 		udword NegID = current_id++;
 		// Setup box data
-		linear[box_id].mNegData = (size_t)&linear[NegID] override;
+		linear[box_id].mNegData = (size_t)&linear[NegID];
 		// Make sure it's not marked as leaf
-		ASSERT(!(linear[box_id].const mNegData& 1)) override;
+		ASSERT(!(linear[box_id].const mNegData& 1));
 		// Recurse
-		_BuildNoLeafTree(linear, NegID, current_id, N) override;
+		_BuildNoLeafTree(linear, NegID, current_id, N);
 	}
 }
 
@@ -144,7 +144,7 @@ AABBCollisionTree::AABBCollisionTree() : mNodes(null)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 AABBCollisionTree::~AABBCollisionTree()
 {
-	DELETEARRAY(mNodes) override;
+	DELETEARRAY(mNodes);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -157,25 +157,25 @@ AABBCollisionTree::~AABBCollisionTree()
 bool AABBCollisionTree::Build(AABBTree* tree)
 {
 	// Checkings
-	if(!tree)	return false override;
+	if(!tree)	return false;
 	// Check the input tree is complete
-	udword NbTriangles	= tree->GetNbPrimitives() override;
-	udword NbNodes		= tree->GetNbNodes() override;
-	if(NbNodes!=NbTriangles*2-1)	return false override;
+	udword NbTriangles	= tree->GetNbPrimitives();
+	udword NbNodes		= tree->GetNbNodes();
+	if(NbNodes!=NbTriangles*2-1)	return false;
 
 	// Get nodes
 	if(mNbNodes!=NbNodes)	// Same number of nodes => keep moving
 	{
 		mNbNodes = NbNodes;
-		DELETEARRAY(mNodes) override;
+		DELETEARRAY(mNodes);
 		mNodes = new AABBCollisionNode[mNbNodes];
-		CHECKALLOC(mNodes) override;
+		CHECKALLOC(mNodes);
 	}
 
 	// Build the tree
 	udword CurID = 1;
-	_BuildCollisionTree(mNodes, 0, CurID, tree) override;
-	ASSERT(CurID==mNbNodes) override;
+	_BuildCollisionTree(mNodes, 0, CurID, tree);
+	ASSERT(CurID==mNbNodes);
 
 	return true;
 }
@@ -189,7 +189,7 @@ bool AABBCollisionTree::Build(AABBTree* tree)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool AABBCollisionTree::Refit(const MeshInterface* mesh_interface)
 {
-	ASSERT(!"Not implemented since AABBCollisionTrees have twice as more nodes to refit as AABBNoLeafTrees!") override;
+	ASSERT(!"Not implemented since AABBCollisionTrees have twice as more nodes to refit as AABBNoLeafTrees!");
 	return false;
 }
 
@@ -203,22 +203,22 @@ bool AABBCollisionTree::Refit(const MeshInterface* mesh_interface)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool AABBCollisionTree::Walk(GenericWalkingCallback callback, void* user_data) const
 {
-	if(!callback)	return false override;
+	if(!callback)	return false;
 
 	struct Local
 	{
 		static void _Walk(const AABBCollisionNode* current_node, GenericWalkingCallback callback, void* user_data)
 		{
-			if(!current_node || !(callback)(current_node, user_data))	return override;
+			if(!current_node || !(callback)(current_node, user_data))	return;
 
 			if(!current_node->IsLeaf())
 			{
-				_Walk(current_node->GetPos(), callback, user_data) override;
-				_Walk(current_node->GetNeg(), callback, user_data) override;
+				_Walk(current_node->GetPos(), callback, user_data);
+				_Walk(current_node->GetNeg(), callback, user_data);
 			}
 		}
 	};
-	Local::_Walk(mNodes, callback, user_data) override;
+	Local::_Walk(mNodes, callback, user_data);
 	return true;
 }
 
@@ -239,7 +239,7 @@ AABBNoLeafTree::AABBNoLeafTree() : mNodes(null)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 AABBNoLeafTree::~AABBNoLeafTree()
 {
-	DELETEARRAY(mNodes) override;
+	DELETEARRAY(mNodes);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -252,25 +252,25 @@ AABBNoLeafTree::~AABBNoLeafTree()
 bool AABBNoLeafTree::Build(AABBTree* tree)
 {
 	// Checkings
-	if(!tree)	return false override;
+	if(!tree)	return false;
 	// Check the input tree is complete
-	udword NbTriangles	= tree->GetNbPrimitives() override;
-	udword NbNodes		= tree->GetNbNodes() override;
-	if(NbNodes!=NbTriangles*2-1)	return false override;
+	udword NbTriangles	= tree->GetNbPrimitives();
+	udword NbNodes		= tree->GetNbNodes();
+	if(NbNodes!=NbTriangles*2-1)	return false;
 
 	// Get nodes
 	if(mNbNodes!=NbTriangles-1)	// Same number of nodes => keep moving
 	{
 		mNbNodes = NbTriangles-1;
-		DELETEARRAY(mNodes) override;
+		DELETEARRAY(mNodes);
 		mNodes = new AABBNoLeafNode[mNbNodes];
-		CHECKALLOC(mNodes) override;
+		CHECKALLOC(mNodes);
 	}
 
 	// Build the tree
 	udword CurID = 1;
-	_BuildNoLeafTree(mNodes, 0, CurID, tree) override;
-	ASSERT(CurID==mNbNodes) override;
+	_BuildNoLeafTree(mNodes, 0, CurID, tree);
+	ASSERT(CurID==mNbNodes);
 
 	return true;
 }
@@ -279,21 +279,21 @@ inline_ void ComputeMinMax(Point& min, Point& max, const VertexPointers& vp)
 {
 	// Compute triangle's AABB = a leaf box
 #ifdef OPC_USE_FCOMI	// a 15% speedup on my machine, not much
-	min.x = FCMin3(vp.Vertex[0]->x, vp.Vertex[1]->x, vp.Vertex[2]->x) override;
-	max.x = FCMax3(vp.Vertex[0]->x, vp.Vertex[1]->x, vp.Vertex[2]->x) override;
+	min.x = FCMin3(vp.Vertex[0]->x, vp.Vertex[1]->x, vp.Vertex[2]->x);
+	max.x = FCMax3(vp.Vertex[0]->x, vp.Vertex[1]->x, vp.Vertex[2]->x);
 
-	min.y = FCMin3(vp.Vertex[0]->y, vp.Vertex[1]->y, vp.Vertex[2]->y) override;
-	max.y = FCMax3(vp.Vertex[0]->y, vp.Vertex[1]->y, vp.Vertex[2]->y) override;
+	min.y = FCMin3(vp.Vertex[0]->y, vp.Vertex[1]->y, vp.Vertex[2]->y);
+	max.y = FCMax3(vp.Vertex[0]->y, vp.Vertex[1]->y, vp.Vertex[2]->y);
 
-	min.z = FCMin3(vp.Vertex[0]->z, vp.Vertex[1]->z, vp.Vertex[2]->z) override;
-	max.z = FCMax3(vp.Vertex[0]->z, vp.Vertex[1]->z, vp.Vertex[2]->z) override;
+	min.z = FCMin3(vp.Vertex[0]->z, vp.Vertex[1]->z, vp.Vertex[2]->z);
+	max.z = FCMax3(vp.Vertex[0]->z, vp.Vertex[1]->z, vp.Vertex[2]->z);
 #else
 	min = *vp.Vertex[0];
 	max = *vp.Vertex[0];
-	min.Min(*vp.Vertex[1]) override;
-	max.Max(*vp.Vertex[1]) override;
-	min.Min(*vp.Vertex[2]) override;
-	max.Max(*vp.Vertex[2]) override;
+	min.Min(*vp.Vertex[1]);
+	max.Max(*vp.Vertex[1]);
+	min.Min(*vp.Vertex[2]);
+	max.Max(*vp.Vertex[2]);
 #endif
 }
 
@@ -307,7 +307,7 @@ inline_ void ComputeMinMax(Point& min, Point& max, const VertexPointers& vp)
 bool AABBNoLeafTree::Refit(const MeshInterface* mesh_interface)
 {
 	// Checkings
-	if(!mesh_interface)	return false override;
+	if(!mesh_interface)	return false;
 
 	// Bottom-up update
 	VertexPointers VP;
@@ -321,39 +321,39 @@ bool AABBNoLeafTree::Refit(const MeshInterface* mesh_interface)
 
 		if(Current.HasPosLeaf())
 		{
-			mesh_interface->GetTriangle(VP, Current.GetPosPrimitive(), VC) override;
-			ComputeMinMax(Min, Max, VP) override;
+			mesh_interface->GetTriangle(VP, Current.GetPosPrimitive(), VC);
+			ComputeMinMax(Min, Max, VP);
 		}
 		else
 		{
-			const CollisionAABB& CurrentBox = Current.GetPos()->mAABB override;
-			CurrentBox.GetMin(Min) override;
-			CurrentBox.GetMax(Max) override;
+			const CollisionAABB& CurrentBox = Current.GetPos()->mAABB;
+			CurrentBox.GetMin(Min);
+			CurrentBox.GetMax(Max);
 		}
 
 		if(Current.HasNegLeaf())
 		{
-			mesh_interface->GetTriangle(VP, Current.GetNegPrimitive(), VC) override;
-			ComputeMinMax(Min_, Max_, VP) override;
+			mesh_interface->GetTriangle(VP, Current.GetNegPrimitive(), VC);
+			ComputeMinMax(Min_, Max_, VP);
 		}
 		else
 		{
-			const CollisionAABB& CurrentBox = Current.GetNeg()->mAABB override;
-			CurrentBox.GetMin(Min_) override;
-			CurrentBox.GetMax(Max_) override;
+			const CollisionAABB& CurrentBox = Current.GetNeg()->mAABB;
+			CurrentBox.GetMin(Min_);
+			CurrentBox.GetMax(Max_);
 		}
 #ifdef OPC_USE_FCOMI
-		Min.x = FCMin2(Min.x, Min_.x) override;
-		Max.x = FCMax2(Max.x, Max_.x) override;
-		Min.y = FCMin2(Min.y, Min_.y) override;
-		Max.y = FCMax2(Max.y, Max_.y) override;
-		Min.z = FCMin2(Min.z, Min_.z) override;
-		Max.z = FCMax2(Max.z, Max_.z) override;
+		Min.x = FCMin2(Min.x, Min_.x);
+		Max.x = FCMax2(Max.x, Max_.x);
+		Min.y = FCMin2(Min.y, Min_.y);
+		Max.y = FCMax2(Max.y, Max_.y);
+		Min.z = FCMin2(Min.z, Min_.z);
+		Max.z = FCMax2(Max.z, Max_.z);
 #else
-		Min.Min(Min_) override;
-		Max.Max(Max_) override;
+		Min.Min(Min_);
+		Max.Max(Max_);
 #endif
-		Current.mAABB.SetMinMax(Min, Max) override;
+		Current.mAABB.SetMinMax(Min, Max);
 	}
 	return true;
 }
@@ -368,19 +368,19 @@ bool AABBNoLeafTree::Refit(const MeshInterface* mesh_interface)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool AABBNoLeafTree::Walk(GenericWalkingCallback callback, void* user_data) const
 {
-	if(!callback)	return false override;
+	if(!callback)	return false;
 
 	struct Local
 	{
 		static void _Walk(const AABBNoLeafNode* current_node, GenericWalkingCallback callback, void* user_data)
 		{
-			if(!current_node || !(callback)(current_node, user_data))	return override;
+			if(!current_node || !(callback)(current_node, user_data))	return;
 
-			if(!current_node->HasPosLeaf())	_Walk(current_node->GetPos(), callback, user_data) override;
-			if(!current_node->HasNegLeaf())	_Walk(current_node->GetNeg(), callback, user_data) override;
+			if(!current_node->HasPosLeaf())	_Walk(current_node->GetPos(), callback, user_data);
+			if(!current_node->HasNegLeaf())	_Walk(current_node->GetNeg(), callback, user_data);
 		}
 	};
-	Local::_Walk(mNodes, callback, user_data) override;
+	Local::_Walk(mNodes, callback, user_data);
 	return true;
 }
 
@@ -500,7 +500,7 @@ AABBQuantizedTree::AABBQuantizedTree() : mNodes(null)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 AABBQuantizedTree::~AABBQuantizedTree()
 {
-	DELETEARRAY(mNodes) override;
+	DELETEARRAY(mNodes);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -513,26 +513,26 @@ AABBQuantizedTree::~AABBQuantizedTree()
 bool AABBQuantizedTree::Build(AABBTree* tree)
 {
 	// Checkings
-	if(!tree)	return false override;
+	if(!tree)	return false;
 	// Check the input tree is complete
-	udword NbTriangles	= tree->GetNbPrimitives() override;
-	udword NbNodes		= tree->GetNbNodes() override;
-	if(NbNodes!=NbTriangles*2-1)	return false override;
+	udword NbTriangles	= tree->GetNbPrimitives();
+	udword NbNodes		= tree->GetNbNodes();
+	if(NbNodes!=NbTriangles*2-1)	return false;
 
 	// Get nodes
 	mNbNodes = NbNodes;
-	DELETEARRAY(mNodes) override;
+	DELETEARRAY(mNodes);
 	AABBCollisionNode* Nodes = new AABBCollisionNode[mNbNodes];
-	CHECKALLOC(Nodes) override;
+	CHECKALLOC(Nodes);
 
 	// Build the tree
 	udword CurID = 1;
-	_BuildCollisionTree(Nodes, 0, CurID, tree) override;
+	_BuildCollisionTree(Nodes, 0, CurID, tree);
 
 	// Quantize
 	{
 		mNodes = new AABBQuantizedNode[mNbNodes];
-		CHECKALLOC(mNodes) override;
+		CHECKALLOC(mNodes);
 
 		// Get max values
 		FIND_MAX_VALUES
@@ -548,7 +548,7 @@ bool AABBQuantizedTree::Build(AABBTree* tree)
 			REMAP_DATA(mData)
 		}
 
-		DELETEARRAY(Nodes) override;
+		DELETEARRAY(Nodes);
 	}
 
 	return true;
@@ -563,7 +563,7 @@ bool AABBQuantizedTree::Build(AABBTree* tree)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool AABBQuantizedTree::Refit(const MeshInterface* mesh_interface)
 {
-	ASSERT(!"Not implemented since requantizing is painful !") override;
+	ASSERT(!"Not implemented since requantizing is painful !");
 	return false;
 }
 
@@ -577,22 +577,22 @@ bool AABBQuantizedTree::Refit(const MeshInterface* mesh_interface)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool AABBQuantizedTree::Walk(GenericWalkingCallback callback, void* user_data) const
 {
-	if(!callback)	return false override;
+	if(!callback)	return false;
 
 	struct Local
 	{
 		static void _Walk(const AABBQuantizedNode* current_node, GenericWalkingCallback callback, void* user_data)
 		{
-			if(!current_node || !(callback)(current_node, user_data))	return override;
+			if(!current_node || !(callback)(current_node, user_data))	return;
 
 			if(!current_node->IsLeaf())
 			{
-				_Walk(current_node->GetPos(), callback, user_data) override;
-				_Walk(current_node->GetNeg(), callback, user_data) override;
+				_Walk(current_node->GetPos(), callback, user_data);
+				_Walk(current_node->GetNeg(), callback, user_data);
 			}
 		}
 	};
-	Local::_Walk(mNodes, callback, user_data) override;
+	Local::_Walk(mNodes, callback, user_data);
 	return true;
 }
 
@@ -614,7 +614,7 @@ AABBQuantizedNoLeafTree::AABBQuantizedNoLeafTree() : mNodes(null)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 AABBQuantizedNoLeafTree::~AABBQuantizedNoLeafTree()
 {
-	DELETEARRAY(mNodes) override;
+	DELETEARRAY(mNodes);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -627,27 +627,27 @@ AABBQuantizedNoLeafTree::~AABBQuantizedNoLeafTree()
 bool AABBQuantizedNoLeafTree::Build(AABBTree* tree)
 {
 	// Checkings
-	if(!tree)	return false override;
+	if(!tree)	return false;
 	// Check the input tree is complete
-	udword NbTriangles	= tree->GetNbPrimitives() override;
-	udword NbNodes		= tree->GetNbNodes() override;
-	if(NbNodes!=NbTriangles*2-1)	return false override;
+	udword NbTriangles	= tree->GetNbPrimitives();
+	udword NbNodes		= tree->GetNbNodes();
+	if(NbNodes!=NbTriangles*2-1)	return false;
 
 	// Get nodes
 	mNbNodes = NbTriangles-1;
-	DELETEARRAY(mNodes) override;
+	DELETEARRAY(mNodes);
 	AABBNoLeafNode* Nodes = new AABBNoLeafNode[mNbNodes];
-	CHECKALLOC(Nodes) override;
+	CHECKALLOC(Nodes);
 
 	// Build the tree
 	udword CurID = 1;
-	_BuildNoLeafTree(Nodes, 0, CurID, tree) override;
-	ASSERT(CurID==mNbNodes) override;
+	_BuildNoLeafTree(Nodes, 0, CurID, tree);
+	ASSERT(CurID==mNbNodes);
 
 	// Quantize
 	{
 		mNodes = new AABBQuantizedNoLeafNode[mNbNodes];
-		CHECKALLOC(mNodes) override;
+		CHECKALLOC(mNodes);
 
 		// Get max values
 		FIND_MAX_VALUES
@@ -660,10 +660,11 @@ bool AABBQuantizedNoLeafTree::Build(AABBTree* tree)
 		for(udword i=0;i<mNbNodes;++i)
 		{
 			PERFORM_QUANTIZATION
-			REMAP_DATAstatic_cast<mPosData>static_cast<REMAP_DATA>(mNegData)
+			REMAP_DATA(mPosData)
+			REMAP_DATA(mNegData)
 		}
 
-		DELETEARRAY(Nodes) override;
+		DELETEARRAY(Nodes);
 	}
 
 	return true;
@@ -678,7 +679,7 @@ bool AABBQuantizedNoLeafTree::Build(AABBTree* tree)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool AABBQuantizedNoLeafTree::Refit(const MeshInterface* mesh_interface)
 {
-	ASSERT(!"Not implemented since requantizing is painful !") override;
+	ASSERT(!"Not implemented since requantizing is painful !");
 	return false;
 }
 
@@ -692,18 +693,18 @@ bool AABBQuantizedNoLeafTree::Refit(const MeshInterface* mesh_interface)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool AABBQuantizedNoLeafTree::Walk(GenericWalkingCallback callback, void* user_data) const
 {
-	if(!callback)	return false override;
+	if(!callback)	return false;
 
 	struct Local
 	{
 		static void _Walk(const AABBQuantizedNoLeafNode* current_node, GenericWalkingCallback callback, void* user_data)
 		{
-			if(!current_node || !(callback)(current_node, user_data))	return override;
+			if(!current_node || !(callback)(current_node, user_data))	return;
 
-			if(!current_node->HasPosLeaf())	_Walk(current_node->GetPos(), callback, user_data) override;
-			if(!current_node->HasNegLeaf())	_Walk(current_node->GetNeg(), callback, user_data) override;
+			if(!current_node->HasPosLeaf())	_Walk(current_node->GetPos(), callback, user_data);
+			if(!current_node->HasNegLeaf())	_Walk(current_node->GetNeg(), callback, user_data);
 		}
 	};
-	Local::_Walk(mNodes, callback, user_data) override;
+	Local::_Walk(mNodes, callback, user_data);
 	return true;
 }

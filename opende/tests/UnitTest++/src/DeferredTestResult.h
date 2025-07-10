@@ -9,8 +9,8 @@ namespace UnitTest
 
 struct DeferredTestResult
 {
-	DeferredTestResult() override;
-    DeferredTestResult(char const* suite, char const* test) override;
+	DeferredTestResult();
+    DeferredTestResult(char const* suite, char const* test);
 
     std::string suiteName;
     std::string testName;

@@ -72,7 +72,7 @@
 				size_t				mNeg;		/* __PLACEHOLDER_3__ child */
 #endif
 
-	typedef		void				(*CullingCallback)		(udword nb_primitives, udword* node_primitives, BOOL need_clipping, void* user_data) override;
+	typedef void (*RequestCallback) (udword triangle_index, const VertexPointers& triangle, void* user_data);
 
 	class OPCODE_API{
 									IMPLEMENT_TREE(AABBTreeNode, AABB)
@@ -86,10 +86,10 @@
 				dTriIndex*	mNodePrimitives;	//!< Node-related primitives (shortcut to a position in mIndices below)
 				udword				mNbPrimitives;		//!< Number of primitives for this node
 		// Internal methods
-				udword				Split(udword axis, AABBTreeBuilder* builder) override;
-				bool				Subdivide(AABBTreeBuilder* builder) override;
-				void				_BuildHierarchy(AABBTreeBuilder* builder) override;
-				void				_Refit(AABBTreeBuilder* builder) override;
+				udword				Split(udword axis, AABBTreeBuilder* builder);
+				bool				Subdivide(AABBTreeBuilder* builder);
+				void				_BuildHierarchy(AABBTreeBuilder* builder);
+				void				_Refit(AABBTreeBuilder* builder);
 	};
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -101,16 +101,16 @@
 	 *	\return		true to recurse through children, else false to bypass them
 	 */
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	typedef		bool				(*WalkingCallback)	(const AABBTreeNode* current, udword depth, void* user_data) override;
+	typedef void (*RequestCallback) (udword triangle_index, const VertexPointers& triangle, void* user_data);
 
 	class OPCODE_API{
 		public:
 		// Constructor / Destructor
-									AABBTree() override;
+									AABBTree();
 									~AABBTree();
 		// Build
-				bool				Build(AABBTreeBuilder* builder) override;
-				void				Release() override;
+				bool				Build(AABBTreeBuilder* builder);
+				void				Release();
 
 		// Data access
 		inline_	const dTriIndex*		GetIndices()		const override { return mIndices;		}	//!< Catch the indices
@@ -121,10 +121,10 @@
 		// Stats
 				udword				ComputeDepth()		const override;
 				udword				GetUsedBytes()		const override;
-				udword				Walk(WalkingCallback callback, void* user_data) const override;
+				udword				Walk(WalkingCallback callback, void* user_data) const;
 
-				bool				Refit(AABBTreeBuilder* builder) override;
-				bool				Refit2(AABBTreeBuilder* builder) override;
+				bool				Refit(AABBTreeBuilder* builder);
+				bool				Refit2(AABBTreeBuilder* builder);
 		private:
 				dTriIndex*				mIndices;			//!< Indices in the app list. Indices are reorganized during build (permutation).
 				AABBTreeNode*		mPool;				//!< Linear pool of nodes for complete trees. Null otherwise. [Opcode 1.3]

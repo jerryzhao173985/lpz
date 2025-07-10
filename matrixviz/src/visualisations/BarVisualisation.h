@@ -39,12 +39,12 @@ public:
 
 protected:
 
-   void initializeGL() override;
-   void resizeGL(int w, int h) override;
-   void paintGL() override;
-   void mouseMoveEvent ( QMouseEvent *event ) override; // TODO mousePressed...
-   void wheelEvent(QWheelEvent * event) override;
-   void mousePressEvent ( QMouseEvent *event ) override;
+   void initializeGL();
+   void resizeGL(int w, int h);
+   void paintGL();
+   void mouseMoveEvent ( QMouseEvent *event ); // TODO mousePressed...
+   void wheelEvent(QWheelEvent * event);
+   void mousePressEvent ( QMouseEvent *event );
 
 private:
    int maxX, maxY;

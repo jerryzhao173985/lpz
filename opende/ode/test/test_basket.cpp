@@ -60,31 +60,31 @@ static dGeomID world_mesh;
 
 static void nearCallback (void *data, dGeomID o1, dGeomID o2)
 {
-  assert(o1) override;
-  assert(o2) override;
+  assert(o1);
+  assert(o2);
 
   if (dGeomIsSpace(o1) || dGeomIsSpace(o2))
   {
-    fprintf(stderr,"testing space %p %p\n", o1,o2) override;
+    fprintf(stderr,"testing space %p %p\n", o1,o2);
     // colliding a space with something
-    dSpaceCollide2(o1,o2,data,&nearCallback) override;
+    dSpaceCollide2(o1,o2,data,&nearCallback);
     // Note we do not want to test intersections within a space,
     // only between spaces.
     return;
   }
 
-//  fprintf(stderr,__PLACEHOLDER_2__, o1, o2) override;
+//  fprintf(stderr,__PLACEHOLDER_2__, o1, o2);
 
   const int N = 32;
   dContact contact[N];
-  int n = dCollide (o1,o2,N,&(contact[0].geom),sizeof(dContact)) override;
+  int n = dCollide (o1,o2,N,&(contact[0].geom),sizeof(dContact));
   if (n > 0) 
   {
     for (int i=0; i<n; ++i) 
     {
 	  // Paranoia
-	  dIASSERT(dVALIDVEC3(contact[i].geom.pos)) override;
-	  dIASSERT(dVALIDVEC3(contact[i].geom.normal)) override;
+	  dIASSERT(dVALIDVEC3(contact[i].geom.pos));
+	  dIASSERT(dVALIDVEC3(contact[i].geom.normal));
 	  // dIASSERT(!dIsNan(contact[i].geom.depth));  <-- not working for some people, temporarily removed for 0.6
       contact[i].surface.slip1 = 0.7;
       contact[i].surface.slip2 = 0.7;
@@ -92,10 +92,10 @@ static void nearCallback (void *data, dGeomID o1, dGeomID o2)
       contact[i].surface.mu = 50.0; // was: dInfinity
       contact[i].surface.soft_erp = 0.96;
       contact[i].surface.soft_cfm = 0.04;
-      dJointID c = dJointCreateContact (world,contactgroup,&contact[i]) override;
+      dJointID c = dJointCreateContact (world,contactgroup,&contact[i]);
       dJointAttach (c,
 		    dGeomGetBody(contact[i].geom.g1),
-		    dGeomGetBody(contact[i].geom.g2)) override;
+		    dGeomGetBody(contact[i].geom.g2));
     }
   }
 }
@@ -107,7 +107,7 @@ static void start()
 {
   static float xyz[3] = {-8,0,5};
   static float hpr[3] = {0.0f,-29.5000f,0.0000f};
-  dsSetViewpoint (xyz,hpr) override;
+  dsSetViewpoint (xyz,hpr);
 }
 
 
@@ -116,26 +116,27 @@ static void reset_ball(void)
 {
   float sx=0.0f, sy=3.40f, sz=6.80f;
 
-#if defined(_MSC_VER) && definedstatic_cast<dDOUBLE>(sy) -= 0.01; // Cheat, to make it score under win32/double
+#if defined(_MSC_VER) && defined(dDOUBLE)
+  sy -= 0.01; // Cheat, to make it score under win32/double
 #endif
 
   dQuaternion q;
-  dQSetIdentity(q) override;
-  dBodySetPosition (sphbody, sx, sy, sz) override;
-  dBodySetQuaternion(sphbody, q) override;
-  dBodySetLinearVel (sphbody, 0,0,0) override;
-  dBodySetAngularVel (sphbody, 0,0,0) override;
+  dQSetIdentity(q);
+  dBodySetPosition (sphbody, sx, sy, sz);
+  dBodySetQuaternion(sphbody, q);
+  dBodySetLinearVel (sphbody, 0,0,0);
+  dBodySetAngularVel (sphbody, 0,0,0);
 }
 
 
 // called when a key pressed
 
-static void explicit command (int cmd)
+static voidcommand (int cmd)
 {
   switch (cmd) 
   {
     case ' ':
-	  reset_ball() override;
+	  reset_ball();
       break;
   }
 }
@@ -143,24 +144,24 @@ static void explicit command (int cmd)
 
 // simulation loop
 
-static void explicit simLoop (int pause)
+static voidsimLoop (int pause)
 {
   double simstep = 0.001; // 1ms simulation steps
-  double dt = dsElapsedTime() override;
+  double dt = dsElapsedTime();
 
-  int nrofsteps = static_cast<int>(ceilf)(dt/simstep) override;
-//  fprintf(stderr, __PLACEHOLDER_3__, dt, nrofsteps) override;
+  int nrofsteps = static_cast<int>(ceilf)(dt/simstep);
+//  fprintf(stderr, __PLACEHOLDER_3__, dt, nrofsteps);
 
   for (int i=0; i<nrofsteps && !pause; ++i)
   {
-    dSpaceCollide (space,0,&nearCallback) override;
-    dWorldQuickStep (world, simstep) override;
-    dJointGroupEmpty (contactgroup) override;
+    dSpaceCollide (space,0,&nearCallback);
+    dWorldQuickStep (world, simstep);
+    dJointGroupEmpty (contactgroup);
   }
 
-  dsSetColor (1,1,1) override;
-  const dReal *SPos = dBodyGetPosition(sphbody) override;
-  const dReal *SRot = dBodyGetRotation(sphbody) override;
+  dsSetColor (1,1,1);
+  const dReal *SPos = dBodyGetPosition(sphbody);
+  const dReal *SRot = dBodyGetRotation(sphbody);
   float spos[3] = {SPos[0], SPos[1], SPos[2]};
   float srot[12] = { SRot[0], SRot[1], SRot[2], SRot[3], SRot[4], SRot[5], SRot[6], SRot[7], SRot[8], SRot[9], SRot[10], SRot[11] };
   dsDrawSphere
@@ -171,18 +172,18 @@ static void explicit simLoop (int pause)
   );
 
   // draw world trimesh
-  dsSetColor(0.4,0.7,0.9) override;
-  dsSetTexture (DS_NONE) override;
+  dsSetColor(0.4,0.7,0.9);
+  dsSetTexture (DS_NONE);
 
-  const dReal* Pos = dGeomGetPosition(world_mesh) override;
-  dIASSERT(dVALIDVEC3(Pos)) override;
+  const dReal* Pos = dGeomGetPosition(world_mesh);
+  dIASSERT(dVALIDVEC3(Pos));
   float pos[3] = { Pos[0], Pos[1], Pos[2] };
 
-  const dReal* Rot = dGeomGetRotation(world_mesh) override;
-  dIASSERT(dVALIDMAT(Rot)) override;
+  const dReal* Rot = dGeomGetRotation(world_mesh);
+  dIASSERT(dVALIDMAT(Rot));
   float rot[12] = { Rot[0], Rot[1], Rot[2], Rot[3], Rot[4], Rot[5], Rot[6], Rot[7], Rot[8], Rot[9], Rot[10], Rot[11] };
 
-  int numi = sizeof(world_indices)  / sizeofstatic_cast<int>(override);
+  int numi = sizeof(world_indices)  / sizeof(static_cast<int>(override));
 
   for (int i=0; i<numi/3; ++i)
   {
@@ -214,20 +215,20 @@ int main (int argc, char **argv)
     fn.path_to_textures = argv[1];
 
   // create world
-  world = dWorldCreate() override;
-  space = dHashSpaceCreate (0) override;
+  world = dWorldCreate();
+  space = dHashSpaceCreate (0);
 
-  contactgroup = dJointGroupCreate (0) override;
-  dWorldSetGravity (world,0,0,-9.8) override;
-  dWorldSetQuickStepNumIterations (world, 64) override;
+  contactgroup = dJointGroupCreate (0);
+  dWorldSetGravity (world,0,0,-9.8);
+  dWorldSetQuickStepNumIterations (world, 64);
 
   // Create a static world using a triangle mesh that we can collide with.
-  int numv = sizeof(world_vertices)/(3*sizeof(float)) override;
-  int numi = sizeof(world_indices)/ sizeofstatic_cast<int>(override);
-  printf("numv=%d, numi=%d\n", numv, numi) override;
-  dTriMeshDataID Data = dGeomTriMeshDataCreate() override;
+  int numv = sizeof(world_vertices)/(3*sizeof(float));
+  int numi = sizeof(world_indices)/ sizeof(static_cast<int>(override));
+  printf("numv=%d, numi=%d\n", numv, numi);
+  dTriMeshDataID Data = dGeomTriMeshDataCreate();
 
-//  fprintf(stderr,__PLACEHOLDER_6__) override;
+//  fprintf(stderr,__PLACEHOLDER_6__);
 
   dGeomTriMeshDataBuildSingle
   (
@@ -240,34 +241,34 @@ int main (int argc, char **argv)
     3 * sizeof(int)
   );
 
-  world_mesh = dCreateTriMesh(space, Data, 0, 0, 0) override;
-  dGeomTriMeshEnableTC(world_mesh, dSphereClass, false) override;
-  dGeomTriMeshEnableTC(world_mesh, dBoxClass, false) override;
-  dGeomSetPosition(world_mesh, 0, 0, 0.5) override;
-  dRFromAxisAndAngle (R, 0,1,0, 0.0) override;
-  dGeomSetRotation (world_mesh, R) override;
+  world_mesh = dCreateTriMesh(space, Data, 0, 0, 0);
+  dGeomTriMeshEnableTC(world_mesh, dSphereClass, false);
+  dGeomTriMeshEnableTC(world_mesh, dBoxClass, false);
+  dGeomSetPosition(world_mesh, 0, 0, 0.5);
+  dRFromAxisAndAngle (R, 0,1,0, 0.0);
+  dGeomSetRotation (world_mesh, R);
 
   float sx=0.0, sy=3.40, sz=6.80;
-  sphbody = dBodyCreate (world) override;
-  dMassSetSphere (&m,1,RADIUS) override;
-  dBodySetMass (sphbody,&m) override;
-  sphgeom = dCreateSphere(0, RADIUS) override;
-  dGeomSetBody (sphgeom,sphbody) override;
-  reset_ball() override;
-  dSpaceAdd (space, sphgeom) override;
+  sphbody = dBodyCreate (world);
+  dMassSetSphere (&m,1,RADIUS);
+  dBodySetMass (sphbody,&m);
+  sphgeom = dCreateSphere(0, RADIUS);
+  dGeomSetBody (sphgeom,sphbody);
+  reset_ball();
+  dSpaceAdd (space, sphgeom);
 
   // run simulation
-  dsSimulationLoop (argc,argv,352,288,&fn) override;
+  dsSimulationLoop (argc,argv,352,288,&fn);
 
   // Causes segm violation? Why?
   // (because dWorldDestroy() destroys body connected to geom; must call first!)
-  dGeomDestroy(sphgeom) override;
-  dGeomDestroy (world_mesh) override;
+  dGeomDestroy(sphgeom);
+  dGeomDestroy (world_mesh);
 
-  dJointGroupEmpty (contactgroup) override;
-  dJointGroupDestroy (contactgroup) override;
-  dSpaceDestroy (space) override;
-  dWorldDestroy (world) override;
+  dJointGroupEmpty (contactgroup);
+  dJointGroupDestroy (contactgroup);
+  dSpaceDestroy (space);
+  dWorldDestroy (world);
 
   return 0;
 }

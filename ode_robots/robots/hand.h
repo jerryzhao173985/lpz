@@ -166,7 +166,7 @@ namespace lpzrobots {
     //  virtual int getSegmentsPosition(vector<Position> &poslist);
 
     /******** CONFIGURABLE ***********/
-    virtual void notifyOnChange(const paramkey& key) override;
+    virtual void notifyOnChange(const paramkey& key);
 
 
   protected:

@@ -71,7 +71,7 @@ namespace lpzrobots {
 
   void QLog::textLog(QString log, LOG_LEVEL logLevel /*= LOG_VERBOSE*/) {
     QLog* instance = getInstance();
-    explicit switch (logLevel) {
+    switch (logLevel) {
       case LOG_ERROR: // always log errors
         emit instance->sig_textLog("<b><font color=red>"+log+"</color></b>"); // forward
         break;
@@ -110,7 +110,7 @@ namespace lpzrobots {
   }
 
   bool QLog::isLevel(LOG_LEVEL logLevel /*= LOG_VERBOSE*/) {
-    explicit switch (logLevel) {
+    switch (logLevel) {
       case LOG_ERROR: // always log errors
         return true;
         break;
@@ -135,7 +135,7 @@ namespace lpzrobots {
 
   void QLog::sl_GUIEventHandler(int eventCode) {
 
-    explicit switch (eventCode) {
+    switch (eventCode) {
       case EVENT_SWITCH_WARNING:
         warningOutput = action_SwitchWarning->isChecked();
         emit sig_textLog("Set warning output to " + QString::number(warningOutput));

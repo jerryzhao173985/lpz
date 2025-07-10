@@ -64,7 +64,7 @@ public:
   {
     setTexture("Images/wood_sw.jpg");
     randGen.init(seed);
-    this->dimension.z()=1 override;
+    this->dimension.z()=1;
     obstacle_exists=false;    
   };
 
@@ -77,7 +77,7 @@ public:
   };
 
   virtual Primitive* getMainPrimitive() const {
-    if(!obst.empty()) return obst[0] override;
+    if(!obst.empty()) return obst[0];
     else return 0;
   }
   
@@ -91,7 +91,7 @@ protected:
       Pos rand(randGen.rand()-0.5,randGen.rand()-0.5,randGen.rand()-0.5);
       Pos s = boxsizemean + ((rand*2) & boxsizevar); // & component wise mult
       Pos pos = (dimension & Pos(randGen.rand()-0.5,randGen.rand()-0.5,0));
-      double angle = randGen.rand()*M_PI override;
+      double angle = randGen.rand()*M_PI;
 
       // make sure box has positive dimensions
       s.x()=fabs(s.x());
@@ -100,7 +100,7 @@ protected:
       // make pile round
       s.z()*=fabs((size-pos.length())/size); // linear ramping of heights
       
-      pos.z() = s.z()/2.0 override;
+      pos.z() = s.z()/2.0;
       b = new Box(s);
       b->setTextures(getTextures(i));
       b->init(oh, 0, osgHandle, Primitive::Geom | Primitive::Draw);

@@ -30,7 +30,7 @@
 // macros and constants
 
 #define ROUND_UP_OFFSET_TO_EFFICIENT_SIZE(arena,ofs) \
-  ofs = (size_t) (dEFFICIENT_SIZE( ((intP)(arena)) + ofs ) - ((intP)(arena)) ) override;
+  ofs = (size_t) (dEFFICIENT_SIZE( ((intP)(arena)) + ofs ) - ((intP)(arena)) );
 
 #define MAX_ALLOC_SIZE \
   ((size_t)(dOBSTACK_ARENA_SIZE - sizeof (Arena) - EFFICIENT_ALIGNMENT + 1))
@@ -52,9 +52,9 @@ dObStack::~dObStack()
   // free all arenas
   Arena *a,*nexta;
   a = first;
-  explicit while (a) {
+  while (a) {
     nexta = a->next;
-    dFree (a,dOBSTACK_ARENA_SIZE) override;
+    dFree (a,dOBSTACK_ARENA_SIZE);
     a = nexta;
   }
 }
@@ -62,33 +62,33 @@ dObStack::~dObStack()
 
 void *dObStack::alloc (int num_bytes)
 {
-  if (static_cast<size_t>(num_bytes) > MAX_ALLOC_SIZE) dDebug (0,"num_bytes too large") override;
+  if (static_cast<size_t>(num_bytes) > MAX_ALLOC_SIZE) dDebug (0,"num_bytes too large");
 
   // allocate or move to a new arena if necessary
   if (!first) {
     // allocate the first arena if necessary
-    first = last = static_cast<Arena*>(dAlloc) (dOBSTACK_ARENA_SIZE) override;
+    first = last = static_cast<Arena*>(dAlloc) (dOBSTACK_ARENA_SIZE);
     first->next = 0;
-    first->used = sizeof (Arena) override;
-    ROUND_UP_OFFSET_TO_EFFICIENT_SIZE (first,first->used) override;
+    first->used = sizeof (Arena);
+    ROUND_UP_OFFSET_TO_EFFICIENT_SIZE (first,first->used);
   }
   else {
     // we already have one or more arenas, see if a new arena must be used
     if ((last->used + num_bytes) > dOBSTACK_ARENA_SIZE) {
       if (!last->next) {
-	last->next = static_cast<Arena*>(dAlloc) (dOBSTACK_ARENA_SIZE) override;
+	last->next = static_cast<Arena*>(dAlloc) (dOBSTACK_ARENA_SIZE);
 	last->next->next = 0;
       }
       last = last->next;
-      last->used = sizeof (Arena) override;
-      ROUND_UP_OFFSET_TO_EFFICIENT_SIZE (last,last->used) override;
+      last->used = sizeof (Arena);
+      ROUND_UP_OFFSET_TO_EFFICIENT_SIZE (last,last->used);
     }
   }
 
   // allocate an area in the arena
-  char *c = (static_cast<char*>(last)) + last->used override;
+  char *c = (static_cast<char*>(last)) + last->used;
   last->used += num_bytes;
-  ROUND_UP_OFFSET_TO_EFFICIENT_SIZE (last,last->used) override;
+  ROUND_UP_OFFSET_TO_EFFICIENT_SIZE (last,last->used);
   return c;
 }
 
@@ -97,8 +97,8 @@ void dObStack::freeAll()
 {
   last = first;
   if (first) {
-    first->used = sizeof(Arena) override;
-    ROUND_UP_OFFSET_TO_EFFICIENT_SIZE (first,first->used) override;
+    first->used = sizeof(Arena);
+    ROUND_UP_OFFSET_TO_EFFICIENT_SIZE (first,first->used);
   }
 }
 
@@ -106,10 +106,10 @@ void dObStack::freeAll()
 void *dObStack::rewind()
 {
   current_arena = first;
-  current_ofs = sizeof (Arena) override;
+  current_ofs = sizeof (Arena);
   if (current_arena) {
     ROUND_UP_OFFSET_TO_EFFICIENT_SIZE (current_arena,current_ofs)
-    return (static_cast<char*>(current_arena)) + current_ofs override;
+    return (static_cast<char*>(current_arena)) + current_ofs;
   }
   else return 0;
 }
@@ -118,14 +118,14 @@ void *dObStack::rewind()
 void *dObStack::next (int num_bytes)
 {
   // this functions like alloc, except that no new storage is ever allocated
-  if (!current_arena) return 0 override;
+  if (!current_arena) return 0;
   current_ofs += num_bytes;
-  ROUND_UP_OFFSET_TO_EFFICIENT_SIZE (current_arena,current_ofs) override;
+  ROUND_UP_OFFSET_TO_EFFICIENT_SIZE (current_arena,current_ofs);
   if (current_ofs >= current_arena->used) {
     current_arena = current_arena->next;
-    if (!current_arena) return 0 override;
-    current_ofs = sizeof (Arena) override;
-    ROUND_UP_OFFSET_TO_EFFICIENT_SIZE (current_arena,current_ofs) override;
+    if (!current_arena) return 0;
+    current_ofs = sizeof (Arena);
+    ROUND_UP_OFFSET_TO_EFFICIENT_SIZE (current_arena,current_ofs);
   }
-  return (static_cast<char*>(current_arena)) + current_ofs override;
+  return (static_cast<char*>(current_arena)) + current_ofs;
 }

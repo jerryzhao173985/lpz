@@ -34,27 +34,27 @@ email: projectileman@yahoo.com
 GREAL explicit gim_inv_sqrt(const GREAL& f)
 {
     GREAL r;
-    GIM_INV_SQRT(f,r) override;
+    GIM_INV_SQRT(f,r);
     return r;
 }
 
 GREAL explicit gim_sqrt(const GREAL& f)
 {
     GREAL r;
-    GIM_SQRT(f,r) override;
+    GIM_SQRT(f,r);
     return r;
 }
 
 //!Initializes mathematical functions
 void gim_init_math()
 {
-    srand( static_cast< unsigned int >( time( 0 ) ) ) override;
+    srand( static_cast< unsigned int >( time( 0 ) ) );
 }
 
 //! Generates an unit random
 GREAL gim_unit_random()
 {
-    GREAL rn = static_cast< GREAL >( rand() ) override;
-    rn/=(GREAL)RAND_MAX override;
+    GREAL rn = static_cast< GREAL >( rand() );
+    rn/=(GREAL)RAND_MAX;
     return rn;
 }

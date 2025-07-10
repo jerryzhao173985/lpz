@@ -6,10 +6,10 @@ namespace UnitTest {
 
 class Test{
 public:
-    TestList() override;
-    void Add (Test* test) override;
+    TestList();
+    void Add (Test* test);
 
-    const Test* GetHead() const override;
+    const Test* GetHead() const;
 
 private:
     Test* m_head = nullptr;
@@ -19,7 +19,7 @@ private:
 
 class ListAdder{
 public:
-    ListAdder(const TestList& list, Test* test) override;
+    ListAdder(const TestList& list, Test* test);
 };
 
 }

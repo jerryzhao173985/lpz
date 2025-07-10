@@ -63,7 +63,7 @@ class MultiReinforce : public AbstractController {
 
 public:
   explicit MultiReinforce(const MultiReinforceConf& conf = getDefaultConf());
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
 
   virtual ~MultiReinforce();
 
@@ -78,10 +78,10 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors);
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
-  virtual void stepNoLearning(const sensor*, int number_sensors, motor*, int number_motors) override;
+  virtual void stepNoLearning(const sensor*, int number_sensors, motor*, int number_motors);
 
   // !!!!!!!!!!!!!!!!!!! MISC STUFF !!!!!!!!
 
@@ -98,7 +98,7 @@ public:
   void setManualControl(bool mControl, int action_ = 0);
 
   /************** CONFIGURABLE ********************************/
-  virtual void notifyOnChange(const paramkey& key) override;
+  virtual void notifyOnChange(const paramkey& key);
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file. */
@@ -107,10 +107,10 @@ public:
   virtual bool restore(FILE* f);
 
   /**** INSPECTABLE ****/
-  virtual std::list<iparamkey> getInternalParamNames()  const override;
-  virtual std::list<iparamval> getInternalParams()  const override;
-  virtual std::list<ILayer> getStructuralLayers()  const override;
-  virtual std::list<IConnection> getStructuralConnections()  const override;
+  virtual std::list<iparamkey> getInternalParamNames()  const;
+  virtual std::list<iparamval> getInternalParams()  const;
+  virtual std::list<ILayer> getStructuralLayers()  const;
+  virtual std::list<IConnection> getStructuralConnections()  const;
 
   static MultiReinforceConf getDefaultConf() {
     MultiReinforceConf c;

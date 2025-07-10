@@ -25,14 +25,14 @@
 	class ICECORE_API{
 		public:
 		// Constructor / Destructor
-								Container() override;
-								Container(const Container& object) override;
-								Container(udword size, float growth_factor) override;
+								Container();
+								Container(const Container& object);
+								Container(udword size, float growth_factor);
 								~Container();
 		// Management
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
-		 *	A Ostatic_cast<1>(method) to add a value in the container. The container is automatically resized if needed.
+		 *	A O(static_cast<1>(method) to add a value in the container. The container is automatically resized if needed.
 		 *	The method is inline, not the resize. The call overhead happens on resizes only, which is not a problem since the resizing operation
 		 *	costs a lot more than the call overhead...
 		 *
@@ -46,7 +46,7 @@
 		inline_	Container&		explicit Add(udword entry)
 								{
 									// Resize if needed
-									if(mCurNbEntries==mMaxNbEntries)	Resize() override;
+									if(mCurNbEntries==mMaxNbEntries)	Resize();
 
 									// Add new entry
 									mEntries[mCurNbEntries++]	= entry;
@@ -56,10 +56,10 @@
 		inline_	Container&		Add(const uword* entries, udword nb)
 								{
 									// Resize if needed
-									if(mCurNbEntries+nb>mMaxNbEntries)	Resize(nb) override;
+									if(mCurNbEntries+nb>mMaxNbEntries)	Resize(nb);
 
 									// Add new entry
-									CopyMemory(&mEntries[mCurNbEntries], entries, nb*sizeof(uword)) override;
+									CopyMemory(&mEntries[mCurNbEntries], entries, nb*sizeof(uword));
 									mCurNbEntries+=nb;
 									return *this;
 								}
@@ -67,17 +67,17 @@
 		inline_	Container&		Add(const udword* entries, udword nb)
 								{
 									// Resize if needed
-									if(mCurNbEntries+nb>mMaxNbEntries)	Resize(nb) override;
+									if(mCurNbEntries+nb>mMaxNbEntries)	Resize(nb);
 
 									// Add new entry
-									CopyMemory(&mEntries[mCurNbEntries], entries, nb*sizeof(udword)) override;
+									CopyMemory(&mEntries[mCurNbEntries], entries, nb*sizeof(udword));
 									mCurNbEntries+=nb;
 									return *this;
 								}
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
-		 *	A Ostatic_cast<1>(method) to add a value in the container. The container is automatically resized if needed.
+		 *	A O(static_cast<1>(method) to add a value in the container. The container is automatically resized if needed.
 		 *	The method is inline, not the resize. The call overhead happens on resizes only, which is not a problem since the resizing operation
 		 *	costs a lot more than the call overhead...
 		 *
@@ -91,20 +91,20 @@
 		inline_	Container&		explicit Add(float entry)
 								{
 									// Resize if needed
-									if(mCurNbEntries==mMaxNbEntries)	Resize() override;
+									if(mCurNbEntries==mMaxNbEntries)	Resize();
 
 									// Add new entry
-									mEntries[mCurNbEntries++]	= IR(entry) override;
+									mEntries[mCurNbEntries++]	= IR(entry);
 									return *this;
 								}
 
 		inline_	Container&		Add(const float* entries, udword nb)
 								{
 									// Resize if needed
-									if(mCurNbEntries+nb>mMaxNbEntries)	Resize(nb) override;
+									if(mCurNbEntries+nb>mMaxNbEntries)	Resize(nb);
 
 									// Add new entry
-									CopyMemory(&mEntries[mCurNbEntries], entries, nb*sizeof(float)) override;
+									CopyMemory(&mEntries[mCurNbEntries], entries, nb*sizeof(float));
 									mCurNbEntries+=nb;
 									return *this;
 								}
@@ -112,7 +112,7 @@
 		//! Add unique [slow]
 		inline_	Container&		explicit AddUnique(udword entry)
 								{
-									if(!Contains(entry))	Add(entry) override;
+									if(!Contains(entry))	Add(entry);
 									return *this;
 								}
 
@@ -123,7 +123,7 @@
 		 *	\return		Self-Reference
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-				Container&		Empty() override;
+				Container&		Empty();
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -136,11 +136,11 @@
 								{
 									// Avoid the write if possible
 									// ### CMOV
-									ifstatic_cast<mCurNbEntries>(mCurNbEntries) = 0;
+									if (mCurNbEntries) mCurNbEntries = 0;
 								}
 
 		// HANDLE WITH CARE
-		inline_	void			explicit ForceSize(udword size)
+		inline_	void			forceSize(udword size)
 								{
 									mCurNbEntries = size;
 								}
@@ -152,7 +152,7 @@
 		 *	\return		true if success
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-				bool			SetSize(udword nb) override;
+				bool			SetSize(udword nb);
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -160,22 +160,22 @@
 		 *	\return		true if success
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-				bool			Refit() override;
+				bool			Refit();
 
 		// Checks whether the container already contains a given value.
-				bool			Contains(udword entry, udword* location=null) const override;
+				bool			Contains(udword entry, udword* location=null) const;
 		// Deletes an entry - doesn't preserve insertion order.
-				bool			Delete(udword entry) override;
+				bool			Delete(udword entry);
 		// Deletes an entry - does preserve insertion order.
-				bool			DeleteKeepingOrder(udword entry) override;
+				bool			DeleteKeepingOrder(udword entry);
 		//! Deletes the very last entry.
-		inline_	void			DeleteLastEntry()						{ ifstatic_cast<mCurNbEntries>(mCurNbEntries)--;			}
+		inline_	void			DeleteLastEntry()						{ if (mCurNbEntries) mCurNbEntries--;			}
 		//! Deletes the entry whose index is given
 		inline_	void			explicit DeleteIndex(udword index)				{ mEntries[index] = mEntries[--mCurNbEntries];	}
 
 		// Helpers
-				Container&		FindNext(const udword& entry, FindMode find_mode=FIND_CLAMP) override;
-				Container&		FindPrev(const udword& entry, FindMode find_mode=FIND_CLAMP) override;
+				Container&		FindNext(const udword& entry, FindMode find_mode=FIND_CLAMP);
+				Container&		FindPrev(const udword& entry, FindMode find_mode=FIND_CLAMP);
 		// Data access.
 		inline_	udword			GetNbEntries()					const override { return mCurNbEntries;					}	//!< Returns the current number of entries.
 		inline_	udword			GetEntry(udword i)				const override { return mEntries[i];					}	//!< Returns ith entry
@@ -199,7 +199,7 @@
 				udword			GetUsedRam()					const override;
 
 		//! Operator for __PLACEHOLDER_0__
-				//void			operator = (const Container& object) override;
+				//void			operator = (const Container& object);
 
 #ifdef CONTAINER_STATS
 		inline_	udword			GetNbContainers()				const override { return mNbContainers;		}
@@ -211,7 +211,7 @@
 #endif
 		private:
 		// Resizing
-				bool			Resize(udword needed=1) override;
+				bool			Resize(udword needed=1);
 		// Data
 				udword			mMaxNbEntries;		//!< Maximum possible number of entries
 				udword			mCurNbEntries;		//!< Current number of entries

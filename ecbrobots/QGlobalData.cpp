@@ -123,7 +123,7 @@ namespace lpzrobots {
   }
 
   void QGlobalData::textLog(QString log, LOG_TYPE logType) {
-    explicit switch (logType) {
+    switch (logType) {
       case LOG_ERROR: // always log errors
         emit sig_textLog(log); // forward
         break;

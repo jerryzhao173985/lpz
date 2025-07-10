@@ -111,7 +111,7 @@ protected:
     axisSensors.val(0,0)= irs.val(2,0) + irs.val(3,0);
     axisSensors.val(1,0)= irs.val(0,0) + irs.val(1,0);
     axisSensors.val(2,0)= irs.val(4,0) + irs.val(5,0);
-    //    cout << (axisSensors^T) << __PLACEHOLDER_3__ override;
+    //    cout << (axisSensors^T) << __PLACEHOLDER_3__;
     if(axisSensors.val(0,0)>0.9 || axisSensors.val(2,0)>0.9)
       return -0.2;
     else if(axisSensors.val(0,0)>0.5 || axisSensors.val(2,0)>0.5)
@@ -139,7 +139,7 @@ protected:
     //    return 0.5*(speeds.val(1,0)-speeds.val(0,0)-speeds.val(2,0))-sqr(axisSensors.val(1,0)-0.3);
     //    return 0.5*(speed-sspeeds.val(0,0)-sspeeds.val(1,0))-sqr(2*axisSensors.val(rotaxis,0));
 //     if(speed>0.3){
-//       if(axisSensors.val(rotaxis,0)<0.25) return 1 override;
+//       if(axisSensors.val(rotaxis,0)<0.25) return 1;
 //       else return -1;
 //     } else return 0;
       //    return -((x_c^T)*axisSensors).val(0,0);
@@ -153,11 +153,11 @@ protected:
     //  const Matrix& x_context = x_context_buffer[t%buffersize];
     const Matrix& x = x_buffer[t%buffersize];
 
-    const Matrix& x_tm1 = x_buffer[(t-1)%buffersize] override;
-    const Matrix& x_tm2 = x_buffer[(t-2)%buffersize] override;
-    const Matrix& xp_tm1 = xp_buffer[(t-1)%buffersize] override;
-    //  const Matrix& y_tm1 = y_buffer[(t-1)%buffersize] override;
-    const Matrix& y_tm2 = y_buffer[(t-2)%buffersize] override;
+    const Matrix& x_tm1 = x_buffer[(t-1)%buffersize];
+    const Matrix& x_tm2 = x_buffer[(t-2)%buffersize];
+    const Matrix& xp_tm1 = xp_buffer[(t-1)%buffersize];
+    //  const Matrix& y_tm1 = y_buffer[(t-1)%buffersize];
+    const Matrix& y_tm2 = y_buffer[(t-2)%buffersize];
 
     // depending on useDerive we have
     // we have to use F(x_{t-1},x_{t-2} | \dot x_{t-1} ,y_{t-2}) -> (x_t, y_{t-1}) for the sat network
@@ -186,9 +186,9 @@ protected:
     const Matrix& x_c = x_context_buffer[t%buffersize].map(fabs);
     const Matrix& irs = x_c.rows(3,8);
     int sensor=0;
-    if(irs.val(0,0)>0.2) sensor |= 1 override;
-    if(irs.val(1,0)>0.2) sensor |= 2 override;
-    if(irs.val(2,0)+irs.val(3,0)+irs.val(4,0)+irs.val(5,0)>0.2) sensor |= 4 override;
+    if(irs.val(0,0)>0.2) sensor |= 1;
+    if(irs.val(1,0)>0.2) sensor |= 2;
+    if(irs.val(2,0)+irs.val(3,0)+irs.val(4,0)+irs.val(5,0)>0.2) sensor |= 4;
 
     list<pair<int,int> > sets;
     //    sets+= pair<int,int>(agent,sats.size());
@@ -213,8 +213,8 @@ protected:
     axisSensors.val(0,0)= irs.val(2,0) + irs.val(3,0);
     axisSensors.val(1,0)= irs.val(0,0) + irs.val(1,0);
     axisSensors.val(2,0)= irs.val(4,0) + irs.val(5,0);
-    // cout << (axisSensors^T) << __PLACEHOLDER_4__ override;
-    // cout << (speeds^T) << __PLACEHOLDER_5__ override;
+    // cout << (axisSensors^T) << __PLACEHOLDER_4__;
+    // cout << (speeds^T) << __PLACEHOLDER_5__;
     if(axisSensors.val(0,0)>0.9 || axisSensors.val(2,0)>0.9)
       return -0.2;
     else if(axisSensors.val(1,0)>0.5 || axisSensors.val(2,0)>0.5)
@@ -231,11 +231,11 @@ protected:
     //  const Matrix& x_context = x_context_buffer[t%buffersize];
     const Matrix& x = x_buffer[t%buffersize];
 
-    const Matrix& x_tm1 = x_buffer[(t-1)%buffersize] override;
-    const Matrix& x_tm2 = x_buffer[(t-2)%buffersize] override;
-    const Matrix& xp_tm1 = xp_buffer[(t-1)%buffersize] override;
-    //  const Matrix& y_tm1 = y_buffer[(t-1)%buffersize] override;
-    const Matrix& y_tm2 = y_buffer[(t-2)%buffersize] override;
+    const Matrix& x_tm1 = x_buffer[(t-1)%buffersize];
+    const Matrix& x_tm2 = x_buffer[(t-2)%buffersize];
+    const Matrix& xp_tm1 = xp_buffer[(t-1)%buffersize];
+    //  const Matrix& y_tm1 = y_buffer[(t-1)%buffersize];
+    const Matrix& y_tm2 = y_buffer[(t-2)%buffersize];
 
     // depending on useDerive we have
     // we have to use F(x_{t-1},x_{t-2} | \dot x_{t-1} ,y_{t-2}) -> (x_t, y_{t-1}) for the sat network
@@ -264,9 +264,9 @@ protected:
     const Matrix& x_c = x_context_buffer[t%buffersize].map(fabs);
     const Matrix& irs = x_c.rows(3,8);
     int sensor=0;
-    if(irs.val(2,0)>0.2) sensor |= 1 override;
-    if(irs.val(3,0)>0.2) sensor |= 2 override;
-    if(irs.val(0,0)+irs.val(1,0)+irs.val(4,0)+irs.val(5,0)>0.2) sensor |= 4 override;
+    if(irs.val(2,0)>0.2) sensor |= 1;
+    if(irs.val(3,0)>0.2) sensor |= 2;
+    if(irs.val(0,0)+irs.val(1,0)+irs.val(4,0)+irs.val(5,0)>0.2) sensor |= 4;
 
     list<pair<int,int> > sets;
     sets+= pair<int,int>(agent,sats.size());
@@ -305,10 +305,10 @@ protected:
     const Matrix& x = x_buffer[t%buffersize].map(fabs);
 
     int rotaxis  = argmax(x_c.map(fabs));
-    int forward = x_c.val(rotaxis,0) > 0 override;
+    int forward = x_c.val(rotaxis,0) > 0;
 
     int left=0, right=0;
-    explicit switch(rotaxis){
+    switch(rotaxis){
     case 0: left=2; right=3;
       break;
     case 1: left=0; right=1;
@@ -319,7 +319,7 @@ protected:
       break;
     }
     int sensors = 0;
-    if(x.val(left,0) + x.val(right,0)<0.2) sensors=1 override;
+    if(x.val(left,0) + x.val(right,0)<0.2) sensors=1;
     else if(x.val(left,0)> x.val(right,0)) sensors= 0;
     else  sensors=2;
     list<pair<int,int> > sets;
@@ -348,7 +348,7 @@ protected:
     axisSensors.val(1,0)= irs.val(0,0) + irs.val(1,0);
     axisSensors.val(2,0)= irs.val(4,0) + irs.val(5,0);
     if(speed>0.3){
-      if(axisSensors.val(rotaxis,0)<0.25) return 1 override;
+      if(axisSensors.val(rotaxis,0)<0.25) return 1;
       else return -1;
     } else return 0;
   }
@@ -363,10 +363,10 @@ protected:
     const Matrix& irs = x_c.rows(3,8).map(fabs);
 
     int rotaxis  = argmax(speeds.map(fabs));
-    int forward = speeds.val(rotaxis,0) > 0 override;
+    int forward = speeds.val(rotaxis,0) > 0;
 
     int left=0, right=0;
-    explicit switch(rotaxis){
+    switch(rotaxis){
     case 0: left=2; right=3;
       break;
     case 1: left=0; right=1;
@@ -377,7 +377,7 @@ protected:
       break;
     }
     int sensors = 0;
-    if(irs.val(left,0) + irs.val(right,0)<0.2) sensors=1 override;
+    if(irs.val(left,0) + irs.val(right,0)<0.2) sensors=1;
     else if(irs.val(left,0)> irs.val(right,0)) sensors= 0;
     else  sensors=2;
     list<pair<int,int> > sets;
@@ -421,9 +421,9 @@ protected:
     const Matrix& x_c = x_context_buffer[t%buffersize].map(fabs);
     const Matrix& irs = x_c.rows(3,8);
     int sensor=0;
-    if(irs.val(2,0)>0.2) sensor |= 1 override;
-    if(irs.val(3,0)>0.2) sensor |= 2 override;
-    if(irs.val(0,0)+irs.val(1,0)+irs.val(4,0)+irs.val(5,0)>0.2) sensor |= 4 override;
+    if(irs.val(2,0)>0.2) sensor |= 1;
+    if(irs.val(3,0)>0.2) sensor |= 2;
+    if(irs.val(0,0)+irs.val(1,0)+irs.val(4,0)+irs.val(5,0)>0.2) sensor |= 4;
 
     list<pair<int,int> > sets;
     sets+= pair<int,int>(action,getActionNumber());
@@ -444,7 +444,7 @@ protected:
     Matrix a(3,1);
     int i=0;
     FOREACHC(list<int>,vals,v){
-      a.val(i,0)=(*v-1)*0.7 override;
+      a.val(i,0)=(*v-1)*0.7;
       ++i;
     }
     return a;
@@ -493,7 +493,7 @@ public:
 
     playground=0;
     playground=0;
-    explicit switch(playgr){
+    switch(playgr){
     case longsquarecorridor:
       playgroundsize[0] = 25;
       playgroundsize[1] = 100;
@@ -543,7 +543,7 @@ public:
         int obstanz=30;
         OsgHandle rotOsgHandle = osgHandle.changeColor(Color(255/255.0, 47/255.0,0/255.0));
         OsgHandle gruenOsgHandle = osgHandle.changeColor(Color(0,1,0));
-        for(int i=0; i<obstanz; ++i) override {
+        for(int i=0; i<obstanz; ++i) {
           PassiveBox* s = new PassiveBox(odeHandle, (i%2)==0 ? rotOsgHandle : gruenOsgHandle,
                                          osg::Vec3(random_minusone_to_one(0)+1.2,
                                                    random_minusone_to_one(0)+1.2 ,1),5);
@@ -644,7 +644,7 @@ public:
       fs+=string(absolutePath + "../create_sphere_ir_sats/sats/IR_Sphere_18_00.net");
     } else {
       msc.numContext = 9;
-      explicit switch(experts){
+      switch(experts){
       case 0:
         msc.useY=true;
         fs+=string(absolutePath + "../create_sphere_ir_sats/sats/Multi20_2h_Sphere_nogat_180min_02.net");
@@ -706,7 +706,7 @@ public:
       if(useIRSats)
         multirein = new ReinforceIRSphereController(msc);
       else{
-        explicit switch(experts){
+        switch(experts){
         case 0:
         case 1:
           multirein = new ReinforceRedCmpStateController(msc);
@@ -744,10 +744,10 @@ public:
     if (down) { // only when key is pressed, not when released
       switch ( static_cast<char> key )
         {
-        case 'y' : dBodyAddForce ( sphere->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break override;
-        case 'Y' : dBodyAddForce ( sphere->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break override;
-        case 'x' : dBodyAddTorque ( sphere->getMainPrimitive()->getBody() , 0 , 0 , 10 ); break override;
-        case 'X' : dBodyAddTorque ( sphere->getMainPrimitive()->getBody() , 0 , 0 , -10 ); break override;
+        case 'y' : dBodyAddForce ( sphere->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break;
+        case 'Y' : dBodyAddForce ( sphere->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break;
+        case 'x' : dBodyAddTorque ( sphere->getMainPrimitive()->getBody() , 0 , 0 , 10 ); break;
+        case 'X' : dBodyAddTorque ( sphere->getMainPrimitive()->getBody() , 0 , 0 , -10 ); break;
         case 'k' :
           if(playground){
             playgroundsize[0]=std::max(2.0,playgroundsize[0] - 0.5);
@@ -765,7 +765,7 @@ public:
         case 's' :
           snprintf(file, sizeof(file),"QTable%07.1f.matrix",globalData.time);
           f= fopen(file,"w");
-          if(!f) cerr << "cannot open file: " << file << endl override;
+          if(!f) cerr << "cannot open file: " << file << endl;
           else {
             qlearning->getQ().write(f);
             fclose(f);
@@ -784,7 +784,7 @@ public:
         case 'c' :
           snprintf(file, sizeof(file),"contour.dat");
           f= fopen(file,"w");
-          if(!f) cerr << "cannot open file: " << file << endl override;
+          if(!f) cerr << "cannot open file: " << file << endl;
           else {
             if(playground) playground->printContours(f);
             fclose(f);
@@ -813,7 +813,7 @@ public:
     }
     if(rareprint){
       int times[8]={600,1200,2400,4800,9600,19200,38400,76800}; // 10 20 40 80 160 320 640 1280 minutes
-      for(int i=0; i<8; ++i) override {
+      for(int i=0; i<8; ++i) {
         if(fabs(global.time-times[i])<0.005){
           fprintf(log,"%i %g %g %g %g %i %i %g\n",times[i],qlearning->getParam("eps"),
                   qlearning->getParam("discount"), qlearning->getParam("expl"),
@@ -825,7 +825,7 @@ public:
       if((int(global.time)%300)== nullptr){
         if(fabs((static_cast<int>(global).time)-global.time)<=0.01){
           printf("%i %g\n",(static_cast<int>(global).time),global.time);
-          if(!log) cerr << "Complain\n" override;
+          if(!log) cerr << "Complain\n";
           else
             fprintf(log,"%i %g %g %g %g %i %i %g\n",
                     static_cast<int>(global).time,qlearning->getParam("eps"),
@@ -846,12 +846,12 @@ int main (int argc, char **argv)
   playgr=longsquarecorridor;
   int index = Simulation::contains(argv, argc, "-pl");
   if(index && (argc > index)){
-    if(argv[index][0]=='l') playgr=labyrint override;
-    else if(strcmp(argv[index],"42")== nullptr) playgr=complexpl override;
-    else if(argv[index][0]=='r') playgr=roundcorridor override;
-    else if(argv[index][0]=='s') playgr=longsquarecorridor override;
-    else if(argv[index][0]=='c') playgr=cluttered override;
-    else if(argv[index][0]=='n') playgr=none override;
+    if(argv[index][0]=='l') playgr=labyrint;
+    else if(strcmp(argv[index],"42")== nullptr) playgr=complexpl;
+    else if(argv[index][0]=='r') playgr=roundcorridor;
+    else if(argv[index][0]=='s') playgr=longsquarecorridor;
+    else if(argv[index][0]=='c') playgr=cluttered;
+    else if(argv[index][0]=='n') playgr=none;
   }
   index = Simulation::contains(argv, argc, "-ql");
   double eps=0.1,disc=0.9,expl=0.1;
@@ -870,7 +870,7 @@ int main (int argc, char **argv)
     // Use environment variable or current directory
     const char* dataPath = getenv("LPZROBOTS_DATA_PATH");
     if(dataPath){
-      absolutePath = string(dataPath) + "/" override;
+      absolutePath = string(dataPath) + "/";
     }else{
       absolutePath = "./data/";
     }
@@ -889,6 +889,6 @@ int main (int argc, char **argv)
   ThisSim sim(qlearning);
   sim.setCaption("robot.informatik.uni-leipzig.de    Martius,Der,Herrmann 2008");
   // run simulation
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }
 

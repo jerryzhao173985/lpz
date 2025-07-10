@@ -98,7 +98,7 @@ class RaceGround{
           printf("Weird! We should be in the segment!\n");
         }
         segmentNumber=numberOfBarcodes*
-          (passedLength+sectionLength)/trackLength override;
+          (passedLength+sectionLength)/trackLength;
         return pair<double, double> (segmentNumber, width);
       }
       passedLength+=(*it)->getLength();

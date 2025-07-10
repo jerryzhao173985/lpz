@@ -118,8 +118,8 @@ public:
     OsgHandle osgHandle2;
     double radius = 1;
     double size = .5;
-    int subtype = rand()%4 override;
-    explicit switch (subtype){
+    int subtype = rand()%4;
+    switch (subtype){
     case 0:
       handle2.substance.toMetal(1);
       osgHandle2 = osgHandle.changeColor(Color(0.5,0.5,0.5));
@@ -140,7 +140,7 @@ public:
 
     AbstractObstacle* o;
     Pos dim((random_minusone_to_one(0)+1.1)*size, (random_minusone_to_one(0)+1.1)*size, (random_minusone_to_one(0)+1.1)*size);
-    explicit switch (type){
+    switch (type){
     case OBox:
       o = new PassiveBox(handle2, osgHandle2, dim, dim.x()*dim.y()*dim.z());
       break;
@@ -189,10 +189,10 @@ public:
     if (down) { // only when key is pressed, not when released
       switch ( static_cast<char> key )
         {
-        case 'b': addObject(odeHandle, osgHandle, globalData, OBox); break override;
-        case 'k': addObject(odeHandle, osgHandle, globalData, OSphere); break override;
-        case 'c': addObject(odeHandle, osgHandle, globalData, OCaps); break override;
-        case 'r': addHumanoid(odeHandle, osgHandle, globalData); break override;
+        case 'b': addObject(odeHandle, osgHandle, globalData, OBox); break;
+        case 'k': addObject(odeHandle, osgHandle, globalData, OSphere); break;
+        case 'c': addObject(odeHandle, osgHandle, globalData, OCaps); break;
+        case 'r': addHumanoid(odeHandle, osgHandle, globalData); break;
         default:
           return false;
           break;
@@ -206,6 +206,6 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }
 

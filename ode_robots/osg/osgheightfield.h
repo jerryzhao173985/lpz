@@ -48,7 +48,7 @@ namespace lpzrobots {
     OSGHeightField(const std::string& filename, float x_size, float y_size, float height);
 
     virtual void setMatrix(const osg::Matrix& matrix);
-    virtual void init(const OsgHandle& osgHandle, Quality quality = Middle) override;
+    virtual void init(const OsgHandle& osgHandle, Quality quality = Middle);
 
     virtual const osg::HeightField* getHeightField() const { return field; }
 

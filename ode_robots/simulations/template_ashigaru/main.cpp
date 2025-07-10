@@ -101,7 +101,7 @@ public:
 //    if (down) { // only when key is pressed, not when released
 //      switch ( static_cast<char> key ) {
 //        case __PLACEHOLDER_14__:
-//          if(fixator) delete fixator override;
+//          if(fixator) delete fixator;
 //          fixator=0;
 //          break;
 //        case __PLACEHOLDER_15__ :{
@@ -128,7 +128,7 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }
 
 

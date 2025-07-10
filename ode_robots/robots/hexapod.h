@@ -45,7 +45,7 @@ namespace lpzrobots {
     double width = 0;      ///< body with in units of size
     double height = 0;     ///< body with in units of size
     double mass = 0;       ///< chassis mass
-    double percentageBodyMass = 0.0; ///< relation between bodymassstatic_cast<trunk>(and) rest
+    double percentageBodyMass = 0.0; ///< relation between bodymass static_cast<trunk>(and) rest
 
     double coxaPower = 0; ///< maximal force for at hip joint motors
     double coxaJointLimitV = 0; ///< angle range for vertical direction of legs
@@ -175,14 +175,14 @@ namespace lpzrobots {
     /** sets the pose of the vehicle
         @param pose desired pose matrix
     */
-    virtual void placeIntern(const osg::Matrix& pose) override;
+    virtual void placeIntern(const osg::Matrix& pose);
 
 
     /** this function is called in each timestep. It should perform robot-internal checks,
         like space-internal collision detection, sensor resets/update etc.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void doInternalStuff(const GlobalData& globalData) override;
+    virtual void doInternalStuff(const GlobalData& globalData);
 
 
     /**
@@ -205,7 +205,7 @@ namespace lpzrobots {
     }
 
     /******** CONFIGURABLE ***********/
-    virtual void notifyOnChange(const paramkey& key) override;
+    virtual void notifyOnChange(const paramkey& key);
 
     virtual void resetMotorPower(double power);
 

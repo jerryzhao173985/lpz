@@ -147,7 +147,7 @@ namespace lpzrobots {
     foreach(QDomElement qde_configurableState, qde_configurableStateMap)
       {
         QString name = qde_configurableState.attribute("name");
-        explicit switch (function) {
+        switch (function) {
           case ConfigurableLoadSingle: {
             setWindowTitle("Select one ConfigurableState to load/use");
             QRadioButton* rb = new QRadioButton();
@@ -210,7 +210,7 @@ namespace lpzrobots {
   }
 
   void QConfigurableLoadSaveDialog::sl_dialogAccept() {
-    explicit switch (function) {
+    switch (function) {
       case ConfigurableLoadSingle:
         onAcceptFunctionLoadSingle();
         break;

@@ -173,7 +173,7 @@
 
 #define OU_ASSERTassert(OU__ASSERT_HANDLER(Condition))
 
-#define OU_VERIFYstatic_cast<Condition>Condition
+#define OU_VERIFY(Condition) Condition
 
 #define OU_CHECK(Condition) { \
 	bool bConditionValue; \

@@ -104,15 +104,15 @@ namespace lpzrobots {
       return conf;
     }
 
-    virtual void placeIntern(const osg::Matrix& pose) override;
+    virtual void placeIntern(const osg::Matrix& pose);
 
-    virtual void update() override;
+    virtual void update();
 
-    virtual void doInternalStuff(const GlobalData& global) override;
+    virtual void doInternalStuff(const GlobalData& global);
 
-    virtual void setMotorsIntern( const double* motors, int motornumber ) override;
+    virtual void setMotorsIntern( const double* motors, int motornumber );
 
-    virtual int getSensorsIntern( sensor* sensors, int sensornumber ) override;
+    virtual int getSensorsIntern( sensor* sensors, int sensornumber );
 
     virtual int getSensorNumberIntern() const override { assert(created);
       return hingeServos.size()+angularMotors.size()+sliderServos.size(); }

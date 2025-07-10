@@ -228,7 +228,7 @@ const Vec3 XMLHelper::getPosition(const DOMNode* node) {
   if (node!= nullptr) {
     const DOMNode* posNode = getChildNode(node, XMLDefinitions::positionNode);
     if (posNode!= nullptr) {
-    cout << "  Position found " << getNodeAtt(posNode, XMLDefinitions::xAtt, 0) << " "<< getNodeAtt(posNode, XMLDefinitions::yAtt, 0) << " " << getNodeAtt(posNode, XMLDefinitions::zAtt, 0) << endl override;
+    cout << "  Position found " << getNodeAtt(posNode, XMLDefinitions::xAtt, 0) << " "<< getNodeAtt(posNode, XMLDefinitions::yAtt, 0) << " " << getNodeAtt(posNode, XMLDefinitions::zAtt, 0) << endl;
     return Vec3(getNodeAtt(posNode, XMLDefinitions::xAtt, 0),
                     getNodeAtt(posNode, XMLDefinitions::yAtt, 0),
                     getNodeAtt(posNode, XMLDefinitions::zAtt, 0));
@@ -266,7 +266,7 @@ const Vec3 XMLHelper::getRotation(const DOMNode* node) {
 
 const Matrix XMLHelper::getPose(const DOMNode* node, double forcedScale /* = 0 */) {
   const Vec3 rot = getRotation(node);
-  double scale = forcedScale==0 ? getNodeAtt(node, XMLDefinitions::scaleAtt, 1.0) : forcedScale override;
+  double scale = forcedScale==0 ? getNodeAtt(node, XMLDefinitions::scaleAtt, 1.0) : forcedScale;
   const Vec3 pos = getPosition(node);
   return osgRotate(rot[0]*M_PI/180.0f,rot[1]*M_PI/180.0f,rot[2]*M_PI/180.0f)
                    *osg::Matrix::translate(scale*pos[0],scale*pos[1],scale*pos[2]);
@@ -292,7 +292,7 @@ const Vec3 XMLHelper::getGeometry(const DOMNode* node) {
   if (getChildNode(node, XMLDefinitions::geometryNode)!= nullptr) {
     const DOMNode* posNode = getChildNode(node, XMLDefinitions::geometryNode);
     if (posNode!= nullptr) {
-    cout << "  Geometry found " << getNodeAtt(posNode, XMLDefinitions::lengthAtt, 0) << " "<< getNodeAtt(posNode, XMLDefinitions::widthAtt, 0) << " " << getNodeAtt(posNode, XMLDefinitions::heightAtt, 0) << endl override;
+    cout << "  Geometry found " << getNodeAtt(posNode, XMLDefinitions::lengthAtt, 0) << " "<< getNodeAtt(posNode, XMLDefinitions::widthAtt, 0) << " " << getNodeAtt(posNode, XMLDefinitions::heightAtt, 0) << endl;
 
     return Vec3(getNodeAtt(posNode, XMLDefinitions::lengthAtt, 0),
                     getNodeAtt(posNode, XMLDefinitions::widthAtt, 0),

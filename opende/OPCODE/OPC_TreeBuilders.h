@@ -44,14 +44,14 @@
 		udword	mRules;		//!< Building/Splitting rules (a combination of SplittingRules flags)
 	};
 
-	class OPCODE_API{
+	class OPCODE_API AABBTreeBuilder {
 		public:
 		//! Constructor
 													AABBTreeBuilder() :
 														mNbPrimitives(0),
 														mNodeBase(null),
 														mCount(0),
-														explicit mNbInvalidSplits(0)		{}
+														mNbInvalidSplits(0)		{}
 		//! Destructor
 		virtual ~AABBTreeBuilder() {}
 
@@ -88,7 +88,7 @@
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		virtual float			GetSplittingValue(const dTriIndex* primitives, udword nb_prims, const AABB& global_box, udword axis) const override {
 														// Default split value = middle of the axis (using only the box)
-														return global_box.GetCenter(axis) override;
+														return global_box.GetCenter(axis);
 													}
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -102,7 +102,7 @@
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		virtual BOOL			ValidateSubdivision(const dTriIndex* primitives, udword nb_prims, const AABB& global_box) override {
 														// Check the user-defined limit
-														if(nb_prims<=mSettings.mLimit)	return FALSE override;
+														if(nb_prims<=mSettings.mLimit)	return FALSE;
 
 														return TRUE;
 													}
@@ -111,55 +111,55 @@
 									udword			mNbPrimitives;		//!< Total number of primitives.
 									void*			mNodeBase;			//!< Address of node pool [Opcode 1.3]
 		// Stats
-		inline_						void			explicit SetCount(udword nb)				{ mCount=nb;				}
-		inline_						void			explicit IncreaseCount(udword nb)		{ mCount+=nb;				}
-		inline_						udword			GetCount()				const override { return mCount;			}
-		inline_						void			explicit SetNbInvalidSplits(udword nb)	{ mNbInvalidSplits=nb;		}
+		inline_						void			SetCount(udword nb)				{ mCount=nb;				}
+		inline_						void			IncreaseCount(udword nb)		{ mCount+=nb;				}
+		inline_						udword			GetCount()				const { return mCount;			}
+		inline_						void			SetNbInvalidSplits(udword nb)	{ mNbInvalidSplits=nb;		}
 		inline_						void			IncreaseNbInvalidSplits()		{ mNbInvalidSplits++;		}
-		inline_						udword			GetNbInvalidSplits()	const override { return mNbInvalidSplits;	}
+		inline_						udword			GetNbInvalidSplits()	const { return mNbInvalidSplits;	}
 
 		private:
 									udword			mCount;				//!< Stats: number of nodes created
 									udword			mNbInvalidSplits;	//!< Stats: number of invalid splits
 	};
 
-	class OPCODE_API{
+	class OPCODE_API AABBTreeOfVerticesBuilder : public AABBTreeBuilder {
 		public:
 		//! Constructor
 													AABBTreeOfVerticesBuilder() : mVertexArray(null)	{}
 		//! Destructor
 		virtual ~AABBTreeOfVerticesBuilder() {}
 
-		overridestatic_cast<AABBTreeBuilder>static_cast<bool>static_cast<ComputeGlobalBox>(const dTriIndex* primitives, udword nb_prims, AABB& global_box)	const override;
-		overridestatic_cast<AABBTreeBuilder>static_cast<float>static_cast<GetSplittingValue>(udword index, udword axis)									const override;
-		overridestatic_cast<AABBTreeBuilder>static_cast<float>static_cast<GetSplittingValue>(const dTriIndex* primitives, udword nb_prims, const AABB& global_box, udword axis)	const override;
+		virtual bool		ComputeGlobalBox(const dTriIndex* primitives, udword nb_prims, AABB& global_box)	const override;
+		virtual float		GetSplittingValue(udword index, udword axis)									const override;
+		virtual float		GetSplittingValue(const dTriIndex* primitives, udword nb_prims, const AABB& global_box, udword axis)	const override;
 
 		const						Point*			mVertexArray;		//!< Shortcut to an app-controlled array of vertices.
 	};
 
-	class OPCODE_API{
+	class OPCODE_API AABBTreeOfAABBsBuilder : public AABBTreeBuilder {
 		public:
 		//! Constructor
 													AABBTreeOfAABBsBuilder() : mAABBArray(null)	{}
 		//! Destructor
 		virtual ~AABBTreeOfAABBsBuilder() {}
 
-		overridestatic_cast<AABBTreeBuilder>static_cast<bool>static_cast<ComputeGlobalBox>(const dTriIndex* primitives, udword nb_prims, AABB& global_box)	const override;
-		overridestatic_cast<AABBTreeBuilder>static_cast<float>static_cast<GetSplittingValue>(udword index, udword axis)									const override;
+		virtual bool		ComputeGlobalBox(const dTriIndex* primitives, udword nb_prims, AABB& global_box)	const override;
+		virtual float		GetSplittingValue(udword index, udword axis)									const override;
 
 		const						AABB*			mAABBArray;			//!< Shortcut to an app-controlled array of AABBs.
 	};
 
-	class OPCODE_API{
+	class OPCODE_API AABBTreeOfTrianglesBuilder : public AABBTreeBuilder {
 		public:
 		//! Constructor
 													AABBTreeOfTrianglesBuilder() : mIMesh(null)										{}
 		//! Destructor
 		virtual ~AABBTreeOfTrianglesBuilder() {}
 
-		overridestatic_cast<AABBTreeBuilder>static_cast<bool>static_cast<ComputeGlobalBox>(const dTriIndex* primitives, udword nb_prims, AABB& global_box)	const override;
-		overridestatic_cast<AABBTreeBuilder>static_cast<float>static_cast<GetSplittingValue>(udword index, udword axis)									const override;
-		overridestatic_cast<AABBTreeBuilder>static_cast<float>static_cast<GetSplittingValue>(const dTriIndex* primitives, udword nb_prims, const AABB& global_box, udword axis)	const override;
+		virtual bool		ComputeGlobalBox(const dTriIndex* primitives, udword nb_prims, AABB& global_box)	const override;
+		virtual float		GetSplittingValue(udword index, udword axis)									const override;
+		virtual float		GetSplittingValue(const dTriIndex* primitives, udword nb_prims, const AABB& global_box, udword axis)	const override;
 
 		const				MeshInterface*			mIMesh;			//!< Shortcut to an app-controlled mesh interface
 	};

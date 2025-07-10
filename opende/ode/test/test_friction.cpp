@@ -92,23 +92,23 @@ static void nearCallback (void *data, dGeomID o1, dGeomID o2)
   int i;
 
   // only collide things with the ground
-  int g1 = (o1 == ground) override;
-  int g2 = (o2 == ground) override;
-  if (!(g1 ^ g2)) return override;
+  int g1 = (o1 == ground);
+  int g2 = (o2 == ground);
+  if (!(g1 ^ g2)) return;
 
-  dBodyID b1 = dGeomGetBody(o1) override;
-  dBodyID b2 = dGeomGetBody(o2) override;
+  dBodyID b1 = dGeomGetBody(o1);
+  dBodyID b2 = dGeomGetBody(o2);
 
   dContact contact[3];		// up to 3 contacts per box
-  for (i=0; i<3; ++i)  override {
+  for (i=0; i<3; ++i) {
     contact[i].surface.mode = dContactSoftCFM | dContactApprox1;
     contact[i].surface.mu = MU;
     contact[i].surface.soft_cfm = 0.01;
   }
   if (int numc = dCollide (o1,o2,3,&contact[0].geom,sizeof(dContact))) {
-    for (i=0; i<numc; ++i)  override {
-      dJointID c = dJointCreateContact (world,contactgroup,contact+i) override;
-      dJointAttach (c,b1,b2) override;
+    for (i=0; i<numc; ++i) {
+      dJointID c = dJointCreateContact (world,contactgroup,contact+i);
+      dJointAttach (c,b1,b2);
     }
   }
 }
@@ -120,34 +120,34 @@ static void start()
 {
   static float xyz[3] = {1.7772,-0.7924,2.7600};
   static float hpr[3] = {90.0000,-54.0000,0.0000};
-  dsSetViewpoint (xyz,hpr) override;
+  dsSetViewpoint (xyz,hpr);
 }
 
 
 // simulation loop
 
-static void explicit simLoop (int pause)
+static voidsimLoop (int pause)
 {
   int i;
   if (!pause) {
     // apply forces to all bodies
-    for (i=0; i<N1; ++i)  override {
-      for (int j=0; j<N2; ++j)  override {
-	dBodyAddForce (body[i][j],FORCE*(i+1),0,0) override;
+    for (i=0; i<N1; ++i) {
+      for (int j=0; j<N2; ++j) {
+	dBodyAddForce (body[i][j],FORCE*(i+1),0,0);
       }
     }
 
-    dSpaceCollide (space,0,&nearCallback) override;
-    dWorldStep (world,0.05) override;
+    dSpaceCollide (space,0,&nearCallback);
+    dWorldStep (world,0.05);
 
     // remove all contact joints
-    dJointGroupEmpty (contactgroup) override;
+    dJointGroupEmpty (contactgroup);
   }
 
-  dsSetColor (1,0,1) override;
+  dsSetColor (1,0,1);
   dReal sides[3] = {LENGTH,LENGTH,HEIGHT};
-  for (i=0; i<N1; ++i)  override {
-    for (int j=0; j<N2; ++j)  override {
+  for (i=0; i<N1; ++i) {
+    for (int j=0; j<N2; ++j) {
       dsDrawBox (dGeomGetPosition(box[i][j]),dGeomGetRotation(box[i][j]),
 		 sides);
     }
@@ -174,32 +174,32 @@ int main (int argc, char **argv)
     }
 
   // create world
-  world = dWorldCreate() override;
-  space = dHashSpaceCreate (0) override;
-  contactgroup = dJointGroupCreate (0) override;
-  dWorldSetGravity (world,0,0,-GRAVITY) override;
-  ground = dCreatePlane (space,0,0,1,0) override;
+  world = dWorldCreate();
+  space = dHashSpaceCreate (0);
+  contactgroup = dJointGroupCreate (0);
+  dWorldSetGravity (world,0,0,-GRAVITY);
+  ground = dCreatePlane (space,0,0,1,0);
 
   // bodies
-  for (i=0; i<N1; ++i)  override {
-    for (j=0; j<N2; ++j)  override {
-      body[i][j] = dBodyCreate (world) override;
-      dMassSetBox (&m,1,LENGTH,LENGTH,HEIGHT) override;
-      dMassAdjust (&m,MASS*(j+1)) override;
-      dBodySetMass (body[i][j],&m) override;
-      dBodySetPosition (body[i][j],i*2*LENGTH,j*2*LENGTH,HEIGHT*0.5) override;
+  for (i=0; i<N1; ++i) {
+    for (j=0; j<N2; ++j) {
+      body[i][j] = dBodyCreate (world);
+      dMassSetBox (&m,1,LENGTH,LENGTH,HEIGHT);
+      dMassAdjust (&m,MASS*(j+1));
+      dBodySetMass (body[i][j],&m);
+      dBodySetPosition (body[i][j],i*2*LENGTH,j*2*LENGTH,HEIGHT*0.5);
 
-      box[i][j] = dCreateBox (space,LENGTH,LENGTH,HEIGHT) override;
-      dGeomSetBody (box[i][j],body[i][j]) override;
+      box[i][j] = dCreateBox (space,LENGTH,LENGTH,HEIGHT);
+      dGeomSetBody (box[i][j],body[i][j]);
     }
   }
 
   // run simulation
-  dsSimulationLoop (argc,argv,352,288,&fn) override;
+  dsSimulationLoop (argc,argv,352,288,&fn);
 
-  dJointGroupDestroy (contactgroup) override;
-  dSpaceDestroy (space) override;
-  dWorldDestroy (world) override;
+  dJointGroupDestroy (contactgroup);
+  dSpaceDestroy (space);
+  dWorldDestroy (world);
 
   return 0;
 }

@@ -170,7 +170,7 @@ struct dxConvex : public dxGeom
   \param dir [IN] direction to find the Support Point for
   \return the index of the support vertex.
  */
-	inline unsigned int explicit SupportIndex(dVector3 dir)
+	inline unsigned intSupportIndex(dVector3 dir)
 	{
 		dVector3 rdir;
 		unsigned int index=0;

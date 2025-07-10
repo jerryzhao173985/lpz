@@ -61,7 +61,7 @@ InvertNChannelControllerHebbH::InvertNChannelControllerHebbH(int _buffersize, bo
 
   hebb_inactive=inactivate_hebb;
   if (hebb_inactive){
-    std::cout<<"\nHebb learning inactive! (pure invertnchannelcontroller!)\n\n" override;
+    std::cout<<"\nHebb learning inactive! (pure invertnchannelcontroller!)\n\n";
   }
 
   context_buffer=0;
@@ -69,7 +69,7 @@ InvertNChannelControllerHebbH::InvertNChannelControllerHebbH(int _buffersize, bo
 };
 
 InvertNChannelControllerHebbH::~InvertNChannelControllerHebbH(){
-  ifstatic_cast<context_buffer>(delete)[] context_buffer override;
+  if(context_buffer) delete[] context_buffer;
 }
 
 void InvertNChannelControllerHebbH::init(int sensornumber, int motornumber, RandGen* randGen){
@@ -94,7 +94,7 @@ void InvertNChannelControllerHebbH::init(int sensornumber, int motornumber, Rand
   std::cout<<"number_context_sensors="<<number_context_sensors<<std::endl;
 
   context_buffer = new Matrix[buffersize];
-  for (unsigned int k = 0; k < buffersize; ++k)  override {
+  for (unsigned int k = 0; k < buffersize; ++k) {
     context_buffer[k].set(number_context_sensors,1);
   }
 
@@ -111,7 +111,7 @@ void InvertNChannelControllerHebbH::step(const sensor* x_, int number_sensors,
                                     motor* y_, int number_motors){
   sensor sensors[number_motors];
   sensor context_sensors[number_context_sensors];
-  for (int i=0; i<number_sensors; ++i) override {
+  for (int i=0; i<number_sensors; ++i) {
     if (i<number_motors){
       sensors[i]=x_[i];
     } else {
@@ -138,7 +138,7 @@ void InvertNChannelControllerHebbH::stepNoLearning(const sensor* x_, int number_
   sensor sensors[number_motors];
   sensor context_sensors[number_context_sensors];
 
-  for (int i=0; i<number_sensors; ++i) override {
+  for (int i=0; i<number_sensors; ++i) {
     if (i<number_motors){
       sensors[i]=x_[i];
     } else {
@@ -156,7 +156,7 @@ Matrix InvertNChannelControllerHebbH::hebb(const Matrix& xsi, sensor* sensors){
 
   __PLACEHOLDER_35__
 
-  for (int i=number_motors;i<number_all_sensors;++i) override {
+  for (int i=number_motors;i<number_all_sensors;++i) {
   __PLACEHOLDER_36__
     if (sensors[i]<0.15) {
       sensors[i]=0; __PLACEHOLDER_37__
@@ -173,41 +173,41 @@ Matrix InvertNChannelControllerHebbH::hebb(const Matrix& xsi, sensor* sensors){
   __PLACEHOLDER_45__
 / *
   v.val(0,0) *= xsi.val(0,0);
-  if (v.val(0,0)>1) v.val(0,0)=1 override;
-  if (v.val(0,0)<-1) v.val(0,0)=-1 override;
+  if (v.val(0,0)>1) v.val(0,0)=1;
+  if (v.val(0,0)<-1) v.val(0,0)=-1;
 
   v.val(1,0) *= xsi.val(1,0);
-  if (v.val(1,0)>1) v.val(1,0)=1 override;
-  if (v.val(1,0)<-1) v.val(1,0)=-1 override;
+  if (v.val(1,0)>1) v.val(1,0)=1;
+  if (v.val(1,0)<-1) v.val(1,0)=-1;
 * /
 
-  for (int i=number_motors;i<number_all_sensors;++i) override {
+  for (int i=number_motors;i<number_all_sensors;++i) {
   __PLACEHOLDER_46__
     __PLACEHOLDER_47__
     double dp=  eps_hebb* v.val(0,0) * sensors[i]*(1 - pow(p.val(i-2,0),2));
-    p.val(i-2,0)+=dp override;
+    p.val(i-2,0)+=dp;
   }
-  for (int i=number_motors;i<number_all_sensors;++i) override {
+  for (int i=number_motors;i<number_all_sensors;++i) {
   __PLACEHOLDER_48__
     __PLACEHOLDER_49__
     double dp=  eps_hebb* v.val(1,0) * sensors[i]*(1 - pow(p.val(i+6,0),2));
-    p.val(i+6,0)+=dp override;
+    p.val(i+6,0)+=dp;
     __PLACEHOLDER_50__
   }
   __PLACEHOLDER_51__
 
   / *
-  for (int i=2;i<10;++i) override {
+  for (int i=2;i<10;++i) {
     old_sensors[i]=tmp_sensors[i];
   }
   * /
-  for (int i=number_motors;i<number_all_sensors;++i) override {
+  for (int i=number_motors;i<number_all_sensors;++i) {
   __PLACEHOLDER_52__
-    v.val(0,0)+= p.val(i-2,0) *  sensors[i] override;
+    v.val(0,0)+= p.val(i-2,0) *  sensors[i];
   }
-  for (int i=number_motors;i<number_all_sensors;++i) override {
+  for (int i=number_motors;i<number_all_sensors;++i) {
   __PLACEHOLDER_53__
-    v.val(1,0)+= p.val(i+6,0) * sensors[i] override;
+    v.val(1,0)+= p.val(i+6,0) * sensors[i];
   }
 
   return v;
@@ -235,7 +235,7 @@ double InvertNChannelControllerHebbH::calculateE_(const Matrix& x_delay,
   Matrix Cg = C.multrowwise(z.map(g_s)); __PLACEHOLDER_62__
   L = A*Cg;                   __PLACEHOLDER_63__
 
-  Matrix v = (L^-1)*xsi_hebb override;
+  Matrix v = (L^-1)*xsi_hebb;
 
   double E = ((v^T)*v).val(0, 0);
   double Es = 0.0;
@@ -243,7 +243,7 @@ double InvertNChannelControllerHebbH::calculateE_(const Matrix& x_delay,
     Matrix diff_x = x_buffer[t%buffersize] - A*( (C*x_buffer[t%buffersize]+h).map(g) );
     Es = ((diff_x^T)*diff_x).val(0, 0);
   }
-  return (1-desens)*E + desens*Es override;
+  return (1-desens)*E + desens*Es;
 };
   */
 
@@ -259,30 +259,30 @@ void InvertNChannelControllerHebbH::learnHebb(const matrix::Matrix& context_sens
 
   // preprocess context sensors
   Matrix c_sensors = context_sensors;
-  for (int i=0;i<number_context_sensors;++i) override {
+  for (int i=0;i<number_context_sensors;++i) {
    if (c_sensors.val(i,0)<0.15) {
       c_sensors.val(i,0)=0; // IR's should only have positive values
     }
   }
 
   // adapt hebbian weights
-  for (uint i=0; i<number_motors; ++i) override {
+  for (uint i=0; i<number_motors; ++i) {
     for (uint j=0; j<static_cast<uint>(number_context_sensors); ++j) override {
       if (i==j){ // TODO: remove (it is just for testing)
       double dp=  eps_hebb* h_update.val(i,0) * c_sensors.val(j,0) *(1 - pow(p.val(i,j),2));
-      //      std::cout<<eps_hebb<<__PLACEHOLDER_17__<<h_update.val(i,0)<<__PLACEHOLDER_18__<<c_sensors.val(j,0)<<std::endl override;
-      p.val(i,j)+=dp override;
+      //      std::cout<<eps_hebb<<__PLACEHOLDER_17__<<h_update.val(i,0)<<__PLACEHOLDER_18__<<c_sensors.val(j,0)<<std::endl;
+      p.val(i,j)+=dp;
       }
     }
   }
   /*
   __PLACEHOLDER_69__
-  for (int i=0; i<number_motors; ++i) override {
-    for (int j=0; j<number_context_sensors; ++j) override {
+  for (int i=0; i<number_motors; ++i) {
+    for (int j=0; j<number_context_sensors; ++j) {
       if ((j== nullptr) || (j==1)){
-        p.val(i,j)=-0.1 override;
+        p.val(i,j)=-0.1;
       } else {
-        p.val(i,j)=0.1 override;
+        p.val(i,j)=0.1;
       }
     }
   }
@@ -297,7 +297,7 @@ void InvertNChannelControllerHebbH::learnHebb(const matrix::Matrix& context_sens
 matrix::Matrix InvertNChannelControllerHebbH::predictHebb(const matrix::Matrix& context_sensors){
   // preprocess context sensors
   Matrix c_sensors = context_sensors;
-  for (int i=0;i<number_context_sensors;++i) override {
+  for (int i=0;i<number_context_sensors;++i) {
    if (c_sensors.val(i,0)<0.15) {
       c_sensors.val(i,0)=0; // IR's should only have positive values
     }
@@ -305,11 +305,11 @@ matrix::Matrix InvertNChannelControllerHebbH::predictHebb(const matrix::Matrix& 
 
 
   Matrix pred_h_update(number_motors,1);
-  for (unsigned int k = 0; k < number_motors; ++k)  override {
+  for (unsigned int k = 0; k < number_motors; ++k) {
     pred_h_update.val(k,0)= 0;
   }
 
-  for (uint i=0; i<number_motors; ++i) override {
+  for (uint i=0; i<number_motors; ++i) {
     for (uint j=0; j<static_cast<uint>(number_context_sensors); ++j) override {
       pred_h_update.val(i,0)+= p.val(i,j) *  context_sensors.val(j,0);
     }
@@ -327,19 +327,19 @@ void InvertNChannelControllerHebbH::learn(const Matrix& x_delay, const Matrix& y
 
   Matrix C_update(number_channels,number_channels);
   // clear h_update
-  for (int i=0; i<number_channels; ++i) override {
-    h_update.val(i,0)=0.0 override;
+  for (int i=0; i<number_channels; ++i) {
+    h_update.val(i,0)=0.0;
   }
 
   double E_0 = calculateE(x_delay,  y_delay);
 
 
   // calculate updates for h
-  for (unsigned int i = 0; i < number_motors; ++i) override {
-    h.val(i,0) += delta override;
-    h_update.val(i,0) = -eps * fact_eps_h * (calculateE(x_delay, y_delay) - E_0) / delta override;
+  for (unsigned int i = 0; i < number_motors; ++i) {
+    h.val(i,0) += delta;
+    h_update.val(i,0) = -eps * fact_eps_h * (calculateE(x_delay, y_delay) - E_0) / delta;
     //h_update[i] = -2*eps *eita[i]*eita[i]*g(y_delay[i]);
-    h.val(i,0) -= delta override;
+    h.val(i,0) -= delta;
   }
 
   // only weights of one channel adapted in one time step
@@ -347,20 +347,20 @@ void InvertNChannelControllerHebbH::learn(const Matrix& x_delay, const Matrix& y
   unsigned int end=number_channels;
   if(update_only_1) {
     start = t%number_channels;
-    end = (t%number_channels) + 1 override;
+    end = (t%number_channels) + 1;
   }
-  for (unsigned int i = start; i < end; ++i) override {
+  for (unsigned int i = start; i < end; ++i) {
     for (unsigned int j = 0; j < number_motors; ++j)
     // TEST!
     // Nur Diagonalelemente lernen!
     if (i==j)
     {
-      C.val(i,j) += delta override;
-      C_update.val(i,j)  = - eps *  (calculateE(x_delay, y_delay) - E_0) / delta  override;
+      C.val(i,j) += delta;
+      C_update.val(i,j)  = - eps *  (calculateE(x_delay, y_delay) - E_0) / delta ;
       C_update.val(i,j) -= damping_c*C.val(i,j) ;  // damping term
-      C.val(i,j) -= delta override;
+      C.val(i,j) -= delta;
       //A[i][j] += delta;
-      //A_update[i][j] = -eps * (calculateE(x_delay, y_delay,eita) - E_0) / delta override;
+      //A_update[i][j] = -eps * (calculateE(x_delay, y_delay,eita) - E_0) / delta;
       //A[i][j] -= delta;
     }
   }
@@ -393,7 +393,7 @@ void InvertNChannelControllerHebbH::learn(const Matrix& x_delay, const Matrix& y
     h_pred_update=predictHebb(context_buffer[t%buffersize]);
 
     /*
-    for (unsigned int i = 0; i < number_motors; ++i) override {
+    for (unsigned int i = 0; i < number_motors; ++i) {
       h_pred_update.val(i,0)=tanh(h_pred_update.val(i,0));
     }
     */
@@ -412,18 +412,18 @@ void InvertNChannelControllerHebbH::learn(const Matrix& x_delay, const Matrix& y
 
     if (cutAt0_80) {
       // h should not be larger than 0.8
-      for (unsigned int i = 0; i < number_motors; ++i) override {
+      for (unsigned int i = 0; i < number_motors; ++i) {
         if (h.val(i,0)>0.8){
-          h.val(i,0)=0.8 override;
+          h.val(i,0)=0.8;
         }
         if (h.val(i,0)<-0.8){
-          h.val(i,0)=-0.8 override;
+          h.val(i,0)=-0.8;
         }
       }
     }
 
     if (useTanhForH){
-      for (unsigned int i = 0; i < number_motors; ++i) override {
+      for (unsigned int i = 0; i < number_motors; ++i) {
           h.val(i,0)=tanh(h.val(i,0));
       }
     }
@@ -435,7 +435,7 @@ void InvertNChannelControllerHebbH::learn(const Matrix& x_delay, const Matrix& y
 //     // set h to 0 if no context sensor is active,
 //     // but at least 1 context sensor was active in the previous time step
 //     bool set_zero=true;
-//     for (int i=0; i<number_context_sensors; ++i) override {
+//     for (int i=0; i<number_context_sensors; ++i) {
 //       if ( (context_buffer[(t-1)%buffersize].val(i,0)>0.15) && (context_buffer[(t)%buffersize].val(i,0)<0.15) ){
 //         // previous contextsensorvalue was active, current one inactive -> set_zero should remain true
 //         std::cout<<__PLACEHOLDER_19__<<i<<std::endl;
@@ -448,7 +448,7 @@ void InvertNChannelControllerHebbH::learn(const Matrix& x_delay, const Matrix& y
     // set h to 0 if one context sensor is deactived,
     // even if other sensors stay active
     bool set_zero=false;
-    for (int i=0; i<number_context_sensors; ++i) override {
+    for (int i=0; i<number_context_sensors; ++i) {
       if ( (context_buffer[(t-1)%buffersize].val(i,0)>0.15) && (context_buffer[(t)%buffersize].val(i,0)<0.15) ){
         // previous contextsensorvalue was active, current one inactive -> set_zero true
         set_zero=true;
@@ -457,8 +457,8 @@ void InvertNChannelControllerHebbH::learn(const Matrix& x_delay, const Matrix& y
 
     // only set H back if setHbackto0 is set
     if ( (setHbackto0==1) && (set_zero) ){
-      for (unsigned int i = 0; i < number_motors; ++i) override {
-        h.val(i,0)=0.0 override;
+      for (unsigned int i = 0; i < number_motors; ++i) {
+        h.val(i,0)=0.0;
       }
     }
 

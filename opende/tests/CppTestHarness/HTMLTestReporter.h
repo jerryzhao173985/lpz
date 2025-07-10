@@ -9,9 +9,9 @@ namespace CppTestHarness
 
 class HTMLTestReporter{
 public:
-	virtual void ReportFailure(char const* file, int line, std::string failure) override;
-	virtual void ReportSingleResult(const std::string& testName, bool failed) override;
-	virtual void ReportSummary(int testCount, int failureCount) override;
+	virtual void ReportFailure(char const* file, int line, std::string failure);
+	virtual void ReportSingleResult(const std::string& testName, bool failed);
+	virtual void ReportSummary(int testCount, int failureCount);
 
 private:
 	typedef std::vector<std::string> MessageList;

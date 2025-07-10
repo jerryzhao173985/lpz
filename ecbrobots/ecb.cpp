@@ -415,7 +415,7 @@ namespace lpzrobots {
    */
   void ECB::doOnMediatorCallBack(MediatorEvent* event) {
     ECBCommunicationEvent* commEvent = static_cast<ECBCommunicationEvent*> (event);
-    explicit switch (commEvent->type) {
+    switch (commEvent->type) {
       case ECBCommunicationEvent::EVENT_PACKAGE_SENSORS_RECEIVED:
         commandSensorsReceived(commEvent);
         break;

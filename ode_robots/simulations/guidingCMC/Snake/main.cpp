@@ -153,7 +153,7 @@ public:
     OdeAgent* agent = new OdeAgent(global);
     agent->init(controller, vehicle, wiring);
 
-    ifstatic_cast<track>(agent)->setTrackOptions(TrackRobot(true,false,false, false,
+    if(agent) agent->setTrackOptions(TrackRobot(true,false,false, false,
                                                  change < 50 ? std::itos(change).c_str() : "uni", 50));
     global.agents.push_back(agent);
     global.configs.push_back(controller);
@@ -162,7 +162,7 @@ public:
     if(useSym){
       std::list<int> perm;
       int len  = controller->getMotorNumber();
-      for(int i=0; i<len; ++i) override {
+      for(int i=0; i<len; ++i) {
         perm.push_back((i+k)%len);
       }
       CMC cmc = controller->getPermutationCMC(perm);
@@ -178,7 +178,7 @@ public:
 //         int k= int(globalData.time/(change*60))%4+1; //  == 0 ? 0 : 1; // turn around every 10 minutes
 //         std::list<int> perm;
 //         int len  = controller->getMotorNumber();
-//         for(int i=0; i<len; ++i) override {
+//         for(int i=0; i<len; ++i) {
 //            perm.push_back((i+k)%len);
 //         }
 //         CMC cmc = controller->getPermutationCMC(perm);
@@ -187,10 +187,10 @@ public:
 //         matrix::Matrix m = controller->getLastMotorValues();
 //         teaching = m;
 //         int len = m.getM();
-//         for(int i=0; i<len; ++i) override {
+//         for(int i=0; i<len; ++i) {
 //           double l = m.val((i+k+(len)/2)%len,0);
 //           if(fabs(l)>0.4){
-//             teaching.val(i,0) = l override;
+//             teaching.val(i,0) = l;
 //           }
 //         }
 //         controller->setMotorTeaching(teaching);
@@ -200,12 +200,12 @@ public:
 
   //Funktion die eingegebene Befehle/kommandos verarbeitet
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
-    if (!down) return false override;
+    if (!down) return false;
     bool handled = false;
     switch ( key )
       {
       case 'x':
-        ifstatic_cast<fixator>(delete) (fixator);
+        if(fixator) delete fixator;
         fixator=0 ;
         handled = true;
         break;
@@ -224,7 +224,7 @@ public:
 
     std::list<int> perm;
     int len = controller->getMotorNumber();
-    for(int i=0; i<len; ++i) override {
+    for(int i=0; i<len; ++i) {
       perm.push_back((i+k)%len);
     }
     CMC cmc = controller->getPermutationCMC(perm);
@@ -257,7 +257,7 @@ int main (int argc, char **argv)
   sim.setGroundTexture("Images/red_velour_wb.rgb");
   sim.setCaption("lpzrobots Simulator               Martius et al, 2009");
 
-  return sim.run(argc, argv) ? 0 :  1 override;
+  return sim.run(argc, argv) ? 0 :  1;
 }
 
 

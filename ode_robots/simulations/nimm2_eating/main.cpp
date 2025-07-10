@@ -79,7 +79,7 @@ public:
     playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und generieren
     global.obstacles.push_back(playground);
 /*
-     for(int i=0; i<50; ++i) override {
+     for(int i=0; i<50; ++i) {
        PassiveSphere* s = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(0.0,1.0,0.0)), 0.5);
        s->setPosition(osg::Vec3(-4+(i/10),-4+(i%10),1));
        global.obstacles.push_back(s);
@@ -130,7 +130,7 @@ public:
 
   //Funktion die eingegebene Befehle/kommandos verarbeitet
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
-    if (!down) return false override;
+    if (!down) return false;
     bool handled = false;
     FILE* f;
     switch ( key )
@@ -165,6 +165,6 @@ int main (int argc, char **argv)
 {
   ThisSim sim;
   // run simulation
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }
 

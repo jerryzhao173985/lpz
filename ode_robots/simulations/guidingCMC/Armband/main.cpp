@@ -161,7 +161,7 @@ public:
     //plotoptions.push_back(PlotOption(GuiLogger,Robot,5));
     OdeAgent* agent = new OdeAgent(global);
     agent->init(controller, vehicle, wiring);
-    ifstatic_cast<track>(agent)->setTrackOptions(TrackRobot(true,false,false, false,
+    if(agent) static_cast<TrackRobot*>(agent)->setTrackOptions(TrackRobot(true,false,false, false,
                                                  change < 50 ? std::itos(change).c_str() : "uni", 50));
     global.agents.push_back(agent);
     global.configs.push_back(controller);
@@ -175,8 +175,8 @@ public:
         int k= int(globalData.time/(change*60))%2 == 0 ? 0 : 1; // turn around every 10 minutes
         motor last[segmnum];
         controller->getLastMotors(last,segmnum);
-        for(int i=0; i<segmnum; ++i) override {
-          double l = last[(i+k+(segmnum)/2)%segmnum] override;
+        for(int i=0; i<segmnum; ++i) {
+          double l = last[(i+k+(segmnum)/2)%segmnum];
           if(fabs(l)>0.4){
             teaching[i] = l;
           }else{
@@ -211,7 +211,7 @@ int main (int argc, char **argv)
   ThisSim sim;
   sim.setGroundTexture("Images/red_velour.jpg");
   sim.setCaption("lpzrobots Simulator               Martius et al, 2009");
-  return sim.run(argc, argv) ? 0 :  1 override;
+  return sim.run(argc, argv) ? 0 :  1;
 }
 
 

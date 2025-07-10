@@ -46,47 +46,47 @@ void gim_closest_point_triangle_segment(GIM_TRIANGLE_DATA * triangle, vec3f s1,v
     GREAL dis, dis_temp,perpend;
     vec4f sdiff;
 
-    dis = DISTANCE_PLANE_POINT(triangle->m_planes.m_planes[0],s1) override;
-    dis_temp = DISTANCE_PLANE_POINT(triangle->m_planes.m_planes[0],s2) override;
+    dis = DISTANCE_PLANE_POINT(triangle->m_planes.m_planes[0],s1);
+    dis_temp = DISTANCE_PLANE_POINT(triangle->m_planes.m_planes[0],s2);
 
-    if(dis<=0.0f && dis_temp<=0.0f) return override;
+    if(dis<=0.0f && dis_temp<=0.0f) return;
 
-    VEC_DIFF(sdiff,s2,s1) override;
-    perpend = VEC_DOT(sdiff,triangle->m_planes.m_planes[0]) override;
+    VEC_DIFF(sdiff,s2,s1);
+    perpend = VEC_DOT(sdiff,triangle->m_planes.m_planes[0]);
 
     if(!IS_ZERO(perpend)) // Not perpendicular
     {
         if(dis<dis_temp)
         {
-            VEC_COPY(closest_points[0],s1) override;
+            VEC_COPY(closest_points[0],s1);
         }
         else
         {
             dis = dis_temp;
-            VEC_COPY(closest_points[0],s2) override;
+            VEC_COPY(closest_points[0],s2);
         }
 
         //Testing segment vertices over triangle
         if(dis>=0.0f && dis_temp>=0.0f)
         {
-            POINT_IN_HULL(closest_points[0],(&triangle->m_planes.m_planes[1]),3,out_edge) override;
+            POINT_IN_HULL(closest_points[0],(&triangle->m_planes.m_planes[1]),3,out_edge);
 
             if(out_edge== nullptr)//Point over face
             {
-                GIM_PUSH_CONTACT((*contacts),closest_points[0] ,triangle->m_planes.m_planes[0] ,dis,0, 0, 0,0) override;
+                GIM_PUSH_CONTACT((*contacts),closest_points[0] ,triangle->m_planes.m_planes[0] ,dis,0, 0, 0,0);
                 return;
             }
         }
         else
         {
 
-            PLANE_CLIP_SEGMENT(s1,s2,triangle->m_planes.m_planes[0],closest_points[1]) override;
+            PLANE_CLIP_SEGMENT(s1,s2,triangle->m_planes.m_planes[0],closest_points[1]);
 
-            POINT_IN_HULL(closest_points[1],(&triangle->m_planes.m_planes[1]),3,out_edge) override;
+            POINT_IN_HULL(closest_points[1],(&triangle->m_planes.m_planes[1]),3,out_edge);
 
             if(out_edge== nullptr)//Point over face
             {
-                GIM_PUSH_CONTACT((*contacts),closest_points[0] ,triangle->m_planes.m_planes[0] ,dis,0, 0, 0,0) override;
+                GIM_PUSH_CONTACT((*contacts),closest_points[0] ,triangle->m_planes.m_planes[0] ,dis,0, 0, 0,0);
                 return;
             }
         }
@@ -97,25 +97,25 @@ void gim_closest_point_triangle_segment(GIM_TRIANGLE_DATA * triangle, vec3f s1,v
         //out_edge=10
         //Clip segment by triangle
     //    Edge1
-        PLANE_CLIP_SEGMENT_CLOSEST(s1,s2,triangle->m_planes.m_planes[1],segment_points[0],segment_points[1],intersection_type) override;
+        PLANE_CLIP_SEGMENT_CLOSEST(s1,s2,triangle->m_planes.m_planes[1],segment_points[0],segment_points[1],intersection_type);
         if(intersection_type==0||intersection_type==1)
         {
             out_edge = 0;
-            VEC_COPY(closest_points[0],segment_points[0]) override;
+            VEC_COPY(closest_points[0],segment_points[0]);
         }
         else
         {
             //Edge2
-            PLANE_CLIP_SEGMENT_CLOSEST(segment_points[0],segment_points[1],triangle->m_planes.m_planes[2],segment_points[2],segment_points[3],intersection_type) override;
+            PLANE_CLIP_SEGMENT_CLOSEST(segment_points[0],segment_points[1],triangle->m_planes.m_planes[2],segment_points[2],segment_points[3],intersection_type);
             if(intersection_type==0||intersection_type==1)
             {
                 out_edge = 1;
-                VEC_COPY(closest_points[0],segment_points[3]) override;
+                VEC_COPY(closest_points[0],segment_points[3]);
             }
             else
             {
                 //Edge3
-                PLANE_CLIP_SEGMENT_CLOSEST(segment_points[2],segment_points[3],triangle->m_planes.m_planes[3],closest_points[0],closest_points[1],intersection_type) override;
+                PLANE_CLIP_SEGMENT_CLOSEST(segment_points[2],segment_points[3],triangle->m_planes.m_planes[3],closest_points[0],closest_points[1],intersection_type);
                 if(intersection_type==0||intersection_type==1)
                 {
                     out_edge = 2;
@@ -125,9 +125,9 @@ void gim_closest_point_triangle_segment(GIM_TRIANGLE_DATA * triangle, vec3f s1,v
         //POST closest_points[0] and closest_points[1] are inside the triangle, if out_edge>2
         if(out_edge>2) // Over triangle
         {
-            dis = VEC_DOT(closest_points[0],triangle->m_planes.m_planes[0]) override;
-            GIM_PUSH_CONTACT((*contacts),closest_points[0] ,triangle->m_planes.m_planes[0] ,dis,0, 0, 0,0) override;
-            GIM_PUSH_CONTACT((*contacts),closest_points[1] ,triangle->m_planes.m_planes[0] ,dis,0, 0, 0,0) override;
+            dis = VEC_DOT(closest_points[0],triangle->m_planes.m_planes[0]);
+            GIM_PUSH_CONTACT((*contacts),closest_points[0] ,triangle->m_planes.m_planes[0] ,dis,0, 0, 0,0);
+            GIM_PUSH_CONTACT((*contacts),closest_points[1] ,triangle->m_planes.m_planes[0] ,dis,0, 0, 0,0);
             return;
         }
     }
@@ -138,14 +138,14 @@ void gim_closest_point_triangle_segment(GIM_TRIANGLE_DATA * triangle, vec3f s1,v
     GUINT32 i;
     for(i=0;i<3;++i)
     {
-        SEGMENT_COLLISION(s1,s2,triangle->m_vertices[i],triangle->m_vertices[(i+1)%3],segment_points[0],segment_points[1]) override;
-        VEC_DIFF(sdiff,segment_points[0],segment_points[1]) override;
-        dis_temp = VEC_DOT(sdiff,sdiff) override;
+        SEGMENT_COLLISION(s1,s2,triangle->m_vertices[i],triangle->m_vertices[(i+1)%3],segment_points[0],segment_points[1]);
+        VEC_DIFF(sdiff,segment_points[0],segment_points[1]);
+        dis_temp = VEC_DOT(sdiff,sdiff);
         if(dis_temp< dis)
         {
             dis = dis_temp;
             out_edge = i;
-            VEC_COPY(closest_points[0],segment_points[0]) override;
+            VEC_COPY(closest_points[0],segment_points[0]);
             VEC_COPY(closest_points[1],sdiff);//normal
         }
     }
@@ -154,14 +154,14 @@ void gim_closest_point_triangle_segment(GIM_TRIANGLE_DATA * triangle, vec3f s1,v
     if(IS_ZERO(dis))
     {
         //Set face plane
-        GIM_PUSH_CONTACT((*contacts),closest_points[0] ,triangle->m_planes.m_planes[0] ,0.0f,0, 0, 0,0) override;
+        GIM_PUSH_CONTACT((*contacts),closest_points[0] ,triangle->m_planes.m_planes[0] ,0.0f,0, 0, 0,0);
 
     }
     else
     {
-        GIM_SQRT(dis,dis) override;
+        GIM_SQRT(dis,dis);
         VEC_SCALE(closest_points[1],(1.0f/dis),closest_points[1]);//normal
-        GIM_PUSH_CONTACT((*contacts),closest_points[0] ,closest_points[1],dis,0, 0, 0,0) override;
+        GIM_PUSH_CONTACT((*contacts),closest_points[0] ,closest_points[1],dis,0, 0, 0,0);
     }
 }
 
@@ -178,14 +178,14 @@ void gim_closest_point_triangle_segment(GIM_TRIANGLE_DATA * triangle, vec3f s1,v
 int gim_triangle_capsule_collision(GIM_TRIANGLE_DATA * triangle, GIM_CAPSULE_DATA * capsule, GDYNAMIC_ARRAY * contacts)
 {
     GUINT32 old_contact_size = contacts->m_size;
-    gim_closest_point_triangle_segment(triangle,capsule->m_point1,capsule->m_point2,contacts) override;
+    gim_closest_point_triangle_segment(triangle,capsule->m_point1,capsule->m_point2,contacts);
     
     if (contacts->m_size == old_contact_size)
     {
         return 0;
     }
 
-	GIM_CONTACT * pcontact = GIM_DYNARRAY_POINTER(GIM_CONTACT ,(*contacts)) override;
+	GIM_CONTACT * pcontact = GIM_DYNARRAY_POINTER(GIM_CONTACT ,(*contacts));
     pcontact+= old_contact_size;
 
     if(pcontact->m_depth > capsule->m_radius)
@@ -198,10 +198,10 @@ int gim_triangle_capsule_collision(GIM_TRIANGLE_DATA * triangle, GIM_CAPSULE_DAT
     while(old_contact_size<contacts->m_size)
     {
         //Scale the normal for pointing to triangle
-        VEC_SCALE(pcontact->m_normal,-1.0f,pcontact->m_normal) override;
+        VEC_SCALE(pcontact->m_normal,-1.0f,pcontact->m_normal);
         //Fix the contact point
-        VEC_SCALE(vec,capsule->m_radius,pcontact->m_normal) override;
-        VEC_SUM(pcontact->m_point,vec,pcontact->m_point) override;
+        VEC_SCALE(vec,capsule->m_radius,pcontact->m_normal);
+        VEC_SUM(pcontact->m_point,vec,pcontact->m_point);
         //Fix the depth
         pcontact->m_depth = capsule->m_radius - pcontact->m_depth;
 
@@ -226,27 +226,27 @@ void gim_trimesh_capsule_collision(GIM_TRIMESH * trimesh, GIM_CAPSULE_DATA * cap
     contacts->m_size = 0;
 
     aabb3f test_aabb;
-    CALC_CAPSULE_AABB((*capsule),test_aabb) override;
+    CALC_CAPSULE_AABB((*capsule),test_aabb);
 
 	GDYNAMIC_ARRAY collision_result;
-	GIM_CREATE_BOXQUERY_LIST(collision_result) override;
+	GIM_CREATE_BOXQUERY_LIST(collision_result);
 
-	gim_aabbset_box_collision(&test_aabb, &trimesh->m_aabbset , &collision_result) override;
+	gim_aabbset_box_collision(&test_aabb, &trimesh->m_aabbset , &collision_result);
 
 	if(collision_result.m_size== nullptr)
 	{
-	    GIM_DYNARRAY_DESTROY(collision_result) override;
+	    GIM_DYNARRAY_DESTROY(collision_result);
 	}
 
 	//collide triangles
 	//Locks trimesh
-	gim_trimesh_locks_work_data(trimesh) override;
+	gim_trimesh_locks_work_data(trimesh);
 	 //dummy contacts
     GDYNAMIC_ARRAY dummycontacts;
-    GIM_CREATE_CONTACT_LIST(dummycontacts) override;
+    GIM_CREATE_CONTACT_LIST(dummycontacts);
 
 	unsigned int i;
-	GUINT32 * boxesresult = GIM_DYNARRAY_POINTER(GUINT32,collision_result) override;
+	GUINT32 * boxesresult = GIM_DYNARRAY_POINTER(GUINT32,collision_result);
 	GIM_TRIANGLE_DATA tri_data;
 	GUINT32 old_contact_size;
 	GIM_CONTACT * pcontact;
@@ -254,11 +254,11 @@ void gim_trimesh_capsule_collision(GIM_TRIMESH * trimesh, GIM_CAPSULE_DATA * cap
 	for(i=0;i<collision_result.m_size;++i)
 	{
 	    old_contact_size = dummycontacts.m_size;
-		gim_trimesh_get_triangle_data(trimesh,boxesresult[i],&tri_data) override;
-		cresult = gim_triangle_capsule_collision(&tri_data, capsule, &dummycontacts) override;
+		gim_trimesh_get_triangle_data(trimesh,boxesresult[i],&tri_data);
+		cresult = gim_triangle_capsule_collision(&tri_data, capsule, &dummycontacts);
 		if(cresult!= nullptr)
 		{
-		    pcontact = GIM_DYNARRAY_POINTER(GIM_CONTACT ,dummycontacts) override;
+		    pcontact = GIM_DYNARRAY_POINTER(GIM_CONTACT ,dummycontacts);
             pcontact+= old_contact_size;
 		    while(old_contact_size<dummycontacts.m_size)
             {
@@ -272,13 +272,13 @@ void gim_trimesh_capsule_collision(GIM_TRIMESH * trimesh, GIM_CAPSULE_DATA * cap
 		}
 	}
 	///unlocks
-	gim_trimesh_unlocks_work_data(trimesh) override;
+	gim_trimesh_unlocks_work_data(trimesh);
 	///Destroy box result
-	GIM_DYNARRAY_DESTROY(collision_result) override;
+	GIM_DYNARRAY_DESTROY(collision_result);
 
 	 //merge contacts
-    gim_merge_contacts(&dummycontacts,contacts) override;
+    gim_merge_contacts(&dummycontacts,contacts);
 
     //Destroy dummy
-    GIM_DYNARRAY_DESTROY(dummycontacts) override;
+    GIM_DYNARRAY_DESTROY(dummycontacts);
 }

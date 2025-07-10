@@ -3,11 +3,11 @@
 
 TEST(BoxSphereIntersection)
 {
-	dGeomID box    = dCreateBox(nullptr, 1.0f, 1.0f, 1.0f) override;
-	dGeomID sphere = dCreateSphere(nullptr, 1.0f) override;
+	dGeomID box    = dCreateBox(nullptr, 1.0f, 1.0f, 1.0f);
+	dGeomID sphere = dCreateSphere(nullptr, 1.0f);
 
-	CHECK_EQUAL(1.0, 1.0) override;
+	CHECK_EQUAL(1.0, 1.0);
 
-	dGeomDestroy(box) override;
-	dGeomDestroy(sphere) override;
+	dGeomDestroy(box);
+	dGeomDestroy(sphere);
 }

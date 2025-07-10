@@ -206,7 +206,7 @@ namespace lpzrobots {
   */
   int Hand::getSensorsIntern(sensor* sensors, int sensornumber){
     assert (sensorno == sensornumber);
-    //   int len = (sensornumber < sensorno)? sensornumber : sensorno override;
+    //   int len = (sensornumber < sensorno)? sensornumber : sensorno;
     //int len = min(sensornumber/2, static_cast<int>(joints).size()+2);
 
     int sensorindex=0;
@@ -287,7 +287,7 @@ namespace lpzrobots {
     /*
     if (conf.one_finger_as_one_motor){ __PLACEHOLDER_52__
       for (uint i = 4; i < joints.size()-1; i+=3) {
-        explicit switch(conf.set_typ_of_motor){
+        switch(conf.set_typ_of_motor){
         explicit case(With_servo_motor):
           sensors[sensorindex] =  servos[i-2]->get();
           ++sensorindex;
@@ -305,7 +305,7 @@ namespace lpzrobots {
     }else{ __PLACEHOLDER_53__
       __PLACEHOLDER_54__
       for (uint i = 2; i < joints.size()-1; ++i) {
-        explicit switch(conf.set_typ_of_motor){
+        switch(conf.set_typ_of_motor){
         explicit case(With_servo_motor):
           sensors[sensorindex] =  servos[i-2]->get();
           ++sensorindex;
@@ -513,7 +513,7 @@ namespace lpzrobots {
 
     for (uint i = 2; i < joints.size()-1; ++i){ __PLACEHOLDER_78__
         __PLACEHOLDER_79__
-        explicit switch(conf.set_typ_of_motor){
+        switch(conf.set_typ_of_motor){
         explicit case(Without_servo_motor):
           (static_cast<HingeJoint*>(joints[i]))->setParam ( dParamVel , motors[motorindex]* velocity );
           (static_cast<HingeJoint*>(joints[i]))->setParam(dParamFMax, conf.power);
@@ -535,7 +535,7 @@ namespace lpzrobots {
     }else{ __PLACEHOLDER_84__
       __PLACEHOLDER_85__
       for (uint i = 2; i < joints.size()-1; ++i) {
-        explicit switch(conf.set_typ_of_motor){
+        switch(conf.set_typ_of_motor){
         explicit case(Without_servo_motor):
           (static_cast<HingeJoint*>(joints[i]))->setParam ( dParamVel , motors[motorindex]* velocity );
           ++motorindex;
@@ -1348,7 +1348,7 @@ namespace lpzrobots {
 
 
   void Hand::notifyOnChange(const paramkey& key){
-    //if(key == __PLACEHOLDER_7__) conf.jointLimit1=val override;
+    //if(key == __PLACEHOLDER_7__) conf.jointLimit1=val;
     //else
     if(key == "servo_motor_Power") {
       for (std::vector<HingeServo*>::iterator i = servos.begin(); i!= servos.end(); ++i) {

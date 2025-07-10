@@ -154,19 +154,19 @@ public:
   // add own key handling stuff here, just insert some case values
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
     if (down) { // only when key is pressed, not when released
-      explicit switch ( static_cast<char> key ) {
-      case 'x' : dBodyAddForce ( box3->getBody() , 0 ,0 , 1000 ); break override;
-      case 'X' : dBodyAddForce ( box3->getBody(), 0 , 0 , -1000 ); break override;
-      case 'y' : dBodyAddForce ( sphere1->getBody() , 0 ,0 , 1000 ); break override;
-      case 'a' : dBodyAddForce ( sphere1->getBody(), 0 , 0 , -1000 ); break override;
-      case 'S' : freq*=0.8; printf("FR : %g\n", freq);        break override;
-      case 's' : freq/=0.8; printf("FR : %g\n", freq);        break override;
-      case 'P' : servo->setPower(servo->getPower()+5); printf("KP : %g\n", servo->getPower()); break override;
-      case 'p' : servo->setPower(servo->getPower()-5); printf("KP : %g\n", servo->getPower()); break override;
-      case 'D' : servo->setDamping(servo->getDamping()*1.01); printf("KD : %g\n", servo->getDamping()); break override;
-      case 'd' : servo->setDamping(servo->getDamping()*0.99); printf("KD : %g\n", servo->getDamping()); break override;
-      case 'I' : servo->offsetCanceling()*=1.01; printf("KI : %g\n", servo->offsetCanceling()); break override;
-      case 'i' : servo->offsetCanceling()*=0.99; printf("KI : %g\n", servo->offsetCanceling()); break override;
+      switch ( static_cast<char> key ) {
+      case 'x' : dBodyAddForce ( box3->getBody() , 0 ,0 , 1000 ); break;
+      case 'X' : dBodyAddForce ( box3->getBody(), 0 , 0 , -1000 ); break;
+      case 'y' : dBodyAddForce ( sphere1->getBody() , 0 ,0 , 1000 ); break;
+      case 'a' : dBodyAddForce ( sphere1->getBody(), 0 , 0 , -1000 ); break;
+      case 'S' : freq*=0.8; printf("FR : %g\n", freq);        break;
+      case 's' : freq/=0.8; printf("FR : %g\n", freq);        break;
+      case 'P' : servo->setPower(servo->getPower()+5); printf("KP : %g\n", servo->getPower()); break;
+      case 'p' : servo->setPower(servo->getPower()-5); printf("KP : %g\n", servo->getPower()); break;
+      case 'D' : servo->setDamping(servo->getDamping()*1.01); printf("KD : %g\n", servo->getDamping()); break;
+      case 'd' : servo->setDamping(servo->getDamping()*0.99); printf("KD : %g\n", servo->getDamping()); break;
+      case 'I' : servo->offsetCanceling()*=1.01; printf("KI : %g\n", servo->offsetCanceling()); break;
+      case 'i' : servo->offsetCanceling()*=0.99; printf("KI : %g\n", servo->offsetCanceling()); break;
       default:
         return false;
         break;
@@ -182,7 +182,7 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 
 }
 

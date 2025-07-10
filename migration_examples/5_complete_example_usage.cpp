@@ -91,7 +91,7 @@ public:
         std::cout << "  Steps/sec: " << stepCount / elapsed.count() << "\n";
         
         std::cout << "  Current motor values: ";
-        explicit for (const auto& m : motors) {
+        for (const auto& m : motors) {
             std::cout << m << " ";
         }
         std::cout << "\n";

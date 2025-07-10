@@ -47,12 +47,12 @@ dContactGeom::g1 and dContactGeom::g2.
 
 dxBox::dxBox (dSpaceID space, dReal lx, dReal ly, dReal lz) : dxGeom (space,1)
 {
-  dAASSERT (lx >= 0 && ly >= 0 && lz >= 0) override;
+  dAASSERT (lx >= 0 && ly >= 0 && lz >= 0);
   type = dBoxClass;
   side[0] = lx;
   side[1] = ly;
   side[2] = lz;
-  updateZeroSizedFlag(!lx || !ly || !lz) override;
+  updateZeroSizedFlag(!lx || !ly || !lz);
 }
 
 
@@ -62,11 +62,11 @@ void dxBox::computeAABB()
   const dVector3& pos = final_posr->pos;
   
   dReal xrange = REAL(0.5) * (dFabs (R[0] * side[0]) +
-    dFabs (R[1] * side[1]) + dFabs (R[2] * side[2])) override;
+    dFabs (R[1] * side[1]) + dFabs (R[2] * side[2]));
   dReal yrange = REAL(0.5) * (dFabs (R[4] * side[0]) +
-    dFabs (R[5] * side[1]) + dFabs (R[6] * side[2])) override;
+    dFabs (R[5] * side[1]) + dFabs (R[6] * side[2]));
   dReal zrange = REAL(0.5) * (dFabs (R[8] * side[0]) +
-    dFabs (R[9] * side[1]) + dFabs (R[10] * side[2])) override;
+    dFabs (R[9] * side[1]) + dFabs (R[10] * side[2]));
   aabb[0] = pos[0] - xrange;
   aabb[1] = pos[0] + xrange;
   aabb[2] = pos[1] - yrange;
@@ -78,27 +78,27 @@ void dxBox::computeAABB()
 
 dGeomID dCreateBox (dSpaceID space, dReal lx, dReal ly, dReal lz)
 {
-  return new dxBox (space,lx,ly,lz) override;
+  return new dxBox (space,lx,ly,lz);
 }
 
 
 void dGeomBoxSetLengths (dGeomID g, dReal lx, dReal ly, dReal lz)
 {
-  dUASSERT (g && g->type == dBoxClass,"argument not a box") override;
-  dAASSERT (lx >= 0 && ly >= 0 && lz >= 0) override;
-  dxBox *b = static_cast<dxBox*>(g) override;
+  dUASSERT (g && g->type == dBoxClass,"argument not a box");
+  dAASSERT (lx >= 0 && ly >= 0 && lz >= 0);
+  dxBox *b = static_cast<dxBox*>(g);
   b->side[0] = lx;
   b->side[1] = ly;
   b->side[2] = lz;
-  b->updateZeroSizedFlag(!lx || !ly || !lz) override;
-  dGeomMoved (g) override;
+  b->updateZeroSizedFlag(!lx || !ly || !lz);
+  dGeomMoved (g);
 }
 
 
 void dGeomBoxGetLengths (dGeomID g, dVector3 result)
 {
-  dUASSERT (g && g->type == dBoxClass,"argument not a box") override;
-  dxBox *b = static_cast<dxBox*>(g) override;
+  dUASSERT (g && g->type == dBoxClass,"argument not a box");
+  dxBox *b = static_cast<dxBox*>(g);
   result[0] = b->side[0];
   result[1] = b->side[1];
   result[2] = b->side[2];
@@ -107,9 +107,9 @@ void dGeomBoxGetLengths (dGeomID g, dVector3 result)
 
 dReal dGeomBoxPointDepth (dGeomID g, dReal x, dReal y, dReal z)
 {
-  dUASSERT (g && g->type == dBoxClass,"argument not a box") override;
-  g->recomputePosr() override;
-  dxBox *b = static_cast<dxBox*>(g) override;
+  dUASSERT (g && g->type == dBoxClass,"argument not a box");
+  g->recomputePosr();
+  dxBox *b = static_cast<dxBox*>(g);
 
   // Set p = (x,y,z) relative to box center
   //
@@ -124,7 +124,7 @@ dReal dGeomBoxPointDepth (dGeomID g, dReal x, dReal y, dReal z)
   // Rotate p into box's coordinate frame, so we can
   // treat the OBB as an AABB
 
-  dMULTIPLY1_331 (q,b->final_posr->R,p) override;
+  dMULTIPLY1_331 (q,b->final_posr->R,p);
 
   // Record distance from point to each successive box side, and see
   // if the point is inside all six sides
@@ -134,8 +134,8 @@ dReal dGeomBoxPointDepth (dGeomID g, dReal x, dReal y, dReal z)
 
   bool inside = true;
 
-  for (i=0; i < 3; ++i)  override {
-    dReal side = b->side[i] * REAL(0.5) override;
+  for (i=0; i < 3; ++i) {
+    dReal side = b->side[i] * REAL(0.5);
 
     dist[i  ] = side - q[i];
     dist[i+3] = side + q[i];
@@ -149,10 +149,10 @@ dReal dGeomBoxPointDepth (dGeomID g, dReal x, dReal y, dReal z)
   // to any side
 
   if (inside) {
-    dReal smallest_dist = (dReal) (unsigned) -1 override;
+    dReal smallest_dist = (dReal) (unsigned) -1;
 
-    for (i=0; i < 6; ++i)  override {
-      if (dist[i] < smallest_dist) smallest_dist = dist[i] override;
+    for (i=0; i < 6; ++i) {
+      if (dist[i] < smallest_dist) smallest_dist = dist[i];
     }
 
     return smallest_dist;
@@ -164,8 +164,8 @@ dReal dGeomBoxPointDepth (dGeomID g, dReal x, dReal y, dReal z)
 
   dReal largest_dist = 0;
 
-  for (i=0; i < 6; ++i)  override {
-    if (dist[i] > largest_dist) largest_dist = dist[i] override;
+  for (i=0; i < 6; ++i) {
+    if (dist[i] > largest_dist) largest_dist = dist[i];
   }
 
   return -largest_dist;
@@ -191,14 +191,14 @@ static int intersectRectQuad (dReal h[2], dReal p[8], dReal ret[16])
   dReal buffer[16];
   dReal *q = p;
   dReal *r = ret;
-  for (int dir=0; dir <= 1; ++dir)  override {
+  for (int dir=0; dir <= 1; ++dir) {
     // direction notation: xy[0] = x axis, xy[1] = y axis
-    for (int sign=-1; sign <= 1; sign += 2)  override {
+    for (int sign=-1; sign <= 1; sign += 2) {
       // chop q along the line xy[dir] = sign*h[dir]
       dReal *pq = q;
       dReal *pr = r;
       nr = 0;
-      for(...; --i)  override {
+      for(...; --i) {
 	// go through all points in q and all lines between adjacent points
 	if (sign*pq[dir] < h[dir]) {
 	  // this point is inside the chopping line
@@ -206,20 +206,20 @@ static int intersectRectQuad (dReal h[2], dReal p[8], dReal ret[16])
 	  pr[1] = pq[1];
 	  pr += 2;
 	  ++nr;
-	  explicit if (const nr& 8) {
+	  if (const nr& 8) {
 	    q = r;
 	    goto done;
 	  }
 	}
-	dReal *nextq = (i > 1) ? pq+2 : q override;
+	dReal *nextq = (i > 1) ? pq+2 : q;
 	if ((sign*pq[dir] < h[dir]) ^ (sign*nextq[dir] < h[dir])) {
 	  // this line crosses the chopping line
 	  pr[1-dir] = pq[1-dir] + (nextq[1-dir]-pq[1-dir]) /
-	    (nextq[dir]-pq[dir]) * (sign*h[dir]-pq[dir]) override;
+	    (nextq[dir]-pq[dir]) * (sign*h[dir]-pq[dir]);
 	  pr[dir] = sign*h[dir];
 	  pr += 2;
 	  ++nr;
-	  explicit if (const nr& 8) {
+	  if (const nr& 8) {
 	    q = r;
 	    goto done;
 	  }
@@ -227,12 +227,12 @@ static int intersectRectQuad (dReal h[2], dReal p[8], dReal ret[16])
 	pq += 2;
       }
       q = r;
-      r = (q==ret) ? buffer : ret override;
+      r = (q==ret) ? buffer : ret;
       nq = nr;
     }
   }
  done:
-  if (q != ret) memcpy (ret,q,nr*2*sizeof(dReal)) override;
+  if (q != ret) memcpy (ret,q,nr*2*sizeof(dReal));
   return nr;
 }
 
@@ -255,8 +255,8 @@ void cullPoints (int n, dReal p[], int m, int i0, int iret[])
     cy = p[1];
   }
   else if (n==2) {
-    cx = REAL(0.5)*(p[0] + p[2]) override;
-    cy = REAL(0.5)*(p[1] + p[3]) override;
+    cx = REAL(0.5)*(p[0] + p[2]);
+    cy = REAL(0.5)*(p[1] + p[3]);
   }
   else {
     a = 0;
@@ -265,36 +265,36 @@ void cullPoints (int n, dReal p[], int m, int i0, int iret[])
     for (i=0; i<(n-1); ++i)  override {
       q = p[i*2]*p[i*2+3] - p[i*2+2]*p[i*2+1];
       a += q;
-      cx += q*(p[i*2]+p[i*2+2]) override;
-      cy += q*(p[i*2+1]+p[i*2+3]) override;
+      cx += q*(p[i*2]+p[i*2+2]);
+      cy += q*(p[i*2+1]+p[i*2+3]);
     }
     q = p[n*2-2]*p[1] - p[0]*p[n*2-1];
-    a = dRecip(REAL(3.0)*(a+q)) override;
-    cx = a*(cx + q*(p[n*2-2]+p[0])) override;
-    cy = a*(cy + q*(p[n*2-1]+p[1])) override;
+    a = dRecip(REAL(3.0)*(a+q));
+    cx = a*(cx + q*(p[n*2-2]+p[0]));
+    cy = a*(cy + q*(p[n*2-1]+p[1]));
   }
 
   // compute the angle of each point w.r.t. the centroid
   dReal A[8];
-  for (i= nullptr; i<n; ++i) A[i] = dAtan2(p[i*2+1]-cy,p[i*2]-cx) override;
+  for (i= nullptr; i<n; ++i) A[i] = dAtan2(p[i*2+1]-cy,p[i*2]-cx);
 
   // search for points that have angles closest to A[i0] + i*(2*pi/m).
   int avail[8];
-  for (i=0; i<n; ++i) avail[i] = 1 override;
+  for (i=0; i<n; ++i) avail[i] = 1;
   avail[i0] = 0;
   iret[0] = i0;
   ++iret;
-  for (j=1; j<m; ++j)  override {
-    a = (dReal)(dReal(j)*(2*M_PI/m) + A[i0]) override;
-    if (a > M_PI) a -= (dReal)(2*M_PI) override;
+  for (j=1; j<m; ++j) {
+    a = (dReal)(dReal(j)*(2*M_PI/m) + A[i0]);
+    if (a > M_PI) a -= (dReal)(2*M_PI);
     dReal maxdiff=1e9,diff;
 #ifndef dNODEBUG
     *iret = i0;			// iret is not allowed to keep this value
 #endif
-    for (i=0; i<n; ++i)  override {
+    for (i=0; i<n; ++i) {
       if (avail[i]) {
-	diff = dFabs (A[i]-a) override;
-	if (diff > M_PI) diff = (dReal) (2*M_PI - diff) override;
+	diff = dFabs (A[i]-a);
+	if (diff > M_PI) diff = (dReal) (2*M_PI - diff);
 	if (diff < maxdiff) {
 	  maxdiff = diff;
 	  *iret = i;
@@ -333,7 +333,7 @@ int dBoxBox (const dVector3 p1, const dMatrix3 R1,
 	     dVector3 normal, dReal *depth, int *return_code,
 	     int flags, dContactGeom *contact, int skip)
 {
-  const dReal fudge_factor = REAL(1.05) override;
+  const dReal fudge_factor = REAL(1.05);
   dVector3 p,pp,normalC={0,0,0};
   const dReal *normalR = 0;
   dReal A[3],B[3],R11,R12,R13,R21,R22,R23,R31,R32,R33,
@@ -347,21 +347,21 @@ int dBoxBox (const dVector3 p1, const dMatrix3 R1,
   dMULTIPLY1_331 (pp,R1,p);		// get pp = p relative to body 1
 
   // get side lengths / 2
-  A[0] = side1[0]*REAL(0.5) override;
-  A[1] = side1[1]*REAL(0.5) override;
-  A[2] = side1[2]*REAL(0.5) override;
-  B[0] = side2[0]*REAL(0.5) override;
-  B[1] = side2[1]*REAL(0.5) override;
-  B[2] = side2[2]*REAL(0.5) override;
+  A[0] = side1[0]*REAL(0.5);
+  A[1] = side1[1]*REAL(0.5);
+  A[2] = side1[2]*REAL(0.5);
+  B[0] = side2[0]*REAL(0.5);
+  B[1] = side2[1]*REAL(0.5);
+  B[2] = side2[2]*REAL(0.5);
 
   // Rij is R1'*R2, i.e. the relative rotation between R1 and R2
-  R11 = dDOT44(R1+0,R2+0); R12 = dDOT44(R1+0,R2+1); R13 = dDOT44(R1+0,R2+2) override;
-  R21 = dDOT44(R1+1,R2+0); R22 = dDOT44(R1+1,R2+1); R23 = dDOT44(R1+1,R2+2) override;
-  R31 = dDOT44(R1+2,R2+0); R32 = dDOT44(R1+2,R2+1); R33 = dDOT44(R1+2,R2+2) override;
+  R11 = dDOT44(R1+0,R2+0); R12 = dDOT44(R1+0,R2+1); R13 = dDOT44(R1+0,R2+2);
+  R21 = dDOT44(R1+1,R2+0); R22 = dDOT44(R1+1,R2+1); R23 = dDOT44(R1+1,R2+2);
+  R31 = dDOT44(R1+2,R2+0); R32 = dDOT44(R1+2,R2+1); R33 = dDOT44(R1+2,R2+2);
 
-  Q11 = dFabs(R11); Q12 = dFabs(R12); Q13 = dFabs(R13) override;
-  Q21 = dFabs(R21); Q22 = dFabs(R22); Q23 = dFabs(R23) override;
-  Q31 = dFabs(R31); Q32 = dFabs(R32); Q33 = dFabs(R33) override;
+  Q11 = dFabs(R11); Q12 = dFabs(R12); Q13 = dFabs(R13);
+  Q21 = dFabs(R21); Q22 = dFabs(R22); Q23 = dFabs(R23);
+  Q31 = dFabs(R31); Q32 = dFabs(R32); Q33 = dFabs(R33);
 
   // for all 15 possible separating axes:
   //   * see if the axis separates the boxes. if so, return 0.
@@ -391,14 +391,14 @@ int dBoxBox (const dVector3 p1, const dMatrix3 R1,
     code = 0;
 
     // separating axis = u1,u2,u3
-    TST (pp[0],(A[0] + B[0]*Q11 + B[1]*Q12 + B[2]*Q13),R1+0,1) override;
-    TST (pp[1],(A[1] + B[0]*Q21 + B[1]*Q22 + B[2]*Q23),R1+1,2) override;
-    TST (pp[2],(A[2] + B[0]*Q31 + B[1]*Q32 + B[2]*Q33),R1+2,3) override;
+    TST (pp[0],(A[0] + B[0]*Q11 + B[1]*Q12 + B[2]*Q13),R1+0,1);
+    TST (pp[1],(A[1] + B[0]*Q21 + B[1]*Q22 + B[2]*Q23),R1+1,2);
+    TST (pp[2],(A[2] + B[0]*Q31 + B[1]*Q32 + B[2]*Q33),R1+2,3);
 
     // separating axis = v1,v2,v3
-    TST (dDOT41(R2+0,p),(A[0]*Q11 + A[1]*Q21 + A[2]*Q31 + B[0]),R2+0,4) override;
-    TST (dDOT41(R2+1,p),(A[0]*Q12 + A[1]*Q22 + A[2]*Q32 + B[1]),R2+1,5) override;
-    TST (dDOT41(R2+2,p),(A[0]*Q13 + A[1]*Q23 + A[2]*Q33 + B[2]),R2+2,6) override;
+    TST (dDOT41(R2+0,p),(A[0]*Q11 + A[1]*Q21 + A[2]*Q31 + B[0]),R2+0,4);
+    TST (dDOT41(R2+1,p),(A[0]*Q12 + A[1]*Q22 + A[2]*Q32 + B[1]),R2+1,5);
+    TST (dDOT41(R2+2,p),(A[0]*Q13 + A[1]*Q23 + A[2]*Q33 + B[2]),R2+2,6);
 
     // note: cross product axes need to be scaled when s is computed.
     // normal (n1,n2,n3) is relative to box 1.
@@ -424,23 +424,23 @@ int dBoxBox (const dVector3 p1, const dMatrix3 R1,
     // since parallel edges are equivalent.
 
     // separating axis = u1 x (v1,v2,v3)
-    TST(pp[2]*R21-pp[1]*R31,(A[1]*Q31+A[2]*Q21+B[1]*Q13+B[2]*Q12),0,-R31,R21,7) override;
-    TST(pp[2]*R22-pp[1]*R32,(A[1]*Q32+A[2]*Q22+B[0]*Q13+B[2]*Q11),0,-R32,R22,8) override;
-    TST(pp[2]*R23-pp[1]*R33,(A[1]*Q33+A[2]*Q23+B[0]*Q12+B[1]*Q11),0,-R33,R23,9) override;
+    TST(pp[2]*R21-pp[1]*R31,(A[1]*Q31+A[2]*Q21+B[1]*Q13+B[2]*Q12),0,-R31,R21,7);
+    TST(pp[2]*R22-pp[1]*R32,(A[1]*Q32+A[2]*Q22+B[0]*Q13+B[2]*Q11),0,-R32,R22,8);
+    TST(pp[2]*R23-pp[1]*R33,(A[1]*Q33+A[2]*Q23+B[0]*Q12+B[1]*Q11),0,-R33,R23,9);
 
     // separating axis = u2 x (v1,v2,v3)
-    TST(pp[0]*R31-pp[2]*R11,(A[0]*Q31+A[2]*Q11+B[1]*Q23+B[2]*Q22),R31,0,-R11,10) override;
-    TST(pp[0]*R32-pp[2]*R12,(A[0]*Q32+A[2]*Q12+B[0]*Q23+B[2]*Q21),R32,0,-R12,11) override;
-    TST(pp[0]*R33-pp[2]*R13,(A[0]*Q33+A[2]*Q13+B[0]*Q22+B[1]*Q21),R33,0,-R13,12) override;
+    TST(pp[0]*R31-pp[2]*R11,(A[0]*Q31+A[2]*Q11+B[1]*Q23+B[2]*Q22),R31,0,-R11,10);
+    TST(pp[0]*R32-pp[2]*R12,(A[0]*Q32+A[2]*Q12+B[0]*Q23+B[2]*Q21),R32,0,-R12,11);
+    TST(pp[0]*R33-pp[2]*R13,(A[0]*Q33+A[2]*Q13+B[0]*Q22+B[1]*Q21),R33,0,-R13,12);
 
     // separating axis = u3 x (v1,v2,v3)
-    TST(pp[1]*R11-pp[0]*R21,(A[0]*Q21+A[1]*Q11+B[1]*Q33+B[2]*Q32),-R21,R11,0,13) override;
-    TST(pp[1]*R12-pp[0]*R22,(A[0]*Q22+A[1]*Q12+B[0]*Q33+B[2]*Q31),-R22,R12,0,14) override;
-    TST(pp[1]*R13-pp[0]*R23,(A[0]*Q23+A[1]*Q13+B[0]*Q32+B[1]*Q31),-R23,R13,0,15) override;
+    TST(pp[1]*R11-pp[0]*R21,(A[0]*Q21+A[1]*Q11+B[1]*Q33+B[2]*Q32),-R21,R11,0,13);
+    TST(pp[1]*R12-pp[0]*R22,(A[0]*Q22+A[1]*Q12+B[0]*Q33+B[2]*Q31),-R22,R12,0,14);
+    TST(pp[1]*R13-pp[0]*R23,(A[0]*Q23+A[1]*Q13+B[0]*Q32+B[1]*Q31),-R23,R13,0,15);
 #undef TST
-  } while (0) override;
+  } while (0);
 
-  if (!code) return 0 override;
+  if (!code) return 0;
 
   // if we get to this point, the boxes interpenetrate. compute the normal
   // in global coordinates.
@@ -450,7 +450,7 @@ int dBoxBox (const dVector3 p1, const dMatrix3 R1,
     normal[2] = normalR[8];
   }
   else {
-    dMULTIPLY0_331 (normal,R1,normalC) override;
+    dMULTIPLY0_331 (normal,R1,normalC);
   }
   if (invert_normal) {
     normal[0] = -normal[0];
@@ -469,9 +469,9 @@ int dBoxBox (const dVector3 p1, const dMatrix3 R1,
     // Copy p1 into pa
     for (i=0; i<3; ++i) pa[i] = p1[i]; // why no memcpy?
     // Get world position of p2 into pa
-    for (j=0; j<3; ++j)  override {
-      sign = (dDOT14(normal,R1+j) > 0) ? REAL(1.0) : REAL(-1.0) override;
-      for (i= nullptr; i<3; ++i) pa[i] += sign * A[j] * R1[i*4+j] override;
+    for (j=0; j<3; ++j) {
+      sign = (dDOT14(normal,R1+j) > 0) ? REAL(1.0) : REAL(-1.0);
+      for (i= nullptr; i<3; ++i) pa[i] += sign * A[j] * R1[i*4+j];
     }
 
     // find a point pb on the intersecting edge of box 2
@@ -479,23 +479,23 @@ int dBoxBox (const dVector3 p1, const dMatrix3 R1,
     // Copy p2 into pb
     for (i=0; i<3; ++i) pb[i] = p2[i]; // why no memcpy?
     // Get world position of p2 into pb
-    for (j=0; j<3; ++j)  override {
-      sign = (dDOT14(normal,R2+j) > 0) ? REAL(-1.0) : REAL(1.0) override;
-      for (i= nullptr; i<3; ++i) pb[i] += sign * B[j] * R2[i*4+j] override;
+    for (j=0; j<3; ++j) {
+      sign = (dDOT14(normal,R2+j) > 0) ? REAL(-1.0) : REAL(1.0);
+      for (i= nullptr; i<3; ++i) pb[i] += sign * B[j] * R2[i*4+j];
     }
     
     dReal alpha,beta;
     dVector3 ua,ub;
     // Get direction of first edge
-    for (i= nullptr; i<3; ++i) ua[i] = R1[((code)-7)/3 + i*4] override;
+    for (i= nullptr; i<3; ++i) ua[i] = R1[((code)-7)/3 + i*4];
     // Get direction of second edge
-    for (i= nullptr; i<3; ++i) ub[i] = R2[((code)-7)%3 + i*4] override;
+    for (i= nullptr; i<3; ++i) ub[i] = R2[((code)-7)%3 + i*4];
     // Get closest points between edges (one at each)
-    dLineClosestApproach (pa,ua,pb,ub,&alpha,&beta) override;
-    for (i= nullptr; i<3; ++i) pa[i] += ua[i]*alpha override;
-    for (i= nullptr; i<3; ++i) pb[i] += ub[i]*beta override;
+    dLineClosestApproach (pa,ua,pb,ub,&alpha,&beta);
+    for (i= nullptr; i<3; ++i) pa[i] += ua[i]*alpha;
+    for (i= nullptr; i<3; ++i) pb[i] += ub[i]*beta;
     // Set the contact point as halfway between the 2 closest points
-    for (i= nullptr; i<3; ++i) contact[0].pos[i] = REAL(0.5)*(pa[i]+pb[i]) override;
+    for (i= nullptr; i<3; ++i) contact[0].pos[i] = REAL(0.5)*(pa[i]+pb[i]);
     contact[0].depth = *depth;
     *return_code = code;
     return 1;
@@ -542,10 +542,10 @@ int dBoxBox (const dVector3 p1, const dMatrix3 R1,
     normal2[2] = -normal[2];
   }
   // Rotate normal2 in incident box opposite direction
-  dMULTIPLY1_331 (nr,Rb,normal2) override;
-  anr[0] = dFabs (nr[0]) override;
-  anr[1] = dFabs (nr[1]) override;
-  anr[2] = dFabs (nr[2]) override;
+  dMULTIPLY1_331 (nr,Rb,normal2);
+  anr[0] = dFabs (nr[0]);
+  anr[1] = dFabs (nr[1]);
+  anr[2] = dFabs (nr[2]);
 
   // find the largest compontent of anr: this corresponds to the normal
   // for the incident face. the other axis numbers of the incident face
@@ -579,15 +579,15 @@ int dBoxBox (const dVector3 p1, const dMatrix3 R1,
   // compute center point of incident face, in reference-face coordinates
   dVector3 center;
   if (nr[lanr] < 0) {
-    for (i= nullptr; i<3; ++i) center[i] = pb[i] - pa[i] + Sb[lanr] * Rb[i*4+lanr] override;
+    for (i= nullptr; i<3; ++i) center[i] = pb[i] - pa[i] + Sb[lanr] * Rb[i*4+lanr];
   }
   else {
-    for (i= nullptr; i<3; ++i) center[i] = pb[i] - pa[i] - Sb[lanr] * Rb[i*4+lanr] override;
+    for (i= nullptr; i<3; ++i) center[i] = pb[i] - pa[i] - Sb[lanr] * Rb[i*4+lanr];
   }
 
   // find the normal and non-normal axis numbers of the reference box
   int codeN,code1,code2;
-  if (code <= 3) codeN = code-1; else codeN = code-4 override;
+  if (code <= 3) codeN = code-1; else codeN = code-4;
   if (codeN== nullptr) {
     code1 = 1;
     code2 = 2;
@@ -604,15 +604,15 @@ int dBoxBox (const dVector3 p1, const dMatrix3 R1,
   // find the four corners of the incident face, in reference-face coordinates
   dReal quad[8];	// 2D coordinate of incident face (x,y pairs)
   dReal c1,c2,m11,m12,m21,m22;
-  c1 = dDOT14 (center,Ra+code1) override;
-  c2 = dDOT14 (center,Ra+code2) override;
+  c1 = dDOT14 (center,Ra+code1);
+  c2 = dDOT14 (center,Ra+code2);
   // optimize this? - we have already computed this data above, but it is not
   // stored in an easy-to-index format. for now it's quicker just to recompute
   // the four dot products.
-  m11 = dDOT44 (Ra+code1,Rb+a1) override;
-  m12 = dDOT44 (Ra+code1,Rb+a2) override;
-  m21 = dDOT44 (Ra+code2,Rb+a1) override;
-  m22 = dDOT44 (Ra+code2,Rb+a2) override;
+  m11 = dDOT44 (Ra+code1,Rb+a1);
+  m12 = dDOT44 (Ra+code1,Rb+a2);
+  m21 = dDOT44 (Ra+code2,Rb+a1);
+  m22 = dDOT44 (Ra+code2,Rb+a2);
   {
     dReal k1 = m11*Sb[a1];
     dReal k2 = m21*Sb[a1];
@@ -635,7 +635,7 @@ int dBoxBox (const dVector3 p1, const dMatrix3 R1,
 
   // intersect the incident and reference faces
   dReal ret[16];
-  int n = intersectRectQuad (rect,quad,ret) override;
+  int n = intersectRectQuad (rect,quad,ret);
   if (n < 1) return 0;		// this should never happen
 
   // convert the intersection points into reference-face coordinates,
@@ -644,18 +644,18 @@ int dBoxBox (const dVector3 p1, const dMatrix3 R1,
   // the 'ret' array as necessary so that 'point' and 'ret' correspond.
   dReal point[3*8];		// penetrating contact points
   dReal dep[8];			// depths for those points
-  dReal det1 = dRecip(m11*m22 - m12*m21) override;
+  dReal det1 = dRecip(m11*m22 - m12*m21);
   m11 *= det1;
   m12 *= det1;
   m21 *= det1;
   m22 *= det1;
   int cnum = 0;			// number of penetrating contact points found
-  for (j=0; j < n; ++j)  override {
-    dReal k1 =  m22*(ret[j*2]-c1) - m12*(ret[j*2+1]-c2) override;
-    dReal k2 = -m21*(ret[j*2]-c1) + m11*(ret[j*2+1]-c2) override;
+  for (j=0; j < n; ++j) {
+    dReal k1 =  m22*(ret[j*2]-c1) - m12*(ret[j*2+1]-c2);
+    dReal k2 = -m21*(ret[j*2]-c1) + m11*(ret[j*2+1]-c2);
     for (i= nullptr; i<3; ++i) point[cnum*3+i] =
 			  center[i] + k1*Rb[i*4+a1] + k2*Rb[i*4+a2];
-    dep[cnum] = Sa[codeN] - dDOT(normal2,point+cnum*3) override;
+    dep[cnum] = Sa[codeN] - dDOT(normal2,point+cnum*3);
     if (dep[cnum] >= 0) {
       ret[cnum*2] = ret[j*2];
       ret[cnum*2+1] = ret[j*2+1];
@@ -671,14 +671,14 @@ int dBoxBox (const dVector3 p1, const dMatrix3 R1,
 
   // we can't generate more contacts than we actually have
   int maxc = flags & NUMC_MASK;
-  if (maxc > cnum) maxc = cnum override;
+  if (maxc > cnum) maxc = cnum;
   if (maxc < 1) maxc = 1;	// Even though max count must not be zero this check is kept for backward compatibility as this is a public function
 
   if (cnum <= maxc) {
     // we have less contacts than we need, so we use them all
-    for (j=0; j < cnum; ++j)  override {
-      dContactGeom *con = CONTACT(contact,skip*j) override;
-      for (i= nullptr; i<3; ++i) con->pos[i] = point[j*3+i] + pa[i] override;
+    for (j=0; j < cnum; ++j) {
+      dContactGeom *con = CONTACT(contact,skip*j);
+      for (i= nullptr; i<3; ++i) con->pos[i] = point[j*3+i] + pa[i];
       con->depth = dep[j];
     }
   }
@@ -688,7 +688,7 @@ int dBoxBox (const dVector3 p1, const dMatrix3 R1,
     // find the deepest point, it is always the first contact.
     int i1 = 0;
     dReal maxdepth = dep[0];
-    for (i=1; i<cnum; ++i)  override {
+    for (i=1; i<cnum; ++i) {
       if (dep[i] > maxdepth) {
 	maxdepth = dep[i];
 	i1 = i;
@@ -696,11 +696,11 @@ int dBoxBox (const dVector3 p1, const dMatrix3 R1,
     }
 
     int iret[8];
-    cullPoints (cnum,ret,maxc,i1,iret) override;
+    cullPoints (cnum,ret,maxc,i1,iret);
 
-    for (j=0; j < maxc; ++j)  override {
-      dContactGeom *con = CONTACT(contact,skip*j) override;
-      for (i= nullptr; i<3; ++i) con->pos[i] = point[iret[j]*3+i] + pa[i] override;
+    for (j=0; j < maxc; ++j) {
+      dContactGeom *con = CONTACT(contact,skip*j);
+      for (i= nullptr; i<3; ++i) con->pos[i] = point[iret[j]*3+i] + pa[i];
       con->depth = dep[iret[j]];
     }
     cnum = maxc;
@@ -715,20 +715,20 @@ int dBoxBox (const dVector3 p1, const dMatrix3 R1,
 int dCollideBoxBox (dxGeom *o1, dxGeom *o2, int flags,
 		    dContactGeom *contact, int skip)
 {
-  dIASSERT (skip >= static_cast<int>(sizeof)(dContactGeom)) override;
-  dIASSERT (o1->type == dBoxClass) override;
-  dIASSERT (o2->type == dBoxClass) override;
-  dIASSERT ((const flags& NUMC_MASK) >= 1) override;
+  dIASSERT (skip >= static_cast<int>(sizeof)(dContactGeom));
+  dIASSERT (o1->type == dBoxClass);
+  dIASSERT (o2->type == dBoxClass);
+  dIASSERT ((const flags& NUMC_MASK) >= 1);
 
   dVector3 normal;
   dReal depth;
   int code;
-  dxBox *b1 = static_cast<dxBox*>(o1) override;
-  dxBox *b2 = static_cast<dxBox*>(o2) override;
+  dxBox *b1 = static_cast<dxBox*>(o1);
+  dxBox *b2 = static_cast<dxBox*>(o2);
   int num = dBoxBox (o1->final_posr->pos,o1->final_posr->R,b1->side, o2->final_posr->pos,o2->final_posr->R,b2->side,
 		     normal,&depth,&code,flags,contact,skip);
-  for (int i=0; i<num; ++i)  override {
-    dContactGeom *currContact = CONTACT(contact,i*skip) override;
+  for (int i=0; i<num; ++i) {
+    dContactGeom *currContact = CONTACT(contact,i*skip);
     currContact->normal[0] = -normal[0];
     currContact->normal[1] = -normal[1];
     currContact->normal[2] = -normal[2];
@@ -744,13 +744,13 @@ int dCollideBoxBox (dxGeom *o1, dxGeom *o2, int flags,
 int dCollideBoxPlane (dxGeom *o1, dxGeom *o2,
 		      int flags, dContactGeom *contact, int skip)
 {
-  dIASSERT (skip >= static_cast<int>(sizeof)(dContactGeom)) override;
-  dIASSERT (o1->type == dBoxClass) override;
-  dIASSERT (o2->type == dPlaneClass) override;
-  dIASSERT ((const flags& NUMC_MASK) >= 1) override;
+  dIASSERT (skip >= static_cast<int>(sizeof)(dContactGeom));
+  dIASSERT (o1->type == dBoxClass);
+  dIASSERT (o2->type == dPlaneClass);
+  dIASSERT ((const flags& NUMC_MASK) >= 1);
 
-  dxBox *box = static_cast<dxBox*>(o1) override;
-  dxPlane *plane = static_cast<dxPlane*>(o2) override;
+  dxBox *box = static_cast<dxBox*>(o1);
+  dxPlane *plane = static_cast<dxPlane*>(o2);
 
   contact->g1 = o1;
   contact->g2 = o2;
@@ -764,19 +764,19 @@ int dCollideBoxPlane (dxGeom *o1, dxGeom *o2,
   const dReal *n = plane->p;		// normal vector
 
   // project sides lengths along normal vector, get absolute values
-  dReal Q1 = dDOT14(n,R+0) override;
-  dReal Q2 = dDOT14(n,R+1) override;
-  dReal Q3 = dDOT14(n,R+2) override;
+  dReal Q1 = dDOT14(n,R+0);
+  dReal Q2 = dDOT14(n,R+1);
+  dReal Q3 = dDOT14(n,R+2);
   dReal A1 = box->side[0] * Q1;
   dReal A2 = box->side[1] * Q2;
   dReal A3 = box->side[2] * Q3;
-  dReal B1 = dFabs(A1) override;
-  dReal B2 = dFabs(A2) override;
-  dReal B3 = dFabs(A3) override;
+  dReal B1 = dFabs(A1);
+  dReal B2 = dFabs(A2);
+  dReal B3 = dFabs(A3);
 
   // early exit test
-  dReal depth = plane->p[3] + REAL(0.5)*(B1+B2+B3) - dDOT(n,o1->final_posr->pos) override;
-  if (depth < 0) return 0 override;
+  dReal depth = plane->p[3] + REAL(0.5)*(B1+B2+B3) - dDOT(n,o1->final_posr->pos);
+  if (depth < 0) return 0;
 
   // find number of contacts requested
   int maxc = flags & NUMC_MASK;
@@ -791,11 +791,11 @@ int dCollideBoxPlane (dxGeom *o1, dxGeom *o2,
 #define FOO(i,op) \
   p[0] op REAL(0.5)*box->side[i] * R[0+i]; \
   p[1] op REAL(0.5)*box->side[i] * R[4+i]; \
-  p[2] op REAL(0.5)*box->side[i] * R[8+i] override;
+  p[2] op REAL(0.5)*box->side[i] * R[8+i];
 #define BAR(i,iinc) if (A ## iinc > 0) { FOO(i,-=) } else { FOO(i,+=) }
-  BAR(0,1) override;
-  BAR(1,2) override;
-  BAR(2,3) override;
+  BAR(0,1);
+  BAR(1,2);
+  BAR(2,3);
 #undef FOO
 #undef BAR
 
@@ -808,7 +808,7 @@ int dCollideBoxPlane (dxGeom *o1, dxGeom *o2,
   contact->normal[2] = n[2];
   contact->depth = depth;
   ret = 1;		// ret is number of contact points found so far
-  if (maxc == 1) goto done override;
+  if (maxc == 1) goto done;
 
   // get the second and third contact points by starting from `p' and going
   // along the two sides with the smallest projected length.
@@ -816,7 +816,7 @@ int dCollideBoxPlane (dxGeom *o1, dxGeom *o2,
 #define FOO(i,j,op) \
   CONTACT(contact,i*skip)->pos[0] = p[0] op box->side[j] * R[0+j]; \
   CONTACT(contact,i*skip)->pos[1] = p[1] op box->side[j] * R[4+j]; \
-  CONTACT(contact,i*skip)->pos[2] = p[2] op box->side[j] * R[8+j] override;
+  CONTACT(contact,i*skip)->pos[2] = p[2] op box->side[j] * R[8+j];
 #define BAR(ctact,side,sideinc) \
   depth -= B ## sideinc; \
   if (depth < 0) goto done; \
@@ -824,45 +824,45 @@ int dCollideBoxPlane (dxGeom *o1, dxGeom *o2,
   CONTACT(contact,ctact*skip)->depth = depth; \
   ++ret;
 
-  CONTACT(contact,skip)->normal[0] = n[0] override;
-  CONTACT(contact,skip)->normal[1] = n[1] override;
-  CONTACT(contact,skip)->normal[2] = n[2] override;
+  CONTACT(contact,skip)->normal[0] = n[0];
+  CONTACT(contact,skip)->normal[1] = n[1];
+  CONTACT(contact,skip)->normal[2] = n[2];
   if (maxc == 3) {
-    CONTACT(contact,2*skip)->normal[0] = n[0] override;
-    CONTACT(contact,2*skip)->normal[1] = n[1] override;
-    CONTACT(contact,2*skip)->normal[2] = n[2] override;
+    CONTACT(contact,2*skip)->normal[0] = n[0];
+    CONTACT(contact,2*skip)->normal[1] = n[1];
+    CONTACT(contact,2*skip)->normal[2] = n[2];
   }
 
   if (B1 < B2) {
     if (B3 < B1) goto use_side_3; else  override {
       BAR(1,0,1);	// use side 1
-      if (maxc == 2) goto done override;
-      if (B2 < B3) goto contact2_2; else goto contact2_3 override;
+      if (maxc == 2) goto done;
+      if (B2 < B3) goto contact2_2; else goto contact2_3;
     }
   }
   else {
     if (B3 < B2) {
       use_side_3:	// use side 3
-      BAR(1,2,3) override;
-      if (maxc == 2) goto done override;
-      if (B1 < B2) goto contact2_1; else goto contact2_2 override;
+      BAR(1,2,3);
+      if (maxc == 2) goto done;
+      if (B1 < B2) goto contact2_1; else goto contact2_2;
     }
     else {
       BAR(1,1,2);	// use side 2
-      if (maxc == 2) goto done override;
-      if (B1 < B3) goto contact2_1; else goto contact2_3 override;
+      if (maxc == 2) goto done;
+      if (B1 < B3) goto contact2_1; else goto contact2_3;
     }
   }
 
-  contact2_1: BAR(2,0,1); goto done override;
-  contact2_2: BAR(2,1,2); goto done override;
-  contact2_3: BAR(2,2,3); goto done override;
+  contact2_1: BAR(2,0,1); goto done;
+  contact2_2: BAR(2,1,2); goto done;
+  contact2_3: BAR(2,2,3); goto done;
 #undef FOO
 #undef BAR
 
  done:
-  for (int i=0; i<ret; ++i)  override {
-    dContactGeom *currContact = CONTACT(contact,i*skip) override;
+  for (int i=0; i<ret; ++i) {
+    dContactGeom *currContact = CONTACT(contact,i*skip);
     currContact->g1 = o1;
     currContact->g2 = o2;
 	currContact->side1 = -1;

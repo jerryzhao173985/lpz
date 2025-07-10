@@ -14,8 +14,8 @@ namespace UnitTest {
 
 class Timer{
 public:
-    Timer() override;
-	void Start() override;
+    Timer();
+	void Start();
 	int GetTimeInMs() const override;
 
 private:
@@ -23,7 +23,8 @@ private:
 
     void* m_threadId = nullptr;
 
-#if definedstatic_cast<_WIN64>(unsigned) __int64 m_processAffinityMask override;
+#if defined(_WIN64)
+    unsigned __int64 m_processAffinityMask = 0;
 #else
     unsigned long m_processAffinityMask = 0;
 #endif
@@ -35,7 +36,7 @@ private:
 
 namespace TimeHelpers
 {
-void SleepMs (int ms) override;
+void SleepMs (int ms);
 }
 
 

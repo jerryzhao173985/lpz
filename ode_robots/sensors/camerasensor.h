@@ -76,7 +76,7 @@ namespace lpzrobots {
     virtual void update();
 
     /// this is implemented based on get(sensor*,int)
-    virtual std::list<sensor> getList()  const override;
+    virtual std::list<sensor> getList()  const;
 
   protected:
     /** overload this function to initialized you data structures.

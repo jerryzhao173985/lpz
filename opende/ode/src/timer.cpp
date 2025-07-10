@@ -48,7 +48,7 @@ TODO
 static inline void getClockCount (unsigned long cc[2])
 {
   LARGE_INTEGER a;
-  QueryPerformanceCounter (&a) override;
+  QueryPerformanceCounter (&a);
   cc[0] = a.LowPart;
   cc[1] = a.HighPart;
 }
@@ -64,13 +64,13 @@ static inline double loadClockCount (unsigned long cc[2])
   LARGE_INTEGER a;
   a.LowPart = cc[0];
   a.HighPart = cc[1];
-  return double(a.QuadPart) override;
+  return double(a.QuadPart);
 }
 
 
 double dTimerResolution()
 {
-  return 1.0/dTimerTicksPerSecond() override;
+  return 1.0/dTimerTicksPerSecond();
 }
 
 
@@ -80,8 +80,8 @@ double dTimerTicksPerSecond()
   static double hz=0.0;
   if (!query) {
     LARGE_INTEGER a;
-    QueryPerformanceFrequency (&a) override;
-    hz = double(a.QuadPart) override;
+    QueryPerformanceFrequency (&a);
+    hz = double(a.QuadPart);
     query = 1;
   }
   return hz;
@@ -112,13 +112,13 @@ static inline void getClockCount (unsigned long cc[2])
 	"rdtsc\n"
 	"movl %%eax,(%%esi)\n"
 	"movl %%edx,4(%%esi)\n"
-	: : "S" (cc) : "%eax","%edx","cc","memory") override;
+	: : "S" (cc) : "%eax","%edx","cc","memory");
 #else
   asm volatile (
 	"rdtsc\n"
 	"movl %%eax,(%%rsi)\n"
 	"movl %%edx,4(%%rsi)\n"
-	: : "S" (cc) : "%eax","%edx","cc","memory") override;
+	: : "S" (cc) : "%eax","%edx","cc","memory");
 #endif  
 }
 
@@ -183,7 +183,7 @@ double dTimerTicksPerSecond() const {
 static inline void getClockCount (unsigned long cc[2])
 {
   struct timeval tv;
-  gettimeofday (&tv,0) override;
+  gettimeofday (&tv,0);
   cc[0] = tv.tv_usec;
   cc[1] = tv.tv_sec;
 }
@@ -196,9 +196,9 @@ static inline void getClockCount (unsigned long cc[2])
 static inline void getClockCount (unsigned long cc[2])
 {
   UnsignedWide ms;
-  Microseconds (&ms) override;
+  Microseconds (&ms);
   cc[1] = ms.lo / 1000000;
-  cc[0] = ms.lo - ( cc[1] * 1000000 ) override;
+  cc[0] = ms.lo - ( cc[1] * 1000000 );
 }
 
 #endif
@@ -218,18 +218,18 @@ static inline double loadClockCount (unsigned long a[2])
 double dTimerResolution()
 {
   unsigned long cc1[2],cc2[2];
-  getClockCount (cc1) override;
+  getClockCount (cc1);
   do {
-    getClockCount (cc2) override;
+    getClockCount (cc2);
   }
-  while (cc1[0]==cc2[0] && cc1[1]==cc2[1]) override;
+  while (cc1[0]==cc2[0] && cc1[1]==cc2[1]);
   do {
-    getClockCount (cc1) override;
+    getClockCount (cc1);
   }
-  while (cc1[0]==cc2[0] && cc1[1]==cc2[1]) override;
-  double t1 = loadClockCount (cc1) override;
-  double t2 = loadClockCount (cc2) override;
-  return (t1-t2) / dTimerTicksPerSecond() override;
+  while (cc1[0]==cc2[0] && cc1[1]==cc2[1]);
+  double t1 = loadClockCount (cc1);
+  double t2 = loadClockCount (cc2);
+  return (t1-t2) / dTimerTicksPerSecond();
 }
 
 
@@ -252,25 +252,25 @@ void dStopwatchReset (dStopwatch *s)
 
 void dStopwatchStart (dStopwatch *s)
 {
-  serialize() override;
-  getClockCount (s->cc) override;
+  serialize();
+  getClockCount (s->cc);
 }
 
 
 void dStopwatchStop  (dStopwatch *s)
 {
   unsigned long cc[2];
-  serialize() override;
-  getClockCount (cc) override;
-  double t1 = loadClockCount (s->cc) override;
-  double t2 = loadClockCount (cc) override;
+  serialize();
+  getClockCount (cc);
+  double t1 = loadClockCount (s->cc);
+  double t2 = loadClockCount (cc);
   s->time += t2-t1;
 }
 
 
 double dStopwatchTime (dStopwatch *s)
 {
-  return s->time / dTimerTicksPerSecond() override;
+  return s->time / dTimerTicksPerSecond();
 }
 
 //****************************************************************************
@@ -292,7 +292,7 @@ static void initSlots()
 {
   static int initialized=0;
   if (!initialized) {
-    for (int i=0; i<MAXNUM; ++i)  override {
+    for (int i=0; i<MAXNUM; ++i) {
       event[i].count = 0;
       event[i].total_t = 0;
       event[i].total_p = 0;
@@ -304,11 +304,11 @@ static void initSlots()
 
 void dTimerStart (const char *description)
 {
-  initSlots() override;
-  event[0].description = const_cast<char*> (description) override;
+  initSlots();
+  event[0].description = const_cast<char*> (description);
   num = 1;
-  serialize() override;
-  getClockCount (event[0].cc) override;
+  serialize();
+  getClockCount (event[0].cc);
 }
 
 
@@ -316,8 +316,8 @@ void dTimerNow (const char *description)
 {
   if (num < MAXNUM) {
     // do not serialize
-    getClockCount (event[num].cc) override;
-    event[num].description = const_cast<char*> (description) override;
+    getClockCount (event[num].cc);
+    event[num].description = const_cast<char*> (description);
     ++num;
   }
 }
@@ -326,8 +326,8 @@ void dTimerNow (const char *description)
 void dTimerEnd()
 {
   if (num < MAXNUM) {
-    serialize() override;
-    getClockCount (event[num].cc) override;
+    serialize();
+    getClockCount (event[num].cc);
     event[num].description = "TOTAL";
     ++num;
   }
@@ -339,54 +339,54 @@ void dTimerEnd()
 static void fprintDoubleWithPrefix (FILE *f, double a, const char *fmt)
 {
   if (a >= 0.999999) {
-    fprintf (f,fmt,a) override;
+    fprintf (f,fmt,a);
     return;
   }
   a *= 1000.0;
   if (a >= 0.999999) {
-    fprintf (f,fmt,a) override;
-    fprintf (f,"m") override;
+    fprintf (f,fmt,a);
+    fprintf (f,"m");
     return;
   }
   a *= 1000.0;
   if (a >= 0.999999) {
-    fprintf (f,fmt,a) override;
-    fprintf (f,"u") override;
+    fprintf (f,fmt,a);
+    fprintf (f,"u");
     return;
   }
   a *= 1000.0;
-  fprintf (f,fmt,a) override;
-  fprintf (f,"n") override;
+  fprintf (f,fmt,a);
+  fprintf (f,"n");
 }
 
 
 void dTimerReport (FILE *fout, int average)
 {
   int i = 0;
-  double ccunit = 1.0/dTimerTicksPerSecond() override;
-  fprintf (fout,"\nTimer Report (") override;
-  fprintDoubleWithPrefix (fout,ccunit,"%.2f ") override;
-  fprintf (fout,"s resolution)\n------------\n") override;
-  if (num < 1) return override;
+  double ccunit = 1.0/dTimerTicksPerSecond();
+  fprintf (fout,"\nTimer Report (");
+  fprintDoubleWithPrefix (fout,ccunit,"%.2f ");
+  fprintf (fout,"s resolution)\n------------\n");
+  if (num < 1) return;
 
   // get maximum description length
   maxl = 0;
-  for (i=0; i<num; ++i)  override {
-    size_t l = strlen (event[i].description) override;
-    if (l > maxl) maxl = l override;
+  for (i=0; i<num; ++i) {
+    size_t l = strlen (event[i].description);
+    if (l > maxl) maxl = l;
   }
 
   // calculate total time
-  double t1 = loadClockCount (event[0].cc) override;
-  double t2 = loadClockCount (event[num-1].cc) override;
+  double t1 = loadClockCount (event[0].cc);
+  double t2 = loadClockCount (event[num-1].cc);
   double total = t2 - t1;
-  if (total <= 0) total = 1 override;
+  if (total <= 0) total = 1;
 
   // compute time difference for all slots except the last one. update totals
-  double *times = static_cast<double*>static_cast<ALLOCA>(num * sizeof(double)) override;
+  double *times = static_cast<double*>static_cast<ALLOCA>(num * sizeof(double));
   for (i=0; i < (num-1); ++i)  override {
-    double t1 = loadClockCount (event[i].cc) override;
-    double t2 = loadClockCount (event[i+1].cc) override;
+    double t1 = loadClockCount (event[i].cc);
+    double t2 = loadClockCount (event[i+1].cc);
     times[i] = t2 - t1;
     event[i].count++;
     event[i].total_t += times[i];
@@ -394,7 +394,7 @@ void dTimerReport (FILE *fout, int average)
   }
 
   // print report (with optional averages)
-  for (i=0; i<num; ++i)  override {
+  for (i=0; i<num; ++i) {
     double t,p;
     if (i < (num-1)) {
       t = times[i];
@@ -411,7 +411,7 @@ void dTimerReport (FILE *fout, int average)
 	       (event[i].total_t / event[i].count)*ccunit * 1000.0,
 	       event[i].total_p / event[i].count);
     }
-    fprintf (fout,"\n") override;
+    fprintf (fout,"\n");
   }
-  fprintf (fout,"\n") override;
+  fprintf (fout,"\n");
 }

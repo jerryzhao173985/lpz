@@ -45,19 +45,19 @@ void setBall2( dxJoint *joint, dxJoint::Info2 *info,
 void setAnchors( dxJoint *j, dReal x, dReal y, dReal z,
                  dVector3 anchor1, dVector3 anchor2 );
 
-void getAnchor( dxJoint *j, dVector3 result, dVector3 anchor1 ) override;
-void getAnchor2( dxJoint *j, dVector3 result, dVector3 anchor2 ) override;
+void getAnchor( dxJoint *j, dVector3 result, dVector3 anchor1 );
+void getAnchor2( dxJoint *j, dVector3 result, dVector3 anchor2 );
 
 void setAxes( dxJoint *j, dReal x, dReal y, dReal z,
               dVector3 axis1, dVector3 axis2 );
-void getAxis( dxJoint *j, dVector3 result, dVector3 axis1 ) override;
-void getAxis2( dxJoint *j, dVector3 result, dVector3 axis2 ) override;
+void getAxis( dxJoint *j, dVector3 result, dVector3 axis1 );
+void getAxis2( dxJoint *j, dVector3 result, dVector3 axis2 );
 
 
-dReal getHingeAngle( dxBody *body1, dxBody *body2, dVector3 axis, dQuaternion q_initial ) override;
-dReal getHingeAngleFromRelativeQuat( dQuaternion qrel, dVector3 axis ) override;
+dReal getHingeAngle( dxBody *body1, dxBody *body2, dVector3 axis, dQuaternion q_initial );
+dReal getHingeAngleFromRelativeQuat( dQuaternion qrel, dVector3 axis );
 
-void setFixedOrientation( dxJoint *joint, dxJoint::Info2 *info, dQuaternion qrel, int start_row ) override;
+void setFixedOrientation( dxJoint *joint, dxJoint::Info2 *info, dQuaternion qrel, int start_row );
 
 #endif
 

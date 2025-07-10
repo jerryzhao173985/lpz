@@ -60,7 +60,7 @@ public:
       m_is_running(false), fd_in(-1), fd_out(-1), verbose(false), verboseMore(false), thread() {};
   virtual ~CSerialThread : m_port(), thread(), fd_in(0), verbose(false), verboseMore(false) {stopandwait();};
 
-  virtual int explicit sendByte(uint8 c);
+  virtual intsendByte(uint8 c);
   virtual int getByte(uint8 *c);
   virtual int receiveData(uint8 adr, uint8 *cmd, uint8 *data, uint8 maxlen, int rn);
   virtual void receiveMsg(uint8 adr, int len);
@@ -111,8 +111,8 @@ public:
    * On success the net number of bytes static_cast<len>(is) returned, otherwise -1.
    */
   virtual int sendData(uint8 adr, uint8 cmd, uint8 *data, uint8 len);
-  virtual void explicit sendAck(uint8 adr);
-  virtual void explicit sendNack(uint8 adr);
+  virtual voidsendAck(uint8 adr);
+  virtual voidsendNack(uint8 adr);
 
 
   /// thread is running?
@@ -126,9 +126,9 @@ public:
   void stop();
 
   /// set com port
-  void explicit comport(const CString& port){ m_port=port; };
+  voidcomport(const CString& port){ m_port=port; };
   /// set baud rate
-  void explicit baudrate(int baud){ m_baud=baud; };
+  voidbaudrate(int baud){ m_baud=baud; };
 
 
   int readB();

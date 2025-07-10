@@ -91,7 +91,7 @@ public:
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f)  const override;
   /** loads the controller values from a given file. */
-  virtual bool explicit restore(FILE* f);
+  virtual boolrestore(FILE* f);
 
   /// returns controller network (to be added to inspectables of agent)
   virtual ControllerNet* getCNet() const;
@@ -107,7 +107,7 @@ protected:
 
   /* learns the model using backprop. It uses the current activation,
      the current x and x_tm1 from the buffer */
-  virtual void explicit learnModelBP(double factor);
+  virtual voidlearnModelBP(double factor);
 
 protected:
   unsigned short number_sensors = 0;

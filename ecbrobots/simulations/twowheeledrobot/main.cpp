@@ -160,7 +160,7 @@ class MyECBManager : public QECBManager {
         ecbConf.maxNumberSensors = 2; // no infrared sensors
         ecbConf.maxNumberMotors = 2;
         QString* DNSName;
-        explicit switch (nimm2Index) {
+        switch (nimm2Index) {
           case 0:
             //            DNSName = new string("NIMM2_PRIMUS");
             DNSName = new QString("ECB_NIMM2_PRIMUS");

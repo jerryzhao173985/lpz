@@ -104,8 +104,8 @@
 		#include "OPC_Picking.h"
 
 
-		FUNCTION OPCODE_API bool InitOpcode() override;
-		FUNCTION OPCODE_API bool CloseOpcode() override;
+		FUNCTION OPCODE_API bool InitOpcode();
+		FUNCTION OPCODE_API bool CloseOpcode();
 	}
 
 #endif // __OPCODE_H__

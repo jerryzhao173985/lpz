@@ -76,7 +76,7 @@ namespace lpzrobots {
       long int sim_step; ///< time steps since start
 
       /// returns the list of all agents
-      virtual AgentList& getAgents() override;
+      virtual AgentList& getAgents();
 
 
       /// adds a temporary display item with given life duration in sec

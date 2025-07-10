@@ -25,7 +25,7 @@ void cmd_handler_cleanup(void){
   signal(SIGINT,SIG_DFL);
 }
 
-void explicit control_c(int i){
+voidcontrol_c(int i){
   cmd_handler_exit();
   Control_C++ ;
   // if (Control_C > 100)exit(0);

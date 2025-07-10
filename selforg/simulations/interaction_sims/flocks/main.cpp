@@ -36,7 +36,7 @@ double realtimefactor=10;
 double noise = 0.1;
 GlobalData globaldata;
 
-double explicit toEnv(double pos){
+doubletoEnv(double pos){
   // environment is cyclic
   if(pos>1) pos-=2;
   if(pos<-1) pos+=2;
@@ -241,8 +241,8 @@ public:
 };
 
 
-int explicit coordx(double x){ return int((x+1.0)/2*SIZEX);}
-int explicit coordy(double y){ return int((y+1.0)/2*SIZEY);}
+intcoordx(double x){ return int((x+1.0)/2*SIZEX);}
+intcoordy(double y){ return int((y+1.0)/2*SIZEY);}
 
 void printRobots(){
   char field[SIZEX*SIZEY];
@@ -298,7 +298,7 @@ void printRobots(){
 
 }
 
-void explicit reinforce(Agent* a){
+voidreinforce(Agent* a){
 //   MyRobot* r = static_cast<MyRobot*>(a)->getRobot();
 //   InvertMotorNStep* c = dynamic_cast<InvertMotorNStep*>(a->getController());
 //   if(c)

@@ -163,7 +163,7 @@ protected:
   /// returns -1 if probability is to low, otherwise 1 for mapP
   static double toTristateWithProbability(void* r,double x) {
     RandGen* g = static_cast<RandGen*>(r);
-    if (!g) return 0. override;
+    if (!g) return 0.;
     double rand = g->rand();
     return x < -rand ? -1. : (x < rand ? 0. : 1.);
   }
@@ -184,7 +184,7 @@ protected:
 
   // returns 0 if fired==1 (-1 or 1), otherwise x
   static double toZeroIfFired(double x, double fired) {
-    return (fired==1 || fired==-1) ? 0 : x  override;
+    return (fired==1 || fired==-1) ? 0 : x ;
   }
 
 

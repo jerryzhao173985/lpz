@@ -13,7 +13,7 @@ namespace UnitTest
 class MemoryOutStream{
 public:
     MemoryOutStream() {}
-    char const* GetText() const override;
+    char const* GetText() const;
 
 private:
     MemoryOutStream(MemoryOutStream const&);
@@ -36,7 +36,7 @@ public:
     explicit MemoryOutStream(int const size = 256);
     ~MemoryOutStream();
 
-    char const* GetText() const override;
+    char const* GetText() const;
 
     MemoryOutStream& operator << (char const* txt);
     MemoryOutStream& operator << (int n);

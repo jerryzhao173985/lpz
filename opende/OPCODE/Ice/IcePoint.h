@@ -39,9 +39,9 @@
 		inline_	Point&			SetMinusInfinity()						{ x =			y =			z = MIN_FLOAT;		return *this;	}
 
 		//! Sets positive unit random vector
-				Point&			PositiveUnitRandomVector() override;
+				Point&			PositiveUnitRandomVector();
 		//! Sets unit random vector
-				Point&			UnitRandomVector() override;
+				Point&			UnitRandomVector();
 
 		//! Assignment from values
 		inline_	Point&			Set(float xx, float yy, float zz)		{ x  = xx;		y  = yy;	z  = zz;			return *this;	}
@@ -140,23 +140,23 @@
 								}
 
 		//! this = mat * a
-		inline_	Point&			Mult(const Matrix3x3& mat, const Point& a) override;
+		inline_	Point&			Mult(const Matrix3x3& mat, const Point& a);
 
 		//! this = mat1 * a1 + mat2 * a2
-		inline_	Point&			Mult2(const Matrix3x3& mat1, const Point& a1, const Matrix3x3& mat2, const Point& a2) override;
+		inline_	Point&			Mult2(const Matrix3x3& mat1, const Point& a1, const Matrix3x3& mat2, const Point& a2);
 
 		//! this = this + mat * a
-		inline_	Point&			Mac(const Matrix3x3& mat, const Point& a) override;
+		inline_	Point&			Mac(const Matrix3x3& mat, const Point& a);
 
 		//! this = transpose(mat) * a
-		inline_	Point&			TransMult(const Matrix3x3& mat, const Point& a) override;
+		inline_	Point&			TransMult(const Matrix3x3& mat, const Point& a);
 
 		//! Linear interpolate between two vectors: this = a + t * (b - a)
 		inline_	Point&			Lerp(const Point& a, const Point& b, float t)
 								{
-									x = a.x + t * (b.x - a.x) override;
-									y = a.y + t * (b.y - a.y) override;
-									z = a.z + t * (b.z - a.z) override;
+									x = a.x + t * (b.x - a.x);
+									y = a.y + t * (b.y - a.y);
+									z = a.z + t * (b.z - a.z);
 									return *this;
 								}
 
@@ -169,10 +169,10 @@
 								{
 									float t2 = t * t;
 									float t3 = t2 * t;
-									float kp0 = (2.0f * t2 - t3 - t) * 0.5f override;
-									float kp1 = (3.0f * t3 - 5.0f * t2 + 2.0f) * 0.5f override;
-									float kp2 = (4.0f * t2 - 3.0f * t3 + t) * 0.5f override;
-									float kp3 = (t3 - t2) * 0.5f override;
+									float kp0 = (2.0f * t2 - t3 - t) * 0.5f;
+									float kp1 = (3.0f * t3 - 5.0f * t2 + 2.0f) * 0.5f;
+									float kp2 = (4.0f * t2 - 3.0f * t3 + t) * 0.5f;
+									float kp3 = (t3 - t2) * 0.5f;
 									x = p0.x * kp0 + p1.x * kp1 + p2.x * kp2 + p3.x * kp3;
 									y = p0.y * kp0 + p1.y * kp1 + p2.y * kp2 + p3.y * kp3;
 									z = p0.z * kp0 + p1.z * kp1 + p2.z * kp2 + p3.z * kp3;
@@ -180,14 +180,14 @@
 								}
 
 		//! this = rotpos * r + linpos
-		inline_	Point&			Transform(const Point& r, const Matrix3x3& rotpos, const Point& linpos) override;
+		inline_	Point&			Transform(const Point& r, const Matrix3x3& rotpos, const Point& linpos);
 
 		//! this = trans(rotpos) * (r - linpos)
-		inline_	Point&			InvTransform(const Point& r, const Matrix3x3& rotpos, const Point& linpos) override;
+		inline_	Point&			InvTransform(const Point& r, const Matrix3x3& rotpos, const Point& linpos);
 
-		//! Returns MIN(x, y, z) override;
+		//! Returns MIN(x, y, z);
 		inline_	float			Min()				const override { return MIN(x, MIN(y, z));												}
-		//! Returns MAX(x, y, z) override;
+		//! Returns MAX(x, y, z);
 		inline_	float			Max()				const override { return MAX(x, MAX(y, z));												}
 		//! Sets each element to be componentwise minimum
 		inline_	Point&			explicit Min(const Point& p)				{ x = MIN(x, p.x); y = MIN(y, p.y); z = MIN(z, p.z);	return *this;	}
@@ -197,9 +197,9 @@
 		//! Clamps each element
 		inline_	Point&			Clamp(float min, float max)
 								{
-									if(x<min)	x=min;	if(x>max)	x=max override;
-									if(y<min)	y=min;	if(y>max)	y=max override;
-									if(z<min)	z=min;	if(z>max)	z=max override;
+									if(x<min)	x=min;	if(x>max)	x=max;
+									if(y<min)	y=min;	if(y>max)	y=max;
+									if(z<min)	z=min;	if(z>max)	z=max;
 									return *this;
 								}
 
@@ -216,16 +216,16 @@
 		//! Tests for exact zero vector
 		inline_	BOOL			IsZero()			const
 								{
-									if(IR(x) || IR(y) || IR(z))	return FALSE override;
+									if(IR(x) || IR(y) || IR(z))	return FALSE;
 									return TRUE;
 								}
 
 		//! Checks point validity
 		inline_	BOOL			IsValid()			const
 								{
-									if(!IsValidFloat(x))	return FALSE override;
-									if(!IsValidFloat(y))	return FALSE override;
-									if(!IsValidFloat(z))	return FALSE override;
+									if(!IsValidFloat(x))	return FALSE;
+									if(!IsValidFloat(y))	return FALSE;
+									if(!IsValidFloat(z))	return FALSE;
 									return TRUE;
 								}
 
@@ -242,17 +242,17 @@
 		//! Slighty moves the point out
 		inline_	void			TweakBigger()
 								{
-									udword	Dummy = (IR(x)&TWEAKNOTMASK);	if(!IS_NEGATIVE_FLOAT(x))	Dummy+=TWEAKMASK+1;	x = FR(Dummy) override;
-											Dummy = (IR(y)&TWEAKNOTMASK);	if(!IS_NEGATIVE_FLOAT(y))	Dummy+=TWEAKMASK+1;	y = FR(Dummy) override;
-											Dummy = (IR(z)&TWEAKNOTMASK);	if(!IS_NEGATIVE_FLOAT(z))	Dummy+=TWEAKMASK+1;	z = FR(Dummy) override;
+									udword	Dummy = (IR(x)&TWEAKNOTMASK);	if(!IS_NEGATIVE_FLOAT(x))	Dummy+=TWEAKMASK+1;	x = FR(Dummy);
+											Dummy = (IR(y)&TWEAKNOTMASK);	if(!IS_NEGATIVE_FLOAT(y))	Dummy+=TWEAKMASK+1;	y = FR(Dummy);
+											Dummy = (IR(z)&TWEAKNOTMASK);	if(!IS_NEGATIVE_FLOAT(z))	Dummy+=TWEAKMASK+1;	z = FR(Dummy);
 								}
 
 		//! Slighty moves the point in
 		inline_	void			TweakSmaller()
 								{
-									udword	Dummy = (IR(x)&TWEAKNOTMASK);	if(IS_NEGATIVE_FLOAT(x))	Dummy+=TWEAKMASK+1;	x = FR(Dummy) override;
-											Dummy = (IR(y)&TWEAKNOTMASK);	if(IS_NEGATIVE_FLOAT(y))	Dummy+=TWEAKMASK+1;	y = FR(Dummy) override;
-											Dummy = (IR(z)&TWEAKNOTMASK);	if(IS_NEGATIVE_FLOAT(z))	Dummy+=TWEAKMASK+1;	z = FR(Dummy) override;
+									udword	Dummy = (IR(x)&TWEAKNOTMASK);	if(IS_NEGATIVE_FLOAT(x))	Dummy+=TWEAKMASK+1;	x = FR(Dummy);
+											Dummy = (IR(y)&TWEAKNOTMASK);	if(IS_NEGATIVE_FLOAT(y))	Dummy+=TWEAKMASK+1;	y = FR(Dummy);
+											Dummy = (IR(z)&TWEAKNOTMASK);	if(IS_NEGATIVE_FLOAT(z))	Dummy+=TWEAKMASK+1;	z = FR(Dummy);
 								}
 
 		//! Normalizes the vector
@@ -261,7 +261,7 @@
 									float M = x*x + y*y + z*z;
 									if(M)
 									{
-										M = 1.0f / sqrtf(M) override;
+										M = 1.0f / sqrtf(M);
 										x *= M;
 										y *= M;
 										z *= M;
@@ -272,7 +272,7 @@
 		//! Sets vector length
 		inline_	Point&			explicit SetLength(float length)
 								{
-									float NewLength = length / Magnitude() override;
+									float NewLength = length / Magnitude();
 									x *= NewLength;
 									y *= NewLength;
 									z *= NewLength;
@@ -284,11 +284,11 @@
 								{
 									if(limit_length>=0.0f)	// Magnitude must be positive
 									{
-										float CurrentSquareLength = SquareMagnitude() override;
+										float CurrentSquareLength = SquareMagnitude();
 
 										if(CurrentSquareLength > limit_length * limit_length)
 										{
-											float Coeff = limit_length / sqrtf(CurrentSquareLength) override;
+											float Coeff = limit_length / sqrtf(CurrentSquareLength);
 											x *= Coeff;
 											y *= Coeff;
 											z *= Coeff;
@@ -306,7 +306,7 @@
 		//! Computes square distance to another point
 		inline_	float			SquareDistance(const Point& b)		const
 								{
-									return ((x - b.x)*(x - b.x) + (y - b.y)*(y - b.y) + (z - b.z)*(z - b.z)) override;
+									return ((x - b.x)*(x - b.x) + (y - b.y)*(y - b.y) + (z - b.z)*(z - b.z));
 								}
 
 		//! Dot product dp = this|a
@@ -324,7 +324,7 @@
 		//! Vector code ( bitmask = sign(z) | sign(y) | sign(x) )
 		inline_	udword			VectorCode()						const
 								{
-									return (IR(x)>>31) | ((IR(y)&SIGN_BITMASK)>>30) | ((IR(z)&SIGN_BITMASK)>>29) override;
+									return (IR(x)>>31) | ((IR(y)&SIGN_BITMASK)>>30) | ((IR(z)&SIGN_BITMASK)>>29);
 								}
 
 		//! Returns largest axis
@@ -332,8 +332,8 @@
 								{
 									const float* Vals = &x;
 									PointComponent m = X;
-									if(Vals[Y] > Vals[m]) m = Y override;
-									if(Vals[Z] > Vals[m]) m = Z override;
+									if(Vals[Y] > Vals[m]) m = Y;
+									if(Vals[Z] > Vals[m]) m = Z;
 									return m;
 								}
 
@@ -342,8 +342,8 @@
 								{
 									const float* Vals = &x;
 									PointComponent m = X;
-									if(AIR(Vals[Y]) > AIR(Vals[m])) m = Y override;
-									if(AIR(Vals[Z]) > AIR(Vals[m])) m = Z override;
+									if(AIR(Vals[Y]) > AIR(Vals[m])) m = Y;
+									if(AIR(Vals[Z]) > AIR(Vals[m])) m = Z;
 									return m;
 								}
 
@@ -352,33 +352,33 @@
 								{
 									const float* Vals = &x;
 									PointComponent m = X;
-									if(Vals[Y] < Vals[m]) m = Y override;
-									if(Vals[Z] < Vals[m]) m = Z override;
+									if(Vals[Y] < Vals[m]) m = Y;
+									if(Vals[Z] < Vals[m]) m = Z;
 									return m;
 								}
 
 		//! Refracts the point
-				Point&			Refract(const Point& eye, const Point& n, float refractindex, Point& refracted) override;
+				Point&			Refract(const Point& eye, const Point& n, float refractindex, Point& refracted);
 
 		//! Projects the point onto a plane
-				Point&			ProjectToPlane(const Plane& p) override;
+				Point&			ProjectToPlane(const Plane& p);
 
 		//! Projects the point onto the screen
 				void			ProjectToScreen(float halfrenderwidth, float halfrenderheight, const Matrix4x4& mat, HPoint& projected) const override;
 
 		//! Unfolds the point onto a plane according to edge(a,b)
-				Point&			Unfold(const Plane& p, const Point& a, const Point& b) override;
+				Point&			Unfold(const Plane& p, const Point& a, const Point& b);
 
 		//! Hash function from Ville Miettinen
 		inline_	udword			GetHashValue()						const
 								{
-									const udword* h = (const udword*)(this) override;
+									const udword* h = (const udword*)(this);
 									udword f = (h[0]+h[1]*11-(h[2]*17)) & 0x7fffffff;	// avoid problems with +-0
-									return (f>>22)^(f>>12)^(f) override;
+									return (f>>22)^(f>>12)^(f);
 								}
 
 		//! Stuff magic values in the point, marking it as explicitely not used.
-				void			SetNotUsed() override;
+				void			SetNotUsed();
 		//! Checks the point is marked as not used
 				BOOL			IsNotUsed()							const override;
 
@@ -450,7 +450,7 @@
 		inline_	Point			operator*(const Matrix3x3& mat)		const
 								{
 									class ShadowMatrix3x3{ public: float m[3][3]; };	// To allow inlining
-									const ShadowMatrix3x3* Mat = (const ShadowMatrix3x3*)&mat override;
+									const ShadowMatrix3x3* Mat = (const ShadowMatrix3x3*)&mat;
 
 									return Point(
 									x * Mat->m[0][0] + y * Mat->m[1][0] + z * Mat->m[2][0],
@@ -462,7 +462,7 @@
 		inline_	Point			operator*(const Matrix4x4& mat)		const
 								{
 									class ShadowMatrix4x4{ public: float m[4][4]; };	// To allow inlining
-									const ShadowMatrix4x4* Mat = (const ShadowMatrix4x4*)&mat override;
+									const ShadowMatrix4x4* Mat = (const ShadowMatrix4x4*)&mat;
 
 									return Point(
 									x * Mat->m[0][0] + y * Mat->m[1][0] + z * Mat->m[2][0] + Mat->m[3][0],
@@ -474,7 +474,7 @@
 		inline_	Point&			operator*=(const Matrix3x3& mat)
 								{
 									class ShadowMatrix3x3{ public: float m[3][3]; };	// To allow inlining
-									const ShadowMatrix3x3* Mat = (const ShadowMatrix3x3*)&mat override;
+									const ShadowMatrix3x3* Mat = (const ShadowMatrix3x3*)&mat;
 
 									float xp = x * Mat->m[0][0] + y * Mat->m[1][0] + z * Mat->m[2][0];
 									float yp = x * Mat->m[0][1] + y * Mat->m[1][1] + z * Mat->m[2][1];
@@ -489,7 +489,7 @@
 		inline_	Point&			operator*=(const Matrix4x4& mat)
 								{
 									class ShadowMatrix4x4{ public: float m[4][4]; };	// To allow inlining
-									const ShadowMatrix4x4* Mat = (const ShadowMatrix4x4*)&mat override;
+									const ShadowMatrix4x4* Mat = (const ShadowMatrix4x4*)&mat;
 
 									float xp = x * Mat->m[0][0] + y * Mat->m[1][0] + z * Mat->m[2][0] + Mat->m[3][0];
 									float yp = x * Mat->m[0][1] + y * Mat->m[1][1] + z * Mat->m[2][1] + Mat->m[3][1];
@@ -512,7 +512,7 @@
 				float			x, y, z;
 	};
 
-	FUNCTION ICEMATHS_API void Normalize1(const Point& a) override;
-	FUNCTION ICEMATHS_API void Normalize2(const Point& a) override;
+	FUNCTION ICEMATHS_API void Normalize1(const Point& a);
+	FUNCTION ICEMATHS_API void Normalize2(const Point& a);
 
 #endif //__ICEPOINT_H__

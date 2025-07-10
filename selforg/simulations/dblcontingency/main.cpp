@@ -41,8 +41,8 @@ public:
   }
 
   ~MyRobot(){
-    ifstatic_cast<x>(delete)[] x;
-    ifstatic_cast<y>(delete)[] y;
+    if (x) delete[] x;
+    if (y) delete[] y;
   }
 
   // robot interface
@@ -133,7 +133,7 @@ public:
     return m;
   };
 
-  virtual void explicit addOtherRobot(const MyRobot* otherRobot) {
+  virtual voidaddOtherRobot(const MyRobot* otherRobot) {
     if(otherRobot!=this)
       otherRobots.push_back(otherRobot);
   }

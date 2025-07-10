@@ -35,8 +35,8 @@
 	class OPCODE_API{
 		public:
 		// Constructor / Destructor
-											SphereCollider() override;
-		virtual ~SphereCollider() override;
+											SphereCollider();
+		virtual ~SphereCollider();
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -54,39 +54,39 @@
 		 *	\warning	SCALE NOT SUPPORTED. The matrices must contain rotation & translation parts only.
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-							bool			Collide(SphereCache& cache, const Sphere& sphere, const Model& model, const Matrix4x4* worlds=null, const Matrix4x4* worldm=null) override;
+							bool			Collide(SphereCache& cache, const Sphere& sphere, const Model& model, const Matrix4x4* worlds=null, const Matrix4x4* worldm=null);
 
 		// 
-							bool			Collide(SphereCache& cache, const Sphere& sphere, const AABBTree* tree) override;
+							bool			Collide(SphereCache& cache, const Sphere& sphere, const AABBTree* tree);
 		protected:
 		// Sphere in model space
 							Point			mCenter;			//!< Sphere center
 							float			mRadius2 = 0;			//!< Sphere radius squared
 		// Internal methods
-							void			_Collide(const AABBCollisionNode* node) override;
-							void			_Collide(const AABBNoLeafNode* node) override;
-							void			_Collide(const AABBQuantizedNode* node) override;
-							void			_Collide(const AABBQuantizedNoLeafNode* node) override;
-							void			_Collide(const AABBTreeNode* node) override;
-							void			_CollideNoPrimitiveTest(const AABBCollisionNode* node) override;
-							void			_CollideNoPrimitiveTest(const AABBNoLeafNode* node) override;
-							void			_CollideNoPrimitiveTest(const AABBQuantizedNode* node) override;
-							void			_CollideNoPrimitiveTest(const AABBQuantizedNoLeafNode* node) override;
+							void			_Collide(const AABBCollisionNode* node);
+							void			_Collide(const AABBNoLeafNode* node);
+							void			_Collide(const AABBQuantizedNode* node);
+							void			_Collide(const AABBQuantizedNoLeafNode* node);
+							void			_Collide(const AABBTreeNode* node);
+							void			_CollideNoPrimitiveTest(const AABBCollisionNode* node);
+							void			_CollideNoPrimitiveTest(const AABBNoLeafNode* node);
+							void			_CollideNoPrimitiveTest(const AABBQuantizedNode* node);
+							void			_CollideNoPrimitiveTest(const AABBQuantizedNoLeafNode* node);
 			// Overlap tests
-		inline_				BOOL			SphereContainsBox(const Point& bc, const Point& be) override;
-		inline_				BOOL			SphereAABBOverlap(const Point& center, const Point& extents) override;
-							BOOL			SphereTriOverlap(const Point& vert0, const Point& vert1, const Point& vert2) override;
+		inline_				BOOL			SphereContainsBox(const Point& bc, const Point& be);
+		inline_				BOOL			SphereAABBOverlap(const Point& center, const Point& extents);
+							BOOL			SphereTriOverlap(const Point& vert0, const Point& vert1, const Point& vert2);
 			// Init methods
-							BOOL			InitQuery(SphereCache& cache, const Sphere& sphere, const Matrix4x4* worlds=null, const Matrix4x4* worldm=null) override;
+							BOOL			InitQuery(SphereCache& cache, const Sphere& sphere, const Matrix4x4* worlds=null, const Matrix4x4* worldm=null);
 	};
 
 	class OPCODE_API{
 		public:
 		// Constructor / Destructor
-											HybridSphereCollider() override;
-		virtual ~HybridSphereCollider() override;
+											HybridSphereCollider();
+		virtual ~HybridSphereCollider();
 
-							bool			Collide(SphereCache& cache, const Sphere& sphere, const HybridModel& model, const Matrix4x4* worlds=null, const Matrix4x4* worldm=null) override;
+							bool			Collide(SphereCache& cache, const Sphere& sphere, const HybridModel& model, const Matrix4x4* worlds=null, const Matrix4x4* worldm=null);
 		protected:
 							Container		mTouchedBoxes;
 	};

@@ -55,7 +55,7 @@ public:
   */
   FFNNController(MultiLayerFFNN* net, int history, bool input_only_x, unsigned int init_wait = 0);
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
 
   virtual ~FFNNController();
 
@@ -68,14 +68,14 @@ public:
     return number_motors;
   }
 
-  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors);
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,
                               motor*,
-                              int number_motors) override;
+                              int number_motors);
 
   /**** CONFIGURABLE ****/
-  void notifyOnChange(const paramkey& key) override;
+  void notifyOnChange(const paramkey& key);
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file (binary).  */

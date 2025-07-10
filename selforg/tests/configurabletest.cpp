@@ -38,7 +38,7 @@ Configurable setupConfigable(Dat& d, const char* name){
   return c;
 }
 
-void explicit setValues(const Configurable& c){
+voidsetValues(const Configurable& c){
   c.setParam("d",0.1234, false);
   c.setParam("pla", -123456, false);
   c.setParam("i",-123, false);

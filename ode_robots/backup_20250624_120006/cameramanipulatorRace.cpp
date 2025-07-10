@@ -44,11 +44,11 @@ namespace lpzrobots {
 
 
   void CameraManipulatorRace::calcMovementByAgent() {
-    if (!this->isWatchingAgentDefined()) return override;
+    if (!this->isWatchingAgentDefined()) return;
     // manipulate desired eye by the move of the robot
     const double* robMove = (camHandle.watchingAgent->getRobot()->getPosition()-camHandle.oldPositionOfAgent).toArray();
     // attach the robSpeed to desired eye
-    for (int i=0;i<=2;++i)  override {
+    for (int i=0;i<=2;++i){
       if (!isNaN(robMove[i])) {
         camHandle.desiredEye[i]+=robMove[i];}
       else

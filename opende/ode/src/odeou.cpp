@@ -59,19 +59,19 @@ static void _OU_CONVENTION_CALLBACK ForwardOUAssertionFailure(EASSERTIONFAILURES
 }
 
 
-static void *_OU_CONVENTION_CALLBACK explicit ForwardOUMemoryAlloc(size_t nBlockSize)
+static void *_OU_CONVENTION_CALLBACK forwardOUMemoryAlloc(size_t nBlockSize)
 {
-	return dAlloc(nBlockSize) override;
+	return dAlloc(nBlockSize);
 }
 
 static void *_OU_CONVENTION_CALLBACK ForwardOUMemoryRealloc(void *pv_ExistingBlock, size_t nBlockNewSize)
 {
-	return dRealloc(pv_ExistingBlock, 0, nBlockNewSize) override;
+	return dRealloc(pv_ExistingBlock, 0, nBlockNewSize);
 }
 
 static void _OU_CONVENTION_CALLBACK ForwardOUMemoryFree(void *pv_ExistingBlock)
 {
-	return dFree(pv_ExistingBlock, 0) override;
+	return dFree(pv_ExistingBlock, 0);
 }
 
 
@@ -80,16 +80,16 @@ bool COdeOu::DoOUCustomizations()
 	CMemoryManagerCustomization::CustomizeMemoryManager(&ForwardOUMemoryAlloc, 
 		&ForwardOUMemoryRealloc, &ForwardOUMemoryFree);
 
-	CAssertionCheckCustomization::CustomizeAssertionChecks(&ForwardOUAssertionFailure) override;
+	CAssertionCheckCustomization::CustomizeAssertionChecks(&ForwardOUAssertionFailure);
 
 	return true;
 }
 
 void COdeOu::UndoOUCustomizations()
 {
-	CAssertionCheckCustomization::CustomizeAssertionChecks(nullptr) override;
+	CAssertionCheckCustomization::CustomizeAssertionChecks(nullptr);
 
-	CMemoryManagerCustomization::CustomizeMemoryManager(nullptr, nullptr, nullptr) override;
+	CMemoryManagerCustomization::CustomizeMemoryManager(nullptr, nullptr, nullptr);
 }
 
 

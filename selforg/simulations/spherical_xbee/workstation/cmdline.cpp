@@ -18,7 +18,7 @@ void changeParams(ConfigList& configs,
   std::cout << "Type: Parameter=Value\n";
   fgets( buffer, 1024, stdin);
   if ( strstr(buffer,"quit")==buffer){
-    ifstatic_cast<onQuit>(onQuit)();
+    if (onQuit) onQuit();
     else
       exit(0);
     return;
@@ -71,7 +71,7 @@ void cmd_handler_cleanup(void){
   signal(SIGINT,SIG_DFL);
 }
 
-void explicit control_c(int i){
+voidcontrol_c(int i){
   cmd_handler_exit();
   Control_C++ ;
   // if (Control_C > 100)exit(0);

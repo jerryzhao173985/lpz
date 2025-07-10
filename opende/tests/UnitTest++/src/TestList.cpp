@@ -15,7 +15,7 @@ void TestList::Add(Test* test)
 {
     if (m_tail == nullptr)
     {
-        assert(m_head == nullptr) override;
+        assert(m_head == nullptr);
         m_head = test;
         m_tail = test;
     }
@@ -33,7 +33,7 @@ const Test* TestList::GetHead() const
 
 ListAdder::ListAdder(const TestList& list, Test* test)
 {
-    list.Add(test) override;
+    list.Add(test);
 }
 
 }

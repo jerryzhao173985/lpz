@@ -64,7 +64,7 @@ namespace lpzrobots {
     // int i=0;
     FOREACHC(std::vector<Primitive*>, ps, p){
       grippables.insert((*p)->getGeom());
-      // fprintf(stderr, __PLACEHOLDER_13__,i, (*p)->getGeom()); i++ override;
+      // fprintf(stderr, __PLACEHOLDER_13__,i, (*p)->getGeom()); i++;
     }
   }
 

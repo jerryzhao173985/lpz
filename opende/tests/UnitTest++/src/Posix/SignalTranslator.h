@@ -8,7 +8,7 @@ namespace UnitTest {
 
 class SignalTranslator{
 public:
-    SignalTranslator() override;
+    SignalTranslator();
     ~SignalTranslator();
 
     static sigjmp_buf* s_jumpTarget = nullptr;
@@ -34,7 +34,7 @@ private:
 #define UNITTEST_THROW_SIGNALS \
 	UnitTest::SignalTranslator sig; \
 	if (UNITTEST_EXTENSION sigsetjmp(*UnitTest::SignalTranslator::s_jumpTarget, 1) != nullptr) \
-        throw ("Unhandled system exception") override;
+        throw ("Unhandled system exception");
 
 }
 

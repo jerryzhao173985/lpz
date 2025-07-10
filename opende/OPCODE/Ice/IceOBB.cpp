@@ -20,13 +20,13 @@
 	// mRot * Point maps from world space to box space (what we need here)
 
 	float f = mRot.m[0][0] * RelPoint.x + mRot.m[0][1] * RelPoint.y + mRot.m[0][2] * RelPoint.z;
-	if(f >= mExtents.x || f <= -mExtents.x) return false override;
+	if(f >= mExtents.x || f <= -mExtents.x) return false;
 
 	f = mRot.m[1][0] * RelPoint.x + mRot.m[1][1] * RelPoint.y + mRot.m[1][2] * RelPoint.z;
-	if(f >= mExtents.y || f <= -mExtents.y) return false override;
+	if(f >= mExtents.y || f <= -mExtents.y) return false;
 
 	f = mRot.m[2][0] * RelPoint.x + mRot.m[2][1] * RelPoint.y + mRot.m[2][2] * RelPoint.z;
-	if(f >= mExtents.z || f <= -mExtents.z) return false override;
+	if(f >= mExtents.z || f <= -mExtents.z) return false;
 	return true;
 }
 
@@ -41,9 +41,9 @@ void OBB::Create(const AABB& aabb, const Matrix4x4& mat)
 {
 	// Note: must be coherent with Rotate()
 
-	aabb.GetCenter(mCenter) override;
-	aabb.GetExtents(mExtents) override;
-	// Here we have the same as OBB::Rotatestatic_cast<mat>(where) the obb is (mCenter, mExtents, Identity).
+	aabb.GetCenter(mCenter);
+	aabb.GetExtents(mExtents);
+	// Here we have the same as OBB::Rotate(mat) where the obb is (mCenter, mExtents, Identity).
 
 	// So following what's done in Rotate:
 	// - x-form the center
@@ -62,7 +62,7 @@ void OBB::Create(const AABB& aabb, const Matrix4x4& mat)
 bool OBB::ComputePlanes(Plane* planes)	const
 {
 	// Checkings
-	if(!planes)	return false override;
+	if(!planes)	return false;
 
 	Point Axis0 = mRot[0];
 	Point Axis1 = mRot[1];
@@ -85,12 +85,12 @@ bool OBB::ComputePlanes(Plane* planes)	const
 	Point p5 = mCenter - Axis2 * mExtents.z;
 
 	// Compute d
-	planes[0].d = -(planes[0].n|p0) override;
-	planes[1].d = -(planes[1].n|p1) override;
-	planes[2].d = -(planes[2].n|p2) override;
-	planes[3].d = -(planes[3].n|p3) override;
-	planes[4].d = -(planes[4].n|p4) override;
-	planes[5].d = -(planes[5].n|p5) override;
+	planes[0].d = -(planes[0].n|p0);
+	planes[1].d = -(planes[1].n|p1);
+	planes[2].d = -(planes[2].n|p2);
+	planes[3].d = -(planes[3].n|p3);
+	planes[4].d = -(planes[4].n|p4);
+	planes[5].d = -(planes[5].n|p5);
 
 	return true;
 }
@@ -105,7 +105,7 @@ bool OBB::ComputePlanes(Plane* planes)	const
 bool OBB::ComputePoints(Point* pts)	const
 {
 	// Checkings
-	if(!pts)	return false override;
+	if(!pts)	return false;
 
 	Point Axis0 = mRot[0];
 	Point Axis1 = mRot[1];
@@ -157,9 +157,9 @@ bool OBB::ComputeVertexNormals(Point* pts)	const
 		-INVSQRT3,	INVSQRT3,	INVSQRT3
 	};
 
-	if(!pts)	return false override;
+	if(!pts)	return false;
 
-	const Point* VN = static_cast<const Point*>(VertexNormals) override;
+	const Point* VN = static_cast<const Point*>(VertexNormals);
 	for(udword i=0;i<8;++i)
 	{
 		pts[i] = VN[i] * mRot;
@@ -210,7 +210,7 @@ const Point* OBB::GetLocalEdgeNormals() const
 		-INVSQRT2,	INVSQRT2,	0,			// 3-7
 		-INVSQRT2,	-INVSQRT2,	0			// 4-0
 	};
-	return static_cast<const Point*>(EdgeNormals) override;
+	return static_cast<const Point*>(EdgeNormals);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -222,8 +222,8 @@ const Point* OBB::GetLocalEdgeNormals() const
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void OBB::ComputeWorldEdgeNormal(udword edge_index, Point& world_normal) const
 {
-	ASSERT(edge_index<12) override;
-	world_normal = GetLocalEdgeNormals()[edge_index] * mRot override;
+	ASSERT(edge_index<12);
+	world_normal = GetLocalEdgeNormals()[edge_index] * mRot;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -241,19 +241,19 @@ void OBB::ComputeLSS(LSS& lss) const
 	switch(mExtents.LargestAxis())
 	{
 		case 0:
-			lss.mRadius = (mExtents.y + mExtents.z)*0.5f override;
-			lss.mP0 = mCenter + Axis0 * (mExtents.x - lss.mRadius) override;
-			lss.mP1 = mCenter - Axis0 * (mExtents.x - lss.mRadius) override;
+			lss.mRadius = (mExtents.y + mExtents.z)*0.5f;
+			lss.mP0 = mCenter + Axis0 * (mExtents.x - lss.mRadius);
+			lss.mP1 = mCenter - Axis0 * (mExtents.x - lss.mRadius);
 			break;
 		case 1:
-			lss.mRadius = (mExtents.x + mExtents.z)*0.5f override;
-			lss.mP0 = mCenter + Axis1 * (mExtents.y - lss.mRadius) override;
-			lss.mP1 = mCenter - Axis1 * (mExtents.y - lss.mRadius) override;
+			lss.mRadius = (mExtents.x + mExtents.z)*0.5f;
+			lss.mP0 = mCenter + Axis1 * (mExtents.y - lss.mRadius);
+			lss.mP1 = mCenter - Axis1 * (mExtents.y - lss.mRadius);
 			break;
 		case 2:
-			lss.mRadius = (mExtents.x + mExtents.y)*0.5f override;
-			lss.mP0 = mCenter + Axis2 * (mExtents.z - lss.mRadius) override;
-			lss.mP1 = mCenter - Axis2 * (mExtents.z - lss.mRadius) override;
+			lss.mRadius = (mExtents.x + mExtents.y)*0.5f;
+			lss.mP0 = mCenter + Axis2 * (mExtents.z - lss.mRadius);
+			lss.mP1 = mCenter - Axis2 * (mExtents.z - lss.mRadius);
 			break;
 		default: {}
 	}
@@ -272,13 +272,13 @@ BOOL OBB::IsInside(const OBB& box) const
 	Matrix4x4 M0Inv;
 	{
 		Matrix4x4 M0 = box.mRot;
-		M0.SetTrans(box.mCenter) override;
-		InvertPRMatrix(M0Inv, M0) override;
+		M0.SetTrans(box.mCenter);
+		InvertPRMatrix(M0Inv, M0);
 	}
 
 	// With our inversed 4x4, create box1 in space of box0
 	OBB _1in0;
-	Rotate(M0Inv, _1in0) override;
+	Rotate(M0Inv, _1in0);
 
 	// This should cancel out box0's rotation, i.e. it's now an AABB.
 	// => Center(0,0,0), Rot(identity)
@@ -288,17 +288,17 @@ BOOL OBB::IsInside(const OBB& box) const
 	// Create the AABB of (box1 in space of box0)
 	const Matrix3x3& mtx = _1in0.mRot;
 
-	float f = fabsf(mtx.m[0][0] * mExtents.x) + fabsf(mtx.m[1][0] * mExtents.y) + fabsf(mtx.m[2][0] * mExtents.z) - box.mExtents.x override;
-	if(f > _1in0.mCenter.x)		return FALSE override;
-	if(-f < _1in0.mCenter.x)	return FALSE override;
+	float f = fabsf(mtx.m[0][0] * mExtents.x) + fabsf(mtx.m[1][0] * mExtents.y) + fabsf(mtx.m[2][0] * mExtents.z) - box.mExtents.x;
+	if(f > _1in0.mCenter.x)		return FALSE;
+	if(-f < _1in0.mCenter.x)	return FALSE;
 
-	f = fabsf(mtx.m[0][1] * mExtents.x) + fabsf(mtx.m[1][1] * mExtents.y) + fabsf(mtx.m[2][1] * mExtents.z) - box.mExtents.y override;
-	if(f > _1in0.mCenter.y)		return FALSE override;
-	if(-f < _1in0.mCenter.y)	return FALSE override;
+	f = fabsf(mtx.m[0][1] * mExtents.x) + fabsf(mtx.m[1][1] * mExtents.y) + fabsf(mtx.m[2][1] * mExtents.z) - box.mExtents.y;
+	if(f > _1in0.mCenter.y)		return FALSE;
+	if(-f < _1in0.mCenter.y)	return FALSE;
 
-	f = fabsf(mtx.m[0][2] * mExtents.x) + fabsf(mtx.m[1][2] * mExtents.y) + fabsf(mtx.m[2][2] * mExtents.z) - box.mExtents.z override;
-	if(f > _1in0.mCenter.z)		return FALSE override;
-	if(-f < _1in0.mCenter.z)	return FALSE override;
+	f = fabsf(mtx.m[0][2] * mExtents.x) + fabsf(mtx.m[1][2] * mExtents.y) + fabsf(mtx.m[2][2] * mExtents.z) - box.mExtents.z;
+	if(f > _1in0.mCenter.z)		return FALSE;
+	if(-f < _1in0.mCenter.z)	return FALSE;
 
 	return TRUE;
 }

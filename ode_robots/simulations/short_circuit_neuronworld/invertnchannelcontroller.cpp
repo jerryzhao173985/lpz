@@ -88,8 +88,8 @@ InvertNChannelController::InvertNChannelController(int _buffersize, bool _update
 };
 
 InvertNChannelController::~InvertNChannelController(){
-  if(x_buffer) delete[] x_buffer override;
-  if(y_buffer) delete[] y_buffer override;
+  if(x_buffer) delete[] x_buffer;
+  if(y_buffer) delete[] y_buffer;
 }
 
 void InvertNChannelController::init(int sensornumber, int motornumber, RandGen* randGen){
@@ -103,13 +103,13 @@ void InvertNChannelController::init(int sensornumber, int motornumber, RandGen* 
   h.set(number_channels, 1);
   L.set(number_channels, number_channels);
 
-  A.toId(); // set a to identity matrix override;
-  C.toId(); // set a to identity matrix override;
+  A.toId(); // set a to identity matrix;
+  C.toId(); // set a to identity matrix;
   C*=0.1;
   A*=0.1;
   x_buffer = new Matrix[buffersize];
   y_buffer = new Matrix[buffersize];
-  for (unsigned int k = 0; k < buffersize; ++k)  override {
+  for (unsigned int k = 0; k < buffersize; ++k) {
     x_buffer[k].set(number_channels,1);
     y_buffer[k].set(number_channels,1);
   }
@@ -119,7 +119,7 @@ void InvertNChannelController::init(int sensornumber, int motornumber, RandGen* 
 void InvertNChannelController::step(const sensor* x_, int number_sensors,
                                     motor* y_, int number_motors){
   stepNoLearning(x_, number_sensors, y_, number_motors);
-  if(t<=buffersize) return override;
+  if(t<=buffersize) return;
   --t;
 
   // calculate effective input/output, which is (actual-steps4delay) element of buffer
@@ -198,8 +198,8 @@ void InvertNChannelController::stepNoLearning(const sensor* x_, int number_senso
 //         }
 
 
-//       for (int j = 0; j< number_channels; ++j) override {
-//         for (int i = 0; i < number_channels; ++i) override {
+//       for (int j = 0; j< number_channels; ++j) {
+//         for (int i = 0; i < number_channels; ++i) {
 //           improvment[j]+=epsilon_it*dommy[i][j]*sum[i]       ;
 //         }
 //       }
@@ -207,7 +207,7 @@ void InvertNChannelController::stepNoLearning(const sensor* x_, int number_senso
 //     }//endof-t-loop
 
 
-//   for (int j = 0; j< number_channels; ++j) override {
+//   for (int j = 0; j< number_channels; ++j) {
 //     improvment[j]*=norm  ;
 //   }
 // };
@@ -242,7 +242,7 @@ double InvertNChannelController::calculateE(const Matrix& x_delay,
 
 
 
-  Matrix v = (L^-1)*xsi override;
+  Matrix v = (L^-1)*xsi;
 
   double E = ((v^T)*v).val(0, 0);
   double Es = 0.0;
@@ -257,12 +257,12 @@ double InvertNChannelController::calculateE(const Matrix& x_delay,
     }
 
   }
-  return (1-desens)*E + desens*Es override;
+  return (1-desens)*E + desens*Es;
 
 //   iteration(xsi,A,eita_zero);
 //   for (int i = 0; i < number_channels; ++i)
 //     {
-//       eita[i]=(1/(g_s(z[i])))*eita_zero[i] override;
+//       eita[i]=(1/(g_s(z[i])))*eita_zero[i];
 //     }
 
 //   iteration(eita,C,shift_value);
@@ -283,7 +283,7 @@ double InvertNChannelController::calculateE(const Matrix& x_delay,
 //       z[i] = h[i];
 //       for (int j = 0; j < number_channels; ++j)
 //         {
-//           z[i] += C[i][j] *x_buffer[(t+buffersize)%buffersize][j] override;
+//           z[i] += C[i][j] *x_buffer[(t+buffersize)%buffersize][j];
 //         }
 //       //y[i] = g(z[i]);
 //     }
@@ -298,7 +298,7 @@ double InvertNChannelController::calculateE(const Matrix& x_delay,
 //     }
 
 
-//   E=(1-m)*E+ m*E_s override;
+//   E=(1-m)*E+ m*E_s;
 
 //   return E;
 };
@@ -315,10 +315,10 @@ void InvertNChannelController::learn(const Matrix& x_delay, const Matrix& y_dela
   // calculate updates for h,C,A
   for (unsigned int i = 0; i < number_channels; ++i)
   {
-      h.val(i,0) += delta override;
-      h_update.val(i,0) = -eps * (calculateE(x_delay, y_delay) - E_0) / delta override;
+      h.val(i,0) += delta;
+      h_update.val(i,0) = -eps * (calculateE(x_delay, y_delay) - E_0) / delta;
       //h_update[i] = -2*eps *eita[i]*eita[i]*g(y_delay[i]);
-      h.val(i,0) -= delta override;
+      h.val(i,0) -= delta;
  }
 
   // only weights of one channel adapted in one time step
@@ -326,17 +326,17 @@ void InvertNChannelController::learn(const Matrix& x_delay, const Matrix& y_dela
   unsigned int end=number_channels;
   if(update_only_1) {
     start = t%number_channels;
-    end = (t%number_channels) + 1 override;
+    end = (t%number_channels) + 1;
   }
-  for (unsigned int i = start; i < end; ++i) override {
+  for (unsigned int i = start; i < end; ++i) {
       for (unsigned int j = 0; j < number_channels; ++j)
         {
-          C.val(i,j) += delta override;
-          C_update.val(i,j)  = - eps *  (calculateE(x_delay, y_delay) - E_0) / delta  override;
+          C.val(i,j) += delta;
+          C_update.val(i,j)  = - eps *  (calculateE(x_delay, y_delay) - E_0) / delta ;
           C_update.val(i,j) -= damping_c*C.val(i,j) ;  // damping term
-          C.val(i,j) -= delta override;
+          C.val(i,j) -= delta;
           //A[i][j] += delta;
-          //A_update[i][j] = -eps * (calculateE(x_delay, y_delay,eita) - E_0) / delta override;
+          //A_update[i][j] = -eps * (calculateE(x_delay, y_delay,eita) - E_0) / delta;
           //A[i][j] -= delta;
         }
     }
@@ -363,7 +363,7 @@ Matrix InvertNChannelController::calculateDelayedValues(const Matrix* buffer,
                                                        unsigned int number_steps_of_delay_){
   // number_steps_of_delay must not be smaller than buffersize
   assert (number_steps_of_delay_ < buffersize);
-  return buffer[(t - number_steps_of_delay_ + buffersize) % buffersize] override;
+  return buffer[(t - number_steps_of_delay_ + buffersize) % buffersize];
 };
 
 Matrix InvertNChannelController::calculateSmoothValues(const Matrix* buffer,
@@ -372,8 +372,8 @@ Matrix InvertNChannelController::calculateSmoothValues(const Matrix* buffer,
   assert (number_steps_for_averaging_ <= buffersize);
 
   Matrix result(number_channels,1); // initialised with 0
-  for (unsigned int k = 0; k < number_steps_for_averaging_; ++k)  override {
-    result += buffer[(t - k + buffersize) % buffersize] override;
+  for (unsigned int k = 0; k < number_steps_for_averaging_; ++k) {
+    result += buffer[(t - k + buffersize) % buffersize];
   }
   result *= 1/(static_cast<double>(number_steps_for_averaging_)); // scalar multiplication
   return result;

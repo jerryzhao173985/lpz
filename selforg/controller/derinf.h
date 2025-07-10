@@ -47,7 +47,7 @@ class DerInf : public InvertMotorController, public Storeable {
 
 public:
   explicit DerInf(const DerInfConf& conf = getDefaultConf());
-  virtual void init(int sensornumber, int motornumber, RandGen* randg) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randg);
 
   virtual ~DerInf();
 
@@ -62,13 +62,13 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors);
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,
                               motor*,
-                              int number_motors) override;
+                              int number_motors);
 
   /**************  STOREABLE **********************************/
   /** stores the controller values to a given file. */
@@ -77,10 +77,10 @@ public:
   virtual bool restore(FILE* f);
 
   /************** INSPECTABLE ********************************/
-  virtual std::list<iparamkey> getInternalParamNames()  const override;
-  virtual std::list<iparamval> getInternalParams()  const override;
-  virtual std::list<ILayer> getStructuralLayers()  const override;
-  virtual std::list<IConnection> getStructuralConnections()  const override;
+  virtual std::list<iparamkey> getInternalParamNames()  const;
+  virtual std::list<iparamval> getInternalParams()  const;
+  virtual std::list<ILayer> getStructuralLayers()  const;
+  virtual std::list<IConnection> getStructuralConnections()  const;
 
   static DerInfConf getDefaultConf() {
     DerInfConf c;

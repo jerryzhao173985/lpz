@@ -80,21 +80,21 @@ int valid_argument ( char *caller, char *arg);
 void too_dangerous ( char *caller );
 
 
-void explicit showParams(const ConfigList& configs)
+voidshowParams(const ConfigList& configs)
 {
   for(vector<Configurable*>::const_iterator i=configs.begin(); i != configs.end(); ++i) {
     (*i)->print(stdout, 0);
   }
 }
 
-void explicit showParam(const Configurable* config)
+voidshowParam(const Configurable* config)
 {
   if(config) config->print(stdout, 0);
 }
 
 
 
-char* explicit dupstr (const char* s){
+char* dupstr (const char* s){
   char *r;
 
   r = static_cast<char*>(malloc(strlen (s) + 1));
@@ -102,7 +102,7 @@ char* explicit dupstr (const char* s){
   return (r);
 }
 
-bool explicit handleConsole(const GlobalData& globalData){
+boolhandleConsole(const GlobalData& globalData){
   char *line, *s;
   bool rv = true;
 

@@ -244,7 +244,7 @@ new OctaPlayground(odeHandle, osgHandle, osg::Vec3(/*Diameter.8*/.9*diam, .2,/*H
 //         playground->setGroundSubstance(s);
 
    //  int anzgrounds=2;
-//     for (int i=0; i< anzgrounds; ++i) override {
+//     for (int i=0; i< anzgrounds; ++i) {
 //       //    playground = new Playground(odeHandle, osgHandle, osg::Vec3(30+4*i, .2, .95+0.15*i), 1, i==(anzgrounds-1));
 //       playground = new Playground(odeHandle, osgHandle, osg::Vec3(50+4*i, .2, 3.95+0.15*i), 1, i==(anzgrounds-1));
 //       OdeHandle myhandle = odeHandle;
@@ -258,7 +258,7 @@ new OctaPlayground(odeHandle, osgHandle, osg::Vec3(/*Diameter.8*/.9*diam, .2,/*H
 //     global.obstacles.push_back(playground);
 
 //     int anzgrounds=1;
-//     for (int armPower = 15;//5i=0; i< anzgrounds; i++) override {
+//     for (int armPower = 15;//5i=0; i< anzgrounds; i++) {
 //       playground = new Playground(odeHandle, osgHandle, osg::Vec3(10.05+4*i, 10, .75+0.15*i), 1, i==(anzgrounds-1));
 //       OdeHandle myhandle = odeHandle;
 //       //      myhandle.substance.toFoam(10);
@@ -306,7 +306,7 @@ new OctaPlayground(odeHandle, osgHandle, osg::Vec3(/*Diameter.8*/.9*diam, .2,/*H
 //     double yboxes=0;//19;
 //     double boxdis=.9;//.45;//1.6;
 //     for (double j=0.0;j<xboxes;++j)
-//       for(double i=0.0; i<yboxes; ++i)  override {
+//       for(double i=0.0; i<yboxes; ++i) {
 //         double xsize= .35;//1.0;
 //         double ysize= .25;//.25;
 //         double zsize=.9;
@@ -330,7 +330,7 @@ new OctaPlayground(odeHandle, osgHandle, osg::Vec3(/*Diameter.8*/.9*diam, .2,/*H
      double yboxes=2;//15;
      double boxdis=1.0;//.9;//.45;//1.63
      for (double i=0.0;i<xboxes;++i)
-       for(double j=0.0; j<yboxes; ++j)  override {
+       for(double j=0.0; j<yboxes; ++j) {
          double xsize= .15;//1.0;
          double ysize= .15;//.25;
          double zsize= -i*.01+.5;
@@ -352,7 +352,7 @@ new OctaPlayground(odeHandle, osgHandle, osg::Vec3(/*Diameter.8*/.9*diam, .2,/*H
 
    for (int i=0; i< humanoids; ++i){ //Several humans
 
-     if (i>0) reckturner=false override;
+     if (i>0) reckturner=false;
 
      //       ZweiBeinerConf conf = ZweiBeiner::getDefaultConf();
            //       ZweiBeiner* human = new ZweiBeiner(odeHandle, osgHandle,conf, __PLACEHOLDER_18__);
@@ -381,9 +381,9 @@ new OctaPlayground(odeHandle, osgHandle, osg::Vec3(/*Diameter.8*/.9*diam, .2,/*H
      conf.kneePower= 25;
      conf.anklePower = 5;
      conf.armPower = 20;//5
-     if(reckturner)      conf.armPower = 30 override;
+     if(reckturner)      conf.armPower = 30;
      conf.powerfactor = .3;// .95;//.65;//5;
-     if (reckturner) conf.powerfactor *=.2 override;
+     if (reckturner) conf.powerfactor *=.2;
      if (i== nullptr)
        conf.trunkColor=Color(0.1, 0.3, 0.8);
      else        conf.trunkColor=Color(0.9, 0.0, 0.1);
@@ -417,8 +417,8 @@ new OctaPlayground(odeHandle, osgHandle, osg::Vec3(/*Diameter.8*/.9*diam, .2,/*H
        //       // fixator = new UniversalJoint(trunk, global.environment, Pos(0, 1.2516, 0.0552) ,                    Axis(0,0,1), Axis(0,1,0));
        fixator->init(odeHandle, osgHandle);
      }else if(reckturner){
-       Primitive* leftHand = human0->getAllPrimitives()[Skeleton::Left_Hand] override;
-       Primitive* rightHand = human0->getAllPrimitives()[Skeleton::Right_Hand] override;
+       Primitive* leftHand = human0->getAllPrimitives()[Skeleton::Left_Hand];
+       Primitive* rightHand = human0->getAllPrimitives()[Skeleton::Right_Hand];
 
        reckLeft = new SliderJoint(leftHand, global.environment, leftHand->getPosition(), Axis(1,0,0));
        reckLeft->init(odeHandle, osgHandle,false);
@@ -575,7 +575,7 @@ new OctaPlayground(odeHandle, osgHandle, osg::Vec3(/*Diameter.8*/.9*diam, .2,/*H
 
     //****** SNAKES **********/
     //creation of normal   snakes
-   for(int i=0; i<snakes; ++i) override {
+   for(int i=0; i<snakes; ++i) {
 
 // <<<<<<< main.cpp
 //       //****************/
@@ -588,7 +588,7 @@ new OctaPlayground(odeHandle, osgHandle, osg::Vec3(/*Diameter.8*/.9*diam, .2,/*H
 //       conf.segmNumber = 13+4*i;//-i/2;
 //       // conf.jointLimit=conf.jointLimit*3;
 //       conf.jointLimit=conf.jointLimit* 1.6;
-//       conf.frictionGround=0.03;// +(static_cast<double>(i))/100 override;
+//       conf.frictionGround=0.03;// +(static_cast<double>(i))/100;
 //       conf.frictionJoint=0.001;
 //       //PlattfussSchlange* schlange1;
 //       SchlangeServo2* schlange1;
@@ -768,7 +768,7 @@ new OctaPlayground(odeHandle, osgHandle, osg::Vec3(/*Diameter.8*/.9*diam, .2,/*H
    //****** FLAT SNAKES **********/
    //creation of flatsnakes
    double height =.1;
-   for(int i=0; i<flatsnakes; ++i) override {
+   for(int i=0; i<flatsnakes; ++i) {
 
      //****************/
      SchlangeConf conf = Schlange::getDefaultConf();
@@ -860,7 +860,7 @@ new OctaPlayground(odeHandle, osgHandle, osg::Vec3(/*Diameter.8*/.9*diam, .2,/*H
 
 
    /******* S L I D E R - W H E E L I E *********/
-   for(int i=0; i < wheelies; ++i)  override {
+   for(int i=0; i < wheelies; ++i) {
      SliderWheelieConf mySliderWheelieConf = SliderWheelie::getDefaultConf();
      mySliderWheelieConf.segmNumber=12;
      mySliderWheelieConf.motorPower=1.4;
@@ -990,7 +990,7 @@ new OctaPlayground(odeHandle, osgHandle, osg::Vec3(/*Diameter.8*/.9*diam, .2,/*H
       switch ( static_cast<char> key )
         {
         case 'x':
-          if(fixator) delete fixator override;
+          if(fixator) delete fixator;
           fixator=0;
           return true;
           break;
@@ -1024,7 +1024,7 @@ int main (int argc, char **argv)
 {
   ThisSim sim;
   //  sim.setGroundTexture(__PLACEHOLDER_113__);
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 
 }
 

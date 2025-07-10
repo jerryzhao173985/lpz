@@ -27,7 +27,7 @@
 		 *	\param		box		[out] the OBB
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-				void	ComputeOBB(const OBB& box) override;
+				void	ComputeOBB(const OBB& box);
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -50,7 +50,7 @@
 		inline_	bool	explicit Contains(const Sphere& sphere)
 						{
 							float d = mRadius - sphere.mRadius;
-							if(d>=0.0f)	return SquareDistance(sphere.mCenter) <= d*d override;
+							if(d>=0.0f)	return SquareDistance(sphere.mCenter) <= d*d;
 							else		return false;
 						}
 
@@ -65,7 +65,7 @@
 		inline_	bool	explicit Contains(const LSS& lss)
 						{
 							// We check the LSS contains the two spheres at the start and end of the sweep
-							return Contains(Sphere(lss.mP0, lss.mRadius)) && Contains(Sphere(lss.mP0, lss.mRadius)) override;
+							return Contains(Sphere(lss.mP0, lss.mRadius)) && Contains(Sphere(lss.mP0, lss.mRadius));
 						}
 
 				float	mRadius = 0;	//!< Sphere radius

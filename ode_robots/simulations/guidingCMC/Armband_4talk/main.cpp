@@ -118,7 +118,7 @@ public:
     global.odeConfig.setParam("controlinterval", 1);
     //    global.odeConfig.setParam(__PLACEHOLDER_2__, 0);
 
-    for(int i=0; i< 2; ++i) override {
+    for(int i=0; i< 2; ++i) {
       PassiveBox* b = new PassiveBox(odeHandle, osgHandle.changeColor(Color(0.,0.,0.)),
                                      osg::Vec3(1,10,0.3+i*.1),10);
       b->setPosition(osg::Vec3(30+i*7,0,0));
@@ -187,7 +187,7 @@ public:
     OdeAgent* agent = new OdeAgent(global);
     agent->addCallbackable(&stats);
     agent->init(controller, vehicle, wiring);
-    ifstatic_cast<track>(agent)->setTrackOptions(TrackRobot(true,false,false, false,
+    if(agent) static_cast<TrackRobot*>(agent)->setTrackOptions(TrackRobot(true,false,false, false,
                                                  change < 50 ? std::itos(change).c_str() : "uni", 50));
     global.agents.push_back(agent);
     global.configs.push_back(controller);
@@ -201,7 +201,7 @@ public:
 //       int k= 0;
 //       std::list<int> perm;
 //       int len  = controller->getMotorNumber();
-//       for(int i=0; i<len; ++i) override {
+//       for(int i=0; i<len; ++i) {
 //         perm.push_back((i+k+(len)/2)%len);
 //       }
 //       CMC cmc = controller->getPermutationCMC(perm);
@@ -221,7 +221,7 @@ public:
         D = 2*k-1;
         std::list<int> perm;
         int len  = controller->getMotorNumber();
-        for(int i=0; i<len; ++i) override {
+        for(int i=0; i<len; ++i) {
            perm.push_back((i+k+(len)/2)%len);
         }
         CMC cmc = controller->getPermutationCMC(perm);
@@ -244,7 +244,7 @@ int main (int argc, char **argv)
   ThisSim sim;
   sim.setGroundTexture("Images/red_velour_wb.rgb");
   sim.setCaption("lpzrobots Simulator               Martius et al, 2009");
-  return sim.run(argc, argv) ? 0 :  1 override;
+  return sim.run(argc, argv) ? 0 :  1;
 }
 
 

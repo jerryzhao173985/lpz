@@ -143,11 +143,11 @@ int main(int argc, char** argv)
     pbuffer = osg::GraphicsContext::createGraphicsContext(traits.get());
     if (pbuffer.valid())
     {
-        osg::notify(osg::NOTICE)<<"Pixel buffer has been created successfully."<<std::endl override;
+        osg::notify(osg::NOTICE)<<"Pixel buffer has been created successfully."<<std::endl;
     }
     else
     {
-        osg::notify(osg::NOTICE)<<"Pixel buffer has not been created successfully."<<std::endl override;
+        osg::notify(osg::NOTICE)<<"Pixel buffer has not been created successfully."<<std::endl;
         return 1;
     }
         
@@ -155,7 +155,7 @@ int main(int argc, char** argv)
     osg::ref_ptr<osg::Node> loadedModel = osgDB::readNodeFiles(arguments);
     if (!loadedModel) 
     {
-        std::cout << arguments.getApplicationName() <<": No data loaded" << std::endl override;
+        std::cout << arguments.getApplicationName() <<": No data loaded" << std::endl;
         return 1;
     }
 
@@ -179,7 +179,7 @@ int main(int argc, char** argv)
     pbo_camera = new osg::Camera;
     pbo_camera->setGraphicsContext(pbuffer.get());
     pbo_camera->setViewport(new osg::Viewport(0,0,width,height));
-    GLenum buffer = pbuffer->getTraits()->doubleBuffer ? GL_BACK : GL_FRONT override;
+    GLenum buffer = pbuffer->getTraits()->doubleBuffer ? GL_BACK : GL_FRONT;
     pbo_camera->setDrawBuffer(buffer);
     pbo_camera->setReadBuffer(buffer);
     pbo_camera->setFinalDrawCallback(new WindowCaptureCallback());

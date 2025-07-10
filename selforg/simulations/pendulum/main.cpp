@@ -27,7 +27,7 @@ using namespace matrix;
 
 bool stop=false;
 
-void explicit reinforce(Agent* a){
+voidreinforce(Agent* a){
 //   MyRobot* r = static_cast<MyRobot*>(a)->getRobot();
 //   InvertMotorNStep* c = dynamic_cast<InvertMotorNStep*>(a->getController());
 //   if(c)

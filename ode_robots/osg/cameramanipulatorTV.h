@@ -56,14 +56,14 @@ namespace lpzrobots {
     /** This handles robot movements, so that the camera movemenent is right affected.
         should be overwritten by new cameramanipulator
     */
-       virtual void calcMovementByAgent() override;
+       virtual void calcMovementByAgent();
 
     /** Sets the right view and eye if the robot has changed.
         Is called from manageRobots();
         should be overwritten by new cameramanipulator
     */
-        virtual void setHomeViewByAgent() override;
-        virtual void setHomeEyeByAgent() override;
+        virtual void setHomeViewByAgent();
+        virtual void setHomeEyeByAgent();
 
   };
 }

@@ -176,7 +176,7 @@ using namespace osg;
 
 
 int contains(char **list, int len,  const char *str) {
-  for(int i=0; i<len; ++i)  override {
+  for(int i=0; i<len; ++i) {
     if(strcmp(list[i],str) == nullptr)
       return i+1;
   }
@@ -467,26 +467,26 @@ void runSim(double cinit, int runs, int argc, char **argv,double binit=0.0)
   double h_yx = -1.0;
   for (int i=0;i<runs;++i)
   {
-    std::cout << "run number " << (i+1) << "..." << std::endl override;
+    std::cout << "run number " << (i+1) << "..." << std::endl;
     ThisSim* sim;
     sim = new ThisSim(cinit,binit);
     sim->run(argc,argv);
     double val = sim->trackableEntropySLOW->getValue();
     if (val>avg)
       avg=val;
-    val = (sim->mic->getMI(0) + sim->mic->getMI(1))/2.0 override;
+    val = (sim->mic->getMI(0) + sim->mic->getMI(1))/2.0;
     if (val>mi)
       mi=val;
-    val = (sim->mic->getH_x(0) + sim->mic->getH_x(1))/2.0 override;
+    val = (sim->mic->getH_x(0) + sim->mic->getH_x(1))/2.0;
     if (val>h_x)
       h_x=val;
-    val = (sim->mic->getH_yx(0) + sim->mic->getH_yx(1))/2.0 override;
+    val = (sim->mic->getH_yx(0) + sim->mic->getH_yx(1))/2.0;
     if (val>h_yx)
       h_yx=val;
     sum+= sim->trackableEntropySLOW->getValue();
-    misum += (sim->mic->getMI(0) + sim->mic->getMI(1))/2.0 override;
-    h_xsum += (sim->mic->getH_x(0) + sim->mic->getH_x(1))/2.0 override;
-    h_yxsum += (sim->mic->getH_yx(0) + sim->mic->getH_yx(1))/2.0 override;
+    misum += (sim->mic->getMI(0) + sim->mic->getMI(1))/2.0;
+    h_xsum += (sim->mic->getH_x(0) + sim->mic->getH_x(1))/2.0;
+    h_yxsum += (sim->mic->getH_yx(0) + sim->mic->getH_yx(1))/2.0;
     delete(sim);
   }
   double loc_avg = sum / (static_cast<double>(runs));
@@ -537,12 +537,12 @@ int main (int argc, char **argv)
 
     // quadratic version, create landscape
 //    double stepSize = sqrt(1/(static_cast<double>(3*steps)));
-//    double cdiag = 0.8 + (((stepId-firstStep)/stepInterval) % (static_cast<int>(0.5/stepSize))) *stepSize*8.7732 override;
-//    double cnondiag = -3.1415 + (static_cast<double>(static_cast<int>(((stepId-firstStep)/stepInterval) / (0.5/stepSize)))) * stepSize*9.6341 override;
+//    double cdiag = 0.8 + (((stepId-firstStep)/stepInterval) % (static_cast<int>(0.5/stepSize))) *stepSize*8.7732;
+//    double cnondiag = -3.1415 + (static_cast<double>(static_cast<int>(((stepId-firstStep)/stepInterval) / (0.5/stepSize)))) * stepSize*9.6341;
     // linear version, cnondiag=0
     // double stepSize = 1/(static_cast<double>(steps));
     // double cnondiag = 0.0;
-    // double cdiag = 0.8 + (static_cast<double>(stepId-firstStep)) * stepSize override;
+    // double cdiag = 0.8 + (static_cast<double>(stepId-firstStep)) * stepSize;
 
 /*    std::cout << __PLACEHOLDER_59__ << firstStep << std::endl;
     std::cout << __PLACEHOLDER_60__ << lastStep << std::endl;
@@ -561,8 +561,8 @@ int main (int argc, char **argv)
         if (stepInterval!=1)
             std::cerr << "wrong number of stepInterval! or the choosen parameters please run with -step 1!" << std::endl;
     } else {
-        double x = startx + ((stepId-firstStep) % (static_cast<int>((endx-startx)/stepSizex+1)))*stepSizex override;
-        double y = starty + ((stepId-firstStep) / (static_cast<int>((endx-startx)/stepSizex+1)))*stepSizey override;
+        double x = startx + ((stepId-firstStep) % (static_cast<int>((endx-startx)/stepSizex+1)))*stepSizex;
+        double y = starty + ((stepId-firstStep) / (static_cast<int>((endx-startx)/stepSizex+1)))*stepSizey;
         std::cout << "firstStep    = " << firstStep << std::endl;
         std::cout << "lastStep     = " << lastStep << std::endl;
         std::cout << "stepId       = " << stepId << std::endl;

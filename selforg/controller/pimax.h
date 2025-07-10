@@ -62,7 +62,7 @@ class PiMax : public AbstractController, public Teachable, public Parametrizable
 public:
   explicit PiMax(const PiMaxConf& conf = getDefaultConf());
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
 
   virtual ~PiMax();
 
@@ -90,19 +90,19 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors);
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,
                               motor*,
-                              int number_motors) override;
+                              int number_motors);
 
   /// called during babbling phase
   virtual void motorBabblingStep(const sensor*,
                                  int number_sensors,
                                  const motor*,
-                                 int number_motors) override;
+                                 int number_motors);
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
@@ -119,10 +119,10 @@ public:
   virtual void seth(const matrix::Matrix& h);
 
   /***** TEACHABLE ****/
-  virtual void setMotorTeaching(const matrix::Matrix& teaching) override;
-  virtual void setSensorTeaching(const matrix::Matrix& teaching) override;
-  virtual matrix::Matrix getLastMotorValues() override;
-  virtual matrix::Matrix getLastSensorValues() override;
+  virtual void setMotorTeaching(const matrix::Matrix& teaching);
+  virtual void setSensorTeaching(const matrix::Matrix& teaching);
+  virtual matrix::Matrix getLastMotorValues();
+  virtual matrix::Matrix getLastSensorValues();
 
   /***** PARAMETRIZABLE ****/
   virtual std::list<matrix::Matrix> getParameters()  const ;

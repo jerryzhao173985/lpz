@@ -91,7 +91,7 @@ public:
 
   /// ABSTRACTCONTROLLER INTERFACE
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
 
   virtual int getSensorNumber() const override {
     return sensorNumber;
@@ -104,12 +104,12 @@ public:
   virtual void step(const sensor* sensors,
                     int sensornumber,
                     motor* motors,
-                    int motornumber) override;
+                    int motornumber);
 
   virtual void stepNoLearning(const sensor* sensors,
                               int sensornumber,
                               motor* motors,
-                              int motornumber) override;
+                              int motornumber);
 
   /// STORABLE INTERFACE
 
@@ -122,7 +122,7 @@ public:
   }
 
   /// CONFIGURABLE INTERFACE
-  virtual void notifyOnChange(const Configurable::paramkey& key) override;
+  virtual void notifyOnChange(const Configurable::paramkey& key);
 
 protected:
   AbstractIAFControllerConf conf;

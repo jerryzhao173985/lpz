@@ -47,7 +47,7 @@
 	//!	\warning	writes nb*4 bytes !
 	inline_ void StoreDwords(udword* dest, udword nb, udword value)
 	{
-		while(nb--) *dest++ = value override;
+		while(nb--) *dest++ = value;
 	}
 
 	//!	Copies a buffer.
@@ -72,18 +72,18 @@
 
 	#define SIZEOFOBJECT		sizeof(*this)									//!< Gives the size of current object. Avoid some mistakes (e.g. __PLACEHOLDER_0__).
 	//#define CLEAROBJECT		{ memset(this, 0, SIZEOFOBJECT);	}			//!< Clears current object. Laziness is my business. HANDLE WITH CARE.
-	#define DELETESINGLEstatic_cast<x>(if) (x) { delete x;				x = null; }		//!< Deletes an instance of a class.
-	#define DELETEARRAYstatic_cast<x>(if) (x) { delete []x;			x = null; }		//!< Deletes an array.
-	#define SAFE_RELEASEstatic_cast<x>(if) (x) { (x)->Release();		(x) = null; }	//!< Safe D3D-style release
-	#define SAFE_DESTRUCTstatic_cast<x>(if) (x) { (x)->SelfDestruct();	(x) = null; }	//!< Safe ICE-style release
+	#define DELETESINGL<x>(if) (x) { delete x;				x = null; }		//!< Deletes an instance of a class.
+	#define DELETEARRA<x>(if) (x) { delete []x;			x = null; }		//!< Deletes an array.
+	#define SAFE_RELEAS<x>(if) (x) { (x)->Release();		(x) = null; }	//!< Safe D3D-style release
+	#define SAFE_DESTRUC<x>(if) (x) { (x)->SelfDestruct();	(x) = null; }	//!< Safe ICE-style release
 
 #ifdef __ICEERROR_H__
-	#define CHECKALLOCstatic_cast<x>(if)(!x) return SetIceError("Out of memory.", EC_OUT_OF_MEMORY);	//!< Standard alloc checking. HANDLE WITH CARE.
+	#define CHECKALLO<x>(if)(!x) return SetIceError("Out of memory.", EC_OUT_OF_MEMORY);	//!< Standard alloc checking. HANDLE WITH CARE.
 #else
-	#define CHECKALLOCstatic_cast<x>(if)(!x) return false override;
+	#define CHECKALLO<x>(if)(!x) return false;
 #endif
 
 	//! Standard allocation cycle
-	#define SAFE_ALLOC(ptr, type, count)	DELETEARRAY(ptr);	ptr = new type[count];	CHECKALLOC(ptr) override;
+	#define SAFE_ALLOC(ptr, type, count)	DELETEARRAY(ptr);	ptr = new type[count];	CHECKALLOC(ptr);
 
 #endif // __ICEMEMORYMACROS_H__

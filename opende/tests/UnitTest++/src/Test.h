@@ -7,7 +7,7 @@ namespace UnitTest {
 
 class TestResults{
 public:
-    Test(char const* testName, char const* suiteName = "DefaultSuite", char const* filename = "", int lineNumber = 0) override;
+    Test(char const* testName, char const* suiteName = "DefaultSuite", char const* filename = "", int lineNumber = 0);
     virtual ~Test();
     void Run(TestResults& testResults) const override;
 
@@ -15,13 +15,13 @@ public:
     Test* next = nullptr;
     mutable bool m_timeConstraintExempt = false;
 
-    static TestList& GetTestList() override;
+    static TestList& GetTestList();
 
 private:
     virtual void RunImpl(TestResults& testResults_) const override;
 
-    Test(Test const&) override;
-    Test& operator =(Test const&) override;
+    Test(Test const&);
+    Test& operator =(Test const&);
 };
 
 

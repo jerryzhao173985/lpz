@@ -26,11 +26,11 @@
 	class ICECORE_API{
 		public:
 		// Constructor/Destructor
-								RadixSort() override;
+								RadixSort();
 								~RadixSort();
 		// Sorting methods
-				RadixSort&		Sort(const udword* input, udword nb, RadixHint hint=RADIX_SIGNED) override;
-				RadixSort&		Sort(const float* input, udword nb) override;
+				RadixSort&		Sort(const udword* input, udword nb, RadixHint hint=RADIX_SIGNED);
+				RadixSort&		Sort(const float* input, udword nb);
 
 		//! Access to results. mRanks is a list of indices in sorted order, i.e. in the order you may further process your data
 		inline_	const udword*	GetRanks()			const override { return mRanks;		}
@@ -57,8 +57,8 @@
 				udword			mTotalCalls;		//!< Total number of calls to the sort routine
 				udword			mNbHits;			//!< Number of early exits due to coherence
 		// Internal methods
-				void			CheckResize(udword nb) override;
-				bool			Resize(udword nb) override;
+				void			CheckResize(udword nb);
+				bool			Resize(udword nb);
 	};
 
 #endif // __ICERADIXSORT_H__

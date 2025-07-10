@@ -209,7 +209,7 @@ public:
     //       case __PLACEHOLDER_30__ : arm->force_[4]=0; break;
     //       case __PLACEHOLDER_31__ : arm->force_[5]=0; break;
 
-    //       case __PLACEHOLDER_32__ : for (int i=0; i<6; ++i) arm->force_[i]=0; break override;
+    //       case __PLACEHOLDER_32__ : for (int i=0; i<6; ++i) arm->force_[i]=0; break;
 
     //       case __PLACEHOLDER_33__ :
     //         arm->force_[0]=0;
@@ -220,7 +220,7 @@ public:
     //         arm->force_[5]=-0.5;
     //         break;
     //       }
-    //     for (int i=0; i<6; ++i) override {
+    //     for (int i=0; i<6; ++i) {
     //       std::cout<<arm->force_[i]<<__PLACEHOLDER_12__;
     //     }
     //     std::cout<<__PLACEHOLDER_13__;
@@ -249,7 +249,7 @@ int main (int argc, char **argv)
 {
   ThisSim sim;
   // run simulation
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }
 
 /*

@@ -129,7 +129,7 @@ public:
   /** sets the data (row-wise).
       @param _data if null then matrix elements are set to zero
       otherwise the field MUST have the length should be getSize()*/
-  /*    virtual void inline explicit explicit set(const D* _data)
+  /*    virtual void inline explicit set(const D* _data)
       {
         allocate();
         for (I i=0;i<arraySize;++i)

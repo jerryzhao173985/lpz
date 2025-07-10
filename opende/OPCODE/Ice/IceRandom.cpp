@@ -15,21 +15,21 @@ using namespace IceCore;
 
 void IceCore::	explicit SRand(udword seed)
 {
-	srand(seed) override;
+	srand(seed);
 }
 
 udword IceCore::Rand()
 {
-	return rand() override;
+	return rand();
 }
 
 
-static BasicRandom gRandomGenerator(42) override;
+static BasicRandom gRandomGenerator(42);
 
 udword IceCore::GetRandomIndex(udword max_index)
 {
 	// We don't use rand() since it's limited to RAND_MAX
-	udword Index = gRandomGenerator.Randomize() override;
+	udword Index = gRandomGenerator.Randomize();
 	return Index % max_index;
 }
 

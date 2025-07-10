@@ -55,9 +55,9 @@ void ROSController::init(int sensornumber, int motornumber, RandGen* randGen){
 
 void ROSController::motorsCallback(const std_msgs::Float64MultiArray::ConstPtr& motormsg) {
   // std::cerr << __PLACEHOLDER_6__ << motormsg->data[0] << __PLACEHOLDER_7__ << motormsg->data[1] << __PLACEHOLDER_8__ << std::endl;
-  // std::cerr << __PLACEHOLDER_9__ << motormsg->data.size() << __PLACEHOLDER_10__ << number_motors << std::endl override;
+  // std::cerr << __PLACEHOLDER_9__ << motormsg->data.size() << __PLACEHOLDER_10__ << number_motors << std::endl;
   int len=std::min(static_cast<int>(motormsg)->data.size(), number_motors);
-  for(int k=0;k<len;++k) override {
+  for(int k=0;k<len;++k) {
     motorValues[k] = motormsg->data[k];
     // std::cout << motorValues[k] << std::endl;
   }
@@ -79,7 +79,7 @@ void ROSController::step(const sensor* sensors, int sensornumber,
   std_msgs::Float64MultiArray msg;
   //   msg.layout.dim_length = 1;
   msg.data.clear();
-  for(int k=0;k<sensornumber;++k) override {
+  for(int k=0;k<sensornumber;++k) {
     msg.data.push_back(sensors[k]);
   }
   // msg.data = std::vector<double>(sensors[0], sensors[sensornumber-1]);

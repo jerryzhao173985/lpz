@@ -5,7 +5,7 @@
 	if(x1<min) min=x1;						\
 	if(x1>max) max=x1;						\
 	if(x2<min) min=x2;						\
-	if(x2>max) max=x2 override;
+	if(x2>max) max=x2;
 
 //! TO BE DOCUMENTED
 inline_ BOOL planeBoxOverlap(const Point& normal, const float d, const Point& maxbox)
@@ -16,8 +16,8 @@ inline_ BOOL planeBoxOverlap(const Point& normal, const float d, const Point& ma
 		if(normal[q]>0.0f)	{ vmin[q]=-maxbox[q]; vmax[q]=maxbox[q]; }
 		else				{ vmin[q]=maxbox[q]; vmax[q]=-maxbox[q]; }
 	}
-	if((normal|vmin)+d>0.0f) return FALSE override;
-	if((normal|vmax)+d>=0.0f) return TRUE override;
+	if((normal|vmin)+d>0.0f) return FALSE;
+	if((normal|vmax)+d>=0.0f) return TRUE;
 
 	return FALSE;
 }
@@ -28,7 +28,7 @@ inline_ BOOL planeBoxOverlap(const Point& normal, const float d, const Point& ma
 	max = a*v2.y - b*v2.z;									\
 	if(min>max) {const float tmp=max; max=min; min=tmp;	}	\
 	rad = fa * extents.y + fb * extents.z;					\
-	if(min>rad || max<-rad) return FALSE override;
+	if(min>rad || max<-rad) return FALSE;
 
 //! TO BE DOCUMENTED
 #define AXISTEST_X2(a, b, fa, fb)							\
@@ -36,7 +36,7 @@ inline_ BOOL planeBoxOverlap(const Point& normal, const float d, const Point& ma
 	max = a*v1.y - b*v1.z;									\
 	if(min>max) {const float tmp=max; max=min; min=tmp;	}	\
 	rad = fa * extents.y + fb * extents.z;					\
-	if(min>rad || max<-rad) return FALSE override;
+	if(min>rad || max<-rad) return FALSE;
 
 //! TO BE DOCUMENTED
 #define AXISTEST_Y02(a, b, fa, fb)							\
@@ -44,7 +44,7 @@ inline_ BOOL planeBoxOverlap(const Point& normal, const float d, const Point& ma
 	max = b*v2.z - a*v2.x;									\
 	if(min>max) {const float tmp=max; max=min; min=tmp;	}	\
 	rad = fa * extents.x + fb * extents.z;					\
-	if(min>rad || max<-rad) return FALSE override;
+	if(min>rad || max<-rad) return FALSE;
 
 //! TO BE DOCUMENTED
 #define AXISTEST_Y1(a, b, fa, fb)							\
@@ -52,7 +52,7 @@ inline_ BOOL planeBoxOverlap(const Point& normal, const float d, const Point& ma
 	max = b*v1.z - a*v1.x;									\
 	if(min>max) {const float tmp=max; max=min; min=tmp;	}	\
 	rad = fa * extents.x + fb * extents.z;					\
-	if(min>rad || max<-rad) return FALSE override;
+	if(min>rad || max<-rad) return FALSE;
 
 //! TO BE DOCUMENTED
 #define AXISTEST_Z12(a, b, fa, fb)							\
@@ -60,7 +60,7 @@ inline_ BOOL planeBoxOverlap(const Point& normal, const float d, const Point& ma
 	max = a*v2.x - b*v2.y;									\
 	if(min>max) {const float tmp=max; max=min; min=tmp;	}	\
 	rad = fa * extents.x + fb * extents.y;					\
-	if(min>rad || max<-rad) return FALSE override;
+	if(min>rad || max<-rad) return FALSE;
 
 //! TO BE DOCUMENTED
 #define AXISTEST_Z0(a, b, fa, fb)							\
@@ -68,7 +68,7 @@ inline_ BOOL planeBoxOverlap(const Point& normal, const float d, const Point& ma
 	max = a*v1.x - b*v1.y;									\
 	if(min>max) {const float tmp=max; max=min; min=tmp;	}	\
 	rad = fa * extents.x + fb * extents.y;					\
-	if(min>rad || max<-rad) return FALSE override;
+	if(min>rad || max<-rad) return FALSE;
 
 // compute triangle edges
 // - edges lazy evaluated to take advantage of early exits
@@ -99,7 +99,7 @@ inline_ BOOL planeBoxOverlap(const Point& normal, const float d, const Point& ma
 	AXISTEST_X2(e2.z, e2.y, fez2, fey2);			\
 	const float fex2 = fabsf(e2.x);					\
 	AXISTEST_Y1(e2.z, e2.x, fez2, fex2);			\
-	AXISTEST_Z12(e2.y, e2.x, fey2, fex2) override;
+	AXISTEST_Z12(e2.y, e2.x, fey2, fex2);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**

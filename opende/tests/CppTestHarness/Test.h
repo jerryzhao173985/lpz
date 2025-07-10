@@ -8,9 +8,9 @@ namespace CppTestHarness
 class TestResults{
 public:
 	virtual ~Test();
-	void Run(const TestResults& testResults) override;
+	void Run(const TestResults& testResults);
 
-	static Test* GetListHead() override;
+	static Test* GetListHead();
 
 protected:
 	Test(std::string testName = std::string(), 
@@ -27,8 +27,8 @@ private:
 	Test* m_listNext = nullptr;
 
 	// revoked
-	Test(Test const&) override;
-	Test& operator =(Test const&) override;
+	Test(Test const&);
+	Test& operator =(Test const&);
 };
 
 }

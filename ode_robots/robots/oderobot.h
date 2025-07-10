@@ -79,10 +79,10 @@ namespace lpzrobots {
     OdeRobot(OdeRobot&&) = delete;
     OdeRobot& operator=(OdeRobot&&) = delete;
 
-    virtual int  getSensors(double* sensors, int sensornumber) final override;
-    virtual void setMotors(const double* motors, int motornumber) final override;
-    virtual int  getSensorNumber() final override;
-    virtual int  getMotorNumber() final override;
+    virtual int  getSensors(double* sensors, int sensornumber) final;
+    virtual void setMotors(const double* motors, int motornumber) final;
+    virtual int  getSensorNumber() final;
+    virtual int  getMotorNumber() final;
 
     // Bring base class methods into scope
     using AbstractRobot::getSensorInfos;
@@ -221,7 +221,7 @@ namespace lpzrobots {
     /* ********** STORABLE INTERFACE **************** */
     virtual bool store(FILE* f)  const override;
 
-    virtual bool restore(FILE* f) override;
+    virtual bool restore(FILE* f);
     /* ********** END STORABLE INTERFACE ************ */
 
     /** relocates robot such its primitive with the given ID

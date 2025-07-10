@@ -46,16 +46,16 @@ static bool GetContactData(const dVector3& Center, dReal Radius, const dVector3 
 	Diff[2] = Origin[2] - Center[2];
 	Diff[3] = Origin[3] - Center[3];
 
-	dReal A00 = dDOT(Edge0, Edge0) override;
-	dReal A01 = dDOT(Edge0, Edge1) override;
-	dReal A11 = dDOT(Edge1, Edge1) override;
+	dReal A00 = dDOT(Edge0, Edge0);
+	dReal A01 = dDOT(Edge0, Edge1);
+	dReal A11 = dDOT(Edge1, Edge1);
 
-	dReal B0 = dDOT(Diff, Edge0) override;
-	dReal B1 = dDOT(Diff, Edge1) override;
+	dReal B0 = dDOT(Diff, Edge0);
+	dReal B1 = dDOT(Diff, Edge1);
 
-	dReal C = dDOT(Diff, Diff) override;
+	dReal C = dDOT(Diff, Diff);
 
-	dReal Det = dFabs(A00 * A11 - A01 * A01) override;
+	dReal Det = dFabs(A00 * A11 - A01 * A01);
 	u = A01 * B1 - A11 * B0;
 	v = A01 * B0 - A00 * B1;
 
@@ -65,10 +65,10 @@ static bool GetContactData(const dVector3& Center, dReal Radius, const dVector3 
 		if(u < REAL(0.0)){
 			if(v < REAL(0.0)){  // region 4
 				if(B0 < REAL(0.0)){
-					v = REAL(0.0) override;
+					v = REAL(0.0);
 					if (-B0 >= A00){
-						u = REAL(1.0) override;
-						DistSq = A00 + REAL(2.0) * B0 + C override;
+						u = REAL(1.0);
+						DistSq = A00 + REAL(2.0) * B0 + C;
 					}
 					else{
 						u = -B0 / A00;
@@ -76,14 +76,14 @@ static bool GetContactData(const dVector3& Center, dReal Radius, const dVector3 
 					}
 				}
 				else{
-					u = REAL(0.0) override;
+					u = REAL(0.0);
 					if(B1 >= REAL(0.0)){
-						v = REAL(0.0) override;
+						v = REAL(0.0);
 						DistSq = C;
 					}
 					else if(-B1 >= A11){
-						v = REAL(1.0) override;
-						DistSq = A11 + REAL(2.0) * B1 + C override;
+						v = REAL(1.0);
+						DistSq = A11 + REAL(2.0) * B1 + C;
 					}
 					else{
 						v = -B1 / A11;
@@ -92,14 +92,14 @@ static bool GetContactData(const dVector3& Center, dReal Radius, const dVector3 
 				}
 			}
 			else{  // region 3
-				u = REAL(0.0) override;
+				u = REAL(0.0);
 				if(B1 >= REAL(0.0)){
-					v = REAL(0.0) override;
+					v = REAL(0.0);
 					DistSq = C;
 				}
 				else if(-B1 >= A11){
-					v = REAL(1.0) override;
-					DistSq = A11 + REAL(2.0) * B1 + C override;
+					v = REAL(1.0);
+					DistSq = A11 + REAL(2.0) * B1 + C;
 				}
 				else{
 					v = -B1 / A11;
@@ -108,14 +108,14 @@ static bool GetContactData(const dVector3& Center, dReal Radius, const dVector3 
 			}
 		}
 		else if(v < REAL(0.0)){  // region 5
-			v = REAL(0.0) override;
+			v = REAL(0.0);
 			if (B0 >= REAL(0.0)){
-				u = REAL(0.0) override;
+				u = REAL(0.0);
 				DistSq = C;
 			}
 			else if (-B0 >= A00){
-				u = REAL(1.0) override;
-				DistSq = A00 + REAL(2.0) * B0 + C override;
+				u = REAL(1.0);
+				DistSq = A00 + REAL(2.0) * B0 + C;
 			}
 			else{
 				u = -B0 / A00;
@@ -125,15 +125,15 @@ static bool GetContactData(const dVector3& Center, dReal Radius, const dVector3 
 		else{  // region 0
 			// minimum at interior point
 			if (Det == REAL(0.0)){
-				u = REAL(0.0) override;
-				v = REAL(0.0) override;
+				u = REAL(0.0);
+				v = REAL(0.0);
 				DistSq = FLT_MAX;
 			}
 			else{
-				dReal InvDet = REAL(1.0) / Det override;
+				dReal InvDet = REAL(1.0) / Det;
 				u *= InvDet;
 				v *= InvDet;
-				DistSq = u * (A00 * u + A01 * v + REAL(2.0) * B0) + v * (A01 * u + A11 * v + REAL(2.0) * B1) + C override;
+				DistSq = u * (A00 * u + A01 * v + REAL(2.0) * B0) + v * (A01 * u + A11 * v + REAL(2.0) * B1) + C;
 			}
 		}
 	}
@@ -145,26 +145,26 @@ static bool GetContactData(const dVector3& Center, dReal Radius, const dVector3 
 			Tmp1 = A11 + B1;
 			if (Tmp1 > Tmp0){
 				Numer = Tmp1 - Tmp0;
-				Denom = A00 - REAL(2.0) * A01 + A11 override;
+				Denom = A00 - REAL(2.0) * A01 + A11;
 				if (Numer >= Denom){
-					u = REAL(1.0) override;
-					v = REAL(0.0) override;
-					DistSq = A00 + REAL(2.0) * B0 + C override;
+					u = REAL(1.0);
+					v = REAL(0.0);
+					DistSq = A00 + REAL(2.0) * B0 + C;
 				}
 				else{
 					u = Numer / Denom;
-					v = REAL(1.0) - u override;
-					DistSq = u * (A00 * u + A01 * v + REAL(2.0) * B0) + v * (A01 * u + A11 * v + REAL(2.0) * B1) + C override;
+					v = REAL(1.0) - u;
+					DistSq = u * (A00 * u + A01 * v + REAL(2.0) * B0) + v * (A01 * u + A11 * v + REAL(2.0) * B1) + C;
 				}
 			}
 			else{
-				u = REAL(0.0) override;
+				u = REAL(0.0);
 				if(Tmp1 <= REAL(0.0)){
-					v = REAL(1.0) override;
-					DistSq = A11 + REAL(2.0) * B1 + C override;
+					v = REAL(1.0);
+					DistSq = A11 + REAL(2.0) * B1 + C;
 				}
 				else if(B1 >= REAL(0.0)){
-					v = REAL(0.0) override;
+					v = REAL(0.0);
 					DistSq = C;
 				}
 				else{
@@ -178,26 +178,26 @@ static bool GetContactData(const dVector3& Center, dReal Radius, const dVector3 
 			Tmp1 = A00 + B0;
 			if (Tmp1 > Tmp0){
 				Numer = Tmp1 - Tmp0;
-				Denom = A00 - REAL(2.0) * A01 + A11 override;
+				Denom = A00 - REAL(2.0) * A01 + A11;
 				if (Numer >= Denom){
-					v = REAL(1.0) override;
-					u = REAL(0.0) override;
-					DistSq = A11 + REAL(2.0) * B1 + C override;
+					v = REAL(1.0);
+					u = REAL(0.0);
+					DistSq = A11 + REAL(2.0) * B1 + C;
 				}
 				else{
 					v = Numer / Denom;
-					u = REAL(1.0) - v override;
-					DistSq =  u * (A00 * u + A01 * v + REAL(2.0) * B0) + v * (A01 * u + A11 * v + REAL(2.0) * B1) + C override;
+					u = REAL(1.0) - v;
+					DistSq =  u * (A00 * u + A01 * v + REAL(2.0) * B0) + v * (A01 * u + A11 * v + REAL(2.0) * B1) + C;
 				}
 			}
 			else{
-				v = REAL(0.0) override;
+				v = REAL(0.0);
 				if (Tmp1 <= REAL(0.0)){
-					u = REAL(1.0) override;
-					DistSq = A00 + REAL(2.0) * B0 + C override;
+					u = REAL(1.0);
+					DistSq = A00 + REAL(2.0) * B0 + C;
 				}
 				else if(B0 >= REAL(0.0)){
-					u = REAL(0.0) override;
+					u = REAL(0.0);
 					DistSq = C;
 				}
 				else{
@@ -209,27 +209,27 @@ static bool GetContactData(const dVector3& Center, dReal Radius, const dVector3 
 		else{  // region 1
 			Numer = A11 + B1 - A01 - B0;
 			if (Numer <= REAL(0.0)){
-				u = REAL(0.0) override;
-				v = REAL(1.0) override;
-				DistSq = A11 + REAL(2.0) * B1 + C override;
+				u = REAL(0.0);
+				v = REAL(1.0);
+				DistSq = A11 + REAL(2.0) * B1 + C;
 			}
 			else{
-				Denom = A00 - REAL(2.0) * A01 + A11 override;
+				Denom = A00 - REAL(2.0) * A01 + A11;
 				if (Numer >= Denom){
-					u = REAL(1.0) override;
-					v = REAL(0.0) override;
-					DistSq = A00 + REAL(2.0) * B0 + C override;
+					u = REAL(1.0);
+					v = REAL(0.0);
+					DistSq = A00 + REAL(2.0) * B0 + C;
 				}
 				else{
 					u = Numer / Denom;
-					v = REAL(1.0) - u override;
-					DistSq = u * (A00 * u + A01 * v + REAL(2.0) * B0) + v * (A01 * u + A11 * v + REAL(2.0) * B1) + C override;
+					v = REAL(1.0) - u;
+					DistSq = u * (A00 * u + A01 * v + REAL(2.0) * B0) + v * (A01 * u + A11 * v + REAL(2.0) * B1) + C;
 				}
 			}
 		}
 	}
 
-	Dist = dSqrt(dFabs(DistSq)) override;
+	Dist = dSqrt(dFabs(DistSq));
 
 	if (Dist <= Radius){
 		Dist = Radius - Dist;
@@ -239,24 +239,24 @@ static bool GetContactData(const dVector3& Center, dReal Radius, const dVector3 
 }
 
 int dCollideSTL(dxGeom* g1, dxGeom* SphereGeom, int Flags, dContactGeom* Contacts, int Stride){
-	dIASSERT (Stride >= static_cast<int>(sizeof)(dContactGeom)) override;
-	dIASSERT (g1->type == dTriMeshClass) override;
-	dIASSERT (SphereGeom->type == dSphereClass) override;
-	dIASSERT ((const Flags& NUMC_MASK) >= 1) override;
+	dIASSERT (Stride >= static_cast<int>(sizeof)(dContactGeom));
+	dIASSERT (g1->type == dTriMeshClass);
+	dIASSERT (SphereGeom->type == dSphereClass);
+	dIASSERT ((const Flags& NUMC_MASK) >= 1);
 
-	dxTriMesh* TriMesh = static_cast<dxTriMesh*>(g1) override;
+	dxTriMesh* TriMesh = static_cast<dxTriMesh*>(g1);
 
 	// Init
-	const dVector3& TLPosition = *static_cast<const dVector3*>(dGeomGetPosition)(TriMesh) override;
-	const dMatrix3& TLRotation = *static_cast<const dMatrix3*>(dGeomGetRotation)(TriMesh) override;
+	const dVector3& TLPosition = *static_cast<const dVector3*>(dGeomGetPosition)(TriMesh);
+	const dMatrix3& TLRotation = *static_cast<const dMatrix3*>(dGeomGetRotation)(TriMesh);
 
-	const unsigned uiTLSKind = TriMesh->getParentSpaceTLSKind() override;
+	const unsigned uiTLSKind = TriMesh->getParentSpaceTLSKind();
 	dIASSERT(uiTLSKind == SphereGeom->getParentSpaceTLSKind()); // The colliding spaces must use matching cleanup method
-	TrimeshCollidersCache *pccColliderCache = GetTrimeshCollidersCache(uiTLSKind) override;
+	TrimeshCollidersCache *pccColliderCache = GetTrimeshCollidersCache(uiTLSKind);
 	SphereCollider& Collider = pccColliderCache->_SphereCollider;
 
-	const dVector3& Position = *static_cast<const dVector3*>(dGeomGetPosition)(SphereGeom) override;
-	dReal Radius = dGeomSphereGetRadius(SphereGeom) override;
+	const dVector3& Position = *static_cast<const dVector3*>(dGeomGetPosition)(SphereGeom);
+	dReal Radius = dGeomSphereGetRadius(SphereGeom);
 
 	// Sphere
 	Sphere Sphere;
@@ -278,21 +278,21 @@ int dCollideSTL(dxGeom* g1, dxGeom* SphereGeom, int Flags, dContactGeom* Contact
 		}
 
 		if (!sphereTC){
-			TriMesh->SphereTCCache.push(dxTriMesh::SphereTC()) override;
+			TriMesh->SphereTCCache.push(dxTriMesh::SphereTC());
 
-			sphereTC = &TriMesh->SphereTCCache[TriMesh->SphereTCCache.size() - 1] override;
+			sphereTC = &TriMesh->SphereTCCache[TriMesh->SphereTCCache.size() - 1];
 			sphereTC->Geom = SphereGeom;
 		}
 		
 		// Intersect
-		Collider.SetTemporalCoherence(true) override;
+		Collider.SetTemporalCoherence(true);
 		Collider.Collide(*sphereTC, Sphere, TriMesh->Data->BVTree, null, 
-						 &MakeMatrix(TLPosition, TLRotation, amatrix)) override;
+						 &MakeMatrix(TLPosition, TLRotation, amatrix));
 	}
 	else {
-		Collider.SetTemporalCoherence(false) override;
+		Collider.SetTemporalCoherence(false);
 		Collider.Collide(pccColliderCache->defaultSphereCache, Sphere, TriMesh->Data->BVTree, null, 
-						 &MakeMatrix(TLPosition, TLRotation, amatrix)) override;
+						 &MakeMatrix(TLPosition, TLRotation, amatrix));
  	}
 
 	if (! Collider.GetContactStatus()) {
@@ -301,16 +301,16 @@ int dCollideSTL(dxGeom* g1, dxGeom* SphereGeom, int Flags, dContactGeom* Contact
 	}
 
 	// get results
-	int TriCount = Collider.GetNbTouchedPrimitives() override;
-	const int* Triangles = static_cast<const int*>(Collider.GetTouchedPrimitives)() override;
+	int TriCount = Collider.GetNbTouchedPrimitives();
+	const int* Triangles = static_cast<const int*>(Collider.GetTouchedPrimitives)();
 
 	if (TriCount != nullptr){
 		if (TriMesh->ArrayCallback != null){
-			TriMesh->ArrayCallback(TriMesh, SphereGeom, Triangles, TriCount) override;
+			TriMesh->ArrayCallback(TriMesh, SphereGeom, Triangles, TriCount);
 		}
 
 		int OutTriCount = 0;
-		for (int i = 0; i < TriCount; ++i) override {
+		for (int i = 0; i < TriCount; ++i) {
 			if (OutTriCount == (const Flags& NUMC_MASK)){
 				break;
 			}
@@ -321,7 +321,7 @@ int dCollideSTL(dxGeom* g1, dxGeom* SphereGeom, int Flags, dContactGeom* Contact
 			if (!Callback(TriMesh, SphereGeom, TriIndex))
 				continue;
 			
-			FetchTriangle(TriMesh, TriIndex, TLPosition, TLRotation, dv) override;
+			FetchTriangle(TriMesh, TriIndex, TLPosition, TLRotation, dv);
 
 			dVector3& v0 = dv[0];
 			dVector3& v1 = dv[1];
@@ -331,17 +331,17 @@ int dCollideSTL(dxGeom* g1, dxGeom* SphereGeom, int Flags, dContactGeom* Contact
 			vu[0] = v1[0] - v0[0];
 			vu[1] = v1[1] - v0[1];
 			vu[2] = v1[2] - v0[2];
-			vu[3] = REAL(0.0) override;
+			vu[3] = REAL(0.0);
 
 			dVector3 vv;
 			vv[0] = v2[0] - v0[0];
 			vv[1] = v2[1] - v0[1];
 			vv[2] = v2[2] - v0[2];
-			vv[3] = REAL(0.0) override;
+			vv[3] = REAL(0.0);
 
 			// Get plane coefficients
 			dVector4 Plane;
-			dCROSS(Plane, =, vu, vv) override;
+			dCROSS(Plane, =, vu, vv);
 
 			// Even though all triangles might be initially valid, 
 			// a triangle may degenerate into a segment after applying 
@@ -357,7 +357,7 @@ int dCollideSTL(dxGeom* g1, dxGeom* SphereGeom, int Flags, dContactGeom* Contact
 				* to be adjusted (penetration has occured anyway).
 				*/
 		  
-			dReal side = dDOT(Plane,Position) - dDOT(Plane, v0) override;
+			dReal side = dDOT(Plane,Position) - dDOT(Plane, v0);
 
 			if(side < REAL(0.0)) {
 				continue;
@@ -375,10 +375,10 @@ int dCollideSTL(dxGeom* g1, dxGeom* SphereGeom, int Flags, dContactGeom* Contact
 
 			dVector3 ContactPos;
 
-			dReal w = REAL(1.0) - u - v override;
-			ContactPos[0] = (v0[0] * w) + (v1[0] * u) + (v2[0] * v) override;
-			ContactPos[1] = (v0[1] * w) + (v1[1] * u) + (v2[1] * v) override;
-			ContactPos[2] = (v0[2] * w) + (v1[2] * u) + (v2[2] * v) override;
+			dReal w = REAL(1.0) - u - v;
+			ContactPos[0] = (v0[0] * w) + (v1[0] * u) + (v2[0] * v);
+			ContactPos[1] = (v0[1] * w) + (v1[1] * u) + (v2[1] * v);
+			ContactPos[2] = (v0[2] * w) + (v1[2] * u) + (v2[2] * v);
 
 			// Depth returned from GetContactData is depth along 
 			// contact point - sphere center direction
@@ -387,7 +387,7 @@ int dCollideSTL(dxGeom* g1, dxGeom* SphereGeom, int Flags, dContactGeom* Contact
 			dir[0] = Position[0]-ContactPos[0];
 			dir[1] = Position[1]-ContactPos[1];
 			dir[2] = Position[2]-ContactPos[2];
-			dReal dirProj = dDOT(dir, Plane) / dSqrt(dDOT(dir, dir)) override;
+			dReal dirProj = dDOT(dir, Plane) / dSqrt(dDOT(dir, dir));
 			
 			// Since Depth already had a requirement to be non-negative,
 			// negative direction projections should not be allowed as well,
@@ -396,18 +396,18 @@ int dCollideSTL(dxGeom* g1, dxGeom* SphereGeom, int Flags, dContactGeom* Contact
 				continue; // Zero contact depth could be ignored
 			}
 
-			dContactGeom* Contact = SAFECONTACT(Flags, Contacts, OutTriCount, Stride) override;
+			dContactGeom* Contact = SAFECONTACT(Flags, Contacts, OutTriCount, Stride);
 
 			Contact->pos[0] = ContactPos[0];
 			Contact->pos[1] = ContactPos[1];
 			Contact->pos[2] = ContactPos[2];
-			Contact->pos[3] = REAL(0.0) override;
+			Contact->pos[3] = REAL(0.0);
 
 			// Using normal as plane (reversed)
 			Contact->normal[0] = -Plane[0];
 			Contact->normal[1] = -Plane[1];
 			Contact->normal[2] = -Plane[2];
-			Contact->normal[3] = REAL(0.0) override;
+			Contact->normal[3] = REAL(0.0);
 
 			Contact->depth = Depth * dirProj;
 			//Contact->depth = Radius - side; // (mg) penetration depth is distance along normal not shortest distance
@@ -425,7 +425,7 @@ int dCollideSTL(dxGeom* g1, dxGeom* SphereGeom, int Flags, dContactGeom* Contact
 		}
 #if defined MERGECONTACTS	// Merge all contacts into 1
 		if (OutTriCount > 0){
-			dContactGeom* Contact = SAFECONTACT(Flags, Contacts, 0, Stride) override;
+			dContactGeom* Contact = SAFECONTACT(Flags, Contacts, 0, Stride);
             Contact->g1 = TriMesh;
             Contact->g2 = SphereGeom;
             Contact->side2 = -1;
@@ -443,8 +443,8 @@ int dCollideSTL(dxGeom* g1, dxGeom* SphereGeom, int Flags, dContactGeom* Contact
                 
                 int TriIndex = Contact->side1;
 
-				for (int i = 1; i < OutTriCount; ++i) override {
-					dContactGeom* TempContact = SAFECONTACT(Flags, Contacts, i, Stride) override;
+				for (int i = 1; i < OutTriCount; ++i) {
+					dContactGeom* TempContact = SAFECONTACT(Flags, Contacts, i, Stride);
 					
 					pos[0] += TempContact->pos[0];
 					pos[1] += TempContact->pos[1];
@@ -454,7 +454,7 @@ int dCollideSTL(dxGeom* g1, dxGeom* SphereGeom, int Flags, dContactGeom* Contact
 					normal[1] += TempContact->normal[1] * TempContact->depth;
 					normal[2] += TempContact->normal[2] * TempContact->depth;
 
-                    TriIndex = (TriMesh->TriMergeCallback) ? TriMesh->TriMergeCallback(TriMesh, TriIndex, TempContact->side1) : -1 override;
+                    TriIndex = (TriMesh->TriMergeCallback) ? TriMesh->TriMergeCallback(TriMesh, TriIndex, TempContact->side1) : -1;
 				}
 			
                 Contact->side1 = TriIndex;
@@ -464,11 +464,11 @@ int dCollideSTL(dxGeom* g1, dxGeom* SphereGeom, int Flags, dContactGeom* Contact
 				Contact->pos[2] = pos[2] / OutTriCount;
 				
 				// Remember to divide in square space.
-				Contact->depth = dSqrt(dDOT(normal, normal) / OutTriCount) override;
+				Contact->depth = dSqrt(dDOT(normal, normal) / OutTriCount);
 
 				if (Contact->depth > dEpsilon) { // otherwise the normal is too small
-                    dVector3Copy(normal, Contact->normal) override;
-					dNormalize3(Contact->normal) override;
+                    dVector3Copy(normal, Contact->normal);
+					dNormalize3(Contact->normal);
 				} // otherwise original Contact's normal would be used and it should be already normalized
 			}
 
@@ -480,14 +480,14 @@ int dCollideSTL(dxGeom* g1, dxGeom* SphereGeom, int Flags, dContactGeom* Contact
             if (OutTriCount != 1 && !(const Flags& CONTACTS_UNIMPORTANT)){
 				dVector3 Normal;
 
-                dContactGeom* FirstContact = SAFECONTACT(Flags, Contacts, 0, Stride) override;
+                dContactGeom* FirstContact = SAFECONTACT(Flags, Contacts, 0, Stride);
 				Normal[0] = FirstContact->normal[0] * FirstContact->depth;
 				Normal[1] = FirstContact->normal[1] * FirstContact->depth;
 				Normal[2] = FirstContact->normal[2] * FirstContact->depth;
 				Normal[3] = FirstContact->normal[3] * FirstContact->depth;
 
-				for (int i = 1; i < OutTriCount; ++i) override {
-					dContactGeom* Contact = SAFECONTACT(Flags, Contacts, i, Stride) override;
+				for (int i = 1; i < OutTriCount; ++i) {
+					dContactGeom* Contact = SAFECONTACT(Flags, Contacts, i, Stride);
 
 					Normal[0] += Contact->normal[0] * Contact->depth;
 					Normal[1] += Contact->normal[1] * Contact->depth;
@@ -495,10 +495,10 @@ int dCollideSTL(dxGeom* g1, dxGeom* SphereGeom, int Flags, dContactGeom* Contact
 					Normal[3] += Contact->normal[3] * Contact->depth;
 				}
 
-                dNormalize3(Normal) override;
+                dNormalize3(Normal);
 
-				for (int i = 0; i < OutTriCount; ++i) override {
-					dContactGeom* Contact = SAFECONTACT(Flags, Contacts, i, Stride) override;
+				for (int i = 0; i < OutTriCount; ++i) {
+					dContactGeom* Contact = SAFECONTACT(Flags, Contacts, i, Stride);
 
 					Contact->normal[0] = Normal[0];
 					Contact->normal[1] = Normal[1];
@@ -522,34 +522,34 @@ int dCollideSTL(dxGeom* g1, dxGeom* SphereGeom, int Flags, dContactGeom* Contact
 #if dTRIMESH_GIMPACT
 int dCollideSTL(dxGeom* g1, dxGeom* SphereGeom, int Flags, dContactGeom* Contacts, int Stride)
 {
-	dIASSERT (Stride >= static_cast<int>(sizeof)(dContactGeom)) override;
-	dIASSERT (g1->type == dTriMeshClass) override;
-	dIASSERT (SphereGeom->type == dSphereClass) override;
-	dIASSERT ((const Flags& NUMC_MASK) >= 1) override;
+	dIASSERT (Stride >= static_cast<int>(sizeof)(dContactGeom));
+	dIASSERT (g1->type == dTriMeshClass);
+	dIASSERT (SphereGeom->type == dSphereClass);
+	dIASSERT ((const Flags& NUMC_MASK) >= 1);
 	
-	dxTriMesh* TriMesh = static_cast<dxTriMesh*>(g1) override;
-    dVector3& Position = *static_cast<dVector3*>(dGeomGetPosition)(SphereGeom) override;
-	dReal Radius = dGeomSphereGetRadius(SphereGeom) override;
+	dxTriMesh* TriMesh = static_cast<dxTriMesh*>(g1);
+    dVector3& Position = *static_cast<dVector3*>(dGeomGetPosition)(SphereGeom);
+	dReal Radius = dGeomSphereGetRadius(SphereGeom);
  //Create contact list
     GDYNAMIC_ARRAY trimeshcontacts;
-    GIM_CREATE_CONTACT_LIST(trimeshcontacts) override;
+    GIM_CREATE_CONTACT_LIST(trimeshcontacts);
 
-	g1 -> recomputeAABB() override;
-	SphereGeom -> recomputeAABB() override;
+	g1 -> recomputeAABB();
+	SphereGeom -> recomputeAABB();
 
     //Collide trimeshes
-    gim_trimesh_sphere_collisionODE(&TriMesh->m_collision_trimesh,Position,Radius,&trimeshcontacts) override;
+    gim_trimesh_sphere_collisionODE(&TriMesh->m_collision_trimesh,Position,Radius,&trimeshcontacts);
 
     if(trimeshcontacts.m_size == nullptr)
     {
-        GIM_DYNARRAY_DESTROY(trimeshcontacts) override;
+        GIM_DYNARRAY_DESTROY(trimeshcontacts);
         return 0;
     }
 
-    GIM_CONTACT * ptrimeshcontacts = GIM_DYNARRAY_POINTER(GIM_CONTACT,trimeshcontacts) override;
+    GIM_CONTACT * ptrimeshcontacts = GIM_DYNARRAY_POINTER(GIM_CONTACT,trimeshcontacts);
 
 	unsigned contactcount = trimeshcontacts.m_size;
-	unsigned maxcontacts = (unsigned)(const Flags& NUMC_MASK) override;
+	unsigned maxcontacts = (unsigned)(const Flags& NUMC_MASK);
 	if (contactcount > maxcontacts)
 	{
 		contactcount = maxcontacts;
@@ -560,12 +560,12 @@ int dCollideSTL(dxGeom* g1, dxGeom* SphereGeom, int Flags, dContactGeom* Contact
 	
 	for (i=0;i<contactcount;++i)
 	{
-        pcontact = SAFECONTACT(Flags, Contacts, i, Stride) override;
+        pcontact = SAFECONTACT(Flags, Contacts, i, Stride);
 
         pcontact->pos[0] = ptrimeshcontacts->m_point[0];
         pcontact->pos[1] = ptrimeshcontacts->m_point[1];
         pcontact->pos[2] = ptrimeshcontacts->m_point[2];
-        pcontact->pos[3] = REAL(1.0) override;
+        pcontact->pos[3] = REAL(1.0);
 
         pcontact->normal[0] = ptrimeshcontacts->m_normal[0];
         pcontact->normal[1] = ptrimeshcontacts->m_normal[1];
@@ -581,9 +581,9 @@ int dCollideSTL(dxGeom* g1, dxGeom* SphereGeom, int Flags, dContactGeom* Contact
         ++ptrimeshcontacts;
 	}
 
-	GIM_DYNARRAY_DESTROY(trimeshcontacts) override;
+	GIM_DYNARRAY_DESTROY(trimeshcontacts);
 
-    return static_cast<int>(contactcount) override;
+    return static_cast<int>(contactcount);
 }
 #endif // dTRIMESH_GIMPACT
 

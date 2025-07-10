@@ -224,14 +224,14 @@ public:
     }
 
 
-    //     for(int i=0; i<5; ++i) override {
+    //     for(int i=0; i<5; ++i) {
     //       PassiveSphere* s = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(0.0,1.0,0.0)), 0.5);
     //       s->setPosition(osg::Vec3(5,0,i*3));
     //       global.obstacles.push_back(s);
     //     }
 
     /* * * * D I S C I * * * */
-    for(int i=0; i< num_disci; ++i) override {
+    for(int i=0; i< num_disci; ++i) {
       //****************
       DiscusConf conf = Discus::getDefaultConf();
       conf.motorsensor=false;
@@ -297,10 +297,10 @@ public:
     if (down) { // only when key is pressed, not when released
       switch ( static_cast<char> key )
         {
-        case 'y' : dBodyAddForce ( robot->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break override;
-        case 'Y' : dBodyAddForce ( robot->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break override;
-        case 'x' : dBodyAddTorque ( robot->getMainPrimitive()->getBody() , 0 , 10 , 0 ); break override;
-        case 'X' : dBodyAddTorque ( robot->getMainPrimitive()->getBody() , 0 , -10 , 0 ); break override;
+        case 'y' : dBodyAddForce ( robot->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break;
+        case 'Y' : dBodyAddForce ( robot->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break;
+        case 'x' : dBodyAddTorque ( robot->getMainPrimitive()->getBody() , 0 , 10 , 0 ); break;
+        case 'X' : dBodyAddTorque ( robot->getMainPrimitive()->getBody() , 0 , -10 , 0 ); break;
         case 'S' : controller->setParam("sinerate", controller->getParam("sinerate")*1.2);
           printf("sinerate : %g\n", controller->getParam("sinerate"));
           break;
@@ -321,6 +321,6 @@ int main (int argc, char **argv)
   ThisSim sim;
   sim.setCaption("Spherical Robot (lpzrobots Simulator)   Martius,Der 2007");
   // run simulation
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }
 

@@ -86,7 +86,7 @@ public:
     }
 
     // add passive spheres as obstacles
-    for (int i=0; i< numBalls; ++i) override {
+    for (int i=0; i< numBalls; ++i) {
       PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(1,1,0)), 0.3);
       // s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0));
       if(useCorridor) s1->setPosition(osg::Vec3(sin(i/3.0)*radius,cos(i/3.0)*radius,1));
@@ -95,7 +95,7 @@ public:
       global.obstacles.push_back(s1);
     }
 
-    for(int i=0; i<numSeeing2wheeled; ++i) override {
+    for(int i=0; i<numSeeing2wheeled; ++i) {
       // the twowheeled robot is derived from Nimm2 and has a camera onboard
       TwoWheeledConf twc = TwoWheeled::getDefaultConf();
       twc.n2cfg.force=2;
@@ -144,7 +144,7 @@ public:
     }
 
     /// FOURWHEELED
-    for(int i=0; i<numSeeing4wheeled; ++i) override {
+    for(int i=0; i<numSeeing4wheeled; ++i) {
       FourWheeledConf fwc = FourWheeled::getDefaultConf();
       fwc.twoWheelMode = true;
       fwc.useBumper    = false;
@@ -197,7 +197,7 @@ public:
     }
 
 
-    for(int i=0; i<numBlindRobots; ++i) override {
+    for(int i=0; i<numBlindRobots; ++i) {
       // this robot has no camera
       OdeRobot* robot = new Nimm2(odeHandle, osgHandle, Nimm2::getDefaultConf(),
                                     "BlindRobot_" + itos(i));
@@ -255,6 +255,6 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 
 }

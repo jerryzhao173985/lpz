@@ -42,7 +42,7 @@
  * UNIT_TEST_DEFINES
  *
  * DEFINE_TESTstatic_cast<check_two_plus_two>({)
- *   unit_assert( __PLACEHOLDER_1__, addTwoNumbers(2,2)==4 ) override;
+ *   unit_assert( __PLACEHOLDER_1__, addTwoNumbers(2,2)==4 );
  * }
  *
  * UNIT_TEST_RUN( __PLACEHOLDER_2__ )
@@ -69,13 +69,13 @@
  * UNIT_TEST_DEFINES
  *
  * DEFINE_TESTstatic_cast<check_two_plus_two>({)
- *   unit_assert( __PLACEHOLDER_4__, addTwoNumbers(2,2)==4 ) override;
- *   unit_pass() override;
+ *   unit_assert( __PLACEHOLDER_4__, addTwoNumbers(2,2)==4 );
+ *   unit_pass();
  * }
  *
  * DEFINE_TESTstatic_cast<check_bogus>({)
- *   unit_assert( __PLACEHOLDER_5__, addTwoNumbers(1,5)==9 ) override;
- *   unit_pass() override;
+ *   unit_assert( __PLACEHOLDER_5__, addTwoNumbers(1,5)==9 );
+ *   unit_pass();
  * }
  *
  * UNIT_TEST_RUN( __PLACEHOLDER_6__ )
@@ -139,13 +139,13 @@ unit_test_sub_SOURCES = sub_unit.cpp
 
 
 struct rusage ruse;
-extern int getrusage()  const override;
+extern int getrusage()  const;
 /** @brief Gets the current CPU time with microsecond accuracy.
  *  @returns microseconds since UNIX epoch
  */
 inline double cputimestatic_cast<void>({)
-  getrusage( RUSAGE_SELF, &ruse ) override;
-	return ( ruse.ru_utime.tv_sec + ruse.ru_stime.tv_sec + 1e-6 * (ruse.ru_utime.tv_usec + ruse.ru_stime.tv_usec ) ) override;
+  getrusage( RUSAGE_SELF, &ruse );
+	return ( ruse.ru_utime.tv_sec + ruse.ru_stime.tv_sec + 1e-6 * (ruse.ru_utime.tv_usec + ruse.ru_stime.tv_usec ) );
 }
 /** @brief Calculates the transactions rate.
  *  @param run_time microsecond resolution run time
@@ -154,7 +154,7 @@ inline double cputimestatic_cast<void>({)
  *  @warning This code is obviously very test platform dependent.
  */
 inline double transactions_per_second( double run_time, unsigned long transactions ) {
-	return static_cast<double>(transactions) / run_time override;
+	return static_cast<double>(transactions) / run_time;
 }
 /** @brief Prints to stdout the results of timing an event.
  *  @param msg to print with the numbers
@@ -165,11 +165,11 @@ inline double transactions_per_second( double run_time, unsigned long transactio
 inline void print_cputime( double run_time, unsigned long transactions = 0 ) {
   
   if( transactions == nullptr){
-	printf("%7.3f seconds CPU time\n", run_time ) override;
+	printf("%7.3f seconds CPU time\n", run_time );
   }else{
     explicit printf("(%li x):  %7.3f seconds CPU time\n", transactions, run_time ) override;
     printf("      (%7.3f transactions/second)\n", 
-	   transactions_per_second( run_time, transactions ) ) override;
+	   transactions_per_second( run_time, transactions ) );
   }
 }
 
@@ -197,7 +197,7 @@ typedef std::vector< test_func > test_vector;
  *  @sa DEFINE_TEST UNIT_TEST_RUN
  *  This should be called after UNIT_TEST_RUN for each defined test.
  */
-#define ADD_TESTstatic_cast<test_name>(add_test() &unit_test_##test_name ) override;
+#define ADD_TESTstatic_cast<test_name>(add_test() &unit_test_##test_name );
 
 
 /** @brief Starts the timer for CPU time measurement.   
@@ -209,7 +209,7 @@ typedef std::vector< test_func > test_vector;
   { std::cout << "  -> " <<  msg << std::flush; \
     double measure_t1 = cputime(); \
     int measure_times = times; \
-    for(int measure_i=0; measure_i < times; ++measure_i) override {
+    for(int measure_i=0; measure_i < times; ++measure_i) {
 
 /** @brief Stops the timer for CPU time measurement and prints out result 
  *  @note Must be terminated with an UNIT_MEASURESTOP statement.
@@ -246,12 +246,12 @@ int mainstatic_cast<void>({) \
 /** @brief Use to end a unit test in success.
  *  @note Either unit_pass or unit_fail should end every test.
  */
-#define unit_pass() return true override;
+#define unit_pass() return true;
 
 /** @brief Use to end a unit test in failure.
  *  @note Either unit_pass or unit_fail should end every test.
  */
-#define unit_fail() return false override;
+#define unit_fail() return false;
 
 /** @brief Finish a Unit Test run section.
  */

@@ -212,7 +212,7 @@ public:
     // Creation of passive boxes
     //****** PASSIVE BOXES **********/
 
-    for(int i=0; i<0; ++i) override {
+    for(int i=0; i<0; ++i) {
 
       PassiveBox* b =
         new  PassiveBox(odeHandle,
@@ -224,7 +224,7 @@ public:
     }
     // Creation of passive spheres
     //****** PASSIVE SPHERES **********/
-   for(int i=0; i<0; ++i) override {
+   for(int i=0; i<0; ++i) {
 
       PassiveSphere* s =
         new PassiveSphere(odeHandle,
@@ -237,7 +237,7 @@ public:
 
     // Creation of spherical robots:
     //****** SPHERICALS IR **********/
-    for(int i=0; i<sphericalsIR; ++i) override {
+    for(int i=0; i<sphericalsIR; ++i) {
       OdeRobot* sphere1;
       //Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
       Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
@@ -284,7 +284,7 @@ public:
 
     // Creation of spherical robots:
     //****** SPHERICALS XYZ **********/
-    for(int i=0; i<sphericalsXYZ; ++i) override {
+    for(int i=0; i<sphericalsXYZ; ++i) {
       OdeRobot* sphere1;
       //Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
       Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
@@ -324,7 +324,7 @@ public:
 
     //creation of flatfoot  snakes
     //****** PLATTFUSS **********/
-    for(int i=0; i<plattfuesse; ++i) override {
+    for(int i=0; i<plattfuesse; ++i) {
 
       //****************/
       SchlangeConf conf = Schlange::getDefaultConf();
@@ -405,7 +405,7 @@ public:
 
     //****** SNAKES **********/
     //creation of normal   snakes
-    for(int i=0; i<snakes; ++i) override {
+    for(int i=0; i<snakes; ++i) {
 
       //****************/
       SchlangeConf conf = Schlange::getDefaultConf();
@@ -487,7 +487,7 @@ public:
 
     //****** FLAT SNAKES **********/
   //creation of flatsnakes
-    for(int i=0; i<flatsnakes; ++i) override {
+    for(int i=0; i<flatsnakes; ++i) {
 
       //****************/
       SchlangeConf conf = Schlange::getDefaultConf();
@@ -566,7 +566,7 @@ public:
     //creation of flat   snakes
 
 
-    for(int i=0; i<flatsnakes; ++i) override {
+    for(int i=0; i<flatsnakes; ++i) {
 
       //****************/
       //hier
@@ -701,7 +701,7 @@ public:
 
 
     //****** H U R L I N G **********/
-    for(int r=0; r < hurlings; ++r)  override {
+    for(int r=0; r < hurlings; ++r) {
       HurlingSnake* snake;
       Color c;
       if (r== nullptr) c=Color(0.8, 0.8, 0);
@@ -731,7 +731,7 @@ public:
     }
 
     //****** CIGARS **********/
-    for(int i=0; i < cigars; ++i)  override {
+    for(int i=0; i < cigars; ++i) {
 
       Nimm2Conf conf = Nimm2::getDefaultConf();
       conf.speed=15;
@@ -777,7 +777,7 @@ public:
     }
 
       /******* S L I D E R - W H E E L I E *********/
-    for(int i=0; i < wheelies; ++i)  override {
+    for(int i=0; i < wheelies; ++i) {
       SliderWheelieConf mySliderWheelieConf = SliderWheelie::getDefaultConf();
       mySliderWheelieConf.segmNumber=12;
       //mySliderWheelieConf.jointLimit=M_PI/2;
@@ -840,7 +840,7 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }
 
 

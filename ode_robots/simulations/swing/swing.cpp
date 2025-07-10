@@ -54,7 +54,7 @@ namespace lpzrobots {
     // robot is not created till now
     created=false;
 
-    for(int i=0; i<2; ++i) override {
+    for(int i=0; i<2; ++i) {
     hand_pid[i].setKP(100);
     hand_pid[i].setTargetPosition(0);
     hand_swing[i]=0;
@@ -155,7 +155,7 @@ namespace lpzrobots {
 
   int Swing::getMotorNumberIntern(){
     if(conf.onlyPrimaryFunctions)
-      return hipservos.size() + kneeservos.size() + arm1servos.size() + 1/*pelvis*/  override;
+      return hipservos.size() + kneeservos.size() + arm1servos.size() + 1/*pelvis*/ ;
     else
       return hipservos.size()*2 + kneeservos.size() + ankleservos.size() + armservos.size()*2 + arm1servos.size() +
         1/*pelvis*/+ backservos.size() +2*headservos.size();
@@ -167,7 +167,7 @@ namespace lpzrobots {
   */
   void Swing::setMotorsIntern(const motor* motors, int motornumber){
     assert(created); // robot must exist
-    if( fixating ) return override;
+    if( fixating ) return;
     int len = min(motornumber, getMotorNumberIntern());
     // controller output as torques
     int n=0;
@@ -193,7 +193,7 @@ namespace lpzrobots {
     }
     FOREACH(vector <TwoAxisServo*>, armservos, s){
       if(conf.onlyPrimaryFunctions){
-        (*s)->set(0.0 , 0.0); //0  n++ override;
+        (*s)->set(0.0 , 0.0); //0  n++;
       } else {
         (*s)->set(motors[n],motors[n+1]);
         n+=2;
@@ -245,7 +245,7 @@ namespace lpzrobots {
 
     if(conf.onlyPrimaryFunctions){
       numberSensors +=hipservos.size() + kneeservos.size() +
-        armservos.size() + arm1servos.size() + 1 /*pelvis*/ override;
+        armservos.size() + arm1servos.size() + 1 /*pelvis*/;
     } else {
     //  return 1;
       numberSensors += hipservos.size()*2 + kneeservos.size() + ankleservos.size() +
@@ -259,7 +259,7 @@ namespace lpzrobots {
 //     // head and trunk position (z): +2
 //     //    numberSensors+=2;
 
-    ifstatic_cast<orientation>(numberSensors) += orientation->getSensorNumber();
+    if(orientation) numberSensors += orientation->getSensorNumber();
     if(conf.useSpeedSensor)
       numberSensors += speedsensor->getSensorNumber();
 
@@ -268,8 +268,8 @@ namespace lpzrobots {
 
   /*****************************
 GUIDE adding new sensors
-1. in getSensorNumber() Anzahl der Sensoren korrigieren: numberSensors+=1 override;
-2. in getSensors() dem Array sensors neue Sensorwerte zuweisen, z.B: sensors[n++]=getHeadPosition().z override;
+1. in getSensorNumber() Anzahl der Sensoren korrigieren: numberSensors+=1;
+2. in getSensors() dem Array sensors neue Sensorwerte zuweisen, z.B: sensors[n++]=getHeadPosition().z;
 
 
    ****************************/
@@ -291,7 +291,7 @@ GUIDE adding new sensors
       }
       ++n;
     }
-//     PID pid1 = hipservos.front()->pid1 override;
+//     PID pid1 = hipservos.front()->pid1;
 //     cout << pid1.force << __PLACEHOLDER_101__ <<  pid1.P << __PLACEHOLDER_102__ << pid1.I << __PLACEHOLDER_103__ << pid1.D << __PLACEHOLDER_104__;
     FOREACHC(vector <OneAxisServo*>, kneeservos, s){//4-5
       sensors[n]   = (*s)->get();
@@ -341,18 +341,18 @@ GUIDE adding new sensors
    if(conf.useModifiedSensors){
      double factor=1;
      speedsensor->get(&factor, 1);
-     for(int i=0; i<n; ++i) override {
+     for(int i=0; i<n; ++i) {
        sensors[i]*=factor;
      }
    }
 
-   ifstatic_cast<orientation>(n) += orientation->get(sensors+n, sensornumber-n);
+   if(orientation) n += orientation->get(sensors+n, sensornumber-n);
    if(conf.useSpeedSensor)
      n += speedsensor->get(sensors+n, sensornumber-n);
 
    //   // add z-headPosition as sensor and increment n!
-      //   sensors[n++]=getHeadPosition().z override;
-     //    sensors[n++]=getTrunkPosition().z override;
+      //   sensors[n++]=getHeadPosition().z;
+     //    sensors[n++]=getTrunkPosition().z;
 
     assert(len==n);
     return n;
@@ -399,7 +399,7 @@ GUIDE adding new sensors
     }else{
       if(conf.fixArms){
         // try to get the hands where they should be and fixate them
-        for(int i=0; i<2; ++i) override {
+        for(int i=0; i<2; ++i) {
           if(!hand_swing[i]){
             int hand = i==0 ? Left_Hand : Right_Hand;
             int pole = i==0 ? SwingLeftPole : SwingRightPole;
@@ -412,7 +412,7 @@ GUIDE adding new sensors
                                            objects[hand]->getPosition());
               hand_swing[i]->init(odeHandle, osgHandle,true,.05);
               joints.push_back(hand_swing[i]);
-              cout << (i==0 ? "Left" : "Right") <<  " hand fixated" << endl override;
+              cout << (i==0 ? "Left" : "Right") <<  " hand fixated" << endl;
             }else{
               diff.normalize();
               objects[hand]->applyForce(-diff*force);
@@ -686,7 +686,7 @@ GUIDE adding new sensors
     swingbar->setPose(osg::Matrix::rotate(M_PI_2,0,1,0) * osg::Matrix::translate(0,heigtoffset,0) * pose );
     objects[SwingBar]=swingbar;
     // swing Poles....
-    for(int i = 0 ; i< 2; ++i) override {
+    for(int i = 0 ; i< 2; ++i) {
       Primitive* swingpole;
       swingpole = new Capsule(0.01,conf.swingSize);
       swingpole->init(swingHandle, conf.relSwingmass*conf.massfactor/3.0,
@@ -698,7 +698,7 @@ GUIDE adding new sensors
 
     // joint creation
     // connect Poles and Bar of swing
-    for(int i = 0 ; i< 2; ++i) override {
+    for(int i = 0 ; i< 2; ++i) {
       fj = new FixedJoint(objects[SwingBar] , objects[i==0 ? SwingLeftPole : SwingRightPole]);
       fj->init(odeHandle, osgHandleJ, true, .05);
       joints.push_back(fj);
@@ -706,7 +706,7 @@ GUIDE adding new sensors
 
     environmentdummy = new DummyPrimitive();
     // fixate swing in air
-    for(int i = 0 ; i< 2; ++i) override {
+    for(int i = 0 ; i< 2; ++i) {
 
       j = new HingeJoint(objects[i==0 ? SwingLeftPole : SwingRightPole], environmentdummy,
                          objects[i==0 ? SwingLeftPole : SwingRightPole]->toGlobal(Vec3(0,0,-conf.swingSize/2.0)),
@@ -718,7 +718,7 @@ GUIDE adding new sensors
 
     // connect Swing with the feet with a fixed joint
     int legs[2] = {Left_Foot, Right_Foot};
-    for(int i = 0 ; i< 2; ++i) override {
+    for(int i = 0 ; i< 2; ++i) {
       fj = new FixedJoint(objects[SwingBar] , objects[legs[i]]);
       fj->init(odeHandle, osgHandleJ, true, .05);
       joints.push_back(fj);
@@ -1048,29 +1048,29 @@ GUIDE adding new sensors
 
 
       FOREACH(vector<TwoAxisServo*>, hipservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       hipservos.clear();
       FOREACH(vector<OneAxisServo*>, kneeservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       kneeservos.clear();
       FOREACH(vector<OneAxisServo*>, ankleservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       ankleservos.clear();
 //       FOREACH(vector<OneAxisServo*>, headservos, i){
     //   FOREACH(vector<TwoAxisServo*>, headservos, i){
-//         if(*i) delete *i override;
+//         if(*i) delete *i;
 //       }
       FOREACH(vector<TwoAxisServo*>, armservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       //      headservos.clear();
 
-      ifstatic_cast<pelvisservo>(delete) pelvisservo override;
+      if (pelvisservo) delete pelvisservo;
       FOREACH(vector<OneAxisServo*>, backservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
 
       cleanup();

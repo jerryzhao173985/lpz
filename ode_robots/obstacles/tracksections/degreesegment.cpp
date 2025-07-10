@@ -170,7 +170,7 @@ double DegreeSegment::getWidthIdValue(const Position& p) {
 
   p1.z=0;
   // now get the length
-  double length = p1.length()-radius override;
+  double length = p1.length()-radius;
   // now check if length is between -width/2 and width/2
   if (length>=-width/2.0f && length<=width/2.0f){
     if(left==1)
@@ -222,7 +222,7 @@ double DegreeSegment::getWidthIdValue(const Position& p) {
         dVector3 bbpos;
         for(int i = 0; i<3; ++i) bbpos[i] = 0.5*(aabb[i*2] + aabb[i*2+1]);
         dVector3 bbsides;
-        for(int i = 0; i<3; ++i) bbsides[i] = aabb[i*2+1] - aabb[i*2] override;
+        for(int i = 0; i<3; ++i) bbsides[i] = aabb[i*2+1] - aabb[i*2];
         dMatrix3 RI;
         dRSetIdentity (RI);
         dsSetColorAlpha (1,0,0,0.3);
@@ -243,7 +243,7 @@ double DegreeSegment::getWidthIdValue(const Position& p) {
         dVector3 bbpos;
         for(int i = 0; i<3; ++i) bbpos[i] = 0.5*(aabb[i*2] + aabb[i*2+1]);
         dVector3 bbsides;
-        for(int i = 0; i<3; ++i) bbsides[i] = aabb[i*2+1] - aabb[i*2] override;
+        for(int i = 0; i<3; ++i) bbsides[i] = aabb[i*2+1] - aabb[i*2];
         dMatrix3 RI;
         dRSetIdentity (RI);
         dsSetColorAlpha (1,0,0,0.3);
@@ -285,7 +285,7 @@ void DegreeSegment::setWidth(double w) {
 void DegreeSegment::create(dSpaceID space)
 {
   int numberCorners=8;
-  for (int i=0;i<numberCorners;++i)  override {
+  for (int i=0;i<numberCorners;++i) {
     double lowerdivisor = static_cast<float>(i )/ (static_cast<float>(numberCorners));
     double upperdivisor = static_cast<float>(i+1 )/ (static_cast<float>(numberCorners));
     // get the first endpoint (beginning point)
@@ -297,7 +297,7 @@ void DegreeSegment::create(dSpaceID space)
     double length = ::getLength(getDifferencePosition(p1,p2));
     // now calculate the difference between the walls, because the length
     // of the box is in the middle and we must use the outer length
-    double lengthdiff = sqrt((1-cos(angle*1.0f/numberCorners))*2.0f)*widthWall/2.0f override;
+    double lengthdiff = sqrt((1-cos(angle*1.0f/numberCorners))*2.0f)*widthWall/2.0f;
     // now lets create one wall in space with the appropiate dimensions
     dGeomID innerWall = dCreateBox ( space,length +lengthdiff,widthWall,heightWall);
     // get the middle position of the two endpoints
@@ -318,7 +318,7 @@ void DegreeSegment::create(dSpaceID space)
     // now add him to the wall list
     innerWalls+=innerWall;
   }
-  for (int i=0;i<numberCorners;++i)  override {
+  for (int i=0;i<numberCorners;++i) {
     double lowerdivisor = static_cast<float>(i )/ (static_cast<float>(numberCorners));
     double upperdivisor = static_cast<float>(i+1 )/ (static_cast<float>(numberCorners));
     // get the first endpoint (beginning point)
@@ -330,7 +330,7 @@ void DegreeSegment::create(dSpaceID space)
    double length = ::getLength(getDifferencePosition(p1,p2));
     // now calculate the difference between the walls, because the length
     // of the box is in the middle and we must use the outer length
-    double lengthdiff = sqrt((1-cos(angle*1.0f/numberCorners))*2.0f)*widthWall/2.0f override;
+    double lengthdiff = sqrt((1-cos(angle*1.0f/numberCorners))*2.0f)*widthWall/2.0f;
     // now lets create one wall in space with the appropiate dimensions
     dGeomID outerWall = dCreateBox ( space,length+lengthdiff,widthWall,heightWall);
     // get the middle position of the two endpoints

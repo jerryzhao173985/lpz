@@ -41,7 +41,7 @@ public:
    */
   MotorBabbler(function func = function::Sine);
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
   virtual int getSensorNumber() const override {
     return number_sensors;
   }
@@ -57,7 +57,7 @@ public:
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,
                               motor*,
-                              int number_motors) override;
+                              int number_motors);
 
   // samples a new set of frequencies
   void sampleFrequencies();

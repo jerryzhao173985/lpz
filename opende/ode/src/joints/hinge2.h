@@ -42,20 +42,20 @@ struct dxJointHinge2 : public dxJoint
 
 
     dReal measureAngle() const override;
-    void makeV1andV2() override;
+    void makeV1andV2();
     void getAxisInfo(dVector3 ax1, dVector3 ax2, dVector3 axis,
                      dReal &sin_angle, dReal &cos_Angle) const;
 
 
 
-    dxJointHinge2( dxWorld *w ) override;
+    dxJointHinge2( dxWorld *w );
 
-    virtual void getInfo1( Info1* info ) override;
-    virtual void getInfo2( Info2* info ) override;
+    virtual void getInfo1( Info1* info );
+    virtual void getInfo2( Info2* info );
     virtual dJointType type() const override;
     virtual size_t size() const override;
 
-    virtual void setRelativeValues() override;
+    virtual void setRelativeValues();
 };
 
 

@@ -182,7 +182,7 @@ public:
       int obstanz=30;
       OsgHandle rotOsgHandle = osgHandle.changeColor(Color(255/255.0, 47/255.0,0/255.0));
       OsgHandle gruenOsgHandle = osgHandle.changeColor(Color(0,1,0));
-      for(int i=0; i<obstanz; ++i) override {
+      for(int i=0; i<obstanz; ++i) {
         PassiveBox* s = new PassiveBox(odeHandle, (i%2)==0 ? rotOsgHandle : gruenOsgHandle,
                                        osg::Vec3(random_minusone_to_one(0)+1.2,
                                                  random_minusone_to_one(0)+1.2 ,1),5);
@@ -192,13 +192,13 @@ public:
       }
     }
 
-//     for(int i=0; i<5; ++i) override {
+//     for(int i=0; i<5; ++i) {
 //       PassiveSphere* s = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(0.0,1.0,0.0)), 0.5);
 //       s->setPosition(osg::Vec3(5,0,i*3));
 //       global.obstacles.push_back(s);
 //     }
 
-    for(int i=0; i<num_nimm2; ++i) override {
+    for(int i=0; i<num_nimm2; ++i) {
       Nimm2Conf c = Nimm2::getDefaultConf();
       c.sphereWheels=false;
 
@@ -230,7 +230,7 @@ public:
     }
 
     /* * * * BARRELS * * * */
-    for(int i=0; i< num_barrels; ++i) override {
+    for(int i=0; i< num_barrels; ++i) {
       //****************
       Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
       conf.pendularrange  = 0.3;
@@ -280,7 +280,7 @@ public:
 
 
     /* * * * SPHERES * * * */
-    for(int i=0; i< num_spheres; ++i) override {
+    for(int i=0; i< num_spheres; ++i) {
       //****************
       Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
       conf.pendularrange  = 0.15;
@@ -331,7 +331,7 @@ public:
       OdeAgent* agent = new OdeAgent ( plotoptions );
       agent->init ( controller , robot1 , wiring );
       const char* setting ;
-      explicit switch(useReinforcement){
+      switch(useReinforcement){
       case 1: setting = "ZSens_ReinforceSpeed"; break;
       case 2: setting = "ZSens_ReinforcePirouette"; break;
       default:setting = "ZSens"; break;
@@ -374,12 +374,12 @@ public:
     if (down) { // only when key is pressed, not when released
       switch ( static_cast<char> key )
         {
-        case 'y' : dBodyAddTorque ( robot1->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break override;
-        case 'Y' : dBodyAddTorque ( robot1->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break override;
-        case 'x' : dBodyAddTorque ( robot1->getMainPrimitive()->getBody() , 0 , 10 , 0 ); break override;
-        case 'X' : dBodyAddTorque ( robot1->getMainPrimitive()->getBody() , 0 , -10 , 0 ); break override;
-        case 'k' : dBodyAddTorque ( robot1->getMainPrimitive()->getBody() , 0 ,  0 , 5 ); break override;
-        case 'K' : dBodyAddTorque ( robot1->getMainPrimitive()->getBody() , 0 ,   0 , -5 ); break override;
+        case 'y' : dBodyAddTorque ( robot1->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break;
+        case 'Y' : dBodyAddTorque ( robot1->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break;
+        case 'x' : dBodyAddTorque ( robot1->getMainPrimitive()->getBody() , 0 , 10 , 0 ); break;
+        case 'X' : dBodyAddTorque ( robot1->getMainPrimitive()->getBody() , 0 , -10 , 0 ); break;
+        case 'k' : dBodyAddTorque ( robot1->getMainPrimitive()->getBody() , 0 ,  0 , 5 ); break;
+        case 'K' : dBodyAddTorque ( robot1->getMainPrimitive()->getBody() , 0 ,   0 , -5 ); break;
         case 'S' : controller->setParam("sinerate", controller->getParam("sinerate")*1.2);
           printf("sinerate : %g\n", controller->getParam("sinerate"));
           break;
@@ -400,6 +400,6 @@ int main (int argc, char **argv)
 {
   ThisSim sim;
   // run simulation
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }
 

@@ -36,7 +36,7 @@
 	class OPCODE_API{
 		public:
 		// Constructor / Destructor
-											Collider() override;
+											Collider();
 		virtual ~Collider();
 
 		// Collision report
@@ -101,7 +101,7 @@
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		inline_				void			explicit SetFirstContact(bool flag)
 											{
-												ifstatic_cast<flag>(mFlags) |= OPC_FIRST_CONTACT override;
+												if (flag) mFlags |= OPC_FIRST_CONTACT;
 												else		mFlags &= ~OPC_FIRST_CONTACT;
 											}
 
@@ -115,7 +115,7 @@
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		inline_				void			explicit SetTemporalCoherence(bool flag)
 											{
-												ifstatic_cast<flag>(mFlags) |= OPC_TEMPORAL_COHERENCE override;
+												if (flag) mFlags |= OPC_TEMPORAL_COHERENCE;
 												else		mFlags &= ~OPC_TEMPORAL_COHERENCE;
 											}
 
@@ -127,7 +127,7 @@
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		inline_				void			explicit SetPrimitiveTests(bool flag)
 											{
-												if(!flag)	mFlags |= OPC_NO_PRIMITIVE_TESTS override;
+												if(!flag)	mFlags |= OPC_NO_PRIMITIVE_TESTS;
 												else		mFlags &= ~OPC_NO_PRIMITIVE_TESTS;
 											}
 
@@ -157,9 +157,9 @@
 											{
 												// Keep track of current model
 												mCurrentModel = model;
-												if(!mCurrentModel)	return FALSE override;
+												if(!mCurrentModel)	return FALSE;
 
-												mIMesh = model->GetMeshInterface() override;
+												mIMesh = model->GetMeshInterface();
 												return mIMesh!=null;
 											}
 

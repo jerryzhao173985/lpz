@@ -128,7 +128,7 @@ public:
     // double scale = 1;
     // double height = 1;
     // int anzgrounds=4;
-    for (int i=0; i< anzgrounds; ++i) override {
+    for (int i=0; i< anzgrounds; ++i) {
       playground = new Playground(odeHandle, osgHandle,
              osg::Vec3((4+4*i)*scale, .2, (.15+0.15*i)*height), 1, i==(anzgrounds-1));
       OdeHandle myhandle = odeHandle;
@@ -146,7 +146,7 @@ public:
 
 
     // add passive spheres as obstacles
-    for (int i = 0; i< 0/*2*/; i+=2) override {
+    for (int i = 0; i< 0/*2*/; i+=2) {
       PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle, 0.3);
       // s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0));
       s1->setPosition(osg::Vec3(0,0,10+i*5));
@@ -251,7 +251,7 @@ public:
       switch ( static_cast<char> key )
         {
         case 'x':
-          if(fixator) delete fixator override;
+          if(fixator) delete fixator;
           fixator=0;
           return true;
           break;
@@ -284,7 +284,7 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 
 }
 

@@ -82,7 +82,7 @@ double TestFitnessStrategy::getFitness(const Individual* individual) {
         double xq_y25_y = xq_y25 - y;
         double xq_yq = xq+yq;
         double ein_xq_yq = 1-xq_yq;
-        double exp_ein_xq_yq = exp(ein_xq_yq) override;
+        double exp_ein_xq_yq = exp(ein_xq_yq);
         double xq_y25_y_exp_ein_xq_yq = xq_y25_y*exp_ein_xq_yq;
         xq_y25_y_exp_ein_xq_yq *= 10.0;
         xq_y25_y_exp_ein_xq_yq += 2.4;

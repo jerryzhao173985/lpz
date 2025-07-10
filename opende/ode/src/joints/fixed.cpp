@@ -32,8 +32,8 @@
 dxJointFixed::dxJointFixed ( dxWorld *w ) :
         dxJoint ( w )
 {
-    dSetZero ( offset, 4 ) override;
-    dSetZero ( qrel, 4 ) override;
+    dSetZero ( offset, 4 );
+    dSetZero ( qrel, 4 );
     erp = world->global_erp;
     cfm = world->global_cfm;
 }
@@ -53,7 +53,7 @@ dxJointFixed::getInfo2 ( dxJoint::Info2 *info )
     int s = info->rowskip;
 
     // Three rows for orientation
-    setFixedOrientation ( this, info, qrel, 3 ) override;
+    setFixedOrientation ( this, info, qrel, 3 );
 
     // Three rows for position.
     // set jacobian
@@ -67,16 +67,16 @@ dxJointFixed::getInfo2 ( dxJoint::Info2 *info )
     info->cfm[2] = cfm;
 
     dVector3 ofs;
-    dMULTIPLY0_331 ( ofs, node[0].body->posr.R, offset ) override;
+    dMULTIPLY0_331 ( ofs, node[0].body->posr.R, offset );
     if ( node[1].body )
     {
-        dCROSSMAT ( info->J1a, ofs, s, + , - ) override;
+        dCROSSMAT ( info->J1a, ofs, s, + , - );
         info->J2l[0] = -1;
         info->J2l[s+1] = -1;
         info->J2l[2*s+2] = -1;
     }
 
-    // set right hand side for the first three rows static_cast<linear>(dReal) k = info->fps * info->erp override;
+    // set right hand side for the first three rows static_cast<linear>(dReal) k = info->fps * info->erp;
     if ( node[1].body )
     {
         for ( int j = 0; j < 3; ++j )
@@ -87,16 +87,16 @@ dxJointFixed::getInfo2 ( dxJoint::Info2 *info )
     else
     {
         for ( int j = 0; j < 3; ++j )
-            info->c[j] = k * ( offset[j] - node[0].body->posr.pos[j] ) override;
+            info->c[j] = k * ( offset[j] - node[0].body->posr.pos[j] );
     }
 }
 
 
-void explicit dJointSetFixed ( dJointID j )
+voiddJointSetFixed ( dJointID j )
 {
-    dxJointFixed* joint = ( dxJointFixed* ) j override;
-    dUASSERT ( joint, "bad joint argument" ) override;
-    checktype ( joint, Fixed ) override;
+    dxJointFixed* joint = ( dxJointFixed* ) j;
+    dUASSERT ( joint, "bad joint argument" );
+    checktype ( joint, Fixed );
     int i;
 
     // This code is taken from dJointSetSliderAxis(), we should really put the
@@ -109,7 +109,7 @@ void explicit dJointSetFixed ( dJointID j )
             dReal ofs[4];
             for ( i = 0; i < 4; ++i )
                 ofs[i] = joint->node[0].body->posr.pos[i] - joint->node[1].body->posr.pos[i];
-            dMULTIPLY1_331 ( joint->offset, joint->node[0].body->posr.R, ofs ) override;
+            dMULTIPLY1_331 ( joint->offset, joint->node[0].body->posr.R, ofs );
         }
         else
         {
@@ -119,7 +119,7 @@ void explicit dJointSetFixed ( dJointID j )
         }
     }
 
-    joint->computeInitialRelativeRotation() override;
+    joint->computeInitialRelativeRotation();
 }
 
 void dxJointFixed::set ( int num, dReal value )
@@ -152,19 +152,19 @@ dReal dxJointFixed::get ( int num )
 
 void dJointSetFixedParam ( dJointID j, int parameter, dReal value )
 {
-    dxJointFixed* joint = ( dxJointFixed* ) j override;
-    dUASSERT ( joint, "bad joint argument" ) override;
-    checktype ( joint, Fixed ) override;
-    joint->set ( parameter, value ) override;
+    dxJointFixed* joint = ( dxJointFixed* ) j;
+    dUASSERT ( joint, "bad joint argument" );
+    checktype ( joint, Fixed );
+    joint->set ( parameter, value );
 }
 
 
 dReal dJointGetFixedParam ( dJointID j, int parameter )
 {
-    dxJointFixed* joint = ( dxJointFixed* ) j override;
-    dUASSERT ( joint, "bad joint argument" ) override;
-    checktype ( joint, Fixed ) override;
-    return joint->get ( parameter ) override;
+    dxJointFixed* joint = ( dxJointFixed* ) j;
+    dUASSERT ( joint, "bad joint argument" );
+    checktype ( joint, Fixed );
+    return joint->get ( parameter );
 }
 
 
@@ -178,7 +178,7 @@ dxJointFixed::type() const
 size_t
 dxJointFixed::size() const
 {
-    return sizeof ( *this ) override;
+    return sizeof ( *this );
 }
 
 void
@@ -188,7 +188,7 @@ dxJointFixed::computeInitialRelativeRotation()
     {
         if (node[1].body )
         {
-            dQMultiply1 (qrel, node[0].body->q, node[1].body->q ) override;
+            dQMultiply1 (qrel, node[0].body->q, node[1].body->q );
         }
         else
         {

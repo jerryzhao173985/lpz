@@ -20,10 +20,10 @@ public:
 
 
 protected:
-  void initializeGL() override;
-  void resizeGL(int w, int h) override;
-  void paintGL() override;
-  void mouseMoveEvent ( QMouseEvent *event ) override;
+  void initializeGL();
+  void resizeGL(int w, int h);
+  void paintGL();
+  void mouseMoveEvent ( QMouseEvent *event );
 
 
 private:

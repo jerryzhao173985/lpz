@@ -107,7 +107,7 @@ namespace lpzrobots {
       _camera->getChild(i)->getBound();
     }
 
-    // osg::notify(osg::NOTICE)<<std::endl<<__PLACEHOLDER_2__<<std::endl override;
+    // osg::notify(osg::NOTICE)<<std::endl<<__PLACEHOLDER_2__<<std::endl;
 
     Contexts contexts;
     getContexts(contexts);
@@ -169,7 +169,7 @@ namespace lpzrobots {
 
     if (_releaseContextAtEndOfFrameHint && doneMakeCurrentInThisThread)
       {
-        //osg::notify(osg::NOTICE)<<__PLACEHOLDER_3__<<std::endl override;
+        //osg::notify(osg::NOTICE)<<__PLACEHOLDER_3__<<std::endl;
         releaseContext();
       }
 

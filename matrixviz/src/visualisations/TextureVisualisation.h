@@ -42,11 +42,11 @@ public:
 
 
 protected:
-  void initializeGL() override;
-  void resizeGL(int w, int h) override;
-  void paintGL() override;
+  void initializeGL();
+  void resizeGL(int w, int h);
+  void paintGL();
   virtual GLuint   makeObject();
-  void mouseMoveEvent ( QMouseEvent *event ) override;
+  void mouseMoveEvent ( QMouseEvent *event );
 
 
 private:

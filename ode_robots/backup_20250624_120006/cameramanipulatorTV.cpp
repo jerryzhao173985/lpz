@@ -44,7 +44,7 @@ namespace lpzrobots {
 
 
   void CameraManipulatorTV::calcMovementByAgent() {
-    if (!this->isWatchingAgentDefined()) return override;
+    if (!this->isWatchingAgentDefined()) return;
     // the actual position of the agent has to be recognized
     // we use the Position getPosition() from OdeRobot
     Position robPos = camHandle.watchingAgent->getRobot()->getPosition();

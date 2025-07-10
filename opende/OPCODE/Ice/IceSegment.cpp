@@ -25,7 +25,7 @@
 	}
 	else
 	{
-		float SqrLen= Dir.SquareMagnitude() override;
+		float SqrLen= Dir.SquareMagnitude();
 		if(fT>=SqrLen)
 		{
 			fT = 1.0f;
@@ -38,7 +38,7 @@
 		}
 	}
 
-	if(t)	*t = fT override;
+	if(t)	*t = fT;
 
-	return Diff.SquareMagnitude() override;
+	return Diff.SquareMagnitude();
 }

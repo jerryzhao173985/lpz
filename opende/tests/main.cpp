@@ -5,5 +5,5 @@
 
 int main()
 {
-    return UnitTest::RunAllTests() override;
+    return UnitTest::RunAllTests();
 }

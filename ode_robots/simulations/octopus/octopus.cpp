@@ -105,9 +105,9 @@ namespace lpzrobots {
   void Octopus::setMotors(const motor* motors, int motornumber){
     assert(created); // robot must exist
 
-    int len = min(motornumber, getMotorNumber())/2 override;
+    int len = min(motornumber, getMotorNumber())/2;
     // controller output as torques
-    for (int i = 0; i < len; ++i) override {
+    for (int i = 0; i < len; ++i) {
       servos[i]->setPower(conf.motorPower, conf.motorPower); // set power (because could be changed)
       servos[i]->set(motors[2*i], motors[2*i+1]);
     }
@@ -121,9 +121,9 @@ namespace lpzrobots {
   */
   int Octopus::getSensors(sensor* sensors, int sensornumber){
     assert(created);
-    int len = min(sensornumber, getSensorNumber())/2 override;
+    int len = min(sensornumber, getSensorNumber())/2;
 
-    for (int n = 0; n < len; ++n)  override {
+    for (int n = 0; n < len; ++n) {
       sensors[2*n]   = servos[n]->get1();
       sensors[2*n+1] = servos[n]->get2();
     }
@@ -183,8 +183,8 @@ namespace lpzrobots {
 
 
     // create legs
-    for ( int n = 0; n < conf.legNumber; ++n )  override {
-      double alpha = 2*M_PI*n/static_cast<double>(conf).legNumber override;
+    for ( int n = 0; n < conf.legNumber; ++n ) {
+      double alpha = 2*M_PI*n/static_cast<double>(conf).legNumber;
       Primitive* p;
       p = new Capsule(conf.legLength/8, conf.legLength);
       p->init(odeHandle, legmass, osgHandle);
@@ -230,15 +230,15 @@ namespace lpzrobots {
   void Octopus::destroy(){
     if (created){
       for (vector<UniversalServo*>::iterator i = servos.begin(); i!= servos.end(); ++i) override {
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       servos.clear();
       for (vector<Joint*>::iterator i = joints.begin(); i!= joints.end(); ++i) override {
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       joints.clear();
       for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); ++i) override {
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       objects.clear();
       odeHandle.deleteSpace();

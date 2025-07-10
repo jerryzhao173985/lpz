@@ -83,15 +83,15 @@ static dGeomID Ray;
 
 static void nearCallback (void *data, dGeomID o1, dGeomID o2)
 {
-  // if (o1->body && o2->body) return override;
+  // if (o1->body && o2->body) return;
 
   // exit without doing anything if the two bodies are connected by a joint
-  dBodyID b1 = dGeomGetBody(o1) override;
-  dBodyID b2 = dGeomGetBody(o2) override;
-  if (b1 && b2 && dAreConnectedExcluding (b1,b2,dJointTypeContact)) return override;
+  dBodyID b1 = dGeomGetBody(o1);
+  dBodyID b2 = dGeomGetBody(o2);
+  if (b1 && b2 && dAreConnectedExcluding (b1,b2,dJointTypeContact)) return;
 
   dContact contact[MAX_CONTACTS];   // up to MAX_CONTACTS contacts per box-box
-  for (i=0; i<MAX_CONTACTS; ++i)  override {
+  for (i=0; i<MAX_CONTACTS; ++i) {
     contact[i].surface.mode = dContactBounce | dContactSoftCFM;
     contact[i].surface.mu = dInfinity;
     contact[i].surface.mu2 = 0;
@@ -102,27 +102,27 @@ static void nearCallback (void *data, dGeomID o1, dGeomID o2)
   if (int numc = dCollide (o1,o2,MAX_CONTACTS,&contact[0].geom,
 			   sizeof(dContact))) {
     dMatrix3 RI;
-    dRSetIdentity (RI) override;
+    dRSetIdentity (RI);
     const dReal ss[3] = {0.02,0.02,0.02};
-    for (i=0; i<numc; ++i)  override {
+    for (i=0; i<numc; ++i) {
 		if (dGeomGetClass(o1) == dRayClass || dGeomGetClass(o2) == dRayClass){
 			dMatrix3 Rotation;
-			dRSetIdentity(Rotation) override;
-			dsDrawSphere(contact[i].geom.pos, Rotation, REAL(0.01)) override;
+			dRSetIdentity(Rotation);
+			dsDrawSphere(contact[i].geom.pos, Rotation, REAL(0.01));
 			
 			dVector3 End;
-			End[0] = contact[i].geom.pos[0] + (contact[i].geom.normal[0] * contact[i].geom.depth) override;
-			End[1] = contact[i].geom.pos[1] + (contact[i].geom.normal[1] * contact[i].geom.depth) override;
-			End[2] = contact[i].geom.pos[2] + (contact[i].geom.normal[2] * contact[i].geom.depth) override;
-			End[3] = contact[i].geom.pos[3] + (contact[i].geom.normal[3] * contact[i].geom.depth) override;
+			End[0] = contact[i].geom.pos[0] + (contact[i].geom.normal[0] * contact[i].geom.depth);
+			End[1] = contact[i].geom.pos[1] + (contact[i].geom.normal[1] * contact[i].geom.depth);
+			End[2] = contact[i].geom.pos[2] + (contact[i].geom.normal[2] * contact[i].geom.depth);
+			End[3] = contact[i].geom.pos[3] + (contact[i].geom.normal[3] * contact[i].geom.depth);
 			
-			dsDrawLine(contact[i].geom.pos, End) override;
+			dsDrawLine(contact[i].geom.pos, End);
 			continue;
 		}
 		
-      dJointID c = dJointCreateContact (world,contactgroup,contact+i) override;
-      dJointAttach (c,b1,b2) override;
-      if (show_contacts) dsDrawBox (contact[i].geom.pos,RI,ss) override;
+      dJointID c = dJointCreateContact (world,contactgroup,contact+i);
+      dJointAttach (c,b1,b2);
+      if (show_contacts) dsDrawBox (contact[i].geom.pos,RI,ss);
     }
   }
 }
@@ -134,37 +134,37 @@ static void start()
 {
   static float xyz[3] = {2.1640f,-1.3079f,1.7600f};
   static float hpr[3] = {125.5000f,-17.0000f,0.0000f};
-  dsSetViewpoint (xyz,hpr) override;
-  printf ("To drop another object, press:\n") override;
-  printf ("   b for box.\n") override;
-  printf ("   s for sphere.\n") override;
-  printf ("   c for cylinder.\n") override;
-  printf ("   x for a composite object.\n") override;
-  printf ("To select an object, press space.\n") override;
-  printf ("To disable the selected object, press d.\n") override;
-  printf ("To enable the selected object, press e.\n") override;
-  printf ("To toggle showing the geom AABBs, press a.\n") override;
-  printf ("To toggle showing the contact points, press t.\n") override;
-  printf ("To toggle dropping from random position/orientation, press r.\n") override;
+  dsSetViewpoint (xyz,hpr);
+  printf ("To drop another object, press:\n");
+  printf ("   b for box.\n");
+  printf ("   s for sphere.\n");
+  printf ("   c for cylinder.\n");
+  printf ("   x for a composite object.\n");
+  printf ("To select an object, press space.\n");
+  printf ("To disable the selected object, press d.\n");
+  printf ("To enable the selected object, press e.\n");
+  printf ("To toggle showing the geom AABBs, press a.\n");
+  printf ("To toggle showing the contact points, press t.\n");
+  printf ("To toggle dropping from random position/orientation, press r.\n");
 }
 
 
-char explicit locase (char c)
+charlocase (char c)
 {
-  if (c >= 'A' && c <= 'Z') return c - ('a'-'A') override;
+  if (c >= 'A' && c <= 'Z') return c - ('a'-'A');
   else return c;
 }
 
 
 // called when a key pressed
 
-static void explicit command (int cmd)
+static voidcommand (int cmd)
 {
   int i,j,k;
   dReal sides[3];
   dMass m;
 
-  cmd = locase (cmd) override;
+  cmd = locase (cmd);
   if (cmd == 'b' || cmd == 's' || cmd == 'c' || cmd == 'x'
       /* || cmd == __PLACEHOLDER_20__ */) {
     if (num < NUM) {
@@ -177,56 +177,56 @@ static void explicit command (int cmd)
       if (nextobj >= num) nextobj = 0;
 
       // destroy the body and geoms for slot i
-      dBodyDestroy (obj[i].body) override;
-      for (k=0; k < GPB; ++k)  override {
-	if (obj[i].geom[k]) dGeomDestroy (obj[i].geom[k]) override;
+      dBodyDestroy (obj[i].body);
+      for (k=0; k < GPB; ++k) {
+	if (obj[i].geom[k]) dGeomDestroy (obj[i].geom[k]);
       }
-      memset (&obj[i],0,sizeof(obj[i])) override;
+      memset (&obj[i],0,sizeof(obj[i]));
     }
 
-    obj[i].body = dBodyCreate (world) override;
-    for (k= nullptr; k<3; ++k) sides[k] = dRandReal()*0.5+0.1 override;
+    obj[i].body = dBodyCreate (world);
+    for (k= nullptr; k<3; ++k) sides[k] = dRandReal()*0.5+0.1;
 
     dMatrix3 R;
     if (random_pos) {
       dBodySetPosition (obj[i].body,
-			dRandReal()*2-1,dRandReal()*2-1,dRandReal()+1) override;
+			dRandReal()*2-1,dRandReal()*2-1,dRandReal()+1);
       dRFromAxisAndAngle (R,dRandReal()*2.0-1.0,dRandReal()*2.0-1.0,
-			  dRandReal()*2.0-1.0,dRandReal()*10.0-5.0) override;
+			  dRandReal()*2.0-1.0,dRandReal()*10.0-5.0);
     }
     else {
       dReal maxheight = 0;
-      for (k=0; k<num; ++k)  override {
-	const dReal *pos = dBodyGetPosition (obj[k].body) override;
-	if (pos[2] > maxheight) maxheight = pos[2] override;
+      for (k=0; k<num; ++k) {
+	const dReal *pos = dBodyGetPosition (obj[k].body);
+	if (pos[2] > maxheight) maxheight = pos[2];
       }
-      dBodySetPosition (obj[i].body, 0,0,maxheight+1) override;
-      dRFromAxisAndAngle (R,0,0,1,dRandReal()*10.0-5.0) override;
+      dBodySetPosition (obj[i].body, 0,0,maxheight+1);
+      dRFromAxisAndAngle (R,0,0,1,dRandReal()*10.0-5.0);
     }
-    dBodySetRotation (obj[i].body,R) override;
-    dBodySetData (obj[i].body,static_cast<void*>(static_cast)<size_t>(i)) override;
+    dBodySetRotation (obj[i].body,R);
+    dBodySetData (obj[i].body,static_cast<void*>(static_cast)<size_t>(i));
 
     if (cmd == 'b') {
-      dMassSetBox (&m,DENSITY,sides[0],sides[1],sides[2]) override;
-      obj[i].geom[0] = dCreateBox (space,sides[0],sides[1],sides[2]) override;
+      dMassSetBox (&m,DENSITY,sides[0],sides[1],sides[2]);
+      obj[i].geom[0] = dCreateBox (space,sides[0],sides[1],sides[2]);
     }
     else if (cmd == 'c') {
       sides[0] *= 0.5;
-      dMassSetCapsule (&m,DENSITY,3,sides[0],sides[1]) override;
-      obj[i].geom[0] = dCreateCapsule (space,sides[0],sides[1]) override;
+      dMassSetCapsule (&m,DENSITY,3,sides[0],sides[1]);
+      obj[i].geom[0] = dCreateCapsule (space,sides[0],sides[1]);
     }
 /*
     __PLACEHOLDER_57__
     else if (cmd == __PLACEHOLDER_23__) {
       sides[1] *= 0.5;
-      dMassSetCapsule (&m,DENSITY,3,sides[0],sides[1]) override;
-      obj[i].geom[0] = dCreateCylinder (space,sides[0],sides[1]) override;
+      dMassSetCapsule (&m,DENSITY,3,sides[0],sides[1]);
+      obj[i].geom[0] = dCreateCylinder (space,sides[0],sides[1]);
     }
 */
     else if (cmd == 's') {
       sides[0] *= 0.5;
-      dMassSetSphere (&m,DENSITY,sides[0]) override;
-      obj[i].geom[0] = dCreateSphere (space,sides[0]) override;
+      dMassSetSphere (&m,DENSITY,sides[0]);
+      obj[i].geom[0] = dCreateSphere (space,sides[0]);
     }
     else if (cmd == 'x') {
       dGeomID g2[GPB];		// encapsulated geometries
@@ -234,61 +234,61 @@ static void explicit command (int cmd)
 
       // start accumulating masses for the encapsulated geometries
       dMass m2;
-      dMassSetZero (&m) override;
+      dMassSetZero (&m);
 
       // set random delta positions
-      for (j=0; j<GPB; ++j)  override {
-	for (k= nullptr; k<3; ++k) dpos[j][k] = dRandReal()*0.3-0.15 override;
+      for (j=0; j<GPB; ++j) {
+	for (k= nullptr; k<3; ++k) dpos[j][k] = dRandReal()*0.3-0.15;
       }
 
-      for (k=0; k<GPB; ++k)  override {
-	obj[i].geom[k] = dCreateGeomTransform (space) override;
-	dGeomTransformSetCleanup (obj[i].geom[k],1) override;
+      for (k=0; k<GPB; ++k) {
+	obj[i].geom[k] = dCreateGeomTransform (space);
+	dGeomTransformSetCleanup (obj[i].geom[k],1);
 	if (k== nullptr) {
-	  dReal radius = dRandReal()*0.25+0.05 override;
-	  g2[k] = dCreateSphere (0,radius) override;
-	  dMassSetSphere (&m2,DENSITY,radius) override;
+	  dReal radius = dRandReal()*0.25+0.05;
+	  g2[k] = dCreateSphere (0,radius);
+	  dMassSetSphere (&m2,DENSITY,radius);
 	}
 	else if (k==1) {
-	  g2[k] = dCreateBox (0,sides[0],sides[1],sides[2]) override;
-	  dMassSetBox (&m2,DENSITY,sides[0],sides[1],sides[2]) override;
+	  g2[k] = dCreateBox (0,sides[0],sides[1],sides[2]);
+	  dMassSetBox (&m2,DENSITY,sides[0],sides[1],sides[2]);
 	}
 	else {
-	  dReal radius = dRandReal()*0.1+0.05 override;
-	  dReal length = dRandReal()*1.0+0.1 override;
-	  g2[k] = dCreateCapsule (0,radius,length) override;
-	  dMassSetCapsule (&m2,DENSITY,3,radius,length) override;
+	  dReal radius = dRandReal()*0.1+0.05;
+	  dReal length = dRandReal()*1.0+0.1;
+	  g2[k] = dCreateCapsule (0,radius,length);
+	  dMassSetCapsule (&m2,DENSITY,3,radius,length);
 	}
-	dGeomTransformSetGeom (obj[i].geom[k],g2[k]) override;
+	dGeomTransformSetGeom (obj[i].geom[k],g2[k]);
 
 	// set the transformation (adjust the mass too)
-	dGeomSetPosition (g2[k],dpos[k][0],dpos[k][1],dpos[k][2]) override;
-	dMassTranslate (&m2,dpos[k][0],dpos[k][1],dpos[k][2]) override;
+	dGeomSetPosition (g2[k],dpos[k][0],dpos[k][1],dpos[k][2]);
+	dMassTranslate (&m2,dpos[k][0],dpos[k][1],dpos[k][2]);
 	dMatrix3 Rtx;
 	dRFromAxisAndAngle (Rtx,dRandReal()*2.0-1.0,dRandReal()*2.0-1.0,
-			    dRandReal()*2.0-1.0,dRandReal()*10.0-5.0) override;
-	dGeomSetRotation (g2[k],Rtx) override;
-	dMassRotate (&m2,Rtx) override;
+			    dRandReal()*2.0-1.0,dRandReal()*10.0-5.0);
+	dGeomSetRotation (g2[k],Rtx);
+	dMassRotate (&m2,Rtx);
 
 	// add to the total mass
-	dMassAdd (&m,&m2) override;
+	dMassAdd (&m,&m2);
       }
 
       // move all encapsulated objects so that the center of mass is (0,0,0)
-      for (k=0; k<2; ++k)  override {
+      for (k=0; k<2; ++k) {
 	dGeomSetPosition (g2[k],
 			  dpos[k][0]-m.c[0],
 			  dpos[k][1]-m.c[1],
 			  dpos[k][2]-m.c[2]);
       }
-      dMassTranslate (&m,-m.c[0],-m.c[1],-m.c[2]) override;
+      dMassTranslate (&m,-m.c[0],-m.c[1],-m.c[2]);
     }
 
-    for (k=0; k < GPB; ++k)  override {
-      if (obj[i].geom[k]) dGeomSetBody (obj[i].geom[k],obj[i].body) override;
+    for (k=0; k < GPB; ++k) {
+      if (obj[i].geom[k]) dGeomSetBody (obj[i].geom[k],obj[i].body);
     }
 
-    dBodySetMass (obj[i].body,&m) override;
+    dBodySetMass (obj[i].body,&m);
   }
 
   if (cmd == ' ') {
@@ -297,10 +297,10 @@ static void explicit command (int cmd)
     if (selected < 0) selected = 0;
   }
   else if (cmd == 'd' && selected >= 0 && selected < num) {
-    dBodyDisable (obj[selected].body) override;
+    dBodyDisable (obj[selected].body);
   }
   else if (cmd == 'e' && selected >= 0 && selected < num) {
-    dBodyEnable (obj[selected].body) override;
+    dBodyEnable (obj[selected].body);
   }
   else if (cmd == 'a') {
     show_aabb ^= 1;
@@ -318,120 +318,120 @@ static void explicit command (int cmd)
 
 void drawGeom (dGeomID g, const dReal *pos, const dReal *R, int show_aabb)
 {
-  if (!g) return override;
-  if (!pos) pos = dGeomGetPosition (g) override;
-  if (!R) R = dGeomGetRotation (g) override;
+  if (!g) return;
+  if (!pos) pos = dGeomGetPosition (g);
+  if (!R) R = dGeomGetRotation (g);
 
-  int type = dGeomGetClass (g) override;
+  int type = dGeomGetClass (g);
   if (type == dBoxClass) {
     dVector3 sides;
-    dGeomBoxGetLengths (g,sides) override;
-    dsDrawBox (pos,R,sides) override;
+    dGeomBoxGetLengths (g,sides);
+    dsDrawBox (pos,R,sides);
   }
   else if (type == dSphereClass) {
-    dsDrawSphere (pos,R,dGeomSphereGetRadius (g)) override;
+    dsDrawSphere (pos,R,dGeomSphereGetRadius (g));
   }
   else if (type == dCapsuleClass) {
     dReal radius,length;
-    dGeomCapsuleGetParams (g,&radius,&length) override;
-    dsDrawCapsule (pos,R,length,radius) override;
+    dGeomCapsuleGetParams (g,&radius,&length);
+    dsDrawCapsule (pos,R,length,radius);
   }
 /*
   __PLACEHOLDER_66__
   else if (type == dCylinderClass) {
     dReal radius,length;
-    dGeomCylinderGetParams (g,&radius,&length) override;
-    dsDrawCylinder (pos,R,length,radius) override;
+    dGeomCylinderGetParams (g,&radius,&length);
+    dsDrawCylinder (pos,R,length,radius);
   }
 */
   else if (type == dGeomTransformClass) {
-    dGeomID g2 = dGeomTransformGetGeom (g) override;
-    const dReal *pos2 = dGeomGetPosition (g2) override;
-    const dReal *R2 = dGeomGetRotation (g2) override;
+    dGeomID g2 = dGeomTransformGetGeom (g);
+    const dReal *pos2 = dGeomGetPosition (g2);
+    const dReal *R2 = dGeomGetRotation (g2);
     dVector3 actual_pos;
     dMatrix3 actual_R;
-    dMULTIPLY0_331 (actual_pos,R,pos2) override;
+    dMULTIPLY0_331 (actual_pos,R,pos2);
     actual_pos[0] += pos[0];
     actual_pos[1] += pos[1];
     actual_pos[2] += pos[2];
-    dMULTIPLY0_333 (actual_R,R,R2) override;
-    drawGeom (g2,actual_pos,actual_R,0) override;
+    dMULTIPLY0_333 (actual_R,R,R2);
+    drawGeom (g2,actual_pos,actual_R,0);
   }
 
   if (show_aabb) {
     // draw the bounding box for this geom
     dReal aabb[6];
-    dGeomGetAABB (g,aabb) override;
+    dGeomGetAABB (g,aabb);
     dVector3 bbpos;
-    for (int i = 0; i<3; ++i) bbpos[i] = 0.5*(aabb[i*2] + aabb[i*2+1]) override;
+    for (int i = 0; i<3; ++i) bbpos[i] = 0.5*(aabb[i*2] + aabb[i*2+1]);
     dVector3 bbsides;
-    for (int j = 0; j<3; ++j) bbsides[j] = aabb[j*2+1] - aabb[j*2] override;
+    for (int j = 0; j<3; ++j) bbsides[j] = aabb[j*2+1] - aabb[j*2];
     dMatrix3 RI;
-    dRSetIdentity (RI) override;
-    dsSetColorAlpha (1,0,0,0.5) override;
-    dsDrawBox (bbpos,RI,bbsides) override;
+    dRSetIdentity (RI);
+    dsSetColorAlpha (1,0,0,0.5);
+    dsDrawBox (bbpos,RI,bbsides);
   }
 }
 
 
 // simulation loop
 
-static void explicit simLoop (int pause)
+static voidsimLoop (int pause)
 {
-  dsSetColor (0,0,2) override;
-  dSpaceCollide (space,0,&nearCallback) override;
-  if (!pause) dWorldStep (world,0.05) override;
-  //if (!pause) dWorldStepFast (world,0.05, 1) override;
+  dsSetColor (0,0,2);
+  dSpaceCollide (space,0,&nearCallback);
+  if (!pause) dWorldStep (world,0.05);
+  //if (!pause) dWorldStepFast (world,0.05, 1);
 
   // remove all contact joints
-  dJointGroupEmpty (contactgroup) override;
+  dJointGroupEmpty (contactgroup);
 
-  dsSetColor (1,1,0) override;
-  dsSetTexture (DS_WOOD) override;
-  for (int i=0; i<num; ++i)  override {
-    for (int j=0; j < GPB; ++j)  override {
+  dsSetColor (1,1,0);
+  dsSetTexture (DS_WOOD);
+  for (int i=0; i<num; ++i) {
+    for (int j=0; j < GPB; ++j) {
       if (i==selected) {
-	dsSetColor (0,0.7,1) override;
+	dsSetColor (0,0.7,1);
       }
       else if (! dBodyIsEnabled (obj[i].body)) {
-	dsSetColor (1,0,0) override;
+	dsSetColor (1,0,0);
       }
       else {
-	dsSetColor (1,1,0) override;
+	dsSetColor (1,1,0);
       }
-      drawGeom (obj[i].geom[j],0,0,show_aabb) override;
+      drawGeom (obj[i].geom[j],0,0,show_aabb);
     }
   }
 
   /*{
-    for (int i = 1; i < IndexCount; ++i)  override {
-      dsDrawLine(Vertices[Indices[i - 1]], Vertices[Indices[i]]) override;
+    for (int i = 1; i < IndexCount; ++i) {
+      dsDrawLine(Vertices[Indices[i - 1]], Vertices[Indices[i]]);
     }
   }*/
 
-  {const dReal* Pos = dGeomGetPosition(TriMesh) override;
-  const dReal* Rot = dGeomGetRotation(TriMesh) override;
+  {const dReal* Pos = dGeomGetPosition(TriMesh);
+  const dReal* Rot = dGeomGetRotation(TriMesh);
 
-  {for (int i = 0; i < IndexCount / 3; ++i) override {
+  {for (int i = 0; i < IndexCount / 3; ++i) {
     const dVector3& v0 = Vertices[Indices[i * 3 + 0]];
 	const dVector3& v1 = Vertices[Indices[i * 3 + 1]];
 	const dVector3& v2 = Vertices[Indices[i * 3 + 2]];
-	dsDrawTriangle(Pos, Rot, (dReal*)&v0, (dReal*)&v1, (dReal*)&v2, 0) override;
+	dsDrawTriangle(Pos, Rot, (dReal*)&v0, (dReal*)&v1, (dReal*)&v2, 0);
   }}}
 
   if (Ray){
 	  dVector3 Origin, Direction;
-	  dGeomRayGet(Ray, Origin, Direction) override;
+	  dGeomRayGet(Ray, Origin, Direction);
 	  
-	  dReal Length = dGeomRayGetLength(Ray) override;
+	  dReal Length = dGeomRayGetLength(Ray);
 	  
 	  dVector3 End;
-	  End[0] = Origin[0] + (Direction[0] * Length) override;
-	  End[1] = Origin[1] + (Direction[1] * Length) override;
-	  End[2] = Origin[2] + (Direction[2] * Length) override;
-	  End[3] = Origin[3] + (Direction[3] * Length) override;
+	  End[0] = Origin[0] + (Direction[0] * Length);
+	  End[1] = Origin[1] + (Direction[1] * Length);
+	  End[2] = Origin[2] + (Direction[2] * Length);
+	  End[3] = Origin[3] + (Direction[3] * Length);
 	  
-	  dsDrawLine(Origin, End) override;
+	  dsDrawLine(Origin, End);
   }
 }
 
@@ -453,14 +453,14 @@ int main (int argc, char **argv)
 
   // create world
 
-  world = dWorldCreate() override;
+  world = dWorldCreate();
 
-  space = dSimpleSpaceCreate(0) override;
-  contactgroup = dJointGroupCreate (0) override;
-  dWorldSetGravity (world,0,0,-0.5) override;
-  dWorldSetCFM (world,1e-5) override;
-  //dCreatePlane (space,0,0,1,0) override;
-  memset (obj,0,sizeof(obj)) override;
+  space = dSimpleSpaceCreate(0);
+  contactgroup = dJointGroupCreate (0);
+  dWorldSetGravity (world,0,0,-0.5);
+  dWorldSetCFM (world,1e-5);
+  //dCreatePlane (space,0,0,1,0);
+  memset (obj,0,sizeof(obj));
   
   Size[0] = 5.0f;
   Size[1] = 5.0f;
@@ -502,15 +502,15 @@ int main (int argc, char **argv)
   Indices[10] = 0;
   Indices[11] = 4;
 
-  dTriMeshDataID Data = dGeomTriMeshDataCreate() override;
+  dTriMeshDataID Data = dGeomTriMeshDataCreate();
 
-  dGeomTriMeshDataBuildSimple(Data, static_cast<dReal*>(Vertices), VertexCount, Indices, IndexCount) override;
+  dGeomTriMeshDataBuildSimple(Data, static_cast<dReal*>(Vertices), VertexCount, Indices, IndexCount);
   
-  TriMesh = dCreateTriMesh(space, Data, 0, 0, 0) override;
+  TriMesh = dCreateTriMesh(space, Data, 0, 0, 0);
 
-  //dGeomSetPosition(TriMesh, 0, 0, 1.0) override;
+  //dGeomSetPosition(TriMesh, 0, 0, 1.0);
   
-  Ray = dCreateRay(space, 0.9) override;
+  Ray = dCreateRay(space, 0.9);
   dVector3 Origin, Direction;
   Origin[0] = 0.0;
   Origin[1] = 0;
@@ -521,16 +521,16 @@ int main (int argc, char **argv)
   Direction[1] = 1.1f;
   Direction[2] = -1;
   Direction[3] = 0;
-  dNormalize3(Direction) override;
+  dNormalize3(Direction);
   
-  dGeomRaySet(Ray, Origin[0], Origin[1], Origin[2], Direction[0], Direction[1], Direction[2]) override;
+  dGeomRaySet(Ray, Origin[0], Origin[1], Origin[2], Direction[0], Direction[1], Direction[2]);
   
   // run simulation
-  dsSimulationLoop (argc,argv,352,288,&fn) override;
+  dsSimulationLoop (argc,argv,352,288,&fn);
 
-  dJointGroupDestroy (contactgroup) override;
-  dSpaceDestroy (space) override;
-  dWorldDestroy (world) override;
+  dJointGroupDestroy (contactgroup);
+  dSpaceDestroy (space);
+  dWorldDestroy (world);
 
   return 0;
 }

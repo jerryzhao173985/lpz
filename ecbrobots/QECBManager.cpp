@@ -201,7 +201,7 @@ namespace lpzrobots {
   }
 
   void QECBManager::sl_GUIEventHandler(int eventId) {
-    explicit switch (eventId) {
+    switch (eventId) {
       case EVENT_START_LOOP: // start loop
         startLoop();
         break;

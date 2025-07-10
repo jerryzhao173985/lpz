@@ -173,7 +173,7 @@ public:
 
 
   void command(const OdeHandle& odeHandle, GlobalData& global, int key){
-    explicit switch (key){
+    switch (key){
     case '>': omega+=0.05;
       break;
     case '<': omega-=0.05;
@@ -209,7 +209,7 @@ public:
 
 };
 
-void explicit printUsage(const char* progname){
+voidprintUsage(const char* progname){
   printf("Usage: %s numchannels [-g] [-f]\n\tnumchannels\tnumber of channels\n\
 \t-g\t\tuse guilogger\n\t-f\t\tuse guilogger with logfile", progname);
 }
@@ -222,7 +222,7 @@ int main (int argc, char **argv)
   }
   channels = std::max(1,atoi(argv[1]));
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }
 
 /*

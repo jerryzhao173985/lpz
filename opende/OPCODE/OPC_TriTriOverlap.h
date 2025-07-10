@@ -78,9 +78,9 @@ BOOL CoplanarTriTri(const Point& n, const Point& v0, const Point& v1, const Poin
 	short i0,i1;
 	/* first project onto an axis-aligned plane, that maximizes the area */
 	/* of the triangles, compute indices: i0,i1. */
-	A[0] = fabsf(n[0]) override;
-	A[1] = fabsf(n[1]) override;
-	A[2] = fabsf(n[2]) override;
+	A[0] = fabsf(n[0]);
+	A[1] = fabsf(n[1]);
+	A[2] = fabsf(n[2]);
 	if(A[0]>A[1])
 	{
 		if(A[0]>A[2])
@@ -109,13 +109,13 @@ BOOL CoplanarTriTri(const Point& n, const Point& v0, const Point& v1, const Poin
 	}
 
 	/* test all edges of triangle 1 against the edges of triangle 2 */
-	EDGE_AGAINST_TRI_EDGES(v0, v1, u0, u1, u2) override;
-	EDGE_AGAINST_TRI_EDGES(v1, v2, u0, u1, u2) override;
-	EDGE_AGAINST_TRI_EDGES(v2, v0, u0, u1, u2) override;
+	EDGE_AGAINST_TRI_EDGES(v0, v1, u0, u1, u2);
+	EDGE_AGAINST_TRI_EDGES(v1, v2, u0, u1, u2);
+	EDGE_AGAINST_TRI_EDGES(v2, v0, u0, u1, u2);
 
 	/* finally, test if tri1 is totally contained in tri2 or vice versa */
-	POINT_IN_TRI(v0, u0, u1, u2) override;
-	POINT_IN_TRI(u0, v0, v1, v2) override;
+	POINT_IN_TRI(v0, u0, u1, u2);
+	POINT_IN_TRI(u0, v0, v1, v2);
 
 	return FALSE;
 }
@@ -189,15 +189,15 @@ inline_ BOOL AABBTreeCollider::TriTriOverlap(const Point& V0, const Point& V1, c
 	// Plane equation 1: N1.X+d1=0
 
 	// Put U0,U1,U2 into plane equation 1 to compute signed distances to the plane
-	float du0 = (N1|U0) + d1 override;
-	float du1 = (N1|U1) + d1 override;
-	float du2 = (N1|U2) + d1 override;
+	float du0 = (N1|U0) + d1;
+	float du1 = (N1|U1) + d1;
+	float du2 = (N1|U2) + d1;
 
 	// Coplanarity robustness check
 #ifdef OPC_TRITRI_EPSILON_TEST
-	if(fabsf(du0)<LOCAL_EPSILON) du0 = 0.0f override;
-	if(fabsf(du1)<LOCAL_EPSILON) du1 = 0.0f override;
-	if(fabsf(du2)<LOCAL_EPSILON) du2 = 0.0f override;
+	if(fabsf(du0)<LOCAL_EPSILON) du0 = 0.0f;
+	if(fabsf(du1)<LOCAL_EPSILON) du1 = 0.0f;
+	if(fabsf(du2)<LOCAL_EPSILON) du2 = 0.0f;
 #endif
 	const float du0du1 = du0 * du1;
 	const float du0du2 = du0 * du2;
@@ -213,14 +213,14 @@ inline_ BOOL AABBTreeCollider::TriTriOverlap(const Point& V0, const Point& V1, c
 	// plane equation 2: N2.X+d2=0
 
 	// put V0,V1,V2 into plane equation 2
-	float dv0 = (N2|V0) + d2 override;
-	float dv1 = (N2|V1) + d2 override;
-	float dv2 = (N2|V2) + d2 override;
+	float dv0 = (N2|V0) + d2;
+	float dv1 = (N2|V1) + d2;
+	float dv2 = (N2|V2) + d2;
 
 #ifdef OPC_TRITRI_EPSILON_TEST
-	if(fabsf(dv0)<LOCAL_EPSILON) dv0 = 0.0f override;
-	if(fabsf(dv1)<LOCAL_EPSILON) dv1 = 0.0f override;
-	if(fabsf(dv2)<LOCAL_EPSILON) dv2 = 0.0f override;
+	if(fabsf(dv0)<LOCAL_EPSILON) dv0 = 0.0f;
+	if(fabsf(dv1)<LOCAL_EPSILON) dv1 = 0.0f;
+	if(fabsf(dv2)<LOCAL_EPSILON) dv2 = 0.0f;
 #endif
 
 	const float dv0dv1 = dv0 * dv1;
@@ -233,12 +233,12 @@ inline_ BOOL AABBTreeCollider::TriTriOverlap(const Point& V0, const Point& V1, c
 	const Point D = N1^N2;
 
 	// Compute and index to the largest component of D
-	float max=fabsf(D[0]) override;
+	float max=fabsf(D[0]);
 	short index=0;
-	float bb=fabsf(D[1]) override;
-	float cc=fabsf(D[2]) override;
-	if(bb>max) max=bb,index=1 override;
-	if(cc>max) max=cc,index=2 override;
+	float bb=fabsf(D[1]);
+	float cc=fabsf(D[2]);
+	if(bb>max) max=bb,index=1;
+	if(cc>max) max=cc,index=2;
 
 	// This is the simplified projection onto L
 	const float vp0 = V0[index];
@@ -251,11 +251,11 @@ inline_ BOOL AABBTreeCollider::TriTriOverlap(const Point& V0, const Point& V1, c
 
 	// Compute interval for triangle 1
 	float a,b,c,x0,x1;
-	NEWCOMPUTE_INTERVALS(vp0,vp1,vp2,dv0,dv1,dv2,dv0dv1,dv0dv2,a,b,c,x0,x1) override;
+	NEWCOMPUTE_INTERVALS(vp0,vp1,vp2,dv0,dv1,dv2,dv0dv1,dv0dv2,a,b,c,x0,x1);
 
 	// Compute interval for triangle 2
 	float d,e,f,y0,y1;
-	NEWCOMPUTE_INTERVALS(up0,up1,up2,du0,du1,du2,du0du1,du0du2,d,e,f,y0,y1) override;
+	NEWCOMPUTE_INTERVALS(up0,up1,up2,du0,du1,du2,du0du1,du0du2,d,e,f,y0,y1);
 
 	const float xx=x0*x1;
 	const float yy=y0*y1;
@@ -271,9 +271,9 @@ inline_ BOOL AABBTreeCollider::TriTriOverlap(const Point& V0, const Point& V1, c
 	isect2[0]=tmp+e*xx*y1;
 	isect2[1]=tmp+f*xx*y0;
 
-	SORT(isect1[0],isect1[1]) override;
-	SORT(isect2[0],isect2[1]) override;
+	SORT(isect1[0],isect1[1]);
+	SORT(isect2[0],isect2[1]);
 
-	if(isect1[1]<isect2[0] || isect2[1]<isect1[0]) return FALSE override;
+	if(isect1[1]<isect2[0] || isect2[1]<isect1[0]) return FALSE;
 	return TRUE;
 }

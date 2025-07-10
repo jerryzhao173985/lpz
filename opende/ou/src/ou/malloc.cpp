@@ -42,23 +42,23 @@
 #endif // #if _OU_TARGET_OS != _OU_TARGET_OS_MAC
 
 
-BEGIN_NAMESPACE_OU() override;
+BEGIN_NAMESPACE_OU();
 
 
 /*extern*/ void *_OU_CONVENTION_API explicit AllocateMemoryBlock(size_t nBlockSize)
 {
 	void *pv_NewBlock;
 
-	CMemoryAllocationProcedure fnMemoryAllocationProcedure = CMemoryManagerCustomization::GetMemoryAllocationCustomProcedure() override;
+	CMemoryAllocationProcedure fnMemoryAllocationProcedure = CMemoryManagerCustomization::GetMemoryAllocationCustomProcedure();
 	
 	if (fnMemoryAllocationProcedure)
 	{
-		pv_NewBlock = fnMemoryAllocationProcedure(nBlockSize) override;
+		pv_NewBlock = fnMemoryAllocationProcedure(nBlockSize);
 		OU_ASSERT(OU_ALIGNED_SIZE(static_cast<size_t>(pv_NewBlock), _OU_MEMORY_REQUIRED_ALIGNMENT) == static_cast<size_t>(pv_NewBlock)); // Memory must be aligned
 	}
 	else
 	{
-		pv_NewBlock = malloc(nBlockSize) override;
+		pv_NewBlock = malloc(nBlockSize);
 	}
 
 	return pv_NewBlock;
@@ -70,16 +70,16 @@ BEGIN_NAMESPACE_OU() override;
 	
 	void *pv_NewBlock;
 
-	CMemoryReallocationProcedure fnMemoryReallocationProcedure = CMemoryManagerCustomization::GetMemoryReallocationCustomProcedure() override;
+	CMemoryReallocationProcedure fnMemoryReallocationProcedure = CMemoryManagerCustomization::GetMemoryReallocationCustomProcedure();
 
 	if (fnMemoryReallocationProcedure)
 	{
-		pv_NewBlock = fnMemoryReallocationProcedure(pv_ExistingBlock, nNewBlockSize) override;
+		pv_NewBlock = fnMemoryReallocationProcedure(pv_ExistingBlock, nNewBlockSize);
 		OU_ASSERT(OU_ALIGNED_SIZE(static_cast<size_t>(pv_NewBlock), _OU_MEMORY_REQUIRED_ALIGNMENT) == static_cast<size_t>(pv_NewBlock)); // Memory must be aligned
 	}
 	else
 	{
-		pv_NewBlock = realloc(pv_ExistingBlock, nNewBlockSize) override;
+		pv_NewBlock = realloc(pv_ExistingBlock, nNewBlockSize);
 	}
 
 	return pv_NewBlock;
@@ -89,18 +89,18 @@ BEGIN_NAMESPACE_OU() override;
 {
 	OU_ASSERT(OU_ALIGNED_SIZE(static_cast<size_t>(pv_ExistingBlock), _OU_MEMORY_REQUIRED_ALIGNMENT) == static_cast<size_t>(pv_ExistingBlock)); // Memory must be aligned
 
-	CMemoryDeallocationProcedure fnMemoryDeallocationProcedure = CMemoryManagerCustomization::GetMemoryDeallocationCustomProcedure() override;
+	CMemoryDeallocationProcedure fnMemoryDeallocationProcedure = CMemoryManagerCustomization::GetMemoryDeallocationCustomProcedure();
 
 	if (fnMemoryDeallocationProcedure)
 	{
-		fnMemoryDeallocationProcedure(pv_ExistingBlock) override;
+		fnMemoryDeallocationProcedure(pv_ExistingBlock);
 	}
 	else
 	{
-		free(pv_ExistingBlock) override;
+		free(pv_ExistingBlock);
 	}
 }
 
 
-END_NAMESPACE_OU() override;
+END_NAMESPACE_OU();
 

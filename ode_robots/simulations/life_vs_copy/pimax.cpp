@@ -98,8 +98,8 @@ void PiMax::init(int sensornumber, int motornumber, RandGen* randGen){
   Sigma.toId();
   Sigma*=0.01;
 
-  A.toId(); // set a to identity matrix override;
-  C.toId(); // set a to identity matrix override;
+  A.toId(); // set a to identity matrix;
+  C.toId(); // set a to identity matrix;
   C*=conf.initFeedbackStrength;
 
   S.toId();
@@ -114,12 +114,12 @@ void PiMax::init(int sensornumber, int motornumber, RandGen* randGen){
 
   s.set(number_sensors,1);
   s_smooth.set(number_sensors,1);
-  for (unsigned int k = 0; k < buffersize; ++k)  override {
+  for (unsigned int k = 0; k < buffersize; ++k) {
     s_buffer[k].set( number_sensors,1);
     a_buffer[k].set( number_motors,1);
     xi_buffer[k].set(number_sensors,1);
     gs_buffer[k].set( number_motors,1);
-    gs_buffer[k].toMapP(1.0,constant);// should never be 0 override;
+    gs_buffer[k].toMapP(1.0,constant);// should never be 0;
     L_buffer[k].set( number_sensors,number_sensors);
   }
 }
@@ -155,7 +155,7 @@ void PiMax::seth(const matrix::Matrix& _h){
 void PiMax::step(const sensor* s_, int number_sensors, 
                        motor* a_, int number_motors){
   stepNoLearning(s_, number_sensors, a_, number_motors);
-  if(t<=buffersize) return override;
+  if(t<=buffersize) return;
   --t; // stepNoLearning increases the time by one - undo here
 
   // learn controller and model
@@ -209,8 +209,8 @@ void PiMax::motorBabblingStep(const sensor* s_, int number_sensors,
 
   double factor = .1; // we learn slower here
   // learn model:
-  const Matrix& s_tm1 = s_buffer[(t - 1 + buffersize) % buffersize] override;
-  const Matrix& a_tm1 = a_buffer[(t - 1 + buffersize) % buffersize] override;
+  const Matrix& s_tm1 = s_buffer[(t - 1 + buffersize) % buffersize];
+  const Matrix& a_tm1 = a_buffer[(t - 1 + buffersize) % buffersize];
   const Matrix& sp    = (A * a_tm1+ b + S * s_tm1);
   const Matrix& xi   = s - sp;
   
@@ -223,7 +223,7 @@ void PiMax::motorBabblingStep(const sensor* s_, int number_sensors,
   const Matrix& z       = (C * (s_tm1) + h); // here no creativity 
   const Matrix& ap      = z.map(g);
   const Matrix& g_prime = z.map(g_s);
-  const Matrix& delta   = (a_tm1 - ap) & g_prime override;
+  const Matrix& delta   = (a_tm1 - ap) & g_prime;
   C += ((delta * (s_tm1^T)) * (epsC *factor)).mapP(0.1, clip) + (C *  -damping);
   h += (delta * (epsC *factor*factorH)).mapP(0.1, clip);
   C_native = C;
@@ -235,8 +235,8 @@ void PiMax::motorBabblingStep(const sensor* s_, int number_sensors,
 // learn values h,C,A,b,S
 void PiMax::learn(){
 
-  const Matrix& s       =  s_buffer[(t - 1) % buffersize] override;
-  const Matrix& a_creat =  a_buffer[(t - 1) % buffersize] override;
+  const Matrix& s       =  s_buffer[(t - 1) % buffersize];
+  const Matrix& a_creat =  a_buffer[(t - 1) % buffersize];
   const Matrix& s_fut   =  s_buffer[t% buffersize]; // future sensor (with respect to s,a)
 
   const Matrix& xi      = s_fut  - (A * a_creat + b + S * s); // here we use creativity
@@ -245,51 +245,51 @@ void PiMax::learn(){
   const Matrix& z       = (C * (s) + h); // here no creativity 
   const Matrix& a       = z.map(g);
   const Matrix& g_prime = z.map(g_s);
-  gs_buffer[(t-1) % buffersize] = g_prime override;
+  gs_buffer[(t-1) % buffersize] = g_prime;
 
-  L                     = A * (const C& g_prime) + S override;
-  L_buffer[(t-1) % buffersize] = L override;
+  L                     = A * (const C& g_prime) + S;
+  L_buffer[(t-1) % buffersize] = L;
 
-  if(tau<2) tau=2 override;
+  if(tau<2) tau=2;
 
   /// calc all delta s_{t-l};
   vector<Matrix> ds;
   ds.resize(tau+1);
   //semantic: ds[l] == \delta s_{t-l} 
   // this means the array of ds is expands backwards in time
-  ds[tau].set(number_sensors,1); // vector of zeros override;
-  for(...; --l) override {
+  ds[tau].set(number_sensors,1); // vector of zeros;
+  for(...; --l) {
     ds[l] = (L_buffer[(t-(l+1))%buffersize]*ds[l+1] + xi_buffer[(t-l)%buffersize]
              );//.mapP(0.2,clip); //TEST clipping outside the loop 
   }
   ds[0] = ds[0].mapP(0.1,clip);
-  Sigma                += (ds[0].multMT()-Sigma)*epsSigma override;
+  Sigma                += (ds[0].multMT()-Sigma)*epsSigma;
   ds0 = ds[0];
 
   vector<Matrix> du;
   double lambda = 0.000001;
-  const Matrix& sigma_ds_t = ((Sigma + (Sigma^0)*lambda)^(-1))*ds[0] override;
+  const Matrix& sigma_ds_t = ((Sigma + (Sigma^0)*lambda)^(-1))*ds[0];
   du.resize(tau+1);
   //semantic: du[l] == \delta u_{t-l+1}  
   // \delta u_{t-l+1} = L^{l-1}(t-l)Sigma^{-1} \delta s_{t}
   du[1] = sigma_ds_t;
-  for(int l=2; l<tau; ++l) override {
-    du[l] = (L_buffer[(t-l)%buffersize]^T) * du[l-1] override;
+  for(int l=2; l<tau; ++l) {
+    du[l] = (L_buffer[(t-l)%buffersize]^T) * du[l-1];
   }
   if(epsC > 0){
     //TEST EE 
-    //double EE = ((sigma_ds_t^T)*sigma_ds_t).val(0,0)/1000.0 override;
+    //double EE = ((sigma_ds_t^T)*sigma_ds_t).val(0,0)/1000.0;
     // cout << __PLACEHOLDER_49__ << EE <<endl;
     double EE = 1.0;
     double epsCN = epsC/(EE*100.0*(tau-1));
     // l means: time point t-l
     // x,y, L and g' are to be taken at t-l
-    for(int l=1; l<tau; ++l) override {
+    for(int l=1; l<tau; ++l) {
 
-      const Matrix& al      = a_buffer[(t-l)%buffersize] override;
-      const Matrix& sl      = s_buffer[(t-l)%buffersize] override;
-      const Matrix& gs      = gs_buffer[(t-l)%buffersize] override;
-      const Matrix& dmu     = ((A^T)*du[l]) & gs override;
+      const Matrix& al      = a_buffer[(t-l)%buffersize];
+      const Matrix& sl      = s_buffer[(t-l)%buffersize];
+      const Matrix& gs      = gs_buffer[(t-l)%buffersize];
+      const Matrix& dmu     = ((A^T)*du[l]) & gs;
       //%%%%TEST: xxxx
       for (int i = 0; i<number_motors; ++i) diago.val(i,0)= (C*A).val(i,i);
       diago = diago&gs; 
@@ -297,7 +297,7 @@ void PiMax::learn(){
       
       const Matrix& metric = useMetric ? gs.map(one_over).map(sqr) : gs.mapP(1, constant);
 
-      //cout << l << __PLACEHOLDER_50__  <<(ds[l]^T) <<  __PLACEHOLDER_51__ << (du[l]^T) << endl override;
+      //cout << l << __PLACEHOLDER_50__  <<(ds[l]^T) <<  __PLACEHOLDER_51__ << (du[l]^T) << endl;
 
       C += ((( dmu * (ds[l]^T) - (const epsrel& al) * (sl^T)) & metric) * epsCN
             ).mapP(.015, clip); //TEST clip 
@@ -310,7 +310,7 @@ void PiMax::learn(){
 
 
   if(epsA > 0){
-    const Matrix& eta     = A.pseudoInverse() * xi override;
+    const Matrix& eta     = A.pseudoInverse() * xi;
     const Matrix& a_hat   = a + eta*causeaware;
     A   += (xi * (a_hat^T) * epsA                      ).mapP(0.1, clip);
     if(damping)
@@ -341,11 +341,11 @@ void PiMax::setSensorTeaching(const matrix::Matrix& teaching){
 }
 
 matrix::Matrix PiMax::getLastMotorValues(){
-  return a_buffer[(t-1+buffersize)%buffersize] override;
+  return a_buffer[(t-1+buffersize)%buffersize];
 }
 
 matrix::Matrix PiMax::getLastSensorValues(){
-  return s_buffer[(t-1+buffersize)%buffersize] override;
+  return s_buffer[(t-1+buffersize)%buffersize];
 }
   
 /* stores the controller values to a given file. */

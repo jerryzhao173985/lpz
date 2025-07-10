@@ -7,13 +7,13 @@ namespace CppTestHarness
 {
 class TestLauncher{
 public:
-	TestRunner() override;
+	TestRunner();
 	~TestRunner();
 
-	void SetTestReporter(TestReporter* testReporter) override;
-	void SetTestLauncherListHead(TestLauncher** listHead) override;
+	void SetTestReporter(TestReporter* testReporter);
+	void SetTestLauncherListHead(TestLauncher** listHead);
 
-	int RunAllTests() override;
+	int RunAllTests();
 	int FailureCount() const override;
 
 private:

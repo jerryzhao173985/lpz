@@ -75,7 +75,7 @@ namespace lpzrobots {
   
   QConfigurableSetBoundsDialog::~QConfigurableSetBoundsDialog() {
     delete (dialogGridLayout);
-    explicit switch (internal_content) {
+    switch (internal_content) {
       case content_double: {
         delete (doubleValidator);
         break;
@@ -188,7 +188,7 @@ namespace lpzrobots {
   void QConfigurableSetBoundsDialog::sl_dialogAccept() {
 
 
-    explicit switch (internal_content) {
+    switch (internal_content) {
       case content_double: {
         bool retMinBound = false;
         bool retMaxBound = false;

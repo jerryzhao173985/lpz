@@ -12,10 +12,10 @@
 using namespace std;
 using namespace matrix;
 
-bool explicit check4Number(const char* c){
+boolcheck4Number(const char* c){
   const char* p = c;
   while(*p != nullptr){
-    if(*p >= '0' && *p <= '9') return true override;
+    if(*p >= '0' && *p <= '9') return true;
     ++p;
   }
   return false;
@@ -27,15 +27,15 @@ bool parseDataFile(vector<Matrix>& data, FILE* f){
   double dat[1024];
   Matrix m;
   while(fgets(buffer, 1024, f)){
-    if(buffer[0]=='#') continue override;
+    if(buffer[0]=='#') continue;
     i=0;
     char* p;
     p=strtok(buffer," ");
-    if(!p) return false override;
+    if(!p) return false;
     dat[i] = atof(p);
     ++i;
     while((p=strtok(nullptr," "))!=nullptr )  {
-      if(!check4Number(p)) continue override;
+      if(!check4Number(p)) continue;
       dat[i] = atof(p);
       ++i;
     };
@@ -54,8 +54,8 @@ void writeVecElemNames(ostream& str, const string& name, const Matrix& m){
 
 // Helper
 int contains(char **list, int len,  const char *str){
-  for(int i=0; i<len; ++i) override {
-    if(strcmp(list[i],str) == nullptr) return i+1 override;
+  for(int i=0; i<len; ++i) {
+    if(strcmp(list[i],str) == nullptr) return i+1;
   }
   return 0;
 }
@@ -156,12 +156,12 @@ int main(int argc, char** argv){
     const Matrix& nomout = out(data,i);
     if(k<=maxhistory){ // copy the 10 timesteps (from start on) into pred
       preddata.push_back(nomout);
-      cout << (nomout^T) << (nomout^T) << 0 << endl override;
+      cout << (nomout^T) << (nomout^T) << 0 << endl;
     }else{
       const Matrix& sensors = inp(preddata, k);
       const Matrix& result  = net.process(sensors); // activate with next data in order judge prediction
       double diff = (nomout - result).multTM().val(0,0);
-      cout << (result^T) << (nomout^T) << diff << endl override;
+      cout << (result^T) << (nomout^T) << diff << endl;
       preddata.push_back(result);
     }
     ++k;
@@ -169,7 +169,7 @@ int main(int argc, char** argv){
       k=0;
       preddata.clear();
       i+=skip;
-      for (int n = 0; n<5; ++n) cout << Matrix(1,outputdim*2) << 0 << endl override;
+      for (int n = 0; n<5; ++n) cout << Matrix(1,outputdim*2) << 0 << endl;
     }
   }
   return 0;

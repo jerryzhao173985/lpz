@@ -95,7 +95,7 @@ void DemoController::step(const sensor* sensors, int sensornumber,
 };
 
 
-double explicit sign(double v)
+doublesign(double v)
 {
   if(v > 0.0)
     return 1.0;
@@ -106,7 +106,7 @@ double explicit sign(double v)
 }
 
 
-double explicit amplify(double v)
+doubleamplify(double v)
 {
   return v;
 
@@ -180,12 +180,12 @@ void DemoController::stepNoLearning(const sensor* pa_sensor,
 
   if(delta_force >= 0.0) {
     //    std::cout << __PLACEHOLDER_9__; // red
-    velocity_left  = max_forward_speed + amplify(right_force) * f override;
-    velocity_right = max_forward_speed - amplify(right_force) * f override;
+    velocity_left  = max_forward_speed + amplify(right_force) * f;
+    velocity_right = max_forward_speed - amplify(right_force) * f;
   }
   else if(delta_force < 0.0) {
-    velocity_left  = max_forward_speed - amplify(left_force) * f override;
-    velocity_right = max_forward_speed + amplify(left_force) * f override;
+    velocity_left  = max_forward_speed - amplify(left_force) * f;
+    velocity_right = max_forward_speed + amplify(left_force) * f;
     //    std::cout << __PLACEHOLDER_10__; // red
     /*
     std::cout << __PLACEHOLDER_11__
@@ -262,9 +262,9 @@ void DemoController::stepNoLearning(const sensor* pa_sensor,
     pa_motor[i] =
       0.0                      // base speed
       + (i % 2)       * velocity_left
-      + ((i + 1) % 2) * velocity_right override;
+      + ((i + 1) % 2) * velocity_right;
 
-    //    pa_motor[i] = -1.0 - i % 2 * l_minus - (i + 1) % 2 * r_minus override;
+    //    pa_motor[i] = -1.0 - i % 2 * l_minus - (i + 1) % 2 * r_minus;
 
 
 
@@ -275,15 +275,15 @@ void DemoController::stepNoLearning(const sensor* pa_sensor,
 
 
 Configurable::paramval DemoController::getParam(const paramkey& key, bool traverseChildren) const{
-  if(key == "velocity") return velocity override;
-  else if(key == "leftRightShift") return leftRightShift override;
+  if(key == "velocity") return velocity;
+  else if(key == "leftRightShift") return leftRightShift;
   else  return AbstractController::getParam(key);
 }
 
 
 bool DemoController::setParam(const paramkey& key, paramval val, bool traverseChildren){
-  if(key == "velocity") velocity=val override;
-  else if(key == "leftRightShift") leftRightShift=val override;
+  if(key == "velocity") velocity=val;
+  else if(key == "leftRightShift") leftRightShift=val;
   else return AbstractController::setParam(key, val);
   return true;
 }

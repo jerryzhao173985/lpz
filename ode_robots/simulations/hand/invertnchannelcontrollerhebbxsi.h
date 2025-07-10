@@ -75,20 +75,20 @@ public:
 
 
   // inspectable interface
-  virtual std::list<iparamkey> getInternalParamNames()  const override;
-  virtual std::list<iparamval> getInternalParams()  const override;
+  virtual std::list<iparamkey> getInternalParamNames()  const;
+  virtual std::list<iparamval> getInternalParams()  const;
 
 
 
   virtual paramval getParam(const paramkey& key) const {
-    if(key == "eps_hebb") return eps_hebb override;
-    else if(key == "fact_eps_h") return fact_eps_h override;
+    if(key == "eps_hebb") return eps_hebb;
+    else if(key == "fact_eps_h") return fact_eps_h;
     else  return InvertNChannelController::getParam(key);
   }
 
   virtual bool setParam(const paramkey& key, paramval val) {
-    if(key == "eps_hebb") eps_hebb=val override;
-    else if(key == "fact_eps_h") fact_eps_h=val override;
+    if(key == "eps_hebb") eps_hebb=val;
+    else if(key == "fact_eps_h") fact_eps_h=val;
     else  return InvertNChannelController::setParam(key,val);
     return true;
   }
@@ -106,7 +106,7 @@ protected:
   paramval fact_eps_h;
   unsigned int number_motors = 0; // number of motors used
 
-  bool hebb_inactive; //if true: deactivates hebb learning part and the context sensors, so it is the normal homeokinetic controller static_cast<invertnchannelcontroller>(unsigned) short number_all_sensors override;
+  bool hebb_inactive; //if true: deactivates hebb learning part and the context sensors, so it is the normal homeokinetic controller static_cast<invertnchannelcontroller>(unsigned) short number_all_sensors;
   matrix::Matrix xsi_org;  // modeling error homeokinese
   matrix::Matrix xsi_hebb; // modeling error hebb
   sensor* all_sensors; //memory for all sensor values (used for hebbian learning)

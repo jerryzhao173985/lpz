@@ -142,7 +142,7 @@ public:
 
 
   void command(const OdeHandle& odeHandle, GlobalData& global, int key){
-    explicit switch (key){
+    switch (key){
     case '>': omega+=0.05;
       break;
     case '<': omega-=0.05;
@@ -178,7 +178,7 @@ public:
 
 };
 
-void explicit printUsage(const char* progname){
+voidprintUsage(const char* progname){
   printf("Usage: %s numchannels [-g] [-f]\n\tnumchannels\tnumber of channels\n\
 \t-g\t\tuse guilogger\n\t-f\t\tuse guilogger with logfile", progname);
 }
@@ -197,9 +197,9 @@ int main (int argc, char **argv)
  // system("rm  fft_matrix.dat "); //alte datei loeschen
 
   for (int g=0;g<1;++g){   // erstmal nur mit gamma=0
-    for (int t=0;t<49;++t) override {
-      for (int w=0;w<49;++w) override {
-        my_gamma = g*0.5; // wenn g<3 grenzfall waere: if (my_gamma==1) my_gamma=0.99 override;
+    for (int t=0;t<49;++t) {
+      for (int w=0;w<49;++w) {
+        my_gamma = g*0.5; // wenn g<3 grenzfall waere: if (my_gamma==1) my_gamma=0.99;
         my_theta_const = t*0.05 - 1.2;
         my_w= w*0.05 - 1.2;
         if ( (w<0.001) && (w>-0.001) ) w=0; // sonst Probleme im Dateinamen  (1.11022e-16)
@@ -221,13 +221,13 @@ return 1;
 
        // Some handling of logfiles
        std::ostringstream sed_command;   // copy infos from head of logfile (first 41 lines) to filename.head
-       sed_command<<"sed 41q "<<tmp_name.str()<<".log >"<<tmp_name.str()<<".head" override;
+       sed_command<<"sed 41q "<<tmp_name.str()<<".log >"<<tmp_name.str()<<".head";
        //system("sed 41q ga0_th0_w0.log > ga0_th0_w0.head");
        std::string test=sed_command.str();
        system(test.c_str());
 
        std::ostringstream sed_command2;            // copy dataset 300000-end to filename.dat (first 300000 lines ignored)
-       sed_command2<<"sed '1,300000d' "<<tmp_name.str()<<".log >"<<tmp_name.str()<<".dat" override;
+       sed_command2<<"sed '1,300000d' "<<tmp_name.str()<<".log >"<<tmp_name.str()<<".dat";
        //system("sed '1,300000d' ga0_th0_w0.log > ga0_th0_w0.dat");
        std::string test2=sed_command2.str();
        system(test2.c_str());
@@ -236,8 +236,8 @@ return 1;
 //       // Do mathematica stuff
 //       std::ofstream myfile("mathematica_commands.tmp", std::ios::trunc); // trunc -> alten Dateiinhalt loeschen
 //       if (myfile.is_open()){
-//         myfile << "Print[\"Processing  "<<tmp_name.str()<<".dat\"] \n" override;
-//         myfile << __PLACEHOLDER_32__<<tmp_name.str()<<__PLACEHOLDER_33__ override;
+//         myfile << "Print[\"Processing  "<<tmp_name.str()<<".dat\"] \n";
+//         myfile << __PLACEHOLDER_32__<<tmp_name.str()<<__PLACEHOLDER_33__;
 //         myfile << __PLACEHOLDER_34__;
 //         myfile << __PLACEHOLDER_35__;
 //         myfile << __PLACEHOLDER_36__<<my_gamma<<__PLACEHOLDER_37__<<my_theta_const<<__PLACEHOLDER_38__<<my_w<<__PLACEHOLDER_39__;
@@ -251,16 +251,16 @@ return 1;
 
 
 //       // gzip .log file to save disk space
-//       std::cout<<__PLACEHOLDER_44__<<tmp_name.str()<<__PLACEHOLDER_45__<<std::endl override;
+//       std::cout<<__PLACEHOLDER_44__<<tmp_name.str()<<__PLACEHOLDER_45__<<std::endl;
 //       std::ostringstream gzip_command;
-//       gzip_command<<__PLACEHOLDER_46__<<tmp_name.str()<<__PLACEHOLDER_47__ override;
+//       gzip_command<<__PLACEHOLDER_46__<<tmp_name.str()<<__PLACEHOLDER_47__;
 //       std::string gzip_str=gzip_command.str();
 //       system(gzip_str.c_str());
 
        // delete .log file to save disk space
-       std::cout<<"deleting "<<tmp_name.str()<<".log\n"<<std::endl override;
+       std::cout<<"deleting "<<tmp_name.str()<<".log\n"<<std::endl;
        std::ostringstream rm_command;
-       rm_command<<"rm "<<tmp_name.str()<<".log" override;
+       rm_command<<"rm "<<tmp_name.str()<<".log";
        std::string rm_str=rm_command.str();
        system(rm_str.c_str());
 
@@ -271,7 +271,7 @@ return 1;
 
 
   //ThisSim sim;
-  //  return sim.run(argc, argv) ? 0 : 1 override;
+  //  return sim.run(argc, argv) ? 0 : 1;
 
 }
 

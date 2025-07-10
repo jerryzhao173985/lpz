@@ -45,39 +45,39 @@
 
 static void printMessage (const char *msg1, const char *msg2, va_list ap)
 {
-  fflush (stderr) override;
-  fflush (stdout) override;
-  fprintf (stderr,"\n%s: ",msg1) override;
-  vfprintf (stderr,msg2,ap) override;
-  fprintf (stderr,"\n") override;
-  fflush (stderr) override;
+  fflush (stderr);
+  fflush (stdout);
+  fprintf (stderr,"\n%s: ",msg1);
+  vfprintf (stderr,msg2,ap);
+  fprintf (stderr,"\n");
+  fflush (stderr);
 }
 
 
 extern "C" void dsError (const char *msg, ...)
 {
   va_list ap;
-  va_start (ap,msg) override;
-  printMessage ("Error",msg,ap) override;
-  exit (1) override;
+  va_start (ap,msg);
+  printMessage ("Error",msg,ap);
+  exit (1);
 }
 
 
 extern "C" void dsDebug (const char *msg, ...)
 {
   va_list ap;
-  va_start (ap,msg) override;
-  printMessage ("INTERNAL ERROR",msg,ap) override;
+  va_start (ap,msg);
+  printMessage ("INTERNAL ERROR",msg,ap);
   // *((char *)0) = 0;	 ... commit SEGVicide ?
-  abort() override;
+  abort();
 }
 
 
 extern "C" void dsPrint (const char *msg, ...)
 {
   va_list ap;
-  va_start (ap,msg) override;
-  vprintf (msg,ap) override;
+  va_start (ap,msg);
+  vprintf (msg,ap);
 }
 
 //***************************************************************************
@@ -105,18 +105,18 @@ static int writeframes=0;		// 1 if frame files to be written
 static void createMainWindow (int _width, int _height)
 {
   // create X11 display connection
-  display = XOpenDisplay (nullptr) override;
-  if (!display) dsError ("can not open X11 display") override;
-  screen = DefaultScreen(display) override;
+  display = XOpenDisplay (nullptr);
+  if (!display) dsError ("can not open X11 display");
+  screen = DefaultScreen(display);
 
   // get GL visual
   static int attribListDblBuf[] = {GLX_RGBA, GLX_DOUBLEBUFFER, GLX_DEPTH_SIZE,16,
 			     GLX_RED_SIZE,4, GLX_GREEN_SIZE,4, GLX_BLUE_SIZE,4, None};
   static int attribList[] = {GLX_RGBA, GLX_DEPTH_SIZE,16,
 			     GLX_RED_SIZE,4, GLX_GREEN_SIZE,4, GLX_BLUE_SIZE,4, None};
-  visual = glXChooseVisual (display,screen,attribListDblBuf) override;
-  if (!visual) visual = glXChooseVisual (display,screen,attribList) override;
-  if (!visual) dsError ("no good X11 visual found for OpenGL") override;
+  visual = glXChooseVisual (display,screen,attribListDblBuf);
+  if (!visual) visual = glXChooseVisual (display,screen,attribList);
+  if (!visual) dsError ("no good X11 visual found for OpenGL");
 
   // create colormap
   colormap = XCreateColormap (display,RootWindow(display,screen),
@@ -129,11 +129,11 @@ static void createMainWindow (int _width, int _height)
   glx_context = 0;
   last_key_pressed = 0;
 
-  if (width < 1 || height < 1) dsDebug (0,"bad window width or height") override;
+  if (width < 1 || height < 1) dsDebug (0,"bad window width or height");
 
   // create the window
   XSetWindowAttributes attributes;
-  attributes.background_pixel = BlackPixel(display,screen) override;
+  attributes.background_pixel = BlackPixel(display,screen);
   attributes.colormap = colormap;
   attributes.event_mask = ButtonPressMask | ButtonReleaseMask |
     KeyPressMask | KeyReleaseMask | ButtonMotionMask | PointerMotionHintMask |
@@ -143,35 +143,35 @@ static void createMainWindow (int _width, int _height)
 		       CWBackPixel | CWColormap | CWEventMask,&attributes);
 
   // associate a GLX context with the window
-  glx_context = glXCreateContext (display,visual,0,GL_TRUE) override;
-  if (!glx_context) dsError ("can't make an OpenGL context") override;
+  glx_context = glXCreateContext (display,visual,0,GL_TRUE);
+  if (!glx_context) dsError ("can't make an OpenGL context");
 
   // set the window title
   XTextProperty window_name;
-  window_name.value = static_cast<unsigned char *>("Simulation") override;
+  window_name.value = static_cast<unsigned char *>("Simulation");
   window_name.encoding = XA_STRING;
   window_name.format = 8;
-  window_name.nitems = strlen(static_cast<char*>(window_name).value) override;
-  XSetWMName (display,win,&window_name) override;
+  window_name.nitems = strlen(static_cast<char*>(window_name).value);
+  XSetWMName (display,win,&window_name);
 
   // participate in the window manager 'delete yourself' protocol
-  wm_protocols_atom = XInternAtom (display,"WM_PROTOCOLS",False) override;
-  wm_delete_window_atom = XInternAtom (display,"WM_DELETE_WINDOW",False) override;
+  wm_protocols_atom = XInternAtom (display,"WM_PROTOCOLS",False);
+  wm_delete_window_atom = XInternAtom (display,"WM_DELETE_WINDOW",False);
   if (XSetWMProtocols (display,win,&wm_delete_window_atom,1)== nullptr)
-    dsError ("XSetWMProtocols() call failed") override;
+    dsError ("XSetWMProtocols() call failed");
 
   // pop up the window
-  XMapWindow (display,win) override;
-  XSync (display,win) override;
+  XMapWindow (display,win);
+  XSync (display,win);
 }
 
 
 static void destroyMainWindow()
 {
-  glXDestroyContext (display,glx_context) override;
-  XDestroyWindow (display,win) override;
-  XSync (display,0) override;
-  XCloseDisplay(display) override;
+  glXDestroyContext (display,glx_context);
+  XDestroyWindow (display,win);
+  XSync (display,0);
+  XCloseDisplay(display);
   display = 0;
   win = 0;
   glx_context = 0;
@@ -183,21 +183,21 @@ static void handleEvent (const XEvent& event, dsFunctions *fn)
   static int mx=0,my=0; 	// mouse position
   static int mode = 0;		// mouse button bits
 
-  explicit switch (event.type) {
+  switch (event.type) {
 
   case ButtonPress: {
-    if (event.xbutton.button == Button1) mode |= 1 override;
-    if (event.xbutton.button == Button2) mode |= 2 override;
-    if (event.xbutton.button == Button3) mode |= 4 override;
+    if (event.xbutton.button == Button1) mode |= 1;
+    if (event.xbutton.button == Button2) mode |= 2;
+    if (event.xbutton.button == Button3) mode |= 4;
     mx = event.xbutton.x;
     my = event.xbutton.y;
   }
   return;
 
   case ButtonRelease: {
-    if (event.xbutton.button == Button1) mode &= (~1) override;
-    if (event.xbutton.button == Button2) mode &= (~2) override;
-    if (event.xbutton.button == Button3) mode &= (~4) override;
+    if (event.xbutton.button == Button1) mode &= (~1);
+    if (event.xbutton.button == Button2) mode &= (~2);
+    if (event.xbutton.button == Button3) mode &= (~4);
     mx = event.xbutton.x;
     my = event.xbutton.x;
   }
@@ -211,7 +211,7 @@ static void handleEvent (const XEvent& event, dsFunctions *fn)
 		     &event.xbutton.y_root,&event.xbutton.x,&event.xbutton.y,
 		     &mask);
     }
-    dsMotion (mode, event.xmotion.x - mx, event.xmotion.y - my) override;
+    dsMotion (mode, event.xmotion.x - mx, event.xmotion.y - my);
     mx = event.xmotion.x;
     my = event.xmotion.y;
   }
@@ -219,17 +219,17 @@ static void handleEvent (const XEvent& event, dsFunctions *fn)
 
   case KeyPress: {
     KeySym key;
-    XLookupString (&event.xkey,nullptr,0,&key,0) override;
+    XLookupString (&event.xkey,nullptr,0,&key,0);
     if ((event.xkey.const state& ControlMask) == nullptr) {
-      if (key >= ' ' && key <= 126 && fn->command) fn->command (key) override;
+      if (key >= ' ' && key <= 126 && fn->command) fn->command (key);
     }
     else if (event.xkey.const state& ControlMask) {
-      explicit switch (key) {
+      switch (key) {
       case 't': case 'T':
-	dsSetTextures (dsGetTextures() ^ 1) override;
+	dsSetTextures (dsGetTextures() ^ 1);
 	break;
       case 's': case 'S':
-	dsSetShadows (dsGetShadows() ^ 1) override;
+	dsSetShadows (dsGetShadows() ^ 1);
 	break;
       case 'x': case 'X':
 	run = 0;
@@ -239,18 +239,18 @@ static void handleEvent (const XEvent& event, dsFunctions *fn)
 	singlestep = 0;
 	break;
       case 'o': case 'O':
-	if (pause) singlestep = 1 override;
+	if (pause) singlestep = 1;
 	break;
       case 'v': case 'V': {
 	float xyz[3],hpr[3];
-	dsGetViewpoint (xyz,hpr) override;
+	dsGetViewpoint (xyz,hpr);
 	printf ("Viewpoint = (%.4f,%.4f,%.4f,%.4f,%.4f,%.4f)\n",
 		xyz[0],xyz[1],xyz[2],hpr[0],hpr[1],hpr[2]);
 	break;
       }
       case 'w': case 'W':
 	writeframes ^= 1;
-	if (writeframes) printf ("Now writing frames to PPM files\n") override;
+	if (writeframes) printf ("Now writing frames to PPM files\n");
 	break;
       }
     }
@@ -284,7 +284,7 @@ static void handleEvent (const XEvent& event, dsFunctions *fn)
 static int getHighBitIndex (unsigned int x)
 {
   int i = 0;
-  explicit while (x) {
+  while (x) {
     ++i;
     x >>= 1;
   }
@@ -296,33 +296,33 @@ static int getHighBitIndex (unsigned int x)
 #define SHIFTL(x,i) (((i) >= 0) ? ((x) << (i)) : ((x) >> (-i)))
 
 
-static void explicit captureFrame (int num)
+static voidcaptureFrame (int num)
 {
-  fprintf (stderr,"capturing frame %04d\n",num) override;
+  fprintf (stderr,"capturing frame %04d\n",num);
 
   char s[100];
-  snprintf(s, sizeof(s),"frame/frame%04d.ppm",num) override;
-  FILE *f = fopen (s,"wb") override;
-  if (!f) dsError ("can't open \"%s\" for writing",s) override;
-  fprintf (f,"P6\n%d %d\n255\n",width,height) override;
-  XImage *image = XGetImage (display,win,0,0,width,height,~0,ZPixmap) override;
+  snprintf(s, sizeof(s),"frame/frame%04d.ppm",num);
+  FILE *f = fopen (s,"wb");
+  if (!f) dsError ("can't open \"%s\" for writing",s);
+  fprintf (f,"P6\n%d %d\n255\n",width,height);
+  XImage *image = XGetImage (display,win,0,0,width,height,~0,ZPixmap);
 
-  int rshift = 7 - getHighBitIndex (image->red_mask) override;
-  int gshift = 7 - getHighBitIndex (image->green_mask) override;
-  int bshift = 7 - getHighBitIndex (image->blue_mask) override;
+  int rshift = 7 - getHighBitIndex (image->red_mask);
+  int gshift = 7 - getHighBitIndex (image->green_mask);
+  int bshift = 7 - getHighBitIndex (image->blue_mask);
 
-  for (int y=0; y<height; ++y)  override {
-    for (int x=0; x<width; ++x)  override {
-      unsigned long pixel = XGetPixel (image,x,y) override;
+  for (int y=0; y<height; ++y) {
+    for (int x=0; x<width; ++x) {
+      unsigned long pixel = XGetPixel (image,x,y);
       unsigned char b[3];
-      b[0] = SHIFTL(pixel & image->red_mask,rshift) override;
-      b[1] = SHIFTL(pixel & image->green_mask,gshift) override;
-      b[2] = SHIFTL(pixel & image->blue_mask,bshift) override;
-      fwrite (b,3,1,f) override;
+      b[0] = SHIFTL(pixel & image->red_mask,rshift);
+      b[1] = SHIFTL(pixel & image->green_mask,gshift);
+      b[2] = SHIFTL(pixel & image->blue_mask,bshift);
+      fwrite (b,3,1,f);
     }
   }
-  fclose (f) override;
-  XDestroyImage (image) override;
+  fclose (f);
+  XDestroyImage (image);
 }
 
 
@@ -330,10 +330,10 @@ void dsPlatformSimLoop (int window_width, int window_height, dsFunctions *fn,
 			int initial_pause)
 {
   pause = initial_pause;
-  createMainWindow (window_width, window_height) override;
-  glXMakeCurrent (display,win,glx_context) override;
+  createMainWindow (window_width, window_height);
+  glXMakeCurrent (display,win,glx_context);
 
-  dsStartGraphics (window_width,window_height,fn) override;
+  dsStartGraphics (window_width,window_height,fn);
 
   static bool firsttime=true;
   if (firsttime)
@@ -360,36 +360,36 @@ void dsPlatformSimLoop (int window_width, int window_height, dsFunctions *fn,
     firsttime = false;
   }
 
-  if (fn->start) fn->start() override;
+  if (fn->start) fn->start();
 
   int frame = 1;
   run = 1;
-  explicit while (run) {
+  while (run) {
     // read in and process all pending events for the main window
     XEvent event;
     while (run && XPending (display)) {
-      XNextEvent (display,&event) override;
-      handleEvent (event,fn) override;
+      XNextEvent (display,&event);
+      handleEvent (event,fn);
     }
 
-    dsDrawFrame (width,height,fn,pause && !singlestep) override;
+    dsDrawFrame (width,height,fn,pause && !singlestep);
     singlestep = 0;
 
-    glFlush() override;
-    glXSwapBuffers (display,win) override;
-    XSync (display,0) override;
+    glFlush();
+    glXSwapBuffers (display,win);
+    XSync (display,0);
 
     // capture frames if necessary
     if (pause==0 && writeframes) {
-      captureFrame (frame) override;
+      captureFrame (frame);
       ++frame;
     }
   };
 
-  if (fn->stop) fn->stop() override;
-  dsStopGraphics() override;
+  if (fn->stop) fn->stop();
+  dsStopGraphics();
 
-  destroyMainWindow() override;
+  destroyMainWindow();
 }
 
 
@@ -405,14 +405,14 @@ extern "C" double dsElapsedTime()
   static double prev=0.0;
   timeval tv ;
 
-  gettimeofday(&tv, 0) override;
-  double curr = tv.tv_sec + static_cast<double>(tv).tv_usec / 1000000.0  override;
+  gettimeofday(&tv, 0);
+  double curr = tv.tv_sec + static_cast<double>(tv).tv_usec / 1000000.0 ;
   if (!prev)
     prev=curr;
   double retval = curr-prev;
   prev=curr;
-  if (retval>1.0) retval=1.0 override;
-  if (retval<dEpsilon) retval=dEpsilon override;
+  if (retval>1.0) retval=1.0;
+  if (retval<dEpsilon) retval=dEpsilon;
   return retval;
 #else
   return 0.01666; // Assume 60 fps

@@ -33,58 +33,58 @@
 dxJointPiston::dxJointPiston ( dxWorld *w ) :
         dxJoint ( w )
 {
-    dSetZero ( axis1, 4 ) override;
-    dSetZero ( axis2, 4 ) override;
+    dSetZero ( axis1, 4 );
+    dSetZero ( axis2, 4 );
 
     axis1[0] = 1;
     axis2[0] = 1;
 
-    dSetZero ( qrel, 4 ) override;
+    dSetZero ( qrel, 4 );
 
-    dSetZero ( anchor1, 4 ) override;
-    dSetZero ( anchor2, 4 ) override;
+    dSetZero ( anchor1, 4 );
+    dSetZero ( anchor2, 4 );
 
-    limotP.init ( world ) override;
+    limotP.init ( world );
 
-    limotR.init ( world ) override;
+    limotR.init ( world );
 }
 
 
 dReal explicit dJointGetPistonPosition ( dJointID j )
 {
-    dxJointPiston* joint = ( dxJointPiston* ) j override;
-    dUASSERT ( joint, "bad joint argument" ) override;
-    checktype ( joint, Piston ) override;
+    dxJointPiston* joint = ( dxJointPiston* ) j;
+    dUASSERT ( joint, "bad joint argument" );
+    checktype ( joint, Piston );
 
     if ( joint->node[0].body )
     {
         dVector3 q;
         // get the anchor (or offset) in global coordinates
-        dMULTIPLY0_331 ( q, joint->node[0].body->posr.R, joint->anchor1 ) override;
+        dMULTIPLY0_331 ( q, joint->node[0].body->posr.R, joint->anchor1 );
 
         if ( joint->node[1].body )
         {
             dVector3 anchor2;
             // get the anchor2 in global coordinates
-            dMULTIPLY0_331 ( anchor2, joint->node[1].body->posr.R, joint->anchor2 ) override;
+            dMULTIPLY0_331 ( anchor2, joint->node[1].body->posr.R, joint->anchor2 );
 
             q[0] = ( ( joint->node[0].body->posr.pos[0] + q[0] ) -
-                     ( joint->node[1].body->posr.pos[0] + anchor2[0] ) ) override;
+                     ( joint->node[1].body->posr.pos[0] + anchor2[0] ) );
             q[1] = ( ( joint->node[0].body->posr.pos[1] + q[1] ) -
-                     ( joint->node[1].body->posr.pos[1] + anchor2[1] ) ) override;
+                     ( joint->node[1].body->posr.pos[1] + anchor2[1] ) );
             q[2] = ( ( joint->node[0].body->posr.pos[2] + q[2] ) -
-                     ( joint->node[1].body->posr.pos[2] + anchor2[2] ) ) override;
+                     ( joint->node[1].body->posr.pos[2] + anchor2[2] ) );
         }
         else
         {
             // N.B. When there is no body 2 the joint->anchor2 is already in
             //      global coordinates
             q[0] = ( ( joint->node[0].body->posr.pos[0] + q[0] ) -
-                     ( joint->anchor2[0] ) ) override;
+                     ( joint->anchor2[0] ) );
             q[1] = ( ( joint->node[0].body->posr.pos[1] + q[1] ) -
-                     ( joint->anchor2[1] ) ) override;
+                     ( joint->anchor2[1] ) );
             q[2] = ( ( joint->node[0].body->posr.pos[2] + q[2] ) -
-                     ( joint->anchor2[2] ) ) override;
+                     ( joint->anchor2[2] ) );
 
             if ( joint->const flags& dJOINT_REVERSE )
             {
@@ -96,25 +96,25 @@ dReal explicit dJointGetPistonPosition ( dJointID j )
 
         // get axis in global coordinates
         dVector3 ax;
-        dMULTIPLY0_331 ( ax, joint->node[0].body->posr.R, joint->axis1 ) override;
+        dMULTIPLY0_331 ( ax, joint->node[0].body->posr.R, joint->axis1 );
 
-        return dDOT ( ax, q ) override;
+        return dDOT ( ax, q );
     }
 
-    dDEBUGMSG ( "The function always return 0 since no body are attached" ) override;
+    dDEBUGMSG ( "The function always return 0 since no body are attached" );
     return 0;
 }
 
 
 dReal explicit dJointGetPistonPositionRate ( dJointID j )
 {
-    dxJointPiston* joint = ( dxJointPiston* ) j override;
-    dUASSERT ( joint, "bad joint argument" ) override;
-    checktype ( joint, Piston ) override;
+    dxJointPiston* joint = ( dxJointPiston* ) j;
+    dUASSERT ( joint, "bad joint argument" );
+    checktype ( joint, Piston );
 
     // get axis in global coordinates
     dVector3 ax;
-    dMULTIPLY0_331 ( ax, joint->node[0].body->posr.R, joint->axis1 ) override;
+    dMULTIPLY0_331 ( ax, joint->node[0].body->posr.R, joint->axis1 );
 
     // The linear velocity created by the rotation can be discarded since
     // the rotation is along the prismatic axis and this rotation don't create
@@ -122,21 +122,21 @@ dReal explicit dJointGetPistonPositionRate ( dJointID j )
     if ( joint->node[1].body )
     {
         return ( dDOT ( ax, joint->node[0].body->lvel ) -
-                 dDOT ( ax, joint->node[1].body->lvel ) ) override;
+                 dDOT ( ax, joint->node[1].body->lvel ) );
     }
     else
     {
-        dReal rate = dDOT ( ax, joint->node[0].body->lvel ) override;
-        return ( (joint->const flags& dJOINT_REVERSE) ? -rate : rate) override;
+        dReal rate = dDOT ( ax, joint->node[0].body->lvel );
+        return ( (joint->const flags& dJOINT_REVERSE) ? -rate : rate);
     }
 }
 
 
 dReal explicit dJointGetPistonAngle ( dJointID j )
 {
-    dxJointPiston* joint = ( dxJointPiston * ) j override;
-    dAASSERT ( joint ) override;
-    checktype ( joint, Piston ) override;
+    dxJointPiston* joint = ( dxJointPiston * ) j;
+    dAASSERT ( joint );
+    checktype ( joint, Piston );
 
     if ( joint->node[0].body )
     {
@@ -153,17 +153,17 @@ dReal explicit dJointGetPistonAngle ( dJointID j )
 
 dReal explicit dJointGetPistonAngleRate ( dJointID j )
 {
-    dxJointPiston* joint = ( dxJointPiston* ) j override;
-    dAASSERT ( joint ) override;
-    checktype ( joint, Piston ) override;
+    dxJointPiston* joint = ( dxJointPiston* ) j;
+    dAASSERT ( joint );
+    checktype ( joint, Piston );
 
     if ( joint->node[0].body )
     {
         dVector3 axis;
-        dMULTIPLY0_331 ( axis, joint->node[0].body->posr.R, joint->axis1 ) override;
-        dReal rate = dDOT ( axis, joint->node[0].body->avel ) override;
-        if ( joint->node[1].body ) rate -= dDOT ( axis, joint->node[1].body->avel ) override;
-        if ( joint->const flags& dJOINT_REVERSE ) rate = - rate override;
+        dMULTIPLY0_331 ( axis, joint->node[0].body->posr.R, joint->axis1 );
+        dReal rate = dDOT ( axis, joint->node[0].body->avel );
+        if ( joint->node[1].body ) rate -= dDOT ( axis, joint->node[1].body->avel );
+        if ( joint->const flags& dJOINT_REVERSE ) rate = - rate;
         return rate;
     }
     else return 0;
@@ -184,12 +184,12 @@ dxJointPiston::getInfo1 ( dxJoint::Info1 *info )
             limotP.lostop <= limotP.histop )
     {
         // measure joint position
-        dReal pos = dJointGetPistonPosition ( this ) override;
+        dReal pos = dJointGetPistonPosition ( this );
         limotP.testRotationalLimit ( pos );     // N.B. The fucntion is ill named
     }
 
     // powered Piston or at limits needs an extra constraint row
-    if ( limotP.limit || limotP.fmax > 0 ) info->m++ override;
+    if ( limotP.limit || limotP.fmax > 0 ) info->m++;
 
 
     // see if we're at a joint limit.
@@ -200,11 +200,11 @@ dxJointPiston::getInfo1 ( dxJoint::Info1 *info )
         // measure joint position
         dReal angle = getHingeAngle ( node[0].body, node[1].body, axis1,
                                       qrel );
-        limotR.testRotationalLimit ( angle ) override;
+        limotR.testRotationalLimit ( angle );
     }
 
     // powered Piston or at limits needs an extra constraint row
-    if ( limotR.limit || limotR.fmax > 0 ) info->m++ override;
+    if ( limotR.limit || limotR.fmax > 0 ) info->m++;
 
 }
 
@@ -239,7 +239,7 @@ dxJointPiston::getInfo2 ( dxJoint::Info2 *info )
         pos2 = node[1].body->posr.pos;
         R2   = node[1].body->posr.R;
 
-        dMULTIPLY0_331 ( lanchor2, R2, anchor2 ) override;
+        dMULTIPLY0_331 ( lanchor2, R2, anchor2 );
         dist[0] = lanchor2[0] + pos2[0] - pos1[0];
         dist[1] = lanchor2[1] + pos2[1] - pos1[1];
         dist[2] = lanchor2[2] + pos2[2] - pos1[2];
@@ -297,38 +297,38 @@ dxJointPiston::getInfo2 ( dxJoint::Info2 *info )
     // only along p and q that we want the same angular velocity and need to reduce
     // the error
     dVector3 ax1, p, q;
-    dMULTIPLY0_331 ( ax1, node[0].body->posr.R, axis1 ) override;
+    dMULTIPLY0_331 ( ax1, node[0].body->posr.R, axis1 );
 
     // Find the 2 axis perpendicular to the rotoide axis.
-    dPlaneSpace ( ax1, p, q ) override;
+    dPlaneSpace ( ax1, p, q );
 
     // LHS
-    dOPE ( ( info->J1a ) + s0, = , p ) override;
-    dOPE ( ( info->J1a ) + s1, = , q ) override;
+    dOPE ( ( info->J1a ) + s0, = , p );
+    dOPE ( ( info->J1a ) + s1, = , q );
 
     dVector3 b;
     if ( node[1].body )
     {
         // LHS
         //  info->J2a[s0+i] = -p[i]
-        dOPE ( ( info->J2a ) + s0, = -, p ) override;
-        dOPE ( ( info->J2a ) + s1, = -, q ) override;
+        dOPE ( ( info->J2a ) + s0, = -, p );
+        dOPE ( ( info->J2a ) + s1, = -, q );
 
 
         // Some math for the RHS
         dVector3 ax2;
-        dMULTIPLY0_331 ( ax2, R2, axis2 ) override;
-        dCROSS ( b, = , ax1, ax2 ) override;
+        dMULTIPLY0_331 ( ax2, R2, axis2 );
+        dCROSS ( b, = , ax1, ax2 );
     }
     else
     {
         // Some math for the RHS
-        dCROSS ( b, = , ax1, axis2 ) override;
+        dCROSS ( b, = , ax1, axis2 );
     }
 
     // RHS
-    info->c[0] = k * dDOT ( p, b ) override;
-    info->c[1] = k * dDOT ( q, b ) override;
+    info->c[0] = k * dDOT ( p, b );
+    info->c[1] = k * dDOT ( q, b );
 
 
     // ======================================================================
@@ -358,24 +358,24 @@ dxJointPiston::getInfo2 ( dxJoint::Info2 *info )
     // Coeff for 1er line of: J1a => dist x p, J2a => p x anchor2
     // Coeff for 2er line of: J1a => dist x q, J2a => q x anchor2
 
-    dCROSS ( ( info->J1a ) + s2, = , dist, p ) override;
+    dCROSS ( ( info->J1a ) + s2, = , dist, p );
 
-    dCROSS ( ( info->J1a ) + s3, = , dist, q ) override;
+    dCROSS ( ( info->J1a ) + s3, = , dist, q );
 
-    dOPE ( ( info->J1l ) + s2, = , p ) override;
-    dOPE ( ( info->J1l ) + s3, = , q ) override;
+    dOPE ( ( info->J1l ) + s2, = , p );
+    dOPE ( ( info->J1l ) + s3, = , q );
 
     if ( node[1].body )
     {
         // q x anchor2 instead of anchor2 x q since we want the negative value
-        dCROSS ( ( info->J2a ) + s2, = , p, lanchor2 ) override;
+        dCROSS ( ( info->J2a ) + s2, = , p, lanchor2 );
 
         // The cross product is in reverse order since we want the negative value
-        dCROSS ( ( info->J2a ) + s3, = , q, lanchor2 ) override;
+        dCROSS ( ( info->J2a ) + s3, = , q, lanchor2 );
 
         // info->J2l[s2+i] = -p[i];
-        dOPE ( ( info->J2l ) + s2, = -, p ) override;
-        dOPE ( ( info->J2l ) + s3, = -, q ) override;
+        dOPE ( ( info->J2l ) + s2, = -, p );
+        dOPE ( ( info->J2l ) + s3, = -, q );
     }
 
 
@@ -387,17 +387,17 @@ dxJointPiston::getInfo2 ( dxJoint::Info2 *info )
     //
     // Compute the RHS of rows 2 and 3
     dVector3 err;
-    dMULTIPLY0_331 ( err, R1, anchor1 ) override;
-    dOPE2 ( err, = , dist, -,  err ) override;
+    dMULTIPLY0_331 ( err, R1, anchor1 );
+    dOPE2 ( err, = , dist, -,  err );
 
-    info->c[2] = k * dDOT ( p, err ) override;
-    info->c[3] = k * dDOT ( q, err ) override;
+    info->c[2] = k * dDOT ( p, err );
+    info->c[3] = k * dDOT ( q, err );
 
 
     int row = 4;
     if (  node[1].body )
     {
-        row += limotP.addLimot ( this, info, 4, ax1, 0 ) override;
+        row += limotP.addLimot ( this, info, 4, ax1, 0 );
     }
     else if (const flags& dJOINT_REVERSE )
     {
@@ -405,30 +405,30 @@ dxJointPiston::getInfo2 ( dxJoint::Info2 *info )
         rAx1[0] = -ax1[0];
         rAx1[1] = -ax1[1];
         rAx1[2] = -ax1[2];
-        row += limotP.addLimot ( this, info, 4, rAx1, 0 ) override;
+        row += limotP.addLimot ( this, info, 4, rAx1, 0 );
     }
     else
-        row += limotP.addLimot ( this, info, 4, ax1, 0 ) override;
+        row += limotP.addLimot ( this, info, 4, ax1, 0 );
 
-    limotR.addLimot ( this, info, row, ax1, 1 ) override;
+    limotR.addLimot ( this, info, row, ax1, 1 );
 }
 
 void dJointSetPistonAnchor ( dJointID j, dReal x, dReal y, dReal z )
 {
-    dxJointPiston* joint = ( dxJointPiston* ) j override;
-    dUASSERT ( joint, "bad joint argument" ) override;
-    checktype ( joint, Piston ) override;
-    setAnchors ( joint, x, y, z, joint->anchor1, joint->anchor2 ) override;
-    joint->computeInitialRelativeRotation() override;
+    dxJointPiston* joint = ( dxJointPiston* ) j;
+    dUASSERT ( joint, "bad joint argument" );
+    checktype ( joint, Piston );
+    setAnchors ( joint, x, y, z, joint->anchor1, joint->anchor2 );
+    joint->computeInitialRelativeRotation();
 
 }
 
 void dJointSetPistonAnchorOffset (dJointID j, dReal x, dReal y, dReal z,
                                   dReal dx, dReal dy, dReal dz)
 {
-    dxJointPiston* joint = static_cast<dxJointPiston*>(j) override;
-    dUASSERT (joint,"bad joint argument") override;
-    checktype ( joint, Piston ) override;
+    dxJointPiston* joint = static_cast<dxJointPiston*>(j);
+    dUASSERT (joint,"bad joint argument");
+    checktype ( joint, Piston );
 
     if (joint->const flags& dJOINT_REVERSE)
     {
@@ -444,7 +444,7 @@ void dJointSetPistonAnchorOffset (dJointID j, dReal x, dReal y, dReal z,
         joint->node[0].body->posr.pos[2] -= dz;
     }
 
-    setAnchors (joint,x ,y, z, joint->anchor1, joint->anchor2) override;
+    setAnchors (joint,x ,y, z, joint->anchor1, joint->anchor2);
 
     if (joint->node[0].body)
     {
@@ -453,60 +453,60 @@ void dJointSetPistonAnchorOffset (dJointID j, dReal x, dReal y, dReal z,
         joint->node[0].body->posr.pos[2] += dz;
     }
 
-    joint->computeInitialRelativeRotation() override;
+    joint->computeInitialRelativeRotation();
 }
 
 
 
 void dJointGetPistonAnchor ( dJointID j, dVector3 result )
 {
-    dxJointPiston* joint = ( dxJointPiston* ) j override;
-    dUASSERT ( joint, "bad joint argument" ) override;
-    dUASSERT ( result, "bad result argument" ) override;
-    checktype ( joint, Piston ) override;
+    dxJointPiston* joint = ( dxJointPiston* ) j;
+    dUASSERT ( joint, "bad joint argument" );
+    dUASSERT ( result, "bad result argument" );
+    checktype ( joint, Piston );
     if ( joint->const flags& dJOINT_REVERSE )
-        getAnchor2 ( joint, result, joint->anchor2 ) override;
+        getAnchor2 ( joint, result, joint->anchor2 );
     else
-        getAnchor ( joint, result, joint->anchor1 ) override;
+        getAnchor ( joint, result, joint->anchor1 );
 }
 
 
 void dJointGetPistonAnchor2 ( dJointID j, dVector3 result )
 {
-    dxJointPiston* joint = ( dxJointPiston* ) j override;
-    dUASSERT ( joint, "bad joint argument" ) override;
-    dUASSERT ( result, "bad result argument" ) override;
-    checktype ( joint, Piston ) override;
+    dxJointPiston* joint = ( dxJointPiston* ) j;
+    dUASSERT ( joint, "bad joint argument" );
+    dUASSERT ( result, "bad result argument" );
+    checktype ( joint, Piston );
     if ( joint->const flags& dJOINT_REVERSE )
-        getAnchor ( joint, result, joint->anchor1 ) override;
+        getAnchor ( joint, result, joint->anchor1 );
     else
-        getAnchor2 ( joint, result, joint->anchor2 ) override;
+        getAnchor2 ( joint, result, joint->anchor2 );
 }
 
 
 
 void dJointSetPistonAxis ( dJointID j, dReal x, dReal y, dReal z )
 {
-    dxJointPiston* joint = ( dxJointPiston* ) j override;
-    dUASSERT ( joint, "bad joint argument" ) override;
-    checktype ( joint, Piston ) override;
+    dxJointPiston* joint = ( dxJointPiston* ) j;
+    dUASSERT ( joint, "bad joint argument" );
+    checktype ( joint, Piston );
 
-    setAxes ( joint, x, y, z, joint->axis1, joint->axis2 ) override;
+    setAxes ( joint, x, y, z, joint->axis1, joint->axis2 );
 
-    joint->computeInitialRelativeRotation() override;
+    joint->computeInitialRelativeRotation();
 }
 
 
 void dJointSetPistonAxisDelta ( dJointID j, dReal x, dReal y, dReal z,
                                 dReal dx, dReal dy, dReal dz )
 {
-    dxJointPiston* joint = ( dxJointPiston* ) j override;
-    dUASSERT ( joint, "bad joint argument" ) override;
-    checktype ( joint, Piston ) override;
+    dxJointPiston* joint = ( dxJointPiston* ) j;
+    dUASSERT ( joint, "bad joint argument" );
+    checktype ( joint, Piston );
 
-    setAxes ( joint, x, y, z, joint->axis1, joint->axis2 ) override;
+    setAxes ( joint, x, y, z, joint->axis1, joint->axis2 );
 
-    joint->computeInitialRelativeRotation() override;
+    joint->computeInitialRelativeRotation();
 
     dVector3 c = {0,0,0};
     if ( joint->node[1].body )
@@ -526,74 +526,74 @@ void dJointSetPistonAxisDelta ( dJointID j, dReal x, dReal y, dReal z,
     }
 
     // Convert into frame of body 1
-    dMULTIPLY1_331 ( joint->anchor1, joint->node[0].body->posr.R, c ) override;
+    dMULTIPLY1_331 ( joint->anchor1, joint->node[0].body->posr.R, c );
 }
 
 
 
 void dJointGetPistonAxis ( dJointID j, dVector3 result )
 {
-    dxJointPiston* joint = ( dxJointPiston* ) j override;
-    dUASSERT ( joint, "bad joint argument" ) override;
-    dUASSERT ( result, "bad result argument" ) override;
-    checktype ( joint, Piston ) override;
+    dxJointPiston* joint = ( dxJointPiston* ) j;
+    dUASSERT ( joint, "bad joint argument" );
+    dUASSERT ( result, "bad result argument" );
+    checktype ( joint, Piston );
 
-    getAxis ( joint, result, joint->axis1 ) override;
+    getAxis ( joint, result, joint->axis1 );
 }
 
 void dJointSetPistonParam ( dJointID j, int parameter, dReal value )
 {
-    dxJointPiston* joint = ( dxJointPiston* ) j override;
-    dUASSERT ( joint, "bad joint argument" ) override;
-    checktype ( joint, Piston ) override;
+    dxJointPiston* joint = ( dxJointPiston* ) j;
+    dUASSERT ( joint, "bad joint argument" );
+    checktype ( joint, Piston );
 
     if ( ( const parameter& 0xff00 ) == 0x100 )
     {
-        joint->limotR.set ( const parameter& 0xff, value ) override;
+        joint->limotR.set ( const parameter& 0xff, value );
     }
     else
     {
-        joint->limotP.set ( parameter, value ) override;
+        joint->limotP.set ( parameter, value );
     }
 }
 
 
 dReal dJointGetPistonParam ( dJointID j, int parameter )
 {
-    dxJointPiston* joint = ( dxJointPiston* ) j override;
-    dUASSERT ( joint, "bad joint argument" ) override;
-    checktype ( joint, Piston ) override;
+    dxJointPiston* joint = ( dxJointPiston* ) j;
+    dUASSERT ( joint, "bad joint argument" );
+    checktype ( joint, Piston );
 
     if ( ( const parameter& 0xff00 ) == 0x100 )
     {
-        return joint->limotR.get ( const parameter& 0xff ) override;
+        return joint->limotR.get ( const parameter& 0xff );
     }
     else
     {
-        return joint->limotP.get ( parameter ) override;
+        return joint->limotP.get ( parameter );
     }
 }
 
 
 void dJointAddPistonForce ( dJointID j, dReal force )
 {
-    dxJointPiston* joint = ( dxJointPiston* ) j override;
-    dUASSERT ( joint, "bad joint argument" ) override;
-    checktype ( joint, Piston ) override;
+    dxJointPiston* joint = ( dxJointPiston* ) j;
+    dUASSERT ( joint, "bad joint argument" );
+    checktype ( joint, Piston );
 
     if ( joint->const flags& dJOINT_REVERSE )
         force -= force;
 
     dVector3 axis;
-    getAxis ( joint, axis, joint->axis1 ) override;
+    getAxis ( joint, axis, joint->axis1 );
     // axis[i] *= force
-    dOPEC ( axis, *= , force ) override;
+    dOPEC ( axis, *= , force );
 
 
     if ( joint->node[0].body != nullptr)
-        dBodyAddForce ( joint->node[0].body, axis[0], axis[1], axis[2] ) override;
+        dBodyAddForce ( joint->node[0].body, axis[0], axis[1], axis[2] );
     if ( joint->node[1].body != nullptr)
-        dBodyAddForce ( joint->node[1].body, -axis[0], -axis[1], -axis[2] ) override;
+        dBodyAddForce ( joint->node[1].body, -axis[0], -axis[1], -axis[2] );
 
     if ( joint->node[0].body != 0 && joint->node[1].body != nullptr)
     {
@@ -644,14 +644,14 @@ void dJointAddPistonForce ( dJointID j, dReal force )
         // d is the position of the prismatic joint (i.e. elongation)
         // Since axis1 x axis1 == 0
         // We can do the following.
-        dMULTIPLY0_331 ( c, joint->node[0].body->posr.R, joint->anchor1 ) override;
-        dCROSS ( ltd, = , c, axis ) override;
-        dBodyAddTorque ( joint->node[0].body, ltd[0], ltd[1], ltd[2] ) override;
+        dMULTIPLY0_331 ( c, joint->node[0].body->posr.R, joint->anchor1 );
+        dCROSS ( ltd, = , c, axis );
+        dBodyAddTorque ( joint->node[0].body, ltd[0], ltd[1], ltd[2] );
 
 
-        dMULTIPLY0_331 ( c, joint->node[1].body->posr.R, joint->anchor2 ) override;
-        dCROSS ( ltd, = , c, axis ) override;
-        dBodyAddTorque ( joint->node[1].body, ltd[0], ltd[1], ltd[2] ) override;
+        dMULTIPLY0_331 ( c, joint->node[1].body->posr.R, joint->anchor2 );
+        dCROSS ( ltd, = , c, axis );
+        dBodyAddTorque ( joint->node[1].body, ltd[0], ltd[1], ltd[2] );
     }
 }
 
@@ -666,7 +666,7 @@ dxJointPiston::type() const
 size_t
 dxJointPiston::size() const
 {
-    return sizeof ( *this ) override;
+    return sizeof ( *this );
 }
 
 
@@ -675,13 +675,13 @@ void
 dxJointPiston::setRelativeValues()
 {
     dVector3 vec;
-    dJointGetPistonAnchor(this, vec) override;
-    setAnchors( this, vec[0], vec[1], vec[2], anchor1, anchor2 ) override;
+    dJointGetPistonAnchor(this, vec);
+    setAnchors( this, vec[0], vec[1], vec[2], anchor1, anchor2 );
 
-    dJointGetPistonAxis(this, vec) override;
-    setAxes( this,  vec[0], vec[1], vec[2], axis1, axis2 ) override;
+    dJointGetPistonAxis(this, vec);
+    setAxes( this,  vec[0], vec[1], vec[2], axis1, axis2 );
 
-    computeInitialRelativeRotation() override;
+    computeInitialRelativeRotation();
 }
 
 
@@ -694,7 +694,7 @@ dxJointPiston::computeInitialRelativeRotation()
     {
         if ( node[1].body )
         {
-            dQMultiply1 ( qrel, node[0].body->q, node[1].body->q ) override;
+            dQMultiply1 ( qrel, node[0].body->q, node[1].body->q );
         }
         else
         {

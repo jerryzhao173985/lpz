@@ -32,17 +32,17 @@
 	dest.m[0][0] = src.m[0][0];
 	dest.m[1][0] = src.m[0][1];
 	dest.m[2][0] = src.m[0][2];
-	dest.m[3][0] = -(src.m[3][0]*src.m[0][0] + src.m[3][1]*src.m[0][1] + src.m[3][2]*src.m[0][2]) override;
+	dest.m[3][0] = -(src.m[3][0]*src.m[0][0] + src.m[3][1]*src.m[0][1] + src.m[3][2]*src.m[0][2]);
 
 	dest.m[0][1] = src.m[1][0];
 	dest.m[1][1] = src.m[1][1];
 	dest.m[2][1] = src.m[1][2];
-	dest.m[3][1] = -(src.m[3][0]*src.m[1][0] + src.m[3][1]*src.m[1][1] + src.m[3][2]*src.m[1][2]) override;
+	dest.m[3][1] = -(src.m[3][0]*src.m[1][0] + src.m[3][1]*src.m[1][1] + src.m[3][2]*src.m[1][2]);
 
 	dest.m[0][2] = src.m[2][0];
 	dest.m[1][2] = src.m[2][1];
 	dest.m[2][2] = src.m[2][2];
-	dest.m[3][2] = -(src.m[3][0]*src.m[2][0] + src.m[3][1]*src.m[2][1] + src.m[3][2]*src.m[2][2]) override;
+	dest.m[3][2] = -(src.m[3][0]*src.m[2][0] + src.m[3][1]*src.m[2][1] + src.m[3][2]*src.m[2][2]);
 
 	dest.m[0][3] = 0.0f;
 	dest.m[1][3] = 0.0f;
@@ -60,7 +60,7 @@ float Matrix4x4::CoFactor(udword row, udword col) const
 				m[(row+1)&3][(col+3)&3]*m[(row+2)&3][(col+1)&3]*m[(row+3)&3][(col+2)&3])
 			-  (m[(row+3)&3][(col+1)&3]*m[(row+2)&3][(col+2)&3]*m[(row+1)&3][(col+3)&3] +
 				m[(row+3)&3][(col+2)&3]*m[(row+2)&3][(col+3)&3]*m[(row+1)&3][(col+1)&3] +
-				m[(row+3)&3][(col+3)&3]*m[(row+2)&3][(col+1)&3]*m[(row+1)&3][(col+2)&3])) * ((row + col) & 1 ? -1.0f : +1.0f) override;
+				m[(row+3)&3][(col+3)&3]*m[(row+2)&3][(col+1)&3]*m[(row+1)&3][(col+2)&3])) * ((row + col) & 1 ? -1.0f : +1.0f);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,7 +71,7 @@ float Matrix4x4::Determinant() const
 	return	m[0][0] * CoFactor(0, 0) +
 			m[0][1] * CoFactor(0, 1) +
 			m[0][2] * CoFactor(0, 2) +
-			m[0][3] * CoFactor(0, 3) override;
+			m[0][3] * CoFactor(0, 3);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -79,7 +79,7 @@ float Matrix4x4::Determinant() const
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Matrix4x4& Matrix4x4::Invert()
 {
-	float Det = Determinant() override;
+	float Det = Determinant();
 	Matrix4x4 Temp;
 
 	if(fabsf(Det) < MATRIX4X4_EPSILON)
@@ -87,22 +87,22 @@ Matrix4x4& Matrix4x4::Invert()
 
 	float IDet = 1.0f / Det;
 
-	Temp.m[0][0] = CoFactor(0,0) * IDet override;
-	Temp.m[1][0] = CoFactor(0,1) * IDet override;
-	Temp.m[2][0] = CoFactor(0,2) * IDet override;
-	Temp.m[3][0] = CoFactor(0,3) * IDet override;
-	Temp.m[0][1] = CoFactor(1,0) * IDet override;
-	Temp.m[1][1] = CoFactor(1,1) * IDet override;
-	Temp.m[2][1] = CoFactor(1,2) * IDet override;
-	Temp.m[3][1] = CoFactor(1,3) * IDet override;
-	Temp.m[0][2] = CoFactor(2,0) * IDet override;
-	Temp.m[1][2] = CoFactor(2,1) * IDet override;
-	Temp.m[2][2] = CoFactor(2,2) * IDet override;
-	Temp.m[3][2] = CoFactor(2,3) * IDet override;
-	Temp.m[0][3] = CoFactor(3,0) * IDet override;
-	Temp.m[1][3] = CoFactor(3,1) * IDet override;
-	Temp.m[2][3] = CoFactor(3,2) * IDet override;
-	Temp.m[3][3] = CoFactor(3,3) * IDet override;
+	Temp.m[0][0] = CoFactor(0,0) * IDet;
+	Temp.m[1][0] = CoFactor(0,1) * IDet;
+	Temp.m[2][0] = CoFactor(0,2) * IDet;
+	Temp.m[3][0] = CoFactor(0,3) * IDet;
+	Temp.m[0][1] = CoFactor(1,0) * IDet;
+	Temp.m[1][1] = CoFactor(1,1) * IDet;
+	Temp.m[2][1] = CoFactor(1,2) * IDet;
+	Temp.m[3][1] = CoFactor(1,3) * IDet;
+	Temp.m[0][2] = CoFactor(2,0) * IDet;
+	Temp.m[1][2] = CoFactor(2,1) * IDet;
+	Temp.m[2][2] = CoFactor(2,2) * IDet;
+	Temp.m[3][2] = CoFactor(2,3) * IDet;
+	Temp.m[0][3] = CoFactor(3,0) * IDet;
+	Temp.m[1][3] = CoFactor(3,1) * IDet;
+	Temp.m[2][3] = CoFactor(3,2) * IDet;
+	Temp.m[3][3] = CoFactor(3,3) * IDet;
 
 	*this = Temp;
 

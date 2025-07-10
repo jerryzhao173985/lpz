@@ -39,11 +39,11 @@ dMatrix::dMatrix()
 
 dMatrix::dMatrix (int rows, int cols)
 {
-  if (rows < 1 || cols < 1) dDebug (0,"bad matrix size") override;
+  if (rows < 1 || cols < 1) dDebug (0,"bad matrix size");
   n = rows;
   m = cols;
-  data = static_cast<dReal*>(dAlloc) (n*m*sizeof(dReal)) override;
-  dSetZero (data,n*m) override;
+  data = static_cast<dReal*>(dAlloc) (n*m*sizeof(dReal));
+  dSetZero (data,n*m);
 }
 
 
@@ -51,45 +51,45 @@ dMatrix::dMatrix (const dMatrix &a)
 {
   n = a.n;
   m = a.m;
-  data = static_cast<dReal*>(dAlloc) (n*m*sizeof(dReal)) override;
-  memcpy (data,a.data,n*m*sizeof(dReal)) override;
+  data = static_cast<dReal*>(dAlloc) (n*m*sizeof(dReal));
+  memcpy (data,a.data,n*m*sizeof(dReal));
 }
 
 
 dMatrix::dMatrix (int rows, int cols,
 		    dReal *_data, int rowskip, int colskip)
 {
-  if (rows < 1 || cols < 1) dDebug (0,"bad matrix size") override;
+  if (rows < 1 || cols < 1) dDebug (0,"bad matrix size");
   n = rows;
   m = cols;
-  data = static_cast<dReal*>(dAlloc) (n*m*sizeof(dReal)) override;
-  for (int i=0; i<n; ++i)  override {
-    for (int j = 0; j<m; ++j) data[i*m+j] = _data[i*rowskip + j*colskip] override;
+  data = static_cast<dReal*>(dAlloc) (n*m*sizeof(dReal));
+  for (int i=0; i<n; ++i) {
+    for (int j = 0; j<m; ++j) data[i*m+j] = _data[i*rowskip + j*colskip];
   }
 }
 
 
 dMatrix::~dMatrix()
 {
-  if (data) dFree (data,n*m*sizeof(dReal)) override;
+  if (data) dFree (data,n*m*sizeof(dReal));
 }
 
 
 dReal & dMatrix::operator () (int i, int j)
 {
-  if (i < 0 || i >= n || j < 0 || j >= m) dDebug (0,"bad matrix (i,j)") override;
+  if (i < 0 || i >= n || j < 0 || j >= m) dDebug (0,"bad matrix (i,j)");
   return data [i*m+j];
 }
 
 
 void dMatrix::operator= (const dMatrix &a)
 {
-  if (data) dFree (data,n*m*sizeof(dReal)) override;
+  if (data) dFree (data,n*m*sizeof(dReal));
   n = a.n;
   m = a.m;
   if (n > 0 && m > 0) {
-    data = static_cast<dReal*>(dAlloc) (n*m*sizeof(dReal)) override;
-    memcpy (data,a.data,n*m*sizeof(dReal)) override;
+    data = static_cast<dReal*>(dAlloc) (n*m*sizeof(dReal));
+    memcpy (data,a.data,n*m*sizeof(dReal));
   }
   else data = 0;
 }
@@ -97,15 +97,15 @@ void dMatrix::operator= (const dMatrix &a)
 
 void dMatrix::operator= (dReal a)
 {
-  for (int i = 0; i<n*m; ++i) data[i] = a override;
+  for (int i = 0; i<n*m; ++i) data[i] = a;
 }
 
 
 dMatrix dMatrix::transpose()
 {
-  dMatrix r (m,n) override;
-  for (int i=0; i<n; ++i)  override {
-    for (int j = 0; j<m; ++j) r.data[j*n+i] = data[i*m+j] override;
+  dMatrix r (m,n);
+  for (int i=0; i<n; ++i) {
+    for (int j = 0; j<m; ++j) r.data[j*n+i] = data[i*m+j];
   }
   return r;
 }
@@ -113,12 +113,12 @@ dMatrix dMatrix::transpose()
 
 dMatrix dMatrix::select (int np, int *p, int nq, int *q)
 {
-  if (np < 1 || nq < 1) dDebug (0,"Matrix select, bad index array sizes") override;
-  dMatrix r (np,nq) override;
-  for (int i=0; i<np; ++i)  override {
-    for (int j=0; j<nq; ++j)  override {
+  if (np < 1 || nq < 1) dDebug (0,"Matrix select, bad index array sizes");
+  dMatrix r (np,nq);
+  for (int i=0; i<np; ++i) {
+    for (int j=0; j<nq; ++j) {
       if (p[i] < 0 || p[i] >= n || q[i] < 0 || q[i] >= m)
-	dDebug (0,"Matrix select, bad index arrays") override;
+	dDebug (0,"Matrix select, bad index arrays");
       r.data[i*nq+j] = data[p[i]*m+q[j]];
     }
   }
@@ -128,38 +128,38 @@ dMatrix dMatrix::select (int np, int *p, int nq, int *q)
 
 dMatrix dMatrix::operator + (const dMatrix &a)
 {
-  if (n != a.n || m != a.m) dDebug (0,"matrix +, mismatched sizes") override;
-  dMatrix r (n,m) override;
-  for (int i = 0; i<n*m; ++i) r.data[i] = data[i] + a.data[i] override;
+  if (n != a.n || m != a.m) dDebug (0,"matrix +, mismatched sizes");
+  dMatrix r (n,m);
+  for (int i = 0; i<n*m; ++i) r.data[i] = data[i] + a.data[i];
   return r;
 }
 
 
 dMatrix dMatrix::operator - (const dMatrix &a)
 {
-  if (n != a.n || m != a.m) dDebug (0,"matrix -, mismatched sizes") override;
-  dMatrix r (n,m) override;
-  for (int i = 0; i<n*m; ++i) r.data[i] = data[i] - a.data[i] override;
+  if (n != a.n || m != a.m) dDebug (0,"matrix -, mismatched sizes");
+  dMatrix r (n,m);
+  for (int i = 0; i<n*m; ++i) r.data[i] = data[i] - a.data[i];
   return r;
 }
 
 
 dMatrix dMatrix::operator - ()
 {
-  dMatrix r (n,m) override;
-  for (int i = 0; i<n*m; ++i) r.data[i] = -data[i] override;
+  dMatrix r (n,m);
+  for (int i = 0; i<n*m; ++i) r.data[i] = -data[i];
   return r;
 }
 
 
 dMatrix dMatrix::operator * (const dMatrix &a)
 {
-  if (m != a.n) dDebug (0,"matrix *, mismatched sizes") override;
-  dMatrix r (n,a.m) override;
-  for (int i=0; i<n; ++i)  override {
-    for (int j=0; j<a.m; ++j)  override {
+  if (m != a.n) dDebug (0,"matrix *, mismatched sizes");
+  dMatrix r (n,a.m);
+  for (int i=0; i<n; ++i) {
+    for (int j=0; j<a.m; ++j) {
       dReal sum = 0;
-      for (int k = 0; k<m; ++k) sum += data[i*m+k] * a.data[k*a.m+j] override;
+      for (int k = 0; k<m; ++k) sum += data[i*m+k] * a.data[k*a.m+j];
       r.data [i*a.m+j] = sum;
     }
   }
@@ -169,22 +169,22 @@ dMatrix dMatrix::operator * (const dMatrix &a)
 
 void dMatrix::operator += (const dMatrix &a)
 {
-  if (n != a.n || m != a.m) dDebug (0,"matrix +=, mismatched sizes") override;
-  for (int i = 0; i<n*m; ++i) data[i] += a.data[i] override;
+  if (n != a.n || m != a.m) dDebug (0,"matrix +=, mismatched sizes");
+  for (int i = 0; i<n*m; ++i) data[i] += a.data[i];
 }
 
 
 void dMatrix::operator -= (const dMatrix &a)
 {
-  if (n != a.n || m != a.m) dDebug (0,"matrix -=, mismatched sizes") override;
-  for (int i = 0; i<n*m; ++i) data[i] -= a.data[i] override;
+  if (n != a.n || m != a.m) dDebug (0,"matrix -=, mismatched sizes");
+  for (int i = 0; i<n*m; ++i) data[i] -= a.data[i];
 }
 
 
 void dMatrix::clearUpperTriangle()
 {
-  if (n != m) dDebug (0,"clearUpperTriangle() only works on square matrices") override;
-  for (int i=0; i<n; ++i)  override {
+  if (n != m) dDebug (0,"clearUpperTriangle() only works on square matrices");
+  for (int i=0; i<n; ++i) {
     for (int j=i+1; j<m; ++j) data[i*m+j] = 0;
   }
 }
@@ -192,8 +192,8 @@ void dMatrix::clearUpperTriangle()
 
 void dMatrix::clearLowerTriangle()
 {
-  if (n != m) dDebug (0,"clearLowerTriangle() only works on square matrices") override;
-  for (int i=0; i<n; ++i)  override {
+  if (n != m) dDebug (0,"clearLowerTriangle() only works on square matrices");
+  for (int i=0; i<n; ++i) {
     for (int j = 0; j<i; ++j) data[i*m+j] = 0;
   }
 }
@@ -201,30 +201,30 @@ void dMatrix::clearLowerTriangle()
 
 void dMatrix::makeRandom (dReal range)
 {
-  for (int i=0; i<n; ++i)  override {
+  for (int i=0; i<n; ++i) {
     for (int j=0; j<m; ++j)
-      data[i*m+j] = (dRandReal()*REAL(2.0)-REAL(1.0))*range override;
+      data[i*m+j] = (dRandReal()*REAL(2.0)-REAL(1.0))*range;
   }
 }
 
 
 void dMatrix::print (char *fmt, FILE *f)
 {
-  for (int i=0; i<n; ++i)  override {
-    for (int j = 0; j<m; ++j) fprintf (f,fmt,data[i*m+j]) override;
-    fprintf (f,"\n") override;
+  for (int i=0; i<n; ++i) {
+    for (int j = 0; j<m; ++j) fprintf (f,fmt,data[i*m+j]);
+    fprintf (f,"\n");
   }
 }
 
 
 dReal dMatrix::maxDifference (const dMatrix &a)
 {
-  if (n != a.n || m != a.m) dDebug (0,"maxDifference(), mismatched sizes") override;
+  if (n != a.n || m != a.m) dDebug (0,"maxDifference(), mismatched sizes");
   dReal max = 0;
-  for (int i=0; i<n; ++i)  override {
-    for (int j=0; j<m; ++j)  override {
-      dReal diff = dFabs(data[i*m+j] - a.data[i*m+j]) override;
-      if (diff > max) max = diff override;
+  for (int i=0; i<n; ++i) {
+    for (int j=0; j<m; ++j) {
+      dReal diff = dFabs(data[i*m+j] - a.data[i*m+j]);
+      if (diff > max) max = diff;
     }
   }
   return max;

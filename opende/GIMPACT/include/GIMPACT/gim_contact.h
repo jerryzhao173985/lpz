@@ -75,7 +75,7 @@ struct GIM_CONTACT
 }\
 
 ///Creates a contact list for queries
-#define GIM_CREATE_CONTACT_LISTstatic_cast<contact_array>GIM_CONTACT,contact_array,100
+#define GIM_CREATE_CONTACT_LIST(array_data) GIM_DYNARRAY_CREATE(GIM_CONTACT, array_data, 100)
 
 #define GIM_PUSH_CONTACT(contact_array, point, normal, deep,handle1, handle2, feat1, feat2)\
 {\

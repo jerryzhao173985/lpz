@@ -41,14 +41,14 @@ struct dxJointAMotor : public dxJoint
     dVector3 reference2;    // original axis[0], relative to body 2
 
 
-    void computeGlobalAxes( dVector3 ax[3] ) override;
-    void computeEulerAngles( dVector3 ax[3] ) override;
-    void setEulerReferenceVectors() override;
+    void computeGlobalAxes( dVector3 ax[3] );
+    void computeEulerAngles( dVector3 ax[3] );
+    void setEulerReferenceVectors();
 
 
-    dxJointAMotor( dxWorld *w ) override;
-    virtual void getInfo1( Info1* info ) override;
-    virtual void getInfo2( Info2* info ) override;
+    dxJointAMotor( dxWorld *w );
+    virtual void getInfo1( Info1* info );
+    virtual void getInfo2( Info2* info );
     virtual dJointType type() const override;
     virtual size_t size() const override;
 };

@@ -29,12 +29,12 @@
 		CULLMODE_CCW	= 2
 	};
 
-	typedef CullMode (*CullModeCallback)(udword triangle_index, void* user_data) override;
+	typedef void (*RequestCallback) (udword triangle_index, const VertexPointers& triangle, void* user_data);
 
-	OPCODE_API	bool SetupAllHits		(const RayCollider& collider, const CollisionFaces& contacts) override;
-	OPCODE_API	bool SetupClosestHit	(const RayCollider& collider, const CollisionFace& closest_contact) override;
-	OPCODE_API	bool SetupShadowFeeler	(const RayCollider& collider) override;
-	OPCODE_API	bool SetupInOutTest		(const RayCollider& collider) override;
+	OPCODE_API	bool SetupAllHits		(const RayCollider& collider, const CollisionFaces& contacts);
+	OPCODE_API	bool SetupClosestHit	(const RayCollider& collider, const CollisionFace& closest_contact);
+	OPCODE_API	bool SetupShadowFeeler	(const RayCollider& collider);
+	OPCODE_API	bool SetupInOutTest		(const RayCollider& collider);
 
 	OPCODE_API	bool Picking(
 						CollisionFace& picked_face,

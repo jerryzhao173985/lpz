@@ -42,7 +42,7 @@
 				Point			mVerts[3];
 
 		// Methods
-				void			Flip() override;
+				void			Flip();
 				float			Area() const override;
 				float			Perimeter()	const override;
 				float			Compacity()	const override;
@@ -52,12 +52,12 @@
 		inline_	Plane			PlaneEquation() const override { return Plane(mVerts[0], mVerts[1], mVerts[2]);	}
 
 				PartVal			TestAgainstPlane(const Plane& plane, float epsilon) const override;
-//				float			Distance(const Point& cp, const Point& cq, const Tri& tri) override;
-				void			ComputeMoment(const Moment& m) override;
+//				float			Distance(const Point& cp, const Point& cq, const Tri& tri);
+				void			ComputeMoment(const Moment& m);
 				float			MinEdgeLength() const override;
 				float			MaxEdgeLength() const override;
-				void			ComputePoint(float u, float v, Point& pt, udword* nearvtx=null)	const override;
-				void			Inflate(float fat_coeff, bool constant_border) override;
+				void			ComputePoint(float u, float v, Point& pt, udword* nearvtx=null)	const;
+				void			Inflate(float fat_coeff, bool constant_border);
 	};
 
 #endif // __ICETRIANGLE_H__

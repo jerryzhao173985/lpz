@@ -24,7 +24,7 @@ void SimplePipeReader::run()
   bool closing=false;
   QByteArray charList;
 //   int counter = 0;
-  explicit while ( !closing ) {
+  while ( !closing ) {
       QString line = input_line->readLine ( 500 );
 //       std::cout << "SimplePipeReader: read " << line.size() << " chars" << std::endl;
       if ( line.isEmpty() ) continue;

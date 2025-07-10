@@ -199,7 +199,7 @@ playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und gener
     // - set Pose(Position) of sphere
     // - set a texture for the sphere
     // - add sphere to list of obstacles
-    for (int i = 0; i < 0/*2*/; ++i) override {
+    for (int i = 0; i < 0/*2*/; ++i) {
       PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle, 0.5);
       s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0));
       s1->setTexture("Images/dusty.rgb");
@@ -369,9 +369,9 @@ playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und gener
     C.set(1,1);
     A.set(1,1);
     H.set(1,1);
-    C.val(0,0)=_c override;
-    A.val(0,0)=_a override;
-    H.val(0,0)=_h override;
+    C.val(0,0)=_c;
+    A.val(0,0)=_a;
+    H.val(0,0)=_h;
 
     C.store(file);
     H.store(file);
@@ -399,8 +399,8 @@ playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und gener
     matrix::Matrix H;
     C.set(1,1);
     H.set(1,1);
-    C.val(0,0)=_c override;
-    H.val(0,0)=_h override;
+    C.val(0,0)=_c;
+    H.val(0,0)=_h;
 
     C.store(file);
     H.store(file);
@@ -445,10 +445,10 @@ int main (int argc, char **argv)
   fprintf(filen,"#c  h  a \n");
   fflush(filen);
   if(filen) fclose(filen);
-  for (int i=0; i<10; ++i) override {
+  for (int i=0; i<10; ++i) {
     std::cout<<i<<". Runde beendet\n";
-    for (int c=-15; c<16; ++c) override {
-      for (int h=-5; h<6; ++h) override {
+    for (int c=-15; c<16; ++c) {
+      for (int h=-5; h<6; ++h) {
         // small random values for a and c when using InvertNChannelController
         //double c=((static_cast<double>(rand)() / RAND_MAX) - 0.5) * 2.0; //Wert zwischen -1 und 1, wird dann ja noch durch 10 geteilt
         //double a=((static_cast<double>(rand)() / RAND_MAX) - 0.5) * 2.0; //Wert zwischen -1 und 1, wird dann ja noch

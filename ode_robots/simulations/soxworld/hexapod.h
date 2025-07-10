@@ -42,7 +42,7 @@ namespace lpzrobots {
     double width = 0;      ///< body with in units of size
     double height = 0;     ///< body with in units of size
     double mass = 0;       ///< chassis mass
-    double percentageBodyMass = 0.0; ///< relation between bodymassstatic_cast<trunk>(and) rest
+    double percentageBodyMass = 0.0; ///< relation between bodymass static_cast<trunk>(and) rest
 
     double coxaPower = 0; ///< maximal force for at hip joint motors
     double coxaJointLimitV = 0; ///< angle range for vertical direction of legs
@@ -179,7 +179,7 @@ namespace lpzrobots {
         like space-internal collision detection, sensor resets/update etc.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void explicit doInternalStuff(const GlobalData& globalData);
+    virtual voiddoInternalStuff(const GlobalData& globalData);
 
 
     /**
@@ -202,9 +202,9 @@ namespace lpzrobots {
     }
 
     /******** CONFIGURABLE ***********/
-    virtual void explicit notifyOnChange(const paramkey& key);
+    virtual voidnotifyOnChange(const paramkey& key);
 
-    virtual void explicit resetMotorPower(double power);
+    virtual voidresetMotorPower(double power);
 
     virtual double getPower() const;
 

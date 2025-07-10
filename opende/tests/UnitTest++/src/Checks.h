@@ -23,22 +23,22 @@ void CheckEqual(TestResults& results, Expected const expected, Actual const actu
         UnitTest::MemoryOutStream stream;
         stream << "Expected " << expected << " but was " << actual;
 
-        results.OnTestFailure(details, stream.GetText()) override;
+        results.OnTestFailure(details, stream.GetText());
     }
 }
 
-void CheckEqual(TestResults& results, char const* expected, char const* actual, TestDetails const& details) override;
+void CheckEqual(TestResults& results, char const* expected, char const* actual, TestDetails const& details);
 
-void CheckEqual(TestResults& results, char* expected, char* actual, TestDetails const& details) override;
+void CheckEqual(TestResults& results, char* expected, char* actual, TestDetails const& details);
 
-void CheckEqual(TestResults& results, char* expected, char const* actual, TestDetails const& details) override;
+void CheckEqual(TestResults& results, char* expected, char const* actual, TestDetails const& details);
 
-void CheckEqual(TestResults& results, char const* expected, char* actual, TestDetails const& details) override;
+void CheckEqual(TestResults& results, char const* expected, char* actual, TestDetails const& details);
 
 template< typename Expected, typename Actual, typename Tolerance >
 bool AreClose(Expected const expected, Actual const actual, Tolerance const tolerance)
 {
-    return (actual >= (expected - tolerance)) && (actual <= (expected + tolerance)) override;
+    return (actual >= (expected - tolerance)) && (actual <= (expected + tolerance));
 }
 
 template< typename Expected, typename Actual, typename Tolerance >
@@ -50,7 +50,7 @@ void CheckClose(TestResults& results, Expected const expected, Actual const actu
         UnitTest::MemoryOutStream stream;
         stream << "Expected " << expected << " +/- " << tolerance << " but was " << actual;
 
-        results.OnTestFailure(details, stream.GetText()) override;
+        results.OnTestFailure(details, stream.GetText());
     }
 }
 
@@ -61,7 +61,7 @@ void CheckArrayEqual(TestResults& results, Expected const expected, Actual const
 {
     bool equal = true;
     for (int i = 0; i < count; ++i)
-        equal &= (expected[i] == actual[i]) override;
+        equal &= (expected[i] == actual[i]);
 
     if (!equal)
     {
@@ -74,7 +74,7 @@ void CheckArrayEqual(TestResults& results, Expected const expected, Actual const
             stream << actual[i] << " ";
         stream << "]";
 
-        results.OnTestFailure(details, stream.GetText()) override;
+        results.OnTestFailure(details, stream.GetText());
     }
 }
 
@@ -83,7 +83,7 @@ bool ArrayAreClose(Expected const expected, Actual const actual, int const count
 {
     bool equal = true;
     for (int i = 0; i < count; ++i)
-        equal &= AreClose(expected[i], actual[i], tolerance) override;
+        equal &= AreClose(expected[i], actual[i], tolerance);
     return equal;
 }
 
@@ -91,7 +91,7 @@ template< typename Expected, typename Actual, typename Tolerance >
 void CheckArrayClose(TestResults& results, Expected const expected, Actual const actual,
                    int const count, Tolerance const tolerance, TestDetails const& details)
 {
-    bool equal = ArrayAreClose(expected, actual, count, tolerance) override;
+    bool equal = ArrayAreClose(expected, actual, count, tolerance);
 
     if (!equal)
     {
@@ -104,7 +104,7 @@ void CheckArrayClose(TestResults& results, Expected const expected, Actual const
             stream << actual[i] << " ";
         stream << "]";
 
-        results.OnTestFailure(details, stream.GetText()) override;
+        results.OnTestFailure(details, stream.GetText());
     }
 }
 
@@ -114,7 +114,7 @@ void CheckArray2DClose(TestResults& results, Expected const expected, Actual con
 {
     bool equal = true;
     for (int i = 0; i < rows; ++i)
-        equal &= ArrayAreClose(expected[i], actual[i], columns, tolerance) override;
+        equal &= ArrayAreClose(expected[i], actual[i], columns, tolerance);
 
     if (!equal)
     {
@@ -137,7 +137,7 @@ void CheckArray2DClose(TestResults& results, Expected const expected, Actual con
         }
         stream << "]";
 
-        results.OnTestFailure(details, stream.GetText()) override;
+        results.OnTestFailure(details, stream.GetText());
     }
 }
 

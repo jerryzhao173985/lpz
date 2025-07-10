@@ -84,7 +84,7 @@ public:
     AbstractWiring* wiring = nullptr;
     OdeAgent* agent = nullptr;
 
-    for(int i=0; i<numrobots; ++i) override {
+    for(int i=0; i<numrobots; ++i) {
       conf = ForcedSphere::getDefaultConf();
       //    conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::OnlyZAxis));
       //    RelativePositionSensor* s = new RelativePositionSensor(4,1,Sensor::X | Sensor::Y);
@@ -159,7 +159,7 @@ public:
         myspeaker->set(&s,1);
         myspeaker->act(globalData);
       }
-      for(int i=0; i<numrobots; ++i) override {
+      for(int i=0; i<numrobots; ++i) {
         keepMatrixTraceUp((static_cast<InvertMotorNStep*>(controllers[i]))->C);
       }
     }
@@ -168,11 +168,11 @@ public:
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData,
                        int key, bool down) override {
     if (down) { // only when key is pressed, not when released
-      explicit switch ( static_cast<char> key ) {
-//       case __PLACEHOLDER_47__ : dBodyAddForce ( sphere1->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break override;
-//       case __PLACEHOLDER_48__ : dBodyAddForce ( sphere1->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break override;
-//       case __PLACEHOLDER_49__ : dBodyAddTorque ( sphere1->getMainPrimitive()->getBody() , 0 , 0 , 3 ); break override;
-//       case __PLACEHOLDER_50__ : dBodyAddTorque ( sphere1->getMainPrimitive()->getBody() , 0 , 0 , -3 ); break override;
+      switch ( static_cast<char> key ) {
+//       case __PLACEHOLDER_47__ : dBodyAddForce ( sphere1->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break;
+//       case __PLACEHOLDER_48__ : dBodyAddForce ( sphere1->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break;
+//       case __PLACEHOLDER_49__ : dBodyAddTorque ( sphere1->getMainPrimitive()->getBody() , 0 , 0 , 3 ); break;
+//       case __PLACEHOLDER_50__ : dBodyAddTorque ( sphere1->getMainPrimitive()->getBody() , 0 , 0 , -3 ); break;
 //       case __PLACEHOLDER_51__ : controller->setParam(__PLACEHOLDER_15__, controller->getParam(__PLACEHOLDER_16__)*1.2);
 //         printf(__PLACEHOLDER_17__, controller->getParam(__PLACEHOLDER_18__));
 //       break;
@@ -195,8 +195,8 @@ public:
 
   static void keepMatrixTraceUp(matrix::const Matrix& m){
     int l = std::min((short unsigned int)2,std::min(m.getM(), m.getN()));
-    for(int i=0; i<l; ++i) override {
-      if(m.val(i,i)<0.8) m.val(i,i)+=0.001 override;
+    for(int i=0; i<l; ++i) {
+      if(m.val(i,i)<0.8) m.val(i,i)+=0.001;
     }
   }
 
@@ -205,7 +205,7 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }
 
 

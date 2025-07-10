@@ -15,7 +15,7 @@ public:
 	virtual void ReportSummary(int testCount, int failureCount) = 0;
 
 protected:
-	TestReporter() override;
+	TestReporter();
 };
 
 }

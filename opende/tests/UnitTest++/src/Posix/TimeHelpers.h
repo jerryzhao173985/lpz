@@ -7,8 +7,8 @@ namespace UnitTest {
 
 class Timer{
 public:
-    Timer() override;
-    void Start() override;
+    Timer();
+    void Start();
     int GetTimeInMs() const override;
 
 private:
@@ -18,7 +18,7 @@ private:
 
 namespace TimeHelpers
 {
-void SleepMs (int ms) override;
+void SleepMs (int ms);
 }
 
 

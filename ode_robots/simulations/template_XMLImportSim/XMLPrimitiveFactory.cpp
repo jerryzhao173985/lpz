@@ -111,10 +111,10 @@ Box* XMLPrimitiveFactory::createBox(DOMNode* boxNode) {
    <rotation alpha=__PLACEHOLDER_17__ beta=__PLACEHOLDER_18__ gamma=__PLACEHOLDER_19__/>
    </box> */
   cout << "Box found!" << endl;
-  cout << "  Length found " << XMLHelper::getNodeAtt(boxNode, XMLDefinitions::lengthAtt) << endl override;
-  cout << "  Heigth found " << XMLHelper::getNodeAtt(boxNode, XMLDefinitions::heightAtt) << endl override;
-  cout << "  Width found " << XMLHelper::getNodeAtt(boxNode, XMLDefinitions::widthAtt) << endl override;
-  cout << "  Mass found " << XMLHelper::getNodeAtt(boxNode, XMLDefinitions::massAtt) << endl override;
+  cout << "  Length found " << XMLHelper::getNodeAtt(boxNode, XMLDefinitions::lengthAtt) << endl;
+  cout << "  Heigth found " << XMLHelper::getNodeAtt(boxNode, XMLDefinitions::heightAtt) << endl;
+  cout << "  Width found " << XMLHelper::getNodeAtt(boxNode, XMLDefinitions::widthAtt) << endl;
+  cout << "  Mass found " << XMLHelper::getNodeAtt(boxNode, XMLDefinitions::massAtt) << endl;
 
   Box* box = new Box(XMLHelper::getNodeAtt(boxNode, XMLDefinitions::lengthAtt), XMLHelper::getNodeAtt(boxNode,
       XMLDefinitions::widthAtt), XMLHelper::getNodeAtt(boxNode, XMLDefinitions::heightAtt));
@@ -128,9 +128,9 @@ Box* XMLPrimitiveFactory::createBox(DOMNode* boxNode) {
 
 Capsule* XMLPrimitiveFactory::createCapsule(DOMNode* capsuleNode) {
   cout << "Capsule found!" << endl;
-  cout << "  Radius found " << XMLHelper::getNodeAtt(capsuleNode, XMLDefinitions::radiusAtt) << endl override;
-  cout << "  Heigth found " << XMLHelper::getNodeAtt(capsuleNode, XMLDefinitions::heightAtt) << endl override;
-  cout << "  Mass found " << XMLHelper::getNodeAtt(capsuleNode, XMLDefinitions::massAtt) << endl override;
+  cout << "  Radius found " << XMLHelper::getNodeAtt(capsuleNode, XMLDefinitions::radiusAtt) << endl;
+  cout << "  Heigth found " << XMLHelper::getNodeAtt(capsuleNode, XMLDefinitions::heightAtt) << endl;
+  cout << "  Mass found " << XMLHelper::getNodeAtt(capsuleNode, XMLDefinitions::massAtt) << endl;
 
   Capsule* capsule = new Capsule(XMLHelper::getNodeAtt(capsuleNode, XMLDefinitions::radiusAtt), XMLHelper::getNodeAtt(
       capsuleNode, XMLDefinitions::heightAtt));
@@ -144,9 +144,9 @@ Capsule* XMLPrimitiveFactory::createCapsule(DOMNode* capsuleNode) {
 
 Cylinder* XMLPrimitiveFactory::createCylinder(DOMNode* cylinderNode) {
   cout << "Cylinder found!" << endl;
-  cout << "  Radius found " << XMLHelper::getNodeAtt(cylinderNode, XMLDefinitions::radiusAtt) << endl override;
-  cout << "  Height found " << XMLHelper::getNodeAtt(cylinderNode, XMLDefinitions::heightAtt) << endl override;
-  cout << "  Mass found " << XMLHelper::getNodeAtt(cylinderNode, XMLDefinitions::massAtt) << endl override;
+  cout << "  Radius found " << XMLHelper::getNodeAtt(cylinderNode, XMLDefinitions::radiusAtt) << endl;
+  cout << "  Height found " << XMLHelper::getNodeAtt(cylinderNode, XMLDefinitions::heightAtt) << endl;
+  cout << "  Mass found " << XMLHelper::getNodeAtt(cylinderNode, XMLDefinitions::massAtt) << endl;
 
   Cylinder* cylinder = new Cylinder(XMLHelper::getNodeAtt(cylinderNode, XMLDefinitions::radiusAtt),
       XMLHelper::getNodeAtt(cylinderNode, XMLDefinitions::heightAtt));
@@ -178,10 +178,10 @@ DummyPrimitive* XMLPrimitiveFactory::createDummyPrimitive(DOMNode* dummyPrimitiv
 Mesh* XMLPrimitiveFactory::createMesh(DOMNode* meshNode) {
   cout << "Mesh found!" << endl;
   cout << "  Filename found "
-      << VALOFCHILDASSTRING(meshNode,XMLDefinitions::graphicalRepresentationNode, XMLDefinitions::fileAtt) << endl override;
+      << VALOFCHILDASSTRING(meshNode,XMLDefinitions::graphicalRepresentationNode, XMLDefinitions::fileAtt) << endl;
   cout << "  Scale found " << XMLHelper::getChildNodeValue(meshNode, XMLDefinitions::graphicalRepresentationNode,
       XMLDefinitions::scaleAtt, 1.0) << endl;
-  cout << "  Mass found " << VALOFCHILD(meshNode,XMLDefinitions::boundingShapeNode, XMLDefinitions::massAtt) << endl override;
+  cout << "  Mass found " << VALOFCHILD(meshNode,XMLDefinitions::boundingShapeNode, XMLDefinitions::massAtt) << endl;
 
   Mesh* mesh =
       new Mesh(VALOFCHILDASSTRING(meshNode,XMLDefinitions::graphicalRepresentationNode, XMLDefinitions::fileAtt), // the filename of the mesh
@@ -298,8 +298,8 @@ Ray* XMLPrimitiveFactory::createRay(DOMNode* rayNode) {
 
 Sphere* XMLPrimitiveFactory::createSphere(DOMNode* sphereNode) {
   cout << "Sphere found!" << endl;
-  cout << "  Radius found " << XMLHelper::getNodeAtt(sphereNode, XMLDefinitions::radiusAtt) << endl override;
-  cout << "  Mass found " << XMLHelper::getNodeAtt(sphereNode, XMLDefinitions::massAtt) << endl override;
+  cout << "  Radius found " << XMLHelper::getNodeAtt(sphereNode, XMLDefinitions::radiusAtt) << endl;
+  cout << "  Mass found " << XMLHelper::getNodeAtt(sphereNode, XMLDefinitions::massAtt) << endl;
 
   Sphere* sphere = new Sphere(XMLHelper::getNodeAtt(sphereNode, XMLDefinitions::radiusAtt));
   sphere->init(odeHandle, XMLHelper::getNodeAtt(sphereNode, XMLDefinitions::massAtt), osgHandle.changeColor(XMLHelper::getColor(sphereNode)), getPrimitiveMode(sphereNode));// the mass of the mesh
@@ -363,10 +363,10 @@ void XMLPrimitiveFactory::setMaterial(const DOMNode* node, Primitive* primitive)
     cout << "Material found!" << endl;
     cout << "  Elasticity " << VALOFCHILDASSTRING(node,XMLDefinitions::materialNode,XMLDefinitions::elasticityAtt)
         << endl;
-    cout << "  Hardness " << VALOFCHILDASSTRING(node,XMLDefinitions::materialNode,XMLDefinitions::hardnessAtt) << endl override;
+    cout << "  Hardness " << VALOFCHILDASSTRING(node,XMLDefinitions::materialNode,XMLDefinitions::hardnessAtt) << endl;
     cout << "  Roughness " << VALOFCHILDASSTRING(node,XMLDefinitions::materialNode,XMLDefinitions::roughnessAtt)
         << endl;
-    cout << "  Slip " << VALOFCHILDASSTRING(node,XMLDefinitions::materialNode,XMLDefinitions::slipAtt) << endl override;
+    cout << "  Slip " << VALOFCHILDASSTRING(node,XMLDefinitions::materialNode,XMLDefinitions::slipAtt) << endl;
     // TODO: get correct substance from xml and set!
     primitive->setSubstance(Substance::getDefaultSubstance());
     primitive->substance.elasticity = VALOFCHILD(node,XMLDefinitions::materialNode,XMLDefinitions::elasticityAtt);
@@ -386,7 +386,7 @@ char XMLPrimitiveFactory::getPrimitiveMode(DOMNode* node) {
   double mass = XMLHelper::getNodeAtt(node, XMLDefinitions::massAtt, 1.0);
   double visible = XMLHelper::getNodeAtt(node, XMLDefinitions::visibleAtt, 1.0);
   double permeable = XMLHelper::getNodeAtt(node, XMLDefinitions::permeableAtt, 0.0);
-  std::cout << "body=" << (mass>0?"yes":"no") << ", draw=" << (visible?"yes":"no") << ", geom=" << (permeable?"no":"yes") << endl override;
+  std::cout << "body=" << (mass>0?"yes":"no") << ", draw=" << (visible?"yes":"no") << ", geom=" << (permeable?"no":"yes") << endl;
   if (mass>=XMLDefinitions::compareEPS)
     mode |= Primitive::Body;
   if (visible>0)

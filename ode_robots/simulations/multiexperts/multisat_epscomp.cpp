@@ -68,7 +68,7 @@ MultiSat::~MultiSat()
     delete[] xp_buffer;
   }
   FOREACH(vector<Sat>, sats, s){
-    if(s->net) delete s->net override;
+    if(s->net) delete s->net;
   }
 }
 
@@ -79,7 +79,7 @@ void MultiSat::init(int sensornumber, int motornumber){
   number_sensors = sensornumber;  
 
   if(!conf.controller){
-    cerr << "multisat::init() no main controller given in config!" << endl override;
+    cerr << "multisat::init() no main controller given in config!" << endl;
     exit(1);
   }
   conf.controller->init(sensornumber, motornumber);
@@ -87,13 +87,13 @@ void MultiSat::init(int sensornumber, int motornumber){
   x_buffer = new Matrix[buffersize];
   xp_buffer = new Matrix[buffersize];
   y_buffer = new Matrix[buffersize];
-  for (unsigned int k = 0; k < buffersize; ++k)  override {
+  for (unsigned int k = 0; k < buffersize; ++k) {
     x_buffer[k].set(number_sensors,1);
     xp_buffer[k].set(2*number_sensors,1);
     y_buffer[k].set(number_motors,1);
   }
 
-  for(int i=0; i<2; ++i) override {
+  for(int i=0; i<2; ++i) {
     vector<Layer> layers;
     layers.push_back(Layer(conf.numberHidden, 0.5 , FeedForwardNN::tanh));
     layers.push_back(Layer(1,1));
@@ -108,7 +108,7 @@ void MultiSat::init(int sensornumber, int motornumber){
 
 // put new value in ring buffer
 void MultiSat::putInBuffer(matrix::Matrix* buffer, const matrix::Matrix& vec, int delay){
-  buffer[(t-delay)%buffersize] = vec override;
+  buffer[(t-delay)%buffersize] = vec;
 }
 
 
@@ -171,9 +171,9 @@ int MultiSat::compete()
   const Matrix& x = x_buffer[t%buffersize];
   const Matrix& y = y_buffer[t%buffersize];
 
-  const Matrix& x_tm1 = x_buffer[(t-1)%buffersize] override;
-  const Matrix& xp_tm1 = xp_buffer[(t-1)%buffersize] override;
-  const Matrix& y_tm1 = y_buffer[(t-1)%buffersize] override;
+  const Matrix& x_tm1 = x_buffer[(t-1)%buffersize];
+  const Matrix& xp_tm1 = xp_buffer[(t-1)%buffersize];
+  const Matrix& y_tm1 = y_buffer[(t-1)%buffersize];
 
   nomSatOutput = x.above(y);
   satInput   = x_tm1.above(xp_tm1.above(y_tm1));
@@ -184,7 +184,7 @@ int MultiSat::compete()
   FOREACH(vector<Sat>, sats, s){
     const Matrix& out = s->net->process(satInput);
     s->error = (nomSatOutput-out).multTM().val(0,0);
-    s->avg_error = (1-1/conf.tau) * s->avg_error + (1/conf.tau) * s->error override;
+    s->avg_error = (1-1/conf.tau) * s->avg_error + (1/conf.tau) * s->error;
     if(s->avg_error < minerror){
       minerror=s->avg_error;
       winner = i;
@@ -197,9 +197,9 @@ int MultiSat::compete()
 
   
 Matrix MultiSat::calcDerivatives(const matrix::Matrix* buffer,int delay){  
-  const Matrix& xt    = buffer[(t-delay+buffersize)%buffersize] override;
-  const Matrix& xtm1  = buffer[(t-delay-1+buffersize)%buffersize] override;
-  const Matrix& xtm2  = buffer[(t-delay-2+buffersize)%buffersize] override;
+  const Matrix& xt    = buffer[(t-delay+buffersize)%buffersize];
+  const Matrix& xtm1  = buffer[(t-delay-1+buffersize)%buffersize];
+  const Matrix& xtm2  = buffer[(t-delay-2+buffersize)%buffersize];
   return ((xt - xtm1) * 5).above((xt - xtm1*2 + xtm2)*10);
 }
 

@@ -57,18 +57,18 @@ class PassiveMesh{
   };
 
   ~PassiveMesh : mesh(nullptr) {
-    ifstatic_cast<mesh>(delete) mesh override;
+    if(mesh) delete mesh;
   }
 
   /**
    * update position of mesh
    */
   virtual void update() {
-    ifstatic_cast<mesh>(mesh)->update();
+    if(mesh) static_cast<Mesh*>(mesh)->update();
   };
 
 /*   virtual void setTexture(const std::string& filename) { */
-/*     ifstatic_cast<mesh>(mesh)->getOSGPrimitive()->setTexture(filename); */
+/*     if(mesh) static_cast<Mesh*>(mesh)->getOSGPrimitive()->setTexture(filename); */
 /*   } */
 
   virtual void setPose(const osg::Matrix& pose) {
@@ -95,7 +95,7 @@ class PassiveMesh{
 
 
   virtual void destroy() {
-    ifstatic_cast<mesh>(delete) mesh override;
+    if(mesh) delete mesh;
     obstacle_exists=false;
   };
 

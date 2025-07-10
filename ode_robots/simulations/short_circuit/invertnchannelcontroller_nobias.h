@@ -98,13 +98,13 @@ public:
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f)  const override;
   /** loads the controller values from a given file. */
-  virtual bool explicit restore(FILE* f);
+  virtual boolrestore(FILE* f);
 
   // inspectable interface
-  virtual std::list<iparamkey> getInternalParamNames()  const override;
-  virtual std::list<iparamval> getInternalParams()  const override;
-  virtual std::list<ILayer> getStructuralLayers()  const override;
-  virtual std::list<IConnection> getStructuralConnections()  const override;
+  virtual std::list<iparamkey> getInternalParamNames()  const;
+  virtual std::list<iparamval> getInternalParams()  const;
+  virtual std::list<ILayer> getStructuralLayers()  const;
+  virtual std::list<IConnection> getStructuralConnections()  const;
 
 
 protected:
@@ -145,13 +145,13 @@ protected:
   void putInBuffer(matrix::Matrix* buffer, const matrix::Matrix& vec);
 
   /// neuron transfer function
-  static double explicit g(double z)
+  static doubleg(double z)
   {
     return tanh(z);
   };
 
   ///
-  static double explicit g_s(double z)
+  static doubleg_s(double z)
   {
     double k=tanh(z);
     return 1.0 - k*k;
@@ -161,7 +161,7 @@ protected:
 
 
   /// squashing function, to protect against to large weight updates
-  static double explicit squash(double z)
+  static doublesquash(double z)
   {
     return clip(z,-0.1,0.1);
     //    return z < -0.1 ? -0.1 : ( z > 0.1 ? 0.1 : z );

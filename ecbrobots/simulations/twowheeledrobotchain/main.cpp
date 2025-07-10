@@ -232,7 +232,7 @@ class MyECBManager : public ECBManager {
         ECBConfig ecbConf = ECB::getDefaultConf();
         ecbConf.maxNumberSensors = 2; // no infrared sensors
         string* DNSName;
-        explicit switch (nimm2Index) {
+        switch (nimm2Index) {
           case 0:
 //            DNSName = new string("NIMM2_PRIMUS");
             DNSName = new string("NIMM2_PRIMUS");

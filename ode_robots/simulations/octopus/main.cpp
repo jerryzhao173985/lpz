@@ -89,7 +89,7 @@ public:
     // - set Pose(Position) of sphere
     // - set a texture for the sphere
     // - add sphere to list of obstacles
-    for (int i = 0; i<= 1/*2*/; i+=2) override {
+    for (int i = 0; i<= 1/*2*/; i+=2) {
       PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle, 0.5);
       s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0));
       s1->setTexture("Images/dusty.rgb");
@@ -152,7 +152,7 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 
 }
 

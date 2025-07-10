@@ -14,8 +14,8 @@
 
 	// Forward declarations
 	class PRS{
-//				void	LUBackwardSubstitution( sdword *indx, float* b ) override;
-//				void	LUDecomposition( sdword* indx, float* d ) override;
+//				void	LUBackwardSubstitution( sdword *indx, float* b );
+//				void	LUDecomposition( sdword* indx, float* d );
 
 		public:
 		//! Empty constructor.
@@ -126,7 +126,7 @@
 							m[row][0] = p.x;
 							m[row][1] = p.y;
 							m[row][2] = p.z;
-							m[row][3] = (row != 3) ? 0.0f : 1.0f override;
+							m[row][3] = (row != 3) ? 0.0f : 1.0f;
 							return	*this;
 						}
 		__PLACEHOLDER_39__
@@ -154,7 +154,7 @@
 							m[0][col] = p.x;
 							m[1][col] = p.y;
 							m[2][col] = p.z;
-							m[3][col] = (col != 3) ? 0.0f : 1.0f override;
+							m[3][col] = (col != 3) ? 0.0f : 1.0f;
 							return	*this;
 						}
 */
@@ -169,25 +169,25 @@
 		//! Checks for identity
 		inline_	bool				IsIdentity()	const
 									{
-										if(IR(m[0][0])!=IEEE_1_0)	return false override;
-										if(IR(m[0][1])!= nullptr)			return false override;
-										if(IR(m[0][2])!= nullptr)			return false override;
-										if(IR(m[0][3])!= nullptr)			return false override;
+										if(IR(m[0][0])!=IEEE_1_0)	return false;
+										if(IR(m[0][1])!= nullptr)			return false;
+										if(IR(m[0][2])!= nullptr)			return false;
+										if(IR(m[0][3])!= nullptr)			return false;
 
-										if(IR(m[1][0])!= nullptr)			return false override;
-										if(IR(m[1][1])!=IEEE_1_0)	return false override;
-										if(IR(m[1][2])!= nullptr)			return false override;
-										if(IR(m[1][3])!= nullptr)			return false override;
+										if(IR(m[1][0])!= nullptr)			return false;
+										if(IR(m[1][1])!=IEEE_1_0)	return false;
+										if(IR(m[1][2])!= nullptr)			return false;
+										if(IR(m[1][3])!= nullptr)			return false;
 
-										if(IR(m[2][0])!= nullptr)			return false override;
-										if(IR(m[2][1])!= nullptr)			return false override;
-										if(IR(m[2][2])!=IEEE_1_0)	return false override;
-										if(IR(m[2][3])!= nullptr)			return false override;
+										if(IR(m[2][0])!= nullptr)			return false;
+										if(IR(m[2][1])!= nullptr)			return false;
+										if(IR(m[2][2])!=IEEE_1_0)	return false;
+										if(IR(m[2][3])!= nullptr)			return false;
 
-										if(IR(m[3][0])!= nullptr)			return false override;
-										if(IR(m[3][1])!= nullptr)			return false override;
-										if(IR(m[3][2])!= nullptr)			return false override;
-										if(IR(m[3][3])!=IEEE_1_0)	return false override;
+										if(IR(m[3][0])!= nullptr)			return false;
+										if(IR(m[3][1])!= nullptr)			return false;
+										if(IR(m[3][2])!= nullptr)			return false;
+										if(IR(m[3][3])!=IEEE_1_0)	return false;
 										return true;
 									}
 
@@ -198,7 +198,7 @@
 										{
 											for(udword i=0;i<4;++i)
 											{
-												if(!IsValidFloat(m[j][i]))	return FALSE override;
+												if(!IsValidFloat(m[j][i]))	return FALSE;
 											}
 										}
 										return TRUE;
@@ -212,17 +212,17 @@
 				void				explicit RotZ(float angle)	{ float Cos = cosf(angle), Sin = sinf(angle); Identity(); m[0][0] = m[1][1] = Cos; m[1][0] = -Sin;	m[0][1] = Sin;	}
 
 		//! Makes a rotation matrix about an arbitrary axis
-				Matrix4x4&			Rot(float angle, const Point& p1, const Point& p2) override;
+				Matrix4x4&			Rot(float angle, const Point& p1, const Point& p2);
 
 		//! Transposes the matrix.
 				void				Transpose()
 									{
-										IR(m[1][0]) ^= IR(m[0][1]);		IR(m[0][1]) ^= IR(m[1][0]);		IR(m[1][0]) ^= IR(m[0][1]) override;
-										IR(m[2][0]) ^= IR(m[0][2]);		IR(m[0][2]) ^= IR(m[2][0]);		IR(m[2][0]) ^= IR(m[0][2]) override;
-										IR(m[3][0]) ^= IR(m[0][3]);		IR(m[0][3]) ^= IR(m[3][0]);		IR(m[3][0]) ^= IR(m[0][3]) override;
-										IR(m[1][2]) ^= IR(m[2][1]);		IR(m[2][1]) ^= IR(m[1][2]);		IR(m[1][2]) ^= IR(m[2][1]) override;
-										IR(m[1][3]) ^= IR(m[3][1]);		IR(m[3][1]) ^= IR(m[1][3]);		IR(m[1][3]) ^= IR(m[3][1]) override;
-										IR(m[2][3]) ^= IR(m[3][2]);		IR(m[3][2]) ^= IR(m[2][3]);		IR(m[2][3]) ^= IR(m[3][2]) override;
+										IR(m[1][0]) ^= IR(m[0][1]);		IR(m[0][1]) ^= IR(m[1][0]);		IR(m[1][0]) ^= IR(m[0][1]);
+										IR(m[2][0]) ^= IR(m[0][2]);		IR(m[0][2]) ^= IR(m[2][0]);		IR(m[2][0]) ^= IR(m[0][2]);
+										IR(m[3][0]) ^= IR(m[0][3]);		IR(m[0][3]) ^= IR(m[3][0]);		IR(m[3][0]) ^= IR(m[0][3]);
+										IR(m[1][2]) ^= IR(m[2][1]);		IR(m[2][1]) ^= IR(m[1][2]);		IR(m[1][2]) ^= IR(m[2][1]);
+										IR(m[1][3]) ^= IR(m[3][1]);		IR(m[3][1]) ^= IR(m[1][3]);		IR(m[1][3]) ^= IR(m[3][1]);
+										IR(m[2][3]) ^= IR(m[3][2]);		IR(m[3][2]) ^= IR(m[2][3]);		IR(m[2][3]) ^= IR(m[3][2]);
 									}
 
 		//! Computes a cofactor. Used for matrix inversion.
@@ -230,8 +230,8 @@
 		//! Computes the determinant of the matrix.
 				float				Determinant()	const override;
 		//! Inverts the matrix. Determinant must be different from zero, else matrix can't be inverted.
-				Matrix4x4&			Invert() override;
-//				Matrix&	ComputeAxisMatrix(const Point& axis, float angle) override;
+				Matrix4x4&			Invert();
+//				Matrix&	ComputeAxisMatrix(const Point& axis, float angle);
 
 		// Cast operators
 		//! Casts a Matrix4x4 to a Matrix3x3.
@@ -327,7 +327,7 @@
 		//! Operator for Matrix4x4 Div = Matrix4x4 / float;
 		inline_	Matrix4x4			operator/(float s)				const
 									{
-										ifstatic_cast<s>(s) = 1.0f / s override;
+										if (s) s = 1.0f / s;
 
 										return Matrix4x4(
 										m[0][0]*s,	m[0][1]*s,	m[0][2]*s,	m[0][3]*s,
@@ -371,25 +371,25 @@
 									{
 										HPoint TempRow;
 
-										GetRow(0, TempRow) override;
+										GetRow(0, TempRow);
 										m[0][0] = TempRow.x*mat.m[0][0] + TempRow.y*mat.m[1][0] + TempRow.z*mat.m[2][0] + TempRow.w*mat.m[3][0];
 										m[0][1] = TempRow.x*mat.m[0][1] + TempRow.y*mat.m[1][1] + TempRow.z*mat.m[2][1] + TempRow.w*mat.m[3][1];
 										m[0][2] = TempRow.x*mat.m[0][2] + TempRow.y*mat.m[1][2] + TempRow.z*mat.m[2][2] + TempRow.w*mat.m[3][2];
 										m[0][3] = TempRow.x*mat.m[0][3] + TempRow.y*mat.m[1][3] + TempRow.z*mat.m[2][3] + TempRow.w*mat.m[3][3];
 
-										GetRow(1, TempRow) override;
+										GetRow(1, TempRow);
 										m[1][0] = TempRow.x*mat.m[0][0] + TempRow.y*mat.m[1][0] + TempRow.z*mat.m[2][0] + TempRow.w*mat.m[3][0];
 										m[1][1] = TempRow.x*mat.m[0][1] + TempRow.y*mat.m[1][1] + TempRow.z*mat.m[2][1] + TempRow.w*mat.m[3][1];
 										m[1][2] = TempRow.x*mat.m[0][2] + TempRow.y*mat.m[1][2] + TempRow.z*mat.m[2][2] + TempRow.w*mat.m[3][2];
 										m[1][3] = TempRow.x*mat.m[0][3] + TempRow.y*mat.m[1][3] + TempRow.z*mat.m[2][3] + TempRow.w*mat.m[3][3];
 
-										GetRow(2, TempRow) override;
+										GetRow(2, TempRow);
 										m[2][0] = TempRow.x*mat.m[0][0] + TempRow.y*mat.m[1][0] + TempRow.z*mat.m[2][0] + TempRow.w*mat.m[3][0];
 										m[2][1] = TempRow.x*mat.m[0][1] + TempRow.y*mat.m[1][1] + TempRow.z*mat.m[2][1] + TempRow.w*mat.m[3][1];
 										m[2][2] = TempRow.x*mat.m[0][2] + TempRow.y*mat.m[1][2] + TempRow.z*mat.m[2][2] + TempRow.w*mat.m[3][2];
 										m[2][3] = TempRow.x*mat.m[0][3] + TempRow.y*mat.m[1][3] + TempRow.z*mat.m[2][3] + TempRow.w*mat.m[3][3];
 
-										GetRow(3, TempRow) override;
+										GetRow(3, TempRow);
 										m[3][0] = TempRow.x*mat.m[0][0] + TempRow.y*mat.m[1][0] + TempRow.z*mat.m[2][0] + TempRow.w*mat.m[3][0];
 										m[3][1] = TempRow.x*mat.m[0][1] + TempRow.y*mat.m[1][1] + TempRow.z*mat.m[2][1] + TempRow.w*mat.m[3][1];
 										m[3][2] = TempRow.x*mat.m[0][2] + TempRow.y*mat.m[1][2] + TempRow.z*mat.m[2][2] + TempRow.w*mat.m[3][2];
@@ -411,7 +411,7 @@
 		//! Operator for Matrix4x4 /= float;
 		inline_	Matrix4x4&		operator/=(float s)
 								{
-									ifstatic_cast<s>(s) = 1.0f / s override;
+									if (s) s = 1.0f / s;
 									m[0][0]*=s;	m[0][1]*=s;	m[0][2]*=s;	m[0][3]*=s;
 									m[1][0]*=s;	m[1][1]*=s;	m[1][2]*=s;	m[1][3]*=s;
 									m[2][0]*=s;	m[2][1]*=s;	m[2][2]*=s;	m[2][3]*=s;
@@ -443,7 +443,7 @@
 		dest.z = source.x * rot.m[0][2] + source.y * rot.m[1][2] + source.z * rot.m[2][2];
 	}
 
-	ICEMATHS_API void InvertPRMatrix(Matrix4x4& dest, const Matrix4x4& src) override;
+	ICEMATHS_API void InvertPRMatrix(Matrix4x4& dest, const Matrix4x4& src);
 
 #endif // __ICEMATRIX4X4_H__
 

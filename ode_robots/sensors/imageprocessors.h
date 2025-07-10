@@ -328,7 +328,7 @@ namespace lpzrobots {
 
 //     virtual void initDestImage(Camera::CameraImage& dest, const Camera::CameraImage& src) override {
 //       dest.img->allocateImage(src.img->s(), src.img->t(), 1, GL_LUMINANCE, GL_UNSIGNED_BYTE);
-//       dest.name  = __PLACEHOLDER_15__ + src.name + __PLACEHOLDER_16__ override;
+//       dest.name  = __PLACEHOLDER_15__ + src.name + __PLACEHOLDER_16__;
 //     }
 
 //     virtual void process(const osg::Image* src, osg::Image* dest) override {
@@ -345,7 +345,7 @@ namespace lpzrobots {
 //           const unsigned char* pixel = src->data(k*size, j);
 //           unsigned char* destdata = dest->data(k*size, j);
 //           for(int i=0; i< size; ++i) {
-//             *destdata= (k*111+*pixel)%256 override;
+//             *destdata= (k*111+*pixel)%256;
 //             pixel++;
 //             destdata++;
 //           }
