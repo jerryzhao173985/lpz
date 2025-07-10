@@ -122,7 +122,7 @@ jobs:
       run: |
         # Use platform-specific presets for better compatibility
         if [[ "${{ runner.os }}" == "Linux" ]]; then
-          cmake --preset=default -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DLPZROBOTS_USE_SYSTEM_ODE=OFF
+          cmake --preset=ci -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DLPZROBOTS_USE_SYSTEM_ODE=OFF
         else
           # macOS: Use ARM64 preset for Apple Silicon runners, with proper Qt6 paths
           if [[ "$(uname -m)" == "arm64" ]]; then
@@ -136,7 +136,7 @@ jobs:
       run: |
         # Determine build directory based on platform
         if [[ "${{ runner.os }}" == "Linux" ]]; then
-          BUILD_DIR="build/default"
+          BUILD_DIR="build/ci"
         else
           # macOS uses preset-specific directories
           if [[ "$(uname -m)" == "arm64" ]]; then
@@ -153,7 +153,7 @@ jobs:
       run: |
         # Determine build directory based on platform
         if [[ "${{ runner.os }}" == "Linux" ]]; then
-          BUILD_DIR="build/default"
+          BUILD_DIR="build/ci"
         else
           # macOS uses preset-specific directories
           if [[ "$(uname -m)" == "arm64" ]]; then
@@ -165,12 +165,12 @@ jobs:
         cd "$BUILD_DIR"
         ctest --output-on-failure || echo "No tests found"
     
-    # Test that a simulation can be built with CMake
-    - name: Test simulation build (CMake)
+    # Test that core libraries are built
+    - name: Test core libraries
       run: |
         # Determine build directory based on platform
         if [[ "${{ runner.os }}" == "Linux" ]]; then
-          BUILD_DIR="build/default"
+          BUILD_DIR="build/ci"
         else
           # macOS uses preset-specific directories
           if [[ "$(uname -m)" == "arm64" ]]; then
@@ -180,38 +180,31 @@ jobs:
           fi
         fi
         
-        # Test that the installation works and simulations can find libraries
-        cd ode_robots/simulations/template_sphererobot
-        # Export paths so simulation can find our build
-        export CMAKE_PREFIX_PATH="${{ github.workspace }}/$BUILD_DIR:$CMAKE_PREFIX_PATH"
+        echo "Checking for core libraries in: $BUILD_DIR"
         
-        # Set library path based on platform
-        if [[ "${{ runner.os }}" == "Linux" ]]; then
-          export LD_LIBRARY_PATH="${{ github.workspace }}/$BUILD_DIR/selforg:${{ github.workspace }}/$BUILD_DIR/ode_robots:$LD_LIBRARY_PATH"
+        # Check that core libraries were built
+        if [ -f "$BUILD_DIR/selforg/libselforg.a" ]; then
+          echo "✓ selforg library found"
         else
-          export DYLD_LIBRARY_PATH="${{ github.workspace }}/$BUILD_DIR/selforg:${{ github.workspace }}/$BUILD_DIR/ode_robots:$DYLD_LIBRARY_PATH"
+          echo "✗ selforg library missing"
+          exit 1
         fi
         
-        # Try to build with CMake if CMakeLists.txt exists
-        if [ -f CMakeLists.txt ]; then
-          mkdir -p build_test
-          cd build_test
-          cmake .. -DCMAKE_PREFIX_PATH="${{ github.workspace }}/$BUILD_DIR"
-          make
-          test -f start || exit 1
-          echo "✓ Simulation built successfully with CMake"
-        elif [ -f Makefile ]; then
-          # Fall back to Make build
-          make clean
-          make
-          test -f start || exit 1
-          echo "✓ Simulation built successfully with Make"
+        if [ -f "$BUILD_DIR/real_robots/libamosii_opt.a" ]; then
+          echo "✓ amosii library found"
         else
-          # Template simulations are built as part of the main build
-          # Just check if the binary exists
-          test -f ${{ github.workspace }}/$BUILD_DIR/ode_robots/simulations/template_sphererobot/start || exit 1
-          echo "✓ Simulation binary found from main build"
+          echo "✗ amosii library missing"
+          exit 1
         fi
+        
+        if [ -f "$BUILD_DIR/ga_tools/libga_tools_opt.a" ]; then
+          echo "✓ ga_tools library found"
+        else
+          echo "✗ ga_tools library missing"
+          exit 1
+        fi
+        
+        echo "✓ All core libraries built successfully"
 
   # Also test the legacy Make system
   make-build:

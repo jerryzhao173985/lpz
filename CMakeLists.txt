@@ -125,10 +125,12 @@ else()
     message(STATUS "Skipping ode_robots (requires OpenSceneGraph)")
 endif()
 
-if(BUILD_GUI_TOOLS)
+if(BUILD_GUI_TOOLS AND LPZROBOTS_HAS_QT)
     add_subdirectory(guilogger)
     add_subdirectory(matrixviz)
     add_subdirectory(configurator)
+elseif(BUILD_GUI_TOOLS)
+    message(STATUS "Skipping GUI tools (requires Qt6 or Qt5)")
 endif()
 
 add_subdirectory(ga_tools)
