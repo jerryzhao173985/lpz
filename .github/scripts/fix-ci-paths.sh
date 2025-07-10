@@ -91,11 +91,19 @@ configure_component "ode_robots"
 configure_component "ga_tools"
 
 # Configure GUI tools if they exist
-for tool in guilogger matrixviz configurator; do
+for tool in guilogger matrixviz; do
     if [ -d "$tool" ]; then
         configure_component "$tool"
     fi
 done
+
+# Configure configurator separately as it has different arguments
+if [ -d "configurator" ] && [ -x "configurator/configure" ]; then
+    echo "Configuring configurator..."
+    cd configurator
+    ./configure --prefix="$PREFIX" --type=DEVEL
+    cd ..
+fi
 
 echo "Component configuration complete"
 
