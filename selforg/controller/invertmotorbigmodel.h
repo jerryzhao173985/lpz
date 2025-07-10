@@ -170,7 +170,7 @@ protected:
   // @param y_delay timesteps to delay the y-values.  (usually 0)
   //  Please note that the delayed values are NOT used for the error calculation
   //  (this is done in calcXsi())
-  virtual void calcCandHUpdates(matrix::Matrix& C_update, matrix::Matrix& H_update, int y_delay) override;
+  virtual void calcCandHUpdates(matrix::Matrix& C_update, matrix::Matrix& H_update, int y_delay) ;
 
   /// updates the matrix C and H
   virtual void updateCandH(const matrix::Matrix& C_update,
