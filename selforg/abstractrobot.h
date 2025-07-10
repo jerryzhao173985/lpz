@@ -38,8 +38,8 @@
  */
 class AbstractRobot : public Trackable, public Configurable {
 public:
-  typedef double sensor;
-  typedef double motor;
+  using sensor = double;
+  using motor = double;
 
   /**
    * Constructor

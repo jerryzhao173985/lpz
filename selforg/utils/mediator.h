@@ -40,7 +40,7 @@ public:
 
 class Mediator{
 public:
-  typedef std::vector<MediatorCollegue*> MediatorCollegueListType;
+  using MediatorCollegueListType = std::vector<MediatorCollegue*>;
 
   Mediator();
   virtual ~Mediator();

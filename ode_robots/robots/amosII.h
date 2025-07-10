@@ -312,8 +312,8 @@ namespace lpzrobots {
         // maximum value, used for iteration
         LEG_JOINT_TYPE_MAX
       };
-      typedef AmosIIMotorNames MotorName;
-      typedef AmosIISensorNames SensorName;
+      using MotorName = AmosIIMotorNames;
+      using SensorName = AmosIISensorNames;
 
       /**
        * Returns the default configuration values
@@ -349,13 +349,13 @@ namespace lpzrobots {
       /**
        * updates the OSG nodes of the vehicle
        */
-      virtual void update() override;
+      virtual void update();
 
       /**
        * sets the pose of the vehicle
        * @param pose desired pose matrix
        */
-      virtual void placeIntern(const osg::Matrix& pose) override;
+      virtual void placeIntern(const osg::Matrix& pose);
 
       /**
        * returns actual sensorvalues
@@ -363,14 +363,14 @@ namespace lpzrobots {
        * @param sensornumber length of the sensor array
        * @return number of actually written sensors
        */
-      virtual int getSensorsIntern(double* sensors, int sensornumber) override;
+      virtual int getSensorsIntern(double* sensors, int sensornumber);
 
       /**
        * sets actual motorcommands
        * @param motors motors scaled to [-1,1]
        * @param motornumber length of the motor array
        */
-      virtual void setMotorsIntern(const double* motors, int motornumber) override;
+      virtual void setMotorsIntern(const double* motors, int motornumber);
 
       /**
        * returns number of sensors
@@ -389,22 +389,22 @@ namespace lpzrobots {
        * @param globalData structure that contains global data from the
        *                   simulation environment
        */
-      virtual void doInternalStuff(const GlobalData& globalData) override;
+      virtual void doInternalStuff(const GlobalData& globalData);
 
-      virtual void sense(const GlobalData& globalData) override;
+      virtual void sense(const GlobalData& globalData);
 
       virtual double getMassOfRobot();
 
       void setLegPosUsage(LegPos leg, LegPosUsage usage);
 
       // Configurable Interface
-      virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren = true) override;
+      virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren = true);
 
       /**
        * the main object of the robot, which is used for position and speed
        * tracking
        */
-      virtual const Primitive* getMainPrimitive()  const override;
+      virtual const Primitive* getMainPrimitive()  const;
 
       /**
        * returns the MotorName enum value for the given joint at the given
@@ -494,15 +494,15 @@ namespace lpzrobots {
     private:
 
       /** typedefs */
-      typedef std::map<LegPos, HingeJoint*> HingeJointMap;
-      typedef std::map<LegPos, Leg> LegMap;
-      typedef std::map<LegPos, ContactSensor*> LegContactMap;
-      typedef std::map<MotorName, OneAxisServo*> MotorMap;
-      typedef std::map<LegPos, LegPosUsage> LegPosUsageMap;
-      typedef std::map<LegPos, IRSensor*> LegIRSensorMap;
-      typedef std::vector<Primitive*> PrimitiveList;
-      typedef std::vector<Joint*> JointList;
-      typedef std::vector<OneAxisServo*> ServoList;
+      using HingeJointMap = std::map<LegPos, HingeJoint*>;
+      using LegMap = std::map<LegPos, Leg>;
+      using LegContactMap = std::map<LegPos, ContactSensor*>;
+      using MotorMap = std::map<MotorName, OneAxisServo*>;
+      using LegPosUsageMap = std::map<LegPos, LegPosUsage>;
+      using LegIRSensorMap = std::map<LegPos, IRSensor*>;
+      using PrimitiveList = std::vector<Primitive*>;
+      using JointList = std::vector<Joint*>;
+      using ServoList = std::vector<OneAxisServo*>;
 
       //-----------Add Orientation Sensor by Ren----------------
       AxisOrientationSensor* OrientationSensor;

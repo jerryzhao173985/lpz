@@ -47,7 +47,7 @@ public:
     matrix::Matrix Exp; ///< Lyapunov exponents
   };
 
-  typedef HashMap<int, SlidingMatrix*> Horizons;
+  using Horizons = HashMap<int, SlidingMatrix*>;
 
 public:
   Lyapunov();

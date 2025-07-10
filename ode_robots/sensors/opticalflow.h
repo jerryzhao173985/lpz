@@ -69,7 +69,7 @@ namespace lpzrobots {
       Vec2i operator / (int i) const;
     };
 
-    typedef std::list< std::pair<Vec2i,int> > FlowDelList;
+    using FlowDelList = std::list< std::pair<Vec2i,int> >;
 
     /** @see CameraSensor for further parameter explanation.
      */
@@ -113,7 +113,7 @@ namespace lpzrobots {
        and returns the average absolute difference.
        Field center, size and shift have to be choosen, 
        so that no clipping is required!
-       \param field specifies positionstatic_cast<center>(of) subimage to use for comparison
+       \param field specifies position static_cast<center>(of) subimage to use for comparison
        \param size specifies the size of the field edged in pixels
        \param d_x shift in x direction
        \param d_y shift in y direction   

@@ -34,7 +34,7 @@ namespace lpzrobots {
 }
 
 class Agent;
-typedef std::list<Agent*> AgentList;
+using AgentList = std::list<Agent*>;
 
 class GlobalDataBase {
 public:

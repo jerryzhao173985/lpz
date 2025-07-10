@@ -38,7 +38,7 @@
 template<typename _Tp, typename _Alloc = std::allocator<_Tp>>
 class BackCallerVector : public std::vector<_Tp, _Alloc>, public BackCaller {
 public:
-  typedef typename std::vector<_Tp, _Alloc>::iterator iterator;
+  using iterator = typename std::vector<_Tp, _Alloc>::iterator;
 
   BackCallerVector() {}
   virtual ~BackCallerVector() {
