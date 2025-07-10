@@ -84,8 +84,8 @@ public:
   virtual bool store(FILE* f)  const;
   virtual bool restore(FILE* f);
 
-  virtual void printWeights(FILE* f) const override;
-  virtual void printCellsizes(FILE* f) const override;
+  virtual void printWeights(FILE* f) const ;
+  virtual void printCellsizes(FILE* f) const ;
 
 protected:
   /// updates the cell sizes

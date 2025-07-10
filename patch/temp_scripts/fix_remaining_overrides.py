@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#\!/usr/bin/env python3
 """
 Fix remaining incorrect override keywords in controller headers.
 """
@@ -41,7 +41,7 @@ def remove_override(file_path, method_names):
         replacement = r'\1\3'
         content = re.sub(pattern, replacement, content, flags=re.MULTILINE | re.DOTALL)
     
-    if content != original_content:
+    if content \!= original_content:
         with open(file_path, 'w') as f:
             f.write(content)
         print(f"Fixed {file_path}")
