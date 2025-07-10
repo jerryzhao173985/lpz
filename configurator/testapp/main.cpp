@@ -2,6 +2,7 @@
 
 #include <selforg/sox.h>
 #include <selforg/soxexpand.h>
+#include <selforg/configurablelist.h>
 
 #include <iostream>
 
@@ -16,7 +17,7 @@ using namespace std;
  */
 int main(int argc, char *argv[]) {
 
-  Configurable::configurableList configList;
+  ConfigurableList configList;
   Configurable::paramint activeController;
   Configurable::paramval dummyParam;
 
