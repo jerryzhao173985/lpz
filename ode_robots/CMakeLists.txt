@@ -54,13 +54,50 @@ if(TARGET ode_robots_dbg)
     )
 endif()
 
-# Apply ODE dependency using unified system
-lpzrobots_apply_dependencies(ode_robots ODE)
-if(TARGET ode_robots_opt)
-    lpzrobots_apply_dependencies(ode_robots_opt ODE)
-endif()
-if(TARGET ode_robots_dbg)
-    lpzrobots_apply_dependencies(ode_robots_dbg ODE)
+# ODE include and library handling
+if(LPZROBOTS_USE_SYSTEM_ODE AND LPZROBOTS_ODE_INCLUDE_DIRS)
+    # Use system ODE 
+    target_include_directories(ode_robots PUBLIC ${LPZROBOTS_ODE_INCLUDE_DIRS})
+    if(TARGET ode_robots_opt)
+        target_include_directories(ode_robots_opt PUBLIC ${LPZROBOTS_ODE_INCLUDE_DIRS})
+    endif()
+    if(TARGET ode_robots_dbg)
+        target_include_directories(ode_robots_dbg PUBLIC ${LPZROBOTS_ODE_INCLUDE_DIRS})
+    endif()
+    
+    if(LPZROBOTS_ODE_LIBRARIES)
+        target_link_libraries(ode_robots PUBLIC ${LPZROBOTS_ODE_LIBRARIES})
+        if(TARGET ode_robots_opt)
+            target_link_libraries(ode_robots_opt PUBLIC ${LPZROBOTS_ODE_LIBRARIES})
+        endif()
+        if(TARGET ode_robots_dbg)
+            target_link_libraries(ode_robots_dbg PUBLIC ${LPZROBOTS_ODE_LIBRARIES})
+        endif()
+    endif()
+else()
+    # Use bundled ODE headers
+    if(EXISTS "${CMAKE_SOURCE_DIR}/include/ode-dbl")
+        target_include_directories(ode_robots PUBLIC
+            $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/ode-dbl>
+            $<INSTALL_INTERFACE:include/ode-dbl>
+        )
+        if(TARGET ode_robots_opt)
+            target_include_directories(ode_robots_opt PUBLIC
+                $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/ode-dbl>
+                $<INSTALL_INTERFACE:include/ode-dbl>
+            )
+        endif()
+        if(TARGET ode_robots_dbg)
+            target_include_directories(ode_robots_dbg PUBLIC
+                $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/ode-dbl>
+                $<INSTALL_INTERFACE:include/ode-dbl>
+            )
+        endif()
+    endif()
+    
+    # For bundled ODE, the library is built by the legacy Make system
+    # CMake builds will need to ensure the bundled ODE is pre-built
+    message(STATUS "Using bundled ODE headers (library must be pre-built)")
 endif()
 
 # OpenSceneGraph include directories (use SYSTEM to suppress warnings)

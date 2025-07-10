@@ -259,9 +259,11 @@ function(lpzrobots_find_test_dependencies)
     endif()
 endfunction()
 
-# Function to find ODE - Unified logic for all platforms
+# ODE configuration option (must be outside function for command line overrides)
+option(LPZROBOTS_USE_SYSTEM_ODE "Use system-installed ODE instead of bundled version" OFF)
+
+# Function to find ODE - Unified logic for all platforms  
 function(lpzrobots_find_ode)
-    option(LPZROBOTS_USE_SYSTEM_ODE "Use system-installed ODE instead of bundled version" ON)
     
     if(LPZROBOTS_USE_SYSTEM_ODE)
         message(STATUS "Looking for system ODE...")
@@ -295,9 +297,15 @@ endfunction()
 function(lpzrobots_setup_bundled_ode)
     set(LPZROBOTS_HAS_ODE TRUE PARENT_SCOPE)
     set(LPZROBOTS_ODE_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/include/ode-dbl" PARENT_SCOPE)
-    set(LPZROBOTS_ODE_LIBRARIES "ode_dbl" PARENT_SCOPE)
+    
+    # For bundled ODE, we don't link to a library target - it's handled by the legacy Make system
+    # The bundled ODE is built separately and included via headers only for CMake builds
+    set(LPZROBOTS_ODE_LIBRARIES "" PARENT_SCOPE)
     set(LPZROBOTS_ODE_IS_DOUBLE TRUE PARENT_SCOPE)
-    message(STATUS "Using bundled ODE (double precision)")
+    set(LPZROBOTS_USE_BUNDLED_ODE TRUE PARENT_SCOPE)
+    
+    message(STATUS "Using bundled ODE (double precision, headers only for CMake)")
+    message(WARNING "CMake builds with bundled ODE have limited functionality. Consider using system ODE or legacy Make builds for full features.")
 endfunction()
 
 # Function to setup ODE headers compatibility
