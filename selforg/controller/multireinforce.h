@@ -182,9 +182,9 @@ protected:
   void putInBuffer(std::vector<matrix::Matrix>& buffer, const matrix::Matrix& vec, int delay = 0);
 
   /// puts the sensors in the ringbuffer
-  virtual void fillSensorBuffer(const sensor* x_, int number_sensors) override;
+  virtual void fillSensorBuffer(const sensor* x_, int number_sensors) ;
   /// puts the motors in the ringbuffer
-  virtual void fillMotorBuffer(const motor* y_, int number_motors) override;
+  virtual void fillMotorBuffer(const motor* y_, int number_motors) ;
 
   /// handles inhibition damping etc.
   virtual void management() ;
