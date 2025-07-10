@@ -178,7 +178,7 @@ public:
 
 };
 
-voidprintUsage(const char* progname){
+void printUsage(const char* progname){
   printf("Usage: %s numchannels [-g] [-f]\n\tnumchannels\tnumber of channels\n\
 \t-g\t\tuse guilogger\n\t-f\t\tuse guilogger with logfile", progname);
 }

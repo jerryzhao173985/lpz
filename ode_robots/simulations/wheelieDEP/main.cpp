@@ -212,7 +212,7 @@ public:
     }
   }
 
-  voidend(const GlobalData& globalData) {
+  void end(const GlobalData& globalData) {
     FILE* f;
     f = fopen("result","w");
     if(!f) return;

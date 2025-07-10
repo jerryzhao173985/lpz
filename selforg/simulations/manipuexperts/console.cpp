@@ -80,14 +80,14 @@ int valid_argument ( char *caller, char *arg);
 void too_dangerous ( char *caller );
 
 
-voidshowParams(const ConfigList& configs)
+void showParams(const ConfigList& configs)
 {
   for(vector<Configurable*>::const_iterator i=configs.begin(); i != configs.end(); ++i) {
     (*i)->print(stdout, 0);
   }
 }
 
-voidshowParam(const Configurable* config)
+void showParam(const Configurable* config)
 {
   if(config) config->print(stdout, 0);
 }

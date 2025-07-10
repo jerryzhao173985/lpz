@@ -34,7 +34,6 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
     add_compile_options(
         -Wall -Wextra -Wpedantic
         -Wcast-align -Wcast-qual 
-        -Wconversion -Wsign-conversion
         -Wformat=2 -Wuninitialized
         -Wunused -Wunused-function
         -Wunused-label -Wunused-value
@@ -43,9 +42,11 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
         -Wredundant-decls -Woverloaded-virtual
         -Wsign-promo -Wformat-security
         -Wnon-virtual-dtor -Wold-style-cast
-        -Wzero-as-null-pointer-constant
         -Wno-unused-parameter  # Too many false positives
         -Wno-sign-conversion   # Too noisy for now
+        -Wno-conversion        # Too many warnings, suppress for cleaner CI output
+        -Wno-zero-as-null-pointer-constant  # Too many warnings, suppress for cleaner CI output
+        -Wno-float-conversion  # Too many warnings, suppress for cleaner CI output
     )
     
     if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")

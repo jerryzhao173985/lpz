@@ -188,7 +188,7 @@ public:
     global.configs.push_back ( sphere);
   }
 
-  voidremoveRobot(const GlobalData& global){
+  void removeRobot(const GlobalData& global){
     if(!global.agents.empty()){
       OdeAgentList::iterator i =  global.agents.end()-1;
       delete (*i)->getRobot();

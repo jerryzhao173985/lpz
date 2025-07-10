@@ -43,7 +43,7 @@ public:
 
   virtual ~StraightLine() {}
 
-  voidsetCurveAngle(double alpha);
+  void setCurveAngle(double alpha);
 
   /**
    * gives the position and rotation static_cast<angle>(of) the segment at the
@@ -80,7 +80,7 @@ public:
   /**
    * sets the width of the segment,
    */
-  virtual voidsetWidth(double w);
+  virtual void setWidth(double w);
   
   
   /**
@@ -88,7 +88,7 @@ public:
    */
   virtual void draw();
   
-  virtual voidcreate(dSpaceID space);
+  virtual void create(dSpaceID space);
   
   virtual void destroy();
   

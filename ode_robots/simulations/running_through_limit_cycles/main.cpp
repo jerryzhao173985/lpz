@@ -116,7 +116,7 @@ void start(const OdeHandle& odeHandle, GlobalData& global)
   showParams(configs);
 }
 
-voidend(const GlobalData& global){
+void end(const GlobalData& global){
   for(ObstacleList::iterator i=global.obstacles.begin(); i != global.obstacles.end(); ++i) override {
     delete (*i);
   }
@@ -131,7 +131,7 @@ voidend(const GlobalData& global){
 
 
 // this function is called if the user pressed Ctrl-C
-voidconfig(const GlobalData& global){
+void config(const GlobalData& global){
   changeParams(configs);
 }
 

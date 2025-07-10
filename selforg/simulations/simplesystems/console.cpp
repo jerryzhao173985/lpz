@@ -78,14 +78,14 @@ COMMAND *find_command (char *name);
 bool execute_line (const GlobalData& globalData, char *line);
 int valid_argument ( const char *caller, const char *arg);
 
-voidshowParams(const ConfigList& configs)
+void showParams(const ConfigList& configs)
 {
   for(vector<Configurable*>::const_iterator i=configs.begin(); i != configs.end(); ++i) {
     (*i)->print(stdout, 0);
   }
 }
 
-voidshowParam(const Configurable* config)
+void showParam(const Configurable* config)
 {
   if(config) config->print(stdout, 0);
 }

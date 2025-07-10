@@ -133,7 +133,7 @@ public:
     return m;
   };
 
-  virtual voidaddOtherRobot(const MyRobot* otherRobot) {
+  virtual void addOtherRobot(const MyRobot* otherRobot) {
     if(otherRobot!=this)
       otherRobots.push_back(otherRobot);
   }

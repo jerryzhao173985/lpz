@@ -250,11 +250,11 @@ protected:
     This is the implementation uses a better formula for g^-1 using Mittelwertsatz
     @param delay 0 for no delay and n>0 for n timesteps delay in the SML (s4delay)
 */
-  virtual voidlearnController(int delay);
+  virtual void learnController(int delay);
 
   /// learn conf.model, (and S) using motors y and corresponding sensors x
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual voidlearnModel(int delay);
+  virtual void learnModel(int delay);
 
   /// handles inhibition damping etc.
   virtual void management();

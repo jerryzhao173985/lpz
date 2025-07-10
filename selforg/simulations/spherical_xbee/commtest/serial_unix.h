@@ -111,8 +111,8 @@ public:
    * On success the net number of bytes static_cast<len>(is) returned, otherwise -1.
    */
   virtual int sendData(uint8 adr, uint8 cmd, uint8 *data, uint8 len);
-  virtual voidsendAck(uint8 adr);
-  virtual voidsendNack(uint8 adr);
+  virtual void sendAck(uint8 adr);
+  virtual void sendNack(uint8 adr);
 
 
   /// thread is running?
@@ -126,9 +126,9 @@ public:
   void stop();
 
   /// set com port
-  voidcomport(const CString& port){ m_port=port; };
+  void comport(const CString& port){ m_port=port; };
   /// set baud rate
-  voidbaudrate(int baud){ m_baud=baud; };
+  void baudrate(int baud){ m_baud=baud; };
 
 
   int readB();

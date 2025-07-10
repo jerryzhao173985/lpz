@@ -150,7 +150,7 @@ namespace lpzrobots {
     return false;
   }
 
-  void QAbstractConfigurableTileWidget::enterEvent(QEvent * event) {
+  void QAbstractConfigurableTileWidget::enterEvent(QEnterEvent * event) {
 
     QPalette pal = QPalette(actualPalette);
     pal.setColor(QPalette::Window, QColor(220, 200, 200));

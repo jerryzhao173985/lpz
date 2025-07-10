@@ -37,7 +37,7 @@ public:
   virtual intsendByte(uint8 c);
   virtual int getByte() const;
   virtual int receiveData(uint8 adr, uint8 *cmd, uint8 *data);
-  virtual voidflushInputBuffer(int wait);
+  virtual void flushInputBuffer(int wait);
 
   /**
    * This method writes len bytes of 'raw' data to the slave with the address 'adr'.
@@ -64,9 +64,9 @@ public:
   void stop();
 
   /// set com port
-  voidcomport(const CString& port){ m_port=port; };
+  void comport(const CString& port){ m_port=port; };
   /// set baud rate
-  voidbaudrate(int baud){ m_baud=baud; };
+  void baudrate(int baud){ m_baud=baud; };
 
   /// thread function
   bool run();

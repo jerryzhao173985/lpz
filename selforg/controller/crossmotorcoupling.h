@@ -46,7 +46,7 @@ public:
        This trick is used to ensure that the controller is both __PLACEHOLDER_2__ and
      __PLACEHOLDER_3__.
      @param threshold value below which (absolute) no cross motor teaching is done
-      (avoids suppression of activity)
+      (avoid s suppression of activity)
    */
   CrossMotorCoupling(AbstractController* controller, Teachable* teachable, double threshold = 0.4)
     : AbstractControllerAdapter(controller, "CrossMotorCoupling", "$ID$")

@@ -372,7 +372,7 @@ public:
     }
   }
 
-  virtual voidnotifyOnChange(const paramkey& key) {
+  virtual void notifyOnChange(const paramkey& key) {
     if(key == "alpha"){
       alphaChanged=true;
     }else if(key[0]=='B'){

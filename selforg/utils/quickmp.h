@@ -36,7 +36,7 @@
 // These macros generate a unique symbol name using the line number.  (We
 // must go through several helper macros to force full expansion of __LINE__.)
 // The resulting symbols will be unique within a given file.  Name collisions
-// with other files can be avoided as long as the files don't include one
+// with other files can be avoid ed as long as the files don't include one
 // another, or, if they do include one another, the symbols should be
 // declared within local scopes that aren't seen by the other file.
 #define QMP_UNIQUE_SYMBOL_HELPER2(prefix, line) prefix##_uniqueSymbol##line
@@ -128,7 +128,7 @@
 
 /// Defines a barrier routine used to synchronize threads.  Each thread blocks
 /// at the barrier until all threads have reached it.  This can be expensive
-/// and can often be avoided by splitting one parallel for loop into two.
+/// and can often be avoid ed by splitting one parallel for loop into two.
 #define QMP_BARRIER qmp_internal::ParallelTaskManager::instance().barrier
 
 /// Exposes the given variable to any parallel for loops later in the same

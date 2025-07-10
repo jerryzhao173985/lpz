@@ -32,7 +32,7 @@ namespace lpzrobots {
   class Formel1 : public OdeRobot {
   public:
 
-    formel1(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
+    Formel1(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
           double size=1, double force=3, double speed=15, bool sphereWheels=true);
 
     virtual ~Formel1() {};

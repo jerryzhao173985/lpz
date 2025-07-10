@@ -257,7 +257,7 @@ namespace lpzrobots {
 
 
     /******** CONFIGURABLE ***********/
-    virtual voidnotifyOnChange(const paramkey& key);
+    virtual void notifyOnChange(const paramkey& key);
 
     /** the main object of the robot, which is used for position and speed tracking */
     virtual const Primitive* getMainPrimitive() const const { return objects[Thorax]; } // Trunk_comp

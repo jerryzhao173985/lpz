@@ -73,7 +73,7 @@ public:
   // !!!!!!!!!!!!!!!!!!! MISC STUFF !!!!!!!!
 
   /// stores the sat networks into seperate files
-  voidstoreSats(const char* filestem);
+  void storeSats(const char* filestem);
   /// restore the sat networks from seperate files
   void restoreSats(const std::list<std::string>& filenames);
 

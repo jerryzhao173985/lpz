@@ -600,9 +600,9 @@ public:
       conf.irAxis3=true;
       conf.motor_ir_before_sensors=false;
     }
-    list<dGeomID> avoids;
-    avoids.push_back(ground);
-    conf.irSensorTempl=new IRSensorWall(0.8,avoids);
+    list<dGeomID> avoid s;
+    avoid s.push_back(ground);
+    conf.irSensorTempl=new IRSensorWall(0.8,avoid s);
     conf.irsensorscale=5;
 
     // create new sphere
