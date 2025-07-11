@@ -76,7 +76,8 @@ jobs:
       if: runner.os == 'macOS'
       run: |
         brew install cmake ninja gsl python3
-        pip3 install matplotlib pandas numpy
+        # Use --break-system-packages for Python packages on macOS GitHub runners
+        pip3 install --break-system-packages matplotlib pandas numpy
         
         echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
         echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV
