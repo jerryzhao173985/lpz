@@ -158,10 +158,13 @@ if [ -d "ode_robots" ]; then
     fi
     
     # Create ode_robots header symlink for simulations
-    if [ ! -L "ode_robots/include/ode_robots" ]; then
+    # Check if it's already a directory (which it might be from create_header_links)
+    if [ ! -e "ode_robots/include/ode_robots" ]; then
         # This allows simulations to find headers with #include <ode_robots/simulation.h>
         ln -sf .. ode_robots/include/ode_robots
         echo "Created symlink: ode_robots/include/ode_robots -> .. (ode_robots itself)"
+    elif [ -d "ode_robots/include/ode_robots" ] && [ ! -L "ode_robots/include/ode_robots" ]; then
+        echo "ode_robots/include/ode_robots already exists as a directory, skipping symlink"
     fi
     
     # Also link ode-dbl headers for ode_robots
