@@ -56,12 +56,12 @@ while test $# -gt 0; do
 done
 
 # test for selforg-config
-if [ -x ../selforg/selforg-config ]; then
-    echo "Using local selforg-config at ../selforg/selforg-config"
+if [ -x "$DIRNAME/../selforg/selforg-config" ]; then
+    echo "Using local selforg-config at $DIRNAME/../selforg/selforg-config"
     # Update PATH to include local selforg directory first
-    export PATH="../selforg:$PATH"
-elif ! type selforg-config; then
-    echo "could not find \"selforg-config\" in PATH or ../selforg/" 1>&2;
+    export PATH="$DIRNAME/../selforg:$PATH"
+elif ! type selforg-config >/dev/null 2>&1; then
+    echo "could not find \"selforg-config\" in PATH or $DIRNAME/../selforg/" 1>&2;
     exit 1;
 fi
 
