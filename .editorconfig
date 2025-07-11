@@ -1,0 +1,84 @@
+# EditorConfig is awesome: https://EditorConfig.org
+# This file ensures consistent coding styles between different editors and IDEs
+
+# Top-most EditorConfig file
+root = true
+
+# Default settings for all files
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+# C++ source files
+[*.{cpp,cc,cxx,c,h,hpp,hxx,hh}]
+indent_size = 4
+max_line_length = 100
+# Matches clang-format configuration
+
+# Python files (for build scripts)
+[*.py]
+indent_size = 4
+max_line_length = 88  # Black formatter default
+
+# Shell scripts
+[*.{sh,bash}]
+indent_size = 2
+shell_variant = bash
+
+# Makefiles require tabs
+[{Makefile,*.mk,*.mak,GNUmakefile}]
+indent_style = tab
+tab_width = 4
+
+# CMake files
+[{CMakeLists.txt,*.cmake}]
+indent_size = 2
+max_line_length = 120
+
+# YAML files
+[*.{yml,yaml}]
+indent_size = 2
+
+# JSON files
+[*.json]
+indent_size = 2
+insert_final_newline = false  # Some JSON parsers don't like trailing newlines
+
+# Qt project files
+[*.{pro,pri,prf,prl}]
+indent_size = 2
+
+# XML files
+[*.xml]
+indent_size = 2
+
+# Markdown files
+[*.md]
+trim_trailing_whitespace = false  # Preserve trailing spaces for line breaks
+max_line_length = 80
+
+# Git files
+[{.gitignore,.gitattributes,.gitmodules}]
+indent_size = 2
+
+# M4 macro files
+[*.m4]
+indent_size = 2
+
+# Configuration files
+[*.{conf,cfg,ini}]
+indent_size = 2
+
+# Patch files (preserve exact formatting)
+[*.{patch,diff}]
+trim_trailing_whitespace = false
+insert_final_newline = false
+
+# Binary files (don't modify)
+[*.{png,jpg,jpeg,gif,ico,pdf,exe,dll,so,dylib,a,lib,o,obj}]
+insert_final_newline = false
+trim_trailing_whitespace = false
