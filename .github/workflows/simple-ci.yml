@@ -518,6 +518,10 @@ jobs:
         # Build selforg directly to avoid include path issues
         cd selforg
         
+        # Clean up any bad symlinks first
+        echo "=== Cleaning up bad symlinks ==="
+        find . -type l -name "*.h" ! -path "./include/*" -delete || true
+        
         # Diagnostic: Check the state before building
         echo "=== Diagnostic: Current directory ==="
         pwd

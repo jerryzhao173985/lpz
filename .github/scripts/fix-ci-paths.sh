@@ -157,17 +157,7 @@ if [ -d "ode_robots" ]; then
         echo "Created symlink: ode_robots/include/selforg -> ../../selforg"
     fi
     
-    # CRITICAL: Also create individual header links in ode_robots/include/selforg
-    # This ensures relative includes work correctly when headers are accessed via symlinks
-    mkdir -p ode_robots/include/selforg/utils
-    if [ -d "selforg/utils" ]; then
-        for header in selforg/utils/*.h; do
-            if [ -f "$header" ]; then
-                ln -sf "../../../$header" "ode_robots/include/selforg/utils/$(basename $header)"
-            fi
-        done
-        echo "Created utils header symlinks in ode_robots/include/selforg/utils/"
-    fi
+    # Don't create individual header links - let each component manage its own headers
     
     # Also link ode-dbl headers for ode_robots
     if [ ! -L "ode_robots/include/ode-dbl" ]; then
