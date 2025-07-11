@@ -681,46 +681,56 @@ jobs:
         # CRITICAL FIX: Force config scripts to use source paths
         echo "=== FIXING: Forcing source paths for build ==="
         
-        # Create wrapper scripts that force source paths
-        echo '#!/bin/bash' > selforg-config
-        echo "exec $PROJECT_ROOT/selforg/selforg-config --srcprefix=\"$PROJECT_ROOT/selforg\" \"\$@\"" >> selforg-config
-        chmod +x selforg-config
+        # CRITICAL: Ensure ode_robots is configured in DEVEL mode
+        echo "Checking ode_robots configuration mode..."
+        ODE_ROBOTS_TYPE=$($PROJECT_ROOT/ode_robots/ode_robots-config --type)
+        echo "ode_robots is configured as: $ODE_ROBOTS_TYPE"
         
-        echo '#!/bin/bash' > ode_robots-config
-        echo "exec $PROJECT_ROOT/ode_robots/ode_robots-config --srcprefix=\"$PROJECT_ROOT/ode_robots\" \"\$@\"" >> ode_robots-config
-        chmod +x ode_robots-config
+        if [ "$ODE_ROBOTS_TYPE" != "DEVEL" ]; then
+            echo "ERROR: ode_robots is in USER mode, must reconfigure!"
+            # Force regeneration from M4 template with DEVEL mode
+            cd $PROJECT_ROOT/ode_robots
+            rm -f ode_robots-config
+            m4 -DPREFIX="$PREFIX" -DSRCPREFIX="$PROJECT_ROOT/ode_robots" -DDEVEL -DLINUX -DVERSION="1.0" ode_robots-config.m4 > ode_robots-config
+            chmod +x ode_robots-config
+            cd -
+            echo "Regenerated ode_robots-config in DEVEL mode"
+        fi
         
-        # ode-dbl-config doesn't support --srcprefix, so we just pass through
-        echo '#!/bin/bash' > ode-dbl-config
-        echo "exec $PROJECT_ROOT/opende/ode-dbl-config \"\$@\"" >> ode-dbl-config
-        chmod +x ode-dbl-config
+        # Do the same for selforg
+        SELFORG_TYPE=$($PROJECT_ROOT/selforg/selforg-config --type 2>/dev/null || echo "USER")
+        echo "selforg is configured as: $SELFORG_TYPE"
+        
+        if [ "$SELFORG_TYPE" != "DEVEL" ]; then
+            echo "Regenerating selforg-config in DEVEL mode..."
+            cd $PROJECT_ROOT/selforg
+            rm -f selforg-config
+            m4 -DPREFIX="$PREFIX" -DSRCPREFIX="$PROJECT_ROOT/selforg" -DDEVEL -DLINUX -DVERSION="1.0" selforg-config.m4 > selforg-config
+            chmod +x selforg-config
+            cd -
+        fi
+        
+        # Create simple passthrough wrapper for consistency
+        ln -sf $PROJECT_ROOT/selforg/selforg-config selforg-config
+        ln -sf $PROJECT_ROOT/ode_robots/ode_robots-config ode_robots-config
+        ln -sf $PROJECT_ROOT/opende/ode-dbl-config ode-dbl-config
         
         # Put wrappers first in PATH
         export PATH="$(pwd):$PATH"
         
-        # Debug what the wrappers produce
-        echo "Wrapper output for --cflags:"
-        echo "selforg-config:"
+        # Debug what the config scripts produce
+        echo "Config script outputs after DEVEL mode fix:"
+        echo "selforg-config --cflags:"
         ./selforg-config --cflags
-        echo "ode_robots-config:"
+        echo "ode_robots-config --cflags:"
         ./ode_robots-config --cflags
-        echo "ode-dbl-config:"
+        echo "ode-dbl-config --cflags:"
         ./ode-dbl-config --cflags
-        
-        # Also check what the original scripts return
-        echo ""
-        echo "Original script outputs (for comparison):"
-        echo "Original selforg-config --cflags:"
-        $PROJECT_ROOT/selforg/selforg-config --cflags
-        echo "Original ode_robots-config --cflags:"  
-        $PROJECT_ROOT/ode_robots/ode_robots-config --cflags
         
         # CRITICAL: Create necessary header structure for simulation
         echo "=== Creating header structure for simulation ==="
         
-        # First, ensure ode_robots is configured correctly for DEVEL mode
-        echo "Reconfiguring ode_robots for DEVEL mode..."
-        (cd $PROJECT_ROOT/ode_robots && ./configure --prefix="$PREFIX" --srcprefix="$PROJECT_ROOT/ode_robots" --type=DEVEL)
+        # Header structure is already ensured by DEVEL mode configuration above
         
         # Ensure ode_robots headers are accessible with #include <ode_robots/xxx.h>
         if [ ! -d "$PROJECT_ROOT/ode_robots/include/ode_robots" ]; then
