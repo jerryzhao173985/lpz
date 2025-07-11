@@ -42,6 +42,8 @@ UTILS = selforg-config
 
 # additional inc paths
 INC +=  -Iinclude -Iinclude/selforg
+# Add subdirectories to include path (like CMake does)
+INC += -I. -Icontroller -Iutils -Imatrix -Istatistictools -Iwirings
 
 # use -pg for profiling
 CPPFLAGS = -Wall -pipe -fpic $(INC) $(shell ./selforg-config --srcprefix="." $(CFGOPTS) --intern --cflags)
@@ -138,8 +140,18 @@ endif
 
 # Create header symlinks (still needed for includes to work)
 create_header_links:
+	@mkdir -p $(INCLUDEDIR)
+	@# Create hierarchical symlinks (preserving directory structure)
 	for file in $(HFILES); do \
-		ln -sf $(REVINCLUDEDIR)/$$file $(INCLUDEDIR)/`basename $$file`; \
+		dir=`dirname $$file`; \
+		if [ "$$dir" != "." ]; then \
+			mkdir -p $(INCLUDEDIR)/$$dir; \
+		fi; \
+		ln -sf $(REVINCLUDEDIR)/$$file $(INCLUDEDIR)/$$file; \
+	done
+	@# Also create flattened symlinks for backward compatibility
+	for file in $(HFILES); do \
+		ln -sf $(REVINCLUDEDIR)/$$file $(INCLUDEDIR)/`basename $$file` 2>/dev/null || true; \
 	done
 
 # Modern dependency generation - no separate Makefile.depend needed
