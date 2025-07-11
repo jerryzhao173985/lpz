@@ -6,18 +6,21 @@ set(ODE_ROBOTS_MAIN_SOURCES
     simulation.cpp
 )
 
+# Collect OSG sources if OpenSceneGraph is available
+if(LPZROBOTS_HAS_OSG)
+    file(GLOB OSG_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/osg/*.cpp)
+    list(APPEND ODE_ROBOTS_MAIN_SOURCES ${OSG_SOURCES})
+    set(ODE_ROBOTS_SUBDIRS agents motors obstacles osg robots sensors utils)
+else()
+    set(ODE_ROBOTS_SUBDIRS agents motors obstacles robots sensors utils)
+endif()
+
 # Use the unified library creation function
 lpzrobots_add_component_library(ode_robots
     SOURCES
         ${ODE_ROBOTS_MAIN_SOURCES}
     SUBDIRS
-        agents
-        motors
-        obstacles
-        $<$<BOOL:${LPZROBOTS_HAS_OSG}>:osg>
-        robots
-        sensors
-        utils
+        ${ODE_ROBOTS_SUBDIRS}
     PUBLIC_DEPS
         lpzrobots::selforg
         Threads::Threads
