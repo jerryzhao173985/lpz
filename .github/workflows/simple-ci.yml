@@ -517,7 +517,23 @@ jobs:
         echo "=== Building selforg first ==="
         # Build selforg directly to avoid include path issues
         cd selforg
+        
+        # Diagnostic: Check the state before building
+        echo "=== Diagnostic: Current directory ==="
+        pwd
+        echo "=== Diagnostic: selforg-config --cflags ==="
+        ./selforg-config --cflags || echo "selforg-config failed"
+        echo "=== Diagnostic: Include directory structure ==="
+        ls -la include/ || echo "No include directory"
+        ls -la include/selforg/ || echo "No include/selforg directory"
+        echo "=== Diagnostic: Looking for plotoptionengine.h ==="
+        find . -name "plotoptionengine.h" -ls
+        
         make create_header_links
+        
+        echo "=== Diagnostic: After create_header_links ==="
+        ls -la include/selforg/ | grep plotoptionengine || echo "plotoptionengine.h not found"
+        
         # Build only the single library to avoid race conditions between variants
         make lib -j$(nproc)
         cd ..
