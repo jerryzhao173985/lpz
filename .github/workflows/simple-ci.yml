@@ -553,6 +553,16 @@ jobs:
         
         make create_header_links
         make lib -j$(nproc)
+        
+        # Verify headers were created
+        echo "Checking selforg headers..."
+        if [ -d "include/selforg" ]; then
+          echo "✓ selforg headers found in include/selforg"
+          ls -la include/selforg/ | head -10
+        else
+          echo "✗ selforg headers not found!"
+          exit 1
+        fi
         cd ..
         
         echo "=== Building opende ==="
@@ -620,34 +630,81 @@ jobs:
         # Install selforg
         echo "Installing selforg..."
         cd selforg
+        
+        # Ensure headers are created before installation
+        make create_header_links
+        
         # Use PREFIX to override installation paths
         make PREFIX="$PREFIX" install || {
           echo "Standard install failed, trying manual installation"
           # Manual installation fallback
           cp -v libselforg*.a "$PREFIX/lib/" || true
           cp -v selforg-config "$PREFIX/bin/" || true
-          cp -rv include/selforg "$PREFIX/include/" || true
+          
+          # Install headers - check both possible locations
+          if [ -d "include/selforg" ]; then
+            mkdir -p "$PREFIX/include"
+            cp -rv include/selforg "$PREFIX/include/" || true
+          else
+            echo "Warning: selforg headers not found in include/selforg"
+            # Try to create them from source
+            mkdir -p "$PREFIX/include/selforg"
+            for h in *.h controller/*.h matrix/*.h utils/*.h wirings/*.h; do
+              if [ -f "$h" ]; then
+                cp -v "$h" "$PREFIX/include/selforg/" || true
+              fi
+            done
+          fi
         }
+        
+        # Verify installation
+        echo "Checking selforg installation..."
+        if [ -d "$PREFIX/include/selforg" ]; then
+          echo "✓ selforg headers installed to $PREFIX/include/selforg"
+          ls "$PREFIX/include/selforg/" | head -10
+        else
+          echo "✗ selforg headers NOT installed!"
+          exit 1
+        fi
         cd ..
         
         # Install ode_robots  
         echo "Installing ode_robots..."
         cd ode_robots
+        
+        # Ensure headers are created before installation
+        make create_header_links || echo "No create_header_links target"
+        
         make PREFIX="$PREFIX" install || {
           echo "Standard install failed, trying manual installation"
           # Manual installation fallback
           cp -v libode_robots*.a "$PREFIX/lib/" || true
           cp -v ode_robots-config "$PREFIX/bin/" || true
-          # Create header structure
-          mkdir -p "$PREFIX/include/ode_robots"
-          cp -rv utils "$PREFIX/include/ode_robots/" || true
-          cp -rv osg "$PREFIX/include/ode_robots/" || true
-          cp -rv robots "$PREFIX/include/ode_robots/" || true
-          cp -rv obstacles "$PREFIX/include/ode_robots/" || true
-          cp -rv sensors "$PREFIX/include/ode_robots/" || true
-          cp -rv motors "$PREFIX/include/ode_robots/" || true
-          cp -v *.h "$PREFIX/include/ode_robots/" || true
+          
+          # Create header structure - check if include/ode_robots exists first
+          if [ -d "include/ode_robots" ]; then
+            mkdir -p "$PREFIX/include"
+            cp -rv include/ode_robots "$PREFIX/include/" || true
+          else
+            # Fallback: copy headers directly
+            mkdir -p "$PREFIX/include/ode_robots"
+            cp -rv utils "$PREFIX/include/ode_robots/" || true
+            cp -rv osg "$PREFIX/include/ode_robots/" || true
+            cp -rv robots "$PREFIX/include/ode_robots/" || true
+            cp -rv obstacles "$PREFIX/include/ode_robots/" || true
+            cp -rv sensors "$PREFIX/include/ode_robots/" || true
+            cp -rv motors "$PREFIX/include/ode_robots/" || true
+            cp -v *.h "$PREFIX/include/ode_robots/" || true
+          fi
         }
+        
+        # Verify installation
+        echo "Checking ode_robots installation..."
+        if [ -d "$PREFIX/include/ode_robots" ]; then
+          echo "✓ ode_robots headers installed to $PREFIX/include/ode_robots"
+        else
+          echo "✗ ode_robots headers NOT installed!"
+        fi
         cd ..
         
         # Ensure ode headers are available
