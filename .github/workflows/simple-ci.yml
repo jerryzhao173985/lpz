@@ -563,10 +563,52 @@ jobs:
           echo "✗ selforg headers not found!"
           exit 1
         fi
+        
+        # Install selforg headers to PREFIX for ode_robots to find
+        echo "Installing selforg headers to $PREFIX/include..."
+        mkdir -p "$PREFIX/include"
+        cp -r include/selforg "$PREFIX/include/" || {
+          echo "Failed to install selforg headers"
+          exit 1
+        }
+        
+        # Also install the library
+        cp libselforg*.a "$PREFIX/lib/" || {
+          echo "Creating lib directory and retrying..."
+          mkdir -p "$PREFIX/lib"
+          cp libselforg*.a "$PREFIX/lib/"
+        }
+        
+        # Install selforg-config
+        if [ -x "selforg-config" ]; then
+          mkdir -p "$PREFIX/bin"
+          cp selforg-config "$PREFIX/bin/"
+          chmod +x "$PREFIX/bin/selforg-config"
+        fi
+        
+        echo "✓ selforg headers and libraries installed to $PREFIX"
         cd ..
         
         echo "=== Building opende ==="
         make ode || echo "ODE build failed (may be using system ODE)"
+        
+        # Install ODE headers to PREFIX if not already there
+        echo "Ensuring ODE headers are available..."
+        if [ ! -d "$PREFIX/include/ode-dbl" ]; then
+          if [ -d "include/ode-dbl" ]; then
+            echo "Installing ODE headers from include/ode-dbl to $PREFIX/include..."
+            cp -r include/ode-dbl "$PREFIX/include/"
+          elif [ -d "opende/include/ode-dbl" ]; then
+            echo "Installing ODE headers from opende/include/ode-dbl to $PREFIX/include..."
+            cp -r opende/include/ode-dbl "$PREFIX/include/"
+          fi
+        fi
+        
+        # Install ode-dbl-config if available
+        if [ -x "opende/ode-dbl-config" ]; then
+          cp opende/ode-dbl-config "$PREFIX/bin/"
+          chmod +x "$PREFIX/bin/ode-dbl-config"
+        fi
         
         echo "=== Building ode_robots (depends on selforg) ==="
         # Ensure ode_robots can find ode-dbl-config
