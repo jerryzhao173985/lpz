@@ -666,30 +666,31 @@ jobs:
         echo "Creating ode-dbl-config for system ODE..."
         mkdir -p opende
         
-        # Create ode-dbl-config script using a simple approach
-        cat > opende/ode-dbl-config << 'EOFDBLCONFIG'
-#!/bin/sh
-# ode-dbl-config for system ODE - returns paths relative to repository root
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-
-case "$1" in
-  --cflags) 
-    # Return the path to the parent of ode-dbl directory so #include <ode-dbl/xxx.h> works
-    # This is critical: we need -I.../include not -I.../include/ode-dbl
-    echo "-I$REPO_ROOT/include -DdDOUBLE"
-    ;;
-  --libs) 
-    echo "-lode"
-    ;;
-  --prefix)
-    echo "$REPO_ROOT"
-    ;;
-  *) 
-    echo "Usage: ode-dbl-config [--cflags|--libs|--prefix]" 
-    ;;
-esac
-EOFDBLCONFIG
+        # Create ode-dbl-config script using a different approach to avoid YAML issues
+        mkdir -p opende
+        {
+          echo '#!/bin/sh'
+          echo '# ode-dbl-config for system ODE - returns paths relative to repository root'
+          echo 'SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"'
+          echo 'REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"'
+          echo ''
+          echo 'case "$1" in'
+          echo '  --cflags) '
+          echo '    # Return the path to the parent of ode-dbl directory so #include <ode-dbl/xxx.h> works'
+          echo '    # This is critical: we need -I.../include not -I.../include/ode-dbl'
+          echo '    echo "-I$REPO_ROOT/include -DdDOUBLE"'
+          echo '    ;;'
+          echo '  --libs) '
+          echo '    echo "-lode"'
+          echo '    ;;'
+          echo '  --prefix)'
+          echo '    echo "$REPO_ROOT"'
+          echo '    ;;'
+          echo '  *) '
+          echo '    echo "Usage: ode-dbl-config [--cflags|--libs|--prefix]" '
+          echo '    ;;'
+          echo 'esac'
+        } > opende/ode-dbl-config
         
         chmod +x opende/ode-dbl-config
         
