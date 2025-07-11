@@ -709,6 +709,41 @@ jobs:
         echo "Which ode-dbl-config: $(which ode-dbl-config 2>/dev/null || echo 'not in PATH')"
         
         echo "=== Building ode_robots ==="
+        
+        # Final check: Ensure headers are still there
+        echo "Final header check before ode_robots build:"
+        ls -la include/ode-dbl/common.h || echo "ERROR: common.h missing!"
+        echo "Total headers: $(ls include/ode-dbl/*.h 2>/dev/null | wc -l)"
+        
+        # Also check from ode_robots perspective
+        echo "Checking from ode_robots directory:"
+        cd ode_robots
+        ls -la ../include/ode-dbl/common.h || echo "ERROR: common.h not accessible from ode_robots!"
+        
+        # Test if the compiler can find the header with our include paths
+        echo ""
+        echo "Testing compiler include paths:"
+        echo '#include <ode-dbl/common.h>' > test_include.cpp
+        echo 'int main() { return 0; }' >> test_include.cpp
+        
+        # Get the include flags that will be used
+        ODECFLAGS=$(../opende/ode-dbl-config --cflags)
+        echo "ODE flags from ode-dbl-config: $ODECFLAGS"
+        
+        # Test with the same include paths as the Makefile
+        echo "Testing with: g++ -c -isystem ../include/ode-dbl $ODECFLAGS test_include.cpp"
+        if g++ -c -isystem ../include/ode-dbl $ODECFLAGS test_include.cpp -o test_include.o 2>&1; then
+          echo "✓ Compiler can find ode-dbl/common.h"
+        else
+          echo "✗ Compiler cannot find ode-dbl/common.h"
+          echo "Trying with just ode-dbl-config flags:"
+          g++ -c $ODECFLAGS test_include.cpp -o test_include.o 2>&1 || echo "Still fails"
+        fi
+        
+        rm -f test_include.cpp test_include.o
+        cd ..
+        
+        # Build ode_robots
         make ode_robots
         
         echo "=== Building ga_tools ==="
