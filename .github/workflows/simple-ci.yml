@@ -465,7 +465,7 @@ jobs:
         # created by CI
         
         TYPE=DEVEL
-        PREFIX=\${HOME}/lpzrobots
+        PREFIX=${HOME}/lpzrobots
         
         # Development mode - build from source
         EOF
@@ -811,19 +811,19 @@ EOFDBLCONFIG
         echo "=== Installing components with Legacy Make ==="
         
         # First update Makefile.conf to USER mode for installation
-        cat > Makefile.conf << EOF
+        cat > Makefile.conf << 'EOF'
         # configuration file for lpzrobots make system
         # created by CI
         
         TYPE=user
-        PREFIX=\${HOME}/lpzrobots
+        PREFIX=${HOME}/lpzrobots
         
         # Installation type
-        ifeq (\$(TYPE),user)
-          PREFIX_INC=\$(PREFIX)/include
-          PREFIX_LIB=\$(PREFIX)/lib
-          PREFIX_BIN=\$(PREFIX)/bin  
-          PREFIX_SHARE=\$(PREFIX)/share
+        ifeq ($(TYPE),user)
+          PREFIX_INC=$(PREFIX)/include
+          PREFIX_LIB=$(PREFIX)/lib
+          PREFIX_BIN=$(PREFIX)/bin  
+          PREFIX_SHARE=$(PREFIX)/share
         endif
         EOF
         
