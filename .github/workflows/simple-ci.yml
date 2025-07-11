@@ -518,7 +518,8 @@ jobs:
         # Build selforg directly to avoid include path issues
         cd selforg
         make create_header_links
-        make -j$(nproc)
+        # Build only the single library to avoid race conditions between variants
+        make lib -j$(nproc)
         cd ..
         
         echo "=== Building opende ==="
