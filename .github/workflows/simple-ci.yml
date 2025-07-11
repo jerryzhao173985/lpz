@@ -498,6 +498,9 @@ jobs:
         
         # Use the CI path fix script for other components
         .github/scripts/fix-ci-paths.sh
+        
+        # Ensure selforg headers are properly set up
+        .github/scripts/ensure-selforg-headers.sh
     
     - name: Build components in order
       run: |

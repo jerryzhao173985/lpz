@@ -117,14 +117,10 @@ if [ -n "$PREFIX" ]; then
         (cd "$SRCROOT/selforg" && make create_header_links) || echo "Failed to create header links"
     fi
     
-    # Instead of linking to include/selforg (which has symlinks), link directly to selforg source
-    # This preserves the directory structure needed for relative includes
-    if [ ! -L "$PREFIX/include/selforg" ]; then
-        # Remove any existing symlink or directory
-        rm -rf "$PREFIX/include/selforg"
-        # Create a symlink to the actual selforg directory
-        ln -sf "$SRCROOT/selforg" "$PREFIX/include/selforg"
-        echo "Created symlink: $PREFIX/include/selforg -> $SRCROOT/selforg"
+    # Link to the include/selforg directory which has all the header symlinks
+    if [ ! -L "$PREFIX/include/selforg" ] && [ -d "$SRCROOT/selforg/include/selforg" ]; then
+        ln -sf "$SRCROOT/selforg/include/selforg" "$PREFIX/include/selforg"
+        echo "Created symlink: $PREFIX/include/selforg -> $SRCROOT/selforg/include/selforg"
     fi
     
     # Also link ode-dbl headers to PREFIX
@@ -172,6 +168,17 @@ if [ -d "ode_robots" ]; then
 fi
 
 # Configure ode_robots (needs selforg configured first)
+# First ensure selforg headers are accessible
+if [ -d "ode_robots" ] && [ -d "selforg/include/selforg" ]; then
+    # Create symlink in ode_robots to selforg include directory
+    mkdir -p ode_robots/include
+    if [ ! -L "ode_robots/include/selforg" ]; then
+        # Link to the actual selforg include directory with all headers
+        ln -sf ../../selforg/include/selforg ode_robots/include/selforg
+        echo "Created symlink: ode_robots/include/selforg -> ../../selforg/include/selforg"
+    fi
+fi
+
 configure_component "ode_robots"
 
 # Generate ode_robots-config if m4 template exists
