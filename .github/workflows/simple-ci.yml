@@ -720,6 +720,7 @@ EOFDBLCONFIG
         echo "Checking from ode_robots directory:"
         cd ode_robots
         ls -la ../include/ode-dbl/common.h || echo "ERROR: common.h not accessible from ode_robots!"
+        echo "Include directory structure: $(ls -la ../include/ | grep ode)"
         
         # Test if the compiler can find the header with our include paths
         echo ""
