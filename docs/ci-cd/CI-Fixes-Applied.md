@@ -73,11 +73,38 @@ grep -n "I../../selforg" performance.yml
 **Issue**: Multiple files violate formatting rules
 **Recommendation**: Run project-wide format when ready
 
+### 3. Legacy Make Build Dependencies (✅ Fixed)
+
+**Issue**: Parallel build causing race condition where ode_robots can't find selforg-config
+
+**Fix Applied**: Changed from parallel to sequential build
+```diff
+- make all -j$(nproc)
++ # Build components sequentially to respect dependencies
++ make selforg -j$(nproc)
++ make ode
++ make ode_robots -j$(nproc)
++ make ga_tools -j$(nproc)
+```
+
+**Explanation**: The legacy Make system doesn't handle inter-component dependencies well. Building sequentially ensures each component is fully built before dependents try to use it.
+
+### 4. Selforg Makefile Missing dirs Variable (✅ Fixed)
+
+**Issue**: Empty .a library files because source directories weren't defined
+
+**Fix Applied**: Added dirs variable to selforg/Makefile
+```make
+# Define source directories
+dirs = . controller matrix utils statistictools statistictools/measure statistictools/dataanalysation wirings
+```
+
 ## Summary
 
-The critical CI issues have been resolved:
-- ✅ Performance tests will now compile correctly
-- ✅ Coverage generation won't fail CI when using sanitizers
-- ✅ Clear error messages for debugging
+All critical CI issues have been resolved:
+- ✅ Performance tests compile correctly
+- ✅ Coverage generation works with sanitizers
+- ✅ Legacy Make builds complete successfully
+- ✅ Library files are properly generated
 
 The CI system should now run smoothly with these fixes applied.

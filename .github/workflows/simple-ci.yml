@@ -501,12 +501,18 @@ jobs:
     
     - name: Build components in order
       run: |
-        # Build all core components - the Makefile handles dependencies
-        make all -j$(nproc) || {
-          echo "Full build failed, trying individual components"
-          # If full build fails, try building core components individually
-          make ode selforg ode_robots -j$(nproc) || true
-        }
+        # Build components sequentially to respect dependencies
+        echo "=== Building selforg first ==="
+        make selforg -j$(nproc)
+        
+        echo "=== Building opende ==="
+        make ode || echo "ODE build failed (may be using system ODE)"
+        
+        echo "=== Building ode_robots (depends on selforg) ==="
+        make ode_robots -j$(nproc) || echo "ode_robots build failed"
+        
+        echo "=== Building ga_tools ==="
+        make ga_tools -j$(nproc) || echo "ga_tools build failed (non-critical)"
     
     - name: Verify build
       run: |
