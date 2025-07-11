@@ -97,9 +97,17 @@ fi
 if [ -n "$PREFIX" ]; then
     echo "Creating symlinks in installation prefix: $PREFIX"
     mkdir -p "$PREFIX/include"
-    if [ ! -L "$PREFIX/include/selforg" ] && [ -d "$SRCROOT/selforg" ]; then
-        ln -sf "$SRCROOT/selforg" "$PREFIX/include/selforg"
-        echo "Created symlink: $PREFIX/include/selforg -> $SRCROOT/selforg"
+    
+    # First ensure selforg has created its header links
+    if [ -d "$SRCROOT/selforg" ]; then
+        echo "Creating selforg header links..."
+        (cd "$SRCROOT/selforg" && make create_header_links) || echo "Failed to create header links"
+    fi
+    
+    # Link to the include/selforg directory which has all the header symlinks
+    if [ ! -L "$PREFIX/include/selforg" ] && [ -d "$SRCROOT/selforg/include/selforg" ]; then
+        ln -sf "$SRCROOT/selforg/include/selforg" "$PREFIX/include/selforg"
+        echo "Created symlink: $PREFIX/include/selforg -> $SRCROOT/selforg/include/selforg"
     fi
 fi
 

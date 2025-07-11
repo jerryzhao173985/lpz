@@ -1,10 +1,18 @@
 cmake_minimum_required(VERSION 3.20)
-project(lpzrobots VERSION 2.0.0 LANGUAGES CXX C)
+
+# Read version from VERSION file for single source of truth
+file(READ "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" VERSION_CONTENTS)
+string(STRIP "${VERSION_CONTENTS}" VERSION_CONTENTS)
+
+project(lpzrobots VERSION ${VERSION_CONTENTS} LANGUAGES CXX C)
 
 # Modern C++ standards
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+
+# Include dependency management
+include(cmake/Dependencies.cmake)
 
 # Include custom cmake modules
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")

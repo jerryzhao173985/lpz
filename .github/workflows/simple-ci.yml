@@ -503,6 +503,7 @@ jobs:
       run: |
         # Build components sequentially to respect dependencies
         echo "=== Building selforg first ==="
+        cd selforg && make create_header_links && cd ..
         make selforg -j$(nproc)
         
         echo "=== Building opende ==="
