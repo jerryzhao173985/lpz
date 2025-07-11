@@ -678,6 +678,51 @@ jobs:
         echo "=== BUILDING: Starting Build ==="
         make clean || echo "Clean failed (may not exist yet)"
         
+        # CRITICAL FIX: Force config scripts to use source paths
+        echo "=== FIXING: Forcing source paths for build ==="
+        
+        # Create wrapper scripts that force source paths
+        cat > selforg-config-wrapper <<EOF
+#!/bin/bash
+exec $PROJECT_ROOT/selforg/selforg-config --srcprefix="$PROJECT_ROOT/selforg" "\$@"
+EOF
+        chmod +x selforg-config-wrapper
+        
+        cat > ode_robots-config-wrapper <<EOF
+#!/bin/bash
+exec $PROJECT_ROOT/ode_robots/ode_robots-config --srcprefix="$PROJECT_ROOT/ode_robots" "\$@"
+EOF
+        chmod +x ode_robots-config-wrapper
+        
+        cat > ode-dbl-config-wrapper <<EOF
+#!/bin/bash
+exec $PROJECT_ROOT/opende/ode-dbl-config --srcprefix="$PROJECT_ROOT/opende" "\$@"
+EOF
+        chmod +x ode-dbl-config-wrapper
+        
+        # Put wrappers first in PATH
+        export PATH="$(pwd):$PATH"
+        
+        # Debug what the wrappers produce
+        echo "Wrapper output for --cflags:"
+        ./selforg-config-wrapper --cflags
+        ./ode_robots-config-wrapper --cflags
+        ./ode-dbl-config-wrapper --cflags
+        
+        # CRITICAL: Create necessary header structure for simulation
+        echo "=== Creating header structure for simulation ==="
+        # Ensure ode_robots headers are accessible with #include <ode_robots/xxx.h>
+        if [ ! -d "$PROJECT_ROOT/ode_robots/include/ode_robots" ]; then
+            echo "Running make create_header_links in ode_robots..."
+            (cd $PROJECT_ROOT/ode_robots && make create_header_links) || echo "Failed to create header links"
+        fi
+        
+        # Also ensure we have the proper symlinks in the current directory
+        if [ ! -L "ode_robots" ]; then
+            ln -sf $PROJECT_ROOT/ode_robots ode_robots
+            echo "Created local symlink to ode_robots"
+        fi
+        
         # Show exact commands being run
         echo "Running make with verbose output..."
         make VERBOSE=1 2>&1 | tee build.log || {
@@ -707,7 +752,11 @@ jobs:
         if [ -f start ]; then
           echo "✓ Simulation built successfully"
           ls -la start
+          echo "=== SUCCESS: Legacy Make simulation test passed! ==="
+          exit 0
         else
           echo "✗ Simulation binary not created"
           ls -la
+          echo "=== FAILURE: Legacy Make simulation test failed! ==="
+          exit 1
         fi
