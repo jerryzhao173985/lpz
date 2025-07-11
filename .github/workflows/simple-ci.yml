@@ -492,12 +492,32 @@ jobs:
         # Configure selforg
         echo "Configuring selforg..."
         cd selforg
+        
+        # Always regenerate selforg-config with correct PREFIX
+        echo "Regenerating selforg-config with PREFIX=$PREFIX"
+        rm -f selforg-config
+        
+        # Read version from VERSION.txt if it exists
+        VERSION="1.0"
+        if [ -f "VERSION.txt" ]; then
+          VERSION=$(cat VERSION.txt)
+        fi
+        
+        # Generate config with m4
+        m4 -DPREFIX="$PREFIX" -DSRCPREFIX="$(pwd)" -DUSER -DLINUX -DVERSION="$VERSION" selforg-config.m4 > selforg-config
+        chmod +x selforg-config
+        
+        # Verify the config has correct prefix
+        CONFIG_PREFIX=$(./selforg-config --prefix)
+        echo "selforg-config reports prefix: $CONFIG_PREFIX"
+        if [ "$CONFIG_PREFIX" != "$PREFIX" ]; then
+          echo "ERROR: selforg-config has wrong prefix! Expected $PREFIX but got $CONFIG_PREFIX"
+          exit 1
+        fi
+        
+        # Now run configure if it exists (for Makefile.conf generation)
         if [ -x ./configure ]; then
           ./configure --prefix="$PREFIX" --type=user --system=LINUX
-        else
-          # Fallback: generate from m4 template
-          m4 -DPREFIX="$PREFIX" -DSRCPREFIX="$(pwd)" -DUSER -DLINUX -DVERSION="1.0" selforg-config.m4 > selforg-config
-          chmod +x selforg-config
         fi
         cd ..
         
@@ -516,14 +536,34 @@ jobs:
         # Configure ode_robots
         echo "Configuring ode_robots..."
         cd ode_robots
+        
+        # Always regenerate ode_robots-config if m4 template exists
+        if [ -f "ode_robots-config.m4" ]; then
+          echo "Regenerating ode_robots-config with PREFIX=$PREFIX"
+          rm -f ode_robots-config
+          
+          # Read version from VERSION.txt if it exists
+          VERSION="1.0"
+          if [ -f "VERSION.txt" ]; then
+            VERSION=$(cat VERSION.txt)
+          fi
+          
+          # Generate config with m4
+          m4 -DPREFIX="$PREFIX" -DSRCPREFIX="$(pwd)" -DUSER -DLINUX -DVERSION="$VERSION" ode_robots-config.m4 > ode_robots-config
+          chmod +x ode_robots-config
+          
+          # Verify the config has correct prefix
+          CONFIG_PREFIX=$(./ode_robots-config --prefix)
+          echo "ode_robots-config reports prefix: $CONFIG_PREFIX"
+          if [ "$CONFIG_PREFIX" != "$PREFIX" ]; then
+            echo "ERROR: ode_robots-config has wrong prefix! Expected $PREFIX but got $CONFIG_PREFIX"
+            exit 1
+          fi
+        fi
+        
+        # Now run configure if it exists (for Makefile.conf generation)
         if [ -x ./configure ]; then
           ./configure --prefix="$PREFIX" --type=user --system=LINUX
-        else
-          # Fallback: generate from m4 template if it exists
-          if [ -f "ode_robots-config.m4" ]; then
-            m4 -DPREFIX="$PREFIX" -DSRCPREFIX="$(pwd)" -DUSER -DLINUX -DVERSION="1.0" ode_robots-config.m4 > ode_robots-config
-            chmod +x ode_robots-config
-          fi
         fi
         cd ..
         
@@ -535,8 +575,20 @@ jobs:
           cd ..
         fi
         
-        # Set up include paths - but use the CI script with correct config already done
-        .github/scripts/fix-ci-paths.sh
+        # Create necessary symlinks for header paths
+        echo "=== Setting up header symlinks ==="
+        
+        # Create include directory at root for cross-component dependencies
+        mkdir -p include
+        
+        # Create ode-dbl symlinks if system ODE is being used
+        if [ ! -d "include/ode-dbl" ]; then
+          if [ -d "/usr/include/ode" ]; then
+            mkdir -p include/ode-dbl
+            ln -sf /usr/include/ode/*.h include/ode-dbl/
+            echo "Created symlinks: include/ode-dbl -> /usr/include/ode/*.h"
+          fi
+        fi
     
     - name: Build components in order
       run: |
