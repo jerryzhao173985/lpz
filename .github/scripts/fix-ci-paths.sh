@@ -88,8 +88,17 @@ fi
 if [ ! -d "include" ]; then
     mkdir -p include
 fi
-if [ -d "selforg" ] && [ ! -L "include/selforg" ]; then
-    ln -sf ../selforg include/selforg
+
+# First ensure selforg has created its header links before creating the symlink
+if [ -d "selforg" ] && [ ! -d "selforg/include/selforg" ]; then
+    echo "Creating selforg header links first..."
+    (cd selforg && make create_header_links) || echo "Failed to create header links"
+fi
+
+# Now create the symlink to the correct location
+if [ -d "selforg/include/selforg" ] && [ ! -L "include/selforg" ]; then
+    ln -sf ../selforg/include/selforg include/selforg
+    echo "Created symlink: include/selforg -> ../selforg/include/selforg"
 fi
 
 # Create ode-dbl symlink at root include directory for ode_robots
