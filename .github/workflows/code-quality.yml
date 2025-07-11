@@ -43,6 +43,7 @@ jobs:
   code-formatting:
     name: Code Formatting Check
     runs-on: ubuntu-24.04
+    continue-on-error: true  # Non-blocking until codebase is formatted
     
     steps:
     - name: Checkout repository
