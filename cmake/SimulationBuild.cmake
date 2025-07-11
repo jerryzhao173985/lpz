@@ -81,35 +81,7 @@ function(lpzrobots_add_simulation name)
             target_link_libraries(${name} PRIVATE ${OPENSCENEGRAPH_LIBRARIES})
         endif()
         
-        # Add ODE - use system ODE if configured
-        if(LPZROBOTS_USE_SYSTEM_ODE AND LPZROBOTS_ODE_LIBRARIES)
-            target_link_libraries(${name} PRIVATE ${LPZROBOTS_ODE_LIBRARIES})
-        elseif(LPZROBOTS_USE_SYSTEM_ODE AND NOT LPZROBOTS_ODE_LIBRARIES)
-            # System ODE was requested but libraries weren't set properly
-            # Try to find ODE directly
-            find_package(PkgConfig)
-            if(PkgConfig_FOUND)
-                pkg_check_modules(ODE ode)
-                if(ODE_FOUND)
-                    target_link_libraries(${name} PRIVATE ${ODE_LIBRARIES})
-                    target_include_directories(${name} PRIVATE ${ODE_INCLUDE_DIRS})
-                    target_link_directories(${name} PRIVATE ${ODE_LIBRARY_DIRS})
-                else()
-                    message(FATAL_ERROR "System ODE requested but not found")
-                endif()
-            else()
-                message(FATAL_ERROR "System ODE requested but pkg-config not available")
-            endif()
-        else()
-            # Use bundled ODE
-            target_include_directories(${name} PRIVATE 
-                "${CMAKE_CURRENT_SOURCE_DIR}/../../../opende/include"
-            )
-            target_link_directories(${name} PRIVATE 
-                "${CMAKE_CURRENT_SOURCE_DIR}/../../../opende/ode/src/.libs"
-            )
-            target_link_libraries(${name} PRIVATE ode_dbl)
-        endif()
+        # ODE is already linked through ode_robots, no need to link again
     else()
         message(FATAL_ERROR "Cannot find ode_robots library")
     endif()
