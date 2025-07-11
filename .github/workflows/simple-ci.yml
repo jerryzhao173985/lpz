@@ -545,6 +545,18 @@ jobs:
         chmod +x ode-dbl-config 2>/dev/null || true
         cd ..
         
+        # Add selforg and opende to PATH so config scripts can be found
+        export PATH="$(pwd)/selforg:$(pwd)/opende:$PATH"
+        echo "Updated PATH to include selforg and opende"
+        
+        # Verify ode-dbl-config is available
+        if type ode-dbl-config >/dev/null 2>&1; then
+          echo "✓ ode-dbl-config found at: $(which ode-dbl-config)"
+        else
+          echo "✗ ode-dbl-config not found in PATH!"
+          exit 1
+        fi
+        
         # Configure ode_robots
         echo "Configuring ode_robots..."
         cd ode_robots
