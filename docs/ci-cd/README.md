@@ -36,6 +36,13 @@ Complete troubleshooting journey:
 - Race condition investigation
 - Final solution implementation
 
+#### [Legacy Make CI Fix Summary](LEGACY-MAKE-CI-FIX-SUMMARY.md)
+Comprehensive summary of all CI fixes:
+- Issues encountered and solutions
+- Build system understanding
+- Current status and next steps
+- Alternative approaches
+
 ## 🚀 Quick Start
 
 ### Current CI/CD Workflows
