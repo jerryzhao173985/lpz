@@ -117,11 +117,10 @@ if [ -n "$PREFIX" ]; then
         (cd "$SRCROOT/selforg" && make create_header_links) || echo "Failed to create header links"
     fi
     
-    # Link to the include/selforg directory which has all the header symlinks
-    if [ ! -L "$PREFIX/include/selforg" ] && [ -d "$SRCROOT/selforg/include/selforg" ]; then
-        ln -sf "$SRCROOT/selforg/include/selforg" "$PREFIX/include/selforg"
-        echo "Created symlink: $PREFIX/include/selforg -> $SRCROOT/selforg/include/selforg"
-    fi
+    # SKIP creating selforg symlink in PREFIX for now - it breaks selforg's own build
+    # The issue is that selforg's Makefile includes -I$PREFIX/include which then
+    # finds the symlinked headers with broken relative includes
+    echo "Skipping $PREFIX/include/selforg symlink to avoid breaking selforg build"
     
     # Also link ode-dbl headers to PREFIX
     if [ ! -L "$PREFIX/include/ode-dbl" ]; then

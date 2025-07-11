@@ -555,12 +555,22 @@ jobs:
         # Save project root before changing directories
         PROJECT_ROOT=$(pwd)
         
-        # CRITICAL: Ensure include symlinks are set up before simulation build
+        # CRITICAL: Set up symlinks needed for simulation build
         # This is needed because the simulation's make might trigger ode_robots rebuild
+        
+        # 1. Create root include/selforg symlink
         if [ ! -L "$PROJECT_ROOT/include/selforg" ] && [ -d "$PROJECT_ROOT/selforg/include/selforg" ]; then
           mkdir -p "$PROJECT_ROOT/include"
           ln -sf "$PROJECT_ROOT/selforg/include/selforg" "$PROJECT_ROOT/include/selforg"
           echo "Created root include/selforg symlink"
+        fi
+        
+        # 2. Create PREFIX include/selforg symlink (after selforg is built)
+        PREFIX="$HOME/lpzrobots"
+        if [ ! -L "$PREFIX/include/selforg" ] && [ -d "$PROJECT_ROOT/selforg/include/selforg" ]; then
+          mkdir -p "$PREFIX/include"
+          ln -sf "$PROJECT_ROOT/selforg/include/selforg" "$PREFIX/include/selforg"
+          echo "Created PREFIX include/selforg symlink for simulation build"
         fi
         
         # Set up PATH to include config scripts using absolute paths
