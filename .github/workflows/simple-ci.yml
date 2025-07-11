@@ -284,7 +284,7 @@ jobs:
           exit 1
         fi
         
-        if [ -f "$BUILD_DIR/ode_robots/libode_robots.a" ] || [ -f "$BUILD_DIR/ode_robots/libode_robots_dbg.a" ]; then
+        if [ -f "$BUILD_DIR/ode_robots/libode_robots.a" ] || [ -f "$BUILD_DIR/ode_robots/libode_robots_opt.a" ] || [ -f "$BUILD_DIR/ode_robots/libode_robots_dbg.a" ]; then
           echo "✓ ode_robots library found"
         else
           echo "✗ ode_robots library missing"
