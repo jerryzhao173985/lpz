@@ -132,7 +132,7 @@ jobs:
           
           # Create a simple matrix performance test
           cat > simple_perf_test.cpp << 'EOF'
-        #include <selforg/matrix.h>
+        #include <matrix/matrix.h>
         #include <chrono>
         #include <iostream>
         
@@ -172,7 +172,7 @@ jobs:
           
           # Compile and run the simple test
           $CXX -O3 -march=native -std=c++17 simple_perf_test.cpp \
-            -I../selforg -L $BUILD_DIR/selforg -lselforg -lgsl -lgslcblas \
+            -I../selforg -L${BUILD_DIR}/selforg -lselforg -lgsl -lgslcblas \
             -o simple_perf_test
           
           ./simple_perf_test > benchmark_results/simple_performance.txt
@@ -209,7 +209,7 @@ jobs:
         # Run same simple test on baseline
         if [ -f "../simple_perf_test.cpp" ]; then
           $CXX -O3 -march=native -std=c++17 ../simple_perf_test.cpp \
-            -I../selforg -L build-baseline/selforg -lselforg -lgsl -lgslcblas \
+            -I../selforg -Lbuild-baseline/selforg -lselforg -lgsl -lgslcblas \
             -o baseline_perf_test
           
           mkdir -p ../baseline_results
