@@ -502,7 +502,7 @@ jobs:
           VERSION=$(cat VERSION.txt)
         fi
         
-        # Generate config with m4
+        # Generate config with m4 for USER installation
         m4 -DPREFIX="$PREFIX" -DSRCPREFIX="$(pwd)" -DUSER -DLINUX -DVERSION="$VERSION" selforg-config.m4 > selforg-config
         chmod +x selforg-config
         
@@ -513,6 +513,9 @@ jobs:
           echo "ERROR: selforg-config has wrong prefix! Expected $PREFIX but got $CONFIG_PREFIX"
           exit 1
         fi
+        
+        # Verify the config outputs correct include paths
+        echo "selforg-config --cflags: $(./selforg-config --cflags)"
         
         # Now run configure if it exists (for Makefile.conf generation)
         if [ -x ./configure ]; then
@@ -547,7 +550,7 @@ jobs:
             VERSION=$(cat VERSION.txt)
           fi
           
-          # Generate config with m4
+          # Generate config with m4 for USER installation
           m4 -DPREFIX="$PREFIX" -DSRCPREFIX="$(pwd)" -DUSER -DLINUX -DVERSION="$VERSION" ode_robots-config.m4 > ode_robots-config
           chmod +x ode_robots-config
           
@@ -558,6 +561,9 @@ jobs:
             echo "ERROR: ode_robots-config has wrong prefix! Expected $PREFIX but got $CONFIG_PREFIX"
             exit 1
           fi
+          
+          # Verify the config outputs correct include paths
+          echo "ode_robots-config --cflags: $(./ode_robots-config --cflags)"
         fi
         
         # Now run configure if it exists (for Makefile.conf generation)
@@ -662,7 +668,14 @@ jobs:
         fi
         
         echo "=== Building ode_robots (depends on selforg) ==="
-        # Ensure ode_robots can find ode-dbl-config
+        # Update PATH to use installed config scripts
+        export PATH="$PREFIX/bin:$PATH"
+        
+        # Verify that we're using the installed selforg-config
+        echo "Which selforg-config: $(which selforg-config)"
+        echo "selforg-config --cflags: $(selforg-config --cflags)"
+        echo "selforg-config --prefix: $(selforg-config --prefix)"
+        
         cd ode_robots
         make -j$(nproc)
         cd ..
