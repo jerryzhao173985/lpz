@@ -29,6 +29,9 @@ endif
 
 BUILD_DIR=build
 
+# Define source directories
+dirs = . controller matrix utils statistictools statistictools/measure statistictools/dataanalysation wirings
+
 find_cpp_files = $(wildcard $(dir)/*.cpp)
 CPPFILES   := $(filter-out %flymake.cpp,$(foreach dir,$(dirs),$(find_cpp_files)))
 find_h_files = $(wildcard $(dir)/*.h)
