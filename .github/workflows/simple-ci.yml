@@ -441,7 +441,7 @@ jobs:
   make-build:
     name: Legacy Make build
     runs-on: ubuntu-22.04
-    continue-on-error: true  # Known issues with header symlinks in CI
+    #continue-on-error: true
     
     steps:
     - name: Checkout code
@@ -459,21 +459,15 @@ jobs:
     
     - name: Configure
       run: |
-        # Create Makefile.conf directly to avoid interactive prompt issues
+        # Create Makefile.conf for DEVELOPMENT mode first (for building)
         cat > Makefile.conf << EOF
         # configuration file for lpzrobots make system
         # created by CI
         
-        TYPE=user
+        TYPE=DEVEL
         PREFIX=\${HOME}/lpzrobots
         
-        # Installation type
-        ifeq (\$(TYPE),user)
-          PREFIX_INC=\$(PREFIX)/include
-          PREFIX_LIB=\$(PREFIX)/lib
-          PREFIX_BIN=\$(PREFIX)/bin  
-          PREFIX_SHARE=\$(PREFIX)/share
-        endif
+        # Development mode - build from source
         EOF
     
     - name: Configure components
@@ -619,147 +613,25 @@ jobs:
     
     - name: Build components in order
       run: |
-        # Set up environment for build
+        # Set up environment
         export PREFIX="$HOME/lpzrobots"
-        # Add source directories to PATH for DEVEL mode builds to find config scripts
-        export PATH="$(pwd)/selforg:$(pwd)/opende:$(pwd)/ode_robots:$PREFIX/bin:$PATH"
         
-        # Verify config scripts are available
-        echo "=== Checking PATH for config scripts ==="
-        echo "PATH: $PATH"
-        if type ode-dbl-config >/dev/null 2>&1; then
-          echo "✓ ode-dbl-config found at: $(which ode-dbl-config)"
-        else
-          echo "✗ ode-dbl-config not found in PATH"
-          # Try to find it
-          find . -name "ode-dbl-config" -type f 2>/dev/null | head -5
-        fi
+        echo "=== Building with Legacy Make system ==="
+        echo "TYPE=$(grep ^TYPE Makefile.conf)"
+        echo "PREFIX=$PREFIX"
         
-        # IMPORTANT: Build everything in DEVEL mode first, then switch to USER mode for installation
-        echo "=== Phase 1: Build all components in DEVEL mode ==="
+        # Use the normal make process which handles everything correctly
+        echo "=== Building selforg ==="
+        make selforg
         
-        # Configure selforg in DEVEL mode for building
-        echo "Configuring selforg in DEVEL mode..."
-        cd selforg
+        echo "=== Building ode ==="
+        make ode
         
-        # Generate DEVEL mode config for building
-        rm -f selforg-config
-        VERSION=$(cat VERSION.txt 2>/dev/null || echo "1.0")
-        m4 -DPREFIX="$(pwd)" -DSRCPREFIX="$(pwd)" -DDEVEL -DLINUX -DVERSION="$VERSION" selforg-config.m4 > selforg-config
-        chmod +x selforg-config
-        
-        # Run configure
-        if [ -x ./configure ]; then
-          ./configure --prefix="$PREFIX" --type=DEVEL --system=LINUX
-        fi
-        
-        # Build selforg
-        echo "Building selforg..."
-        make create_header_links
-        make lib -j$(nproc)
-        cd ..
-        
-        echo "=== Building opende ==="
-        make ode || echo "ODE build failed (may be using system ODE)"
-        
-        # ODE headers will be set up when needed in the ode_robots directory
-        echo "=== ODE headers will be configured during ode_robots build ==="
-        
-        # Configure ode_robots in DEVEL mode for building
-        echo "Configuring ode_robots in DEVEL mode..."
-        cd ode_robots
-        
-        # Generate DEVEL mode config if m4 template exists
-        if [ -f "ode_robots-config.m4" ]; then
-          rm -f ode_robots-config
-          VERSION=$(cat VERSION.txt 2>/dev/null || echo "1.0")
-          m4 -DPREFIX="$(pwd)" -DSRCPREFIX="$(pwd)" -DDEVEL -DLINUX -DVERSION="$VERSION" ode_robots-config.m4 > ode_robots-config
-          chmod +x ode_robots-config
-        fi
-        
-        # Run configure in DEVEL mode
-        if [ -x ./configure ]; then
-          ./configure --prefix="$PREFIX" --type=DEVEL --system=LINUX
-        fi
-        
-        # Build ode_robots (it will use ../selforg/selforg-config in DEVEL mode)
-        echo "Building ode_robots..."
-        
-        # CRITICAL FIX: Ensure ODE headers are in the correct location relative to ode_robots
-        echo "=== Setting up ODE headers for ode_robots build ==="
-        echo "Current directory: $(pwd)"
-        
-        # The ode_robots Makefile expects headers at ../include/ode-dbl
-        # So we need to ensure they exist there relative to the ode_robots directory
-        
-        # First, check if headers already exist in the expected location
-        if [ ! -d "../include/ode-dbl" ]; then
-          echo "Creating ../include/ode-dbl directory..."
-          mkdir -p ../include/ode-dbl
-        fi
-        
-        # Always refresh the headers to ensure they're up to date
-        if [ -d "/usr/include/ode" ]; then
-          echo "Copying system ODE headers to ../include/ode-dbl..."
-          cp -f /usr/include/ode/*.h ../include/ode-dbl/ 2>/dev/null || true
-          
-          # Also create an 'ode' symlink since some headers may use <ode/...> includes
-          cd ../include
-          if [ ! -e ode ]; then
-            ln -sf ode-dbl ode
-            echo "Created symlink: include/ode -> include/ode-dbl"
-          fi
-          cd ../ode_robots
-        fi
-        
-        # Verify headers are accessible
-        if [ -f "../include/ode-dbl/common.h" ]; then
-          echo "✓ Headers are in place at ../include/ode-dbl"
-          echo "Header count: $(ls ../include/ode-dbl/*.h 2>/dev/null | wc -l)"
-          
-          # Quick compile test
-          echo "Testing compiler access..."
-          echo '#include <ode-dbl/common.h>' > test_ode.cpp
-          echo 'int main() { return 0; }' >> test_ode.cpp
-          
-          if g++ -isystem ../include/ode-dbl -c test_ode.cpp -o test_ode.o 2>/dev/null; then
-            echo "✓ Compiler can access ODE headers"
-          else
-            echo "⚠️ Compiler test failed, but continuing anyway..."
-          fi
-          rm -f test_ode.cpp test_ode.o
-        else
-          echo "ERROR: Failed to set up ODE headers!"
-          echo "Contents of ../include:"
-          ls -la ../include/ 2>/dev/null || echo "Directory doesn't exist"
-          exit 1
-        fi
-        
-        # Also ensure ode-dbl-config is in PATH as expected by Makefile
-        if [ ! -x "../opende/ode-dbl-config" ] && type ode-dbl-config >/dev/null 2>&1; then
-          echo "Setting up ode-dbl-config..."
-          mkdir -p ../opende
-          ln -sf $(which ode-dbl-config) ../opende/ode-dbl-config
-        fi
-        
-        echo ""
-        echo "Starting build with make..."
-        make -j$(nproc) || {
-          echo "Build failed! Checking common issues..."
-          echo "1. Include paths in Makefile:"
-          grep "^INC" Makefile || true
-          echo ""
-          echo "2. Looking for actual error in build output"
-          exit 1
-        }
-        cd ..
+        echo "=== Building ode_robots ==="
+        make ode_robots
         
         echo "=== Building ga_tools ==="
-        if [ -d ga_tools ]; then
-          cd ga_tools
-          make -j$(nproc) || echo "ga_tools build failed (non-critical)"
-          cd ..
-        fi
+        make ga_tools || echo "ga_tools build failed (non-critical)"
     
     - name: Verify build
       run: |
@@ -805,117 +677,42 @@ jobs:
         # Create installation directories
         mkdir -p "$PREFIX"/{bin,lib,include,share}
         
-        echo "=== Phase 2: Regenerate configs for USER mode and install ==="
+        echo "=== Installing components with Legacy Make ==="
         
-        # Regenerate selforg-config for USER mode installation
-        echo "Regenerating selforg-config for USER mode..."
-        cd selforg
-        rm -f selforg-config
-        VERSION=$(cat VERSION.txt 2>/dev/null || echo "1.0")
-        m4 -DPREFIX="$PREFIX" -DSRCPREFIX="$(pwd)" -DUSER -DLINUX -DVERSION="$VERSION" selforg-config.m4 > selforg-config
-        chmod +x selforg-config
+        # First update Makefile.conf to USER mode for installation
+        cat > Makefile.conf << EOF
+        # configuration file for lpzrobots make system
+        # created by CI
         
-        # Verify it has correct prefix
-        CONFIG_PREFIX=$(./selforg-config --prefix)
-        echo "selforg-config now reports prefix: $CONFIG_PREFIX"
+        TYPE=user
+        PREFIX=\${HOME}/lpzrobots
         
-        # Install selforg
-        echo "Installing selforg..."
-        make PREFIX="$PREFIX" install || {
-          echo "Standard install failed, trying manual installation"
-          # Manual installation fallback
-          cp -v libselforg*.a "$PREFIX/lib/" || true
-          cp -v selforg-config "$PREFIX/bin/" || true
-          
-          # Install headers - check both possible locations
-          if [ -d "include/selforg" ]; then
-            mkdir -p "$PREFIX/include"
-            cp -rv include/selforg "$PREFIX/include/" || true
-          else
-            echo "Warning: selforg headers not found in include/selforg"
-            # Try to create them from source
-            mkdir -p "$PREFIX/include/selforg"
-            for h in *.h controller/*.h matrix/*.h utils/*.h wirings/*.h; do
-              if [ -f "$h" ]; then
-                cp -v "$h" "$PREFIX/include/selforg/" || true
-              fi
-            done
-          fi
-        }
+        # Installation type
+        ifeq (\$(TYPE),user)
+          PREFIX_INC=\$(PREFIX)/include
+          PREFIX_LIB=\$(PREFIX)/lib
+          PREFIX_BIN=\$(PREFIX)/bin  
+          PREFIX_SHARE=\$(PREFIX)/share
+        endif
+        EOF
         
-        # Verify installation
-        echo "Checking selforg installation..."
-        if [ -d "$PREFIX/include/selforg" ]; then
-          echo "✓ selforg headers installed to $PREFIX/include/selforg"
-          ls "$PREFIX/include/selforg/" | head -10
-        else
-          echo "✗ selforg headers NOT installed!"
-          exit 1
-        fi
-        cd ..
+        echo "=== Reconfiguring components for USER mode installation ==="
         
-        # Regenerate ode_robots-config for USER mode installation
-        echo "Regenerating ode_robots-config for USER mode..."
-        cd ode_robots
+        # Reconfigure all components for user mode
+        make conf
         
-        if [ -f "ode_robots-config.m4" ]; then
-          rm -f ode_robots-config
-          VERSION=$(cat VERSION.txt 2>/dev/null || echo "1.0")
-          m4 -DPREFIX="$PREFIX" -DSRCPREFIX="$(pwd)" -DUSER -DLINUX -DVERSION="$VERSION" ode_robots-config.m4 > ode_robots-config
-          chmod +x ode_robots-config
-          
-          # Verify it has correct prefix
-          CONFIG_PREFIX=$(./ode_robots-config --prefix)
-          echo "ode_robots-config now reports prefix: $CONFIG_PREFIX"
-        fi
+        # Install components using make system
+        echo "=== Installing selforg ==="
+        make install_selforg
         
-        # Install ode_robots  
-        echo "Installing ode_robots..."
-        make PREFIX="$PREFIX" install || {
-          echo "Standard install failed, trying manual installation"
-          # Manual installation fallback
-          cp -v libode_robots*.a "$PREFIX/lib/" || true
-          cp -v ode_robots-config "$PREFIX/bin/" || true
-          
-          # Create header structure - check if include/ode_robots exists first
-          if [ -d "include/ode_robots" ]; then
-            mkdir -p "$PREFIX/include"
-            cp -rv include/ode_robots "$PREFIX/include/" || true
-          else
-            # Fallback: copy headers directly
-            mkdir -p "$PREFIX/include/ode_robots"
-            cp -rv utils "$PREFIX/include/ode_robots/" || true
-            cp -rv osg "$PREFIX/include/ode_robots/" || true
-            cp -rv robots "$PREFIX/include/ode_robots/" || true
-            cp -rv obstacles "$PREFIX/include/ode_robots/" || true
-            cp -rv sensors "$PREFIX/include/ode_robots/" || true
-            cp -rv motors "$PREFIX/include/ode_robots/" || true
-            cp -v *.h "$PREFIX/include/ode_robots/" || true
-          fi
-        }
+        echo "=== Installing ode ==="
+        make install_ode
         
-        # Verify installation
-        echo "Checking ode_robots installation..."
-        if [ -d "$PREFIX/include/ode_robots" ]; then
-          echo "✓ ode_robots headers installed to $PREFIX/include/ode_robots"
-        else
-          echo "✗ ode_robots headers NOT installed!"
-        fi
-        cd ..
+        echo "=== Installing ode_robots ==="
+        make install_ode_robots
         
-        # Ensure ode headers are available
-        if [ ! -d "$PREFIX/include/ode-dbl" ]; then
-          if [ -d "opende/include/ode-dbl" ]; then
-            cp -rv opende/include/ode-dbl "$PREFIX/include/"
-          elif [ -d "include/ode-dbl" ]; then
-            cp -rv include/ode-dbl "$PREFIX/include/"
-          fi
-        fi
-        
-        # Install ode-dbl-config if available
-        if [ -x "opende/ode-dbl-config" ]; then
-          cp -v opende/ode-dbl-config "$PREFIX/bin/" || true
-        fi
+        echo "=== Installing ga_tools ==="
+        make install_ga_tools || echo "ga_tools install failed (non-critical)"
         
         # Verify installation
         echo "=== Checking installed files ==="
