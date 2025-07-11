@@ -611,7 +611,15 @@ jobs:
         
         # CRITICAL: Set up ODE headers before building ode_robots
         echo "=== Setting up ODE headers ==="
+        
+        # Debug: Show current directory structure
+        echo "Current directory: $(pwd)"
+        echo "Directory structure:"
+        ls -la . | head -10
+        
+        # Create include/ode-dbl at repository root
         mkdir -p include/ode-dbl
+        
         if [ -d "/usr/include/ode" ]; then
           echo "Copying system ODE headers to include/ode-dbl..."
           cp -f /usr/include/ode/*.h include/ode-dbl/ 2>/dev/null || true
@@ -626,6 +634,21 @@ jobs:
           
           echo "✓ ODE headers set up"
           echo "Header count: $(ls include/ode-dbl/*.h 2>/dev/null | wc -l)"
+          echo "Sample headers: $(ls include/ode-dbl/*.h 2>/dev/null | head -5)"
+          
+          # Debug: Verify headers are accessible from ode_robots directory
+          echo ""
+          echo "=== Verifying ODE header accessibility ==="
+          echo "From repository root:"
+          ls -la include/ode-dbl/common.h || echo "common.h not found from root"
+          
+          echo ""
+          echo "From ode_robots directory:"
+          cd ode_robots
+          echo "Current directory: $(pwd)"
+          ls -la ../include/ode-dbl/common.h || echo "common.h not found from ode_robots"
+          cd ..
+          
         else
           echo "ERROR: System ODE headers not found!"
           exit 1
@@ -638,19 +661,49 @@ jobs:
         # Skip 'make ode' as it overwrites our header setup with symlinks
         echo "=== Skipping 'make ode' - using system ODE with our header setup ==="
         
-        # Ensure ode-dbl-config exists
-        if [ ! -f "opende/ode-dbl-config" ]; then
-          echo "Creating ode-dbl-config for system ODE..."
-          mkdir -p opende
-          echo '#!/bin/sh' > opende/ode-dbl-config
-          echo '# Minimal ode-dbl-config for system ODE' >> opende/ode-dbl-config
-          echo 'case "$1" in' >> opende/ode-dbl-config
-          echo '  --cflags) echo "-I/usr/include -DdDOUBLE" ;;' >> opende/ode-dbl-config
-          echo '  --libs) echo "-lode" ;;' >> opende/ode-dbl-config
-          echo '  *) echo "Usage: ode-dbl-config [--cflags|--libs]" ;;' >> opende/ode-dbl-config
-          echo 'esac' >> opende/ode-dbl-config
-          chmod +x opende/ode-dbl-config
-        fi
+        # Ensure ode-dbl-config exists and returns correct paths
+        echo "Creating ode-dbl-config for system ODE..."
+        mkdir -p opende
+        cat > opende/ode-dbl-config << 'EOF'
+#!/bin/sh
+# ode-dbl-config for system ODE - returns paths relative to repository root
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+case "$1" in
+  --cflags) 
+    # Return the path to our include/ode-dbl directory
+    echo "-I$REPO_ROOT/include/ode-dbl -DdDOUBLE"
+    ;;
+  --libs) 
+    echo "-lode"
+    ;;
+  --prefix)
+    echo "$REPO_ROOT"
+    ;;
+  *) 
+    echo "Usage: ode-dbl-config [--cflags|--libs|--prefix]" 
+    ;;
+esac
+EOF
+        chmod +x opende/ode-dbl-config
+        
+        # Test ode-dbl-config
+        echo "Testing ode-dbl-config:"
+        echo "  --cflags: $(opende/ode-dbl-config --cflags)"
+        echo "  --libs: $(opende/ode-dbl-config --libs)"
+        
+        # Debug: Verify headers are still in place before ode_robots build
+        echo ""
+        echo "=== Verifying ODE headers before ode_robots build ==="
+        echo "Header count in include/ode-dbl: $(ls include/ode-dbl/*.h 2>/dev/null | wc -l)"
+        echo "Checking critical headers:"
+        ls -la include/ode-dbl/common.h include/ode-dbl/ode.h 2>/dev/null || echo "Critical headers missing!"
+        
+        # Also verify the PATH includes opende for ode-dbl-config
+        echo ""
+        echo "PATH check: $PATH"
+        echo "Which ode-dbl-config: $(which ode-dbl-config 2>/dev/null || echo 'not in PATH')"
         
         echo "=== Building ode_robots ==="
         make ode_robots
