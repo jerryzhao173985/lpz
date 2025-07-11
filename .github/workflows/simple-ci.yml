@@ -682,22 +682,28 @@ jobs:
         echo "=== FIXING: Forcing source paths for build ==="
         
         # Create wrapper scripts that force source paths
-        cat > selforg-config-wrapper <<EOF
+        cat > selforg-config-wrapper << 'WRAPPER_EOF'
 #!/bin/bash
-exec $PROJECT_ROOT/selforg/selforg-config --srcprefix="$PROJECT_ROOT/selforg" "\$@"
-EOF
+PROJECT_ROOT="WRAPPER_PROJECT_ROOT"
+exec $PROJECT_ROOT/selforg/selforg-config --srcprefix="$PROJECT_ROOT/selforg" "$@"
+WRAPPER_EOF
+        sed -i.bak "s|WRAPPER_PROJECT_ROOT|$PROJECT_ROOT|g" selforg-config-wrapper && rm selforg-config-wrapper.bak
         chmod +x selforg-config-wrapper
         
-        cat > ode_robots-config-wrapper <<EOF
+        cat > ode_robots-config-wrapper << 'WRAPPER_EOF'
 #!/bin/bash
-exec $PROJECT_ROOT/ode_robots/ode_robots-config --srcprefix="$PROJECT_ROOT/ode_robots" "\$@"
-EOF
+PROJECT_ROOT="WRAPPER_PROJECT_ROOT"
+exec $PROJECT_ROOT/ode_robots/ode_robots-config --srcprefix="$PROJECT_ROOT/ode_robots" "$@"
+WRAPPER_EOF
+        sed -i.bak "s|WRAPPER_PROJECT_ROOT|$PROJECT_ROOT|g" ode_robots-config-wrapper && rm ode_robots-config-wrapper.bak
         chmod +x ode_robots-config-wrapper
         
-        cat > ode-dbl-config-wrapper <<EOF
+        cat > ode-dbl-config-wrapper << 'WRAPPER_EOF'
 #!/bin/bash
-exec $PROJECT_ROOT/opende/ode-dbl-config --srcprefix="$PROJECT_ROOT/opende" "\$@"
-EOF
+PROJECT_ROOT="WRAPPER_PROJECT_ROOT"
+exec $PROJECT_ROOT/opende/ode-dbl-config --srcprefix="$PROJECT_ROOT/opende" "$@"
+WRAPPER_EOF
+        sed -i.bak "s|WRAPPER_PROJECT_ROOT|$PROJECT_ROOT|g" ode-dbl-config-wrapper && rm ode-dbl-config-wrapper.bak
         chmod +x ode-dbl-config-wrapper
         
         # Put wrappers first in PATH
