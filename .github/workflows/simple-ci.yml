@@ -635,8 +635,24 @@ jobs:
         echo "=== Building selforg ==="
         make selforg
         
-        echo "=== Building ode ==="
-        make ode || echo "ODE build skipped (using system ODE)"
+        # Skip 'make ode' as it overwrites our header setup with symlinks
+        echo "=== Skipping 'make ode' - using system ODE with our header setup ==="
+        
+        # Ensure ode-dbl-config exists
+        if [ ! -f "opende/ode-dbl-config" ]; then
+          echo "Creating ode-dbl-config for system ODE..."
+          mkdir -p opende
+          cat > opende/ode-dbl-config << 'EOF'
+#!/bin/sh
+# Minimal ode-dbl-config for system ODE
+case "$1" in
+  --cflags) echo "-I/usr/include -DdDOUBLE" ;;
+  --libs) echo "-lode" ;;
+  *) echo "Usage: ode-dbl-config [--cflags|--libs]" ;;
+esac
+EOF
+          chmod +x opende/ode-dbl-config
+        fi
         
         echo "=== Building ode_robots ==="
         make ode_robots
