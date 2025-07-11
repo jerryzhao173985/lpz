@@ -89,6 +89,10 @@ if [ -d "opende" ]; then
         elif [ -d "include/ode" ]; then
             # Alternative: link from include/ode
             ln -sf ../ode/*.h include/ode-dbl/
+        elif [ -d "/usr/include/ode" ]; then
+            # For system ODE, create symlinks to system headers
+            ln -sf /usr/include/ode/*.h include/ode-dbl/
+            echo "Created symlinks in opende/include/ode-dbl -> /usr/include/ode/*.h"
         fi
     fi
     
@@ -119,9 +123,10 @@ if [ ! -L "include/ode-dbl" ]; then
         ln -sf ../opende/include/ode-dbl include/ode-dbl
         echo "Created symlink: include/ode-dbl -> ../opende/include/ode-dbl"
     elif [ -d "/usr/include/ode" ]; then
-        # For system ODE, create symlink to system headers
-        ln -sf /usr/include/ode include/ode-dbl
-        echo "Created symlink: include/ode-dbl -> /usr/include/ode"
+        # For system ODE, create ode-dbl directory with system headers
+        mkdir -p include/ode-dbl
+        ln -sf /usr/include/ode/*.h include/ode-dbl/
+        echo "Created symlinks in include/ode-dbl -> /usr/include/ode/*.h"
     fi
 fi
 

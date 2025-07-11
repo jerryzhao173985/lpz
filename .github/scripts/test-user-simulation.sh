@@ -53,6 +53,18 @@ else
     exit 1
 fi
 
+# Ensure ODE headers are available in the expected location
+# The simulation Makefile looks for ode-dbl headers in relative paths
+if [ ! -d "../../../include/ode-dbl" ]; then
+    mkdir -p ../../../include/ode-dbl
+    if [ -d "$PREFIX/include/ode-dbl" ]; then
+        ln -sf "$PREFIX/include/ode-dbl"/*.h ../../../include/ode-dbl/
+    elif [ -d "/usr/include/ode" ]; then
+        ln -sf /usr/include/ode/*.h ../../../include/ode-dbl/
+    fi
+    echo "Created ODE header links in ../../../include/ode-dbl"
+fi
+
 # Clean any existing build
 make clean || true
 
