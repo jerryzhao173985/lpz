@@ -583,9 +583,20 @@ jobs:
           fi
         fi
         
-        # Build the simulation - preserve PATH
-        PATH="$PROJECT_ROOT/selforg:$PROJECT_ROOT/opende:$PROJECT_ROOT/ode_robots:$PATH" make clean || echo "Clean failed (may not exist yet)"
-        PATH="$PROJECT_ROOT/selforg:$PROJECT_ROOT/opende:$PROJECT_ROOT/ode_robots:$PATH" make
+        # Export PATH for sub-makes
+        export PATH="$PROJECT_ROOT/selforg:$PROJECT_ROOT/opende:$PROJECT_ROOT/ode_robots:$PATH"
+        
+        # Debug: Show what config scripts are available
+        echo "=== Available config scripts ==="
+        ls -la $PROJECT_ROOT/selforg/selforg-config || echo "selforg-config not found"
+        ls -la $PROJECT_ROOT/opende/ode-dbl-config || echo "ode-dbl-config not found"
+        echo "=== Testing config scripts ==="
+        $PROJECT_ROOT/selforg/selforg-config --libs || echo "selforg-config failed"
+        $PROJECT_ROOT/opende/ode-dbl-config --libs || echo "ode-dbl-config failed"
+        
+        # Build the simulation
+        make clean || echo "Clean failed (may not exist yet)"
+        make
         
         # Verify the binary was created
         if [ -f start ]; then

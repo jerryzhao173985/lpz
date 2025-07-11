@@ -1,0 +1,309 @@
+#!/usr/bin/env python3
+"""
+lpz-analyze - Analysis tool for LPZRobots controllers
+
+Analyzes controller dynamics, stability, and performance:
+- Eigenvalue analysis
+- Phase space plots
+- Controller comparison
+- Performance metrics
+"""
+
+import sys
+import os
+import argparse
+import numpy as np
+import matplotlib.pyplot as plt
+from pathlib import Path
+import re
+
+class ControllerAnalyzer:
+    def __init__(self):
+        self.data = {}
+        
+    def load_log(self, filename):
+        """Load simulation log file"""
+        try:
+            data = np.loadtxt(filename, skiprows=1)
+            return data
+        except Exception as e:
+            print(f"Error loading {filename}: {e}")
+            return None
+            
+    def load_controller_matrix(self, filename):
+        """Load controller matrix from .ctrl file"""
+        matrices = {}
+        current_matrix = None
+        rows = []
+        
+        try:
+            with open(filename, 'r') as f:
+                for line in f:
+                    line = line.strip()
+                    
+                    # Detect matrix name
+                    if line.startswith('#') and 'Matrix' in line:
+                        if current_matrix and rows:
+                            matrices[current_matrix] = np.array(rows)
+                            rows = []
+                        current_matrix = line.split()[1]
+                    
+                    # Parse matrix row
+                    elif line and not line.startswith('#'):
+                        values = [float(x) for x in line.split()]
+                        if values:
+                            rows.append(values)
+                            
+                # Don't forget last matrix
+                if current_matrix and rows:
+                    matrices[current_matrix] = np.array(rows)
+                    
+            return matrices
+        except Exception as e:
+            print(f"Error loading controller file: {e}")
+            return None
+            
+    def analyze_eigenvalues(self, ctrl_file):
+        """Analyze eigenvalues of controller matrices"""
+        print(f"\nAnalyzing eigenvalues from {ctrl_file}...")
+        
+        matrices = self.load_controller_matrix(ctrl_file)
+        if not matrices:
+            return
+            
+        results = {}
+        
+        for name, matrix in matrices.items():
+            if matrix.ndim == 2 and matrix.shape[0] == matrix.shape[1]:
+                try:
+                    eigenvals = np.linalg.eigvals(matrix)
+                    results[name] = {
+                        'eigenvalues': eigenvals,
+                        'max_magnitude': np.max(np.abs(eigenvals)),
+                        'spectral_radius': np.max(np.abs(eigenvals)),
+                        'condition_number': np.linalg.cond(matrix)
+                    }
+                except:
+                    print(f"Could not compute eigenvalues for {name}")
+                    
+        # Display results
+        for name, res in results.items():
+            print(f"\n{name} Matrix:")
+            print(f"  Spectral radius: {res['spectral_radius']:.4f}")
+            print(f"  Condition number: {res['condition_number']:.2e}")
+            
+            if res['spectral_radius'] > 1.5:
+                print("  ⚠️  WARNING: May be unstable (spectral radius > 1.5)")
+            elif res['spectral_radius'] < 0.1:
+                print("  ⚠️  WARNING: May be too damped (spectral radius < 0.1)")
+            else:
+                print("  ✅ Spectral radius in good range")
+                
+            if res['condition_number'] > 1e6:
+                print("  ⚠️  WARNING: Poorly conditioned matrix")
+                
+        return results
+        
+    def plot_phase_space(self, logfile, output=None):
+        """Create phase space plot from log data"""
+        print(f"\nCreating phase space plot from {logfile}...")
+        
+        data = self.load_log(logfile)
+        if data is None:
+            return
+            
+        # Assume standard format: time, sensors, motors, x-values
+        n_cols = data.shape[1]
+        n_sensors_motors = (n_cols - 1) // 3
+        
+        sensor_start = 1
+        sensor_end = 1 + n_sensors_motors // 2
+        motor_start = sensor_end
+        motor_end = motor_start + n_sensors_motors // 2
+        
+        sensors = data[:, sensor_start:sensor_end]
+        motors = data[:, motor_start:motor_end]
+        
+        # Create phase plots
+        fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+        fig.suptitle('Controller Phase Space Analysis')
+        
+        # Sensor vs Motor for first dimensions
+        if sensors.shape[1] > 0 and motors.shape[1] > 0:
+            ax = axes[0, 0]
+            ax.plot(sensors[:, 0], motors[:, 0], 'b-', alpha=0.6, linewidth=0.5)
+            ax.scatter(sensors[0, 0], motors[0, 0], c='green', s=100, label='Start')
+            ax.scatter(sensors[-1, 0], motors[-1, 0], c='red', s=100, label='End')
+            ax.set_xlabel('Sensor 0')
+            ax.set_ylabel('Motor 0')
+            ax.set_title('Sensor-Motor Phase Space')
+            ax.legend()
+            ax.grid(True, alpha=0.3)
+            
+        # Motor phase space (if multiple motors)
+        if motors.shape[1] > 1:
+            ax = axes[0, 1]
+            ax.plot(motors[:, 0], motors[:, 1], 'r-', alpha=0.6, linewidth=0.5)
+            ax.scatter(motors[0, 0], motors[0, 1], c='green', s=100)
+            ax.scatter(motors[-1, 0], motors[-1, 1], c='red', s=100)
+            ax.set_xlabel('Motor 0')
+            ax.set_ylabel('Motor 1')
+            ax.set_title('Motor-Motor Phase Space')
+            ax.grid(True, alpha=0.3)
+            
+        # Time series
+        ax = axes[1, 0]
+        time = data[:, 0]
+        for i in range(min(3, motors.shape[1])):
+            ax.plot(time, motors[:, i], label=f'Motor {i}')
+        ax.set_xlabel('Time')
+        ax.set_ylabel('Motor Values')
+        ax.set_title('Motor Time Series')
+        ax.legend()
+        ax.grid(True, alpha=0.3)
+        
+        # Power spectrum
+        ax = axes[1, 1]
+        if len(motors) > 100:
+            for i in range(min(3, motors.shape[1])):
+                freqs = np.fft.fftfreq(len(motors), d=time[1]-time[0])
+                fft = np.abs(np.fft.fft(motors[:, i]))
+                ax.semilogy(freqs[:len(freqs)//2], fft[:len(fft)//2], label=f'Motor {i}')
+            ax.set_xlabel('Frequency')
+            ax.set_ylabel('Power')
+            ax.set_title('Motor Power Spectrum')
+            ax.legend()
+            ax.grid(True, alpha=0.3)
+            
+        plt.tight_layout()
+        
+        if output:
+            plt.savefig(output, dpi=150)
+            print(f"Saved phase space plot to {output}")
+        else:
+            plt.show()
+            
+    def compare_controllers(self, log_files):
+        """Compare performance metrics across controllers"""
+        print("\nComparing controllers...")
+        
+        metrics = {}
+        
+        for logfile in log_files:
+            name = Path(logfile).stem
+            data = self.load_log(logfile)
+            
+            if data is None:
+                continue
+                
+            # Extract motor values
+            n_cols = data.shape[1]
+            n_sensors_motors = (n_cols - 1) // 3
+            motor_start = 1 + n_sensors_motors // 2
+            motor_end = motor_start + n_sensors_motors // 2
+            motors = data[:, motor_start:motor_end]
+            
+            # Calculate metrics
+            metrics[name] = {
+                'convergence_time': self._find_convergence_time(motors),
+                'final_variance': np.var(motors[-100:]) if len(motors) > 100 else np.var(motors),
+                'oscillation_index': self._calculate_oscillation_index(motors),
+                'energy': np.mean(np.sum(motors**2, axis=1)),
+                'smoothness': self._calculate_smoothness(motors)
+            }
+            
+        # Display comparison
+        print("\nController Comparison:")
+        print("-" * 80)
+        print(f"{'Controller':<20} {'Conv.Time':<12} {'Variance':<12} {'Oscillation':<12} {'Energy':<12} {'Smoothness':<12}")
+        print("-" * 80)
+        
+        for name, m in metrics.items():
+            print(f"{name:<20} {m['convergence_time']:<12.0f} {m['final_variance']:<12.4f} "
+                  f"{m['oscillation_index']:<12.4f} {m['energy']:<12.4f} {m['smoothness']:<12.4f}")
+            
+        # Find best performers
+        print("\nBest performers:")
+        if metrics:
+            fastest = min(metrics.items(), key=lambda x: x[1]['convergence_time'])
+            print(f"  Fastest convergence: {fastest[0]} ({fastest[1]['convergence_time']:.0f} steps)")
+            
+            smoothest = min(metrics.items(), key=lambda x: x[1]['smoothness'])
+            print(f"  Smoothest behavior: {smoothest[0]} ({smoothest[1]['smoothness']:.4f})")
+            
+            most_stable = min(metrics.items(), key=lambda x: x[1]['final_variance'])
+            print(f"  Most stable: {most_stable[0]} (variance: {most_stable[1]['final_variance']:.4f})")
+            
+    def _find_convergence_time(self, motors):
+        """Find when controller converges"""
+        if len(motors) < 200:
+            return len(motors)
+            
+        window = 100
+        threshold = 0.01
+        
+        for i in range(window, len(motors) - window):
+            before = np.mean(motors[i-window:i])
+            after = np.mean(motors[i:i+window])
+            if abs(before - after) < threshold:
+                return i
+                
+        return len(motors)
+        
+    def _calculate_oscillation_index(self, motors):
+        """Calculate oscillation index"""
+        if len(motors) < 10:
+            return 0.0
+            
+        # Count zero crossings
+        centered = motors - np.mean(motors, axis=0)
+        zero_crossings = np.sum(np.diff(np.sign(centered), axis=0) != 0)
+        return zero_crossings / len(motors)
+        
+    def _calculate_smoothness(self, motors):
+        """Calculate smoothness metric (lower is smoother)"""
+        if len(motors) < 2:
+            return 0.0
+            
+        # Sum of squared second derivatives
+        second_deriv = np.diff(motors, n=2, axis=0)
+        return np.mean(np.sum(second_deriv**2, axis=1))
+
+def main():
+    parser = argparse.ArgumentParser(
+        description='Analyze LPZRobots controller dynamics',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  lpz-analyze --eigenvalues controller.ctrl
+  lpz-analyze --phase-plot robot.log -o phase.png
+  lpz-analyze --compare sox.log dep.log sos.log
+        """
+    )
+    
+    parser.add_argument('--eigenvalues', metavar='CTRLFILE',
+                       help='Analyze eigenvalues of controller matrices')
+    parser.add_argument('--phase-plot', metavar='LOGFILE',
+                       help='Create phase space plot from log')
+    parser.add_argument('--compare', nargs='+', metavar='LOGFILE',
+                       help='Compare multiple controllers')
+    parser.add_argument('-o', '--output', metavar='FILE',
+                       help='Output file for plots')
+    
+    args = parser.parse_args()
+    
+    if len(sys.argv) == 1:
+        parser.print_help()
+        return
+        
+    analyzer = ControllerAnalyzer()
+    
+    if args.eigenvalues:
+        analyzer.analyze_eigenvalues(args.eigenvalues)
+    elif args.phase_plot:
+        analyzer.plot_phase_space(args.phase_plot, args.output)
+    elif args.compare:
+        analyzer.compare_controllers(args.compare)
+
+if __name__ == '__main__':
+    main()

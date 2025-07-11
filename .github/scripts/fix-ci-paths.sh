@@ -84,6 +84,14 @@ if [ -d "opende" ]; then
     cd ..
 fi
 
+# Create include directory symlinks for cross-component dependencies
+if [ ! -d "include" ]; then
+    mkdir -p include
+fi
+if [ -d "selforg" ] && [ ! -L "include/selforg" ]; then
+    ln -sf ../selforg include/selforg
+fi
+
 # Configure ode_robots (needs selforg configured first)
 configure_component "ode_robots"
 
