@@ -95,6 +95,15 @@ fi
 # Configure ode_robots (needs selforg configured first)
 configure_component "ode_robots"
 
+# Generate ode_robots-config if m4 template exists
+if [ -f "ode_robots/ode_robots-config.m4" ] && [ ! -f "ode_robots/ode_robots-config" ]; then
+    echo "Generating ode_robots-config from m4 template..."
+    cd ode_robots
+    m4 -DPREFIX="$PREFIX" -DSRCPREFIX="$SRCROOT/ode_robots" -DVERSION="1.0" ode_robots-config.m4 > ode_robots-config
+    chmod +x ode_robots-config
+    cd ..
+fi
+
 # Configure ga_tools
 configure_component "ga_tools"
 
