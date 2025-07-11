@@ -74,6 +74,14 @@ function(lpzrobots_find_dependencies)
     # ODE (Open Dynamics Engine) - Unified handling
     lpzrobots_find_ode()
     
+    # Propagate ODE variables to parent scope
+    set(LPZROBOTS_HAS_ODE ${LPZROBOTS_HAS_ODE} PARENT_SCOPE)
+    set(LPZROBOTS_ODE_INCLUDE_DIRS ${LPZROBOTS_ODE_INCLUDE_DIRS} PARENT_SCOPE)
+    set(LPZROBOTS_ODE_LIBRARIES ${LPZROBOTS_ODE_LIBRARIES} PARENT_SCOPE)
+    set(LPZROBOTS_ODE_IS_DOUBLE ${LPZROBOTS_ODE_IS_DOUBLE} PARENT_SCOPE)
+    set(LPZROBOTS_USE_SYSTEM_ODE ${LPZROBOTS_USE_SYSTEM_ODE} PARENT_SCOPE)
+    set(LPZROBOTS_USE_BUNDLED_ODE ${LPZROBOTS_USE_BUNDLED_ODE} PARENT_SCOPE)
+    
     # Java for Java tools
     if(BUILD_JAVA_TOOLS)
         find_package(Java COMPONENTS Development)
@@ -282,8 +290,6 @@ function(lpzrobots_find_ode)
             lpzrobots_setup_ode_headers("${ODE_INCLUDE_DIRS}")
             
             message(STATUS "Using system ODE (double precision: ${ODE_IS_DOUBLE})")
-            message(STATUS "ODE libraries: ${ODE_LIBRARIES}")
-            message(STATUS "ODE include dirs: ${ODE_INCLUDE_DIRS}")
             
             # Double-check with pkg-config if FindODE didn't find libraries
             if(NOT ODE_LIBRARIES)
