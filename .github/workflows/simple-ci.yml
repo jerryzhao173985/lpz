@@ -840,6 +840,12 @@ jobs:
         echo "=== Installing ode ==="
         make PREFIX="$PREFIX" install_ode
         
+        # Also install ode-dbl-config if it exists
+        if [ -f "opende/ode-dbl-config" ]; then
+          echo "Installing ode-dbl-config to $PREFIX/bin"
+          install -m 755 opende/ode-dbl-config "$PREFIX/bin/"
+        fi
+        
         echo "=== Installing ode_robots ==="
         make PREFIX="$PREFIX" install_ode_robots
         
