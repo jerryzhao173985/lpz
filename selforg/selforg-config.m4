@@ -128,7 +128,7 @@ while test $# -gt 0; do
       if [ -z "$intern" ]; then INTERNFLAGS=; fi
       # Always use NOCONFIGURATOR for now
       CONFIGURATORCLAGS=-DNOCONFIGURATOR
-      echo $CPPFLAGS DEVORUSER(-I"$srcprefix/include",-I"$prefix/include") GSL(`gsl-config --cflags`, -DNO_GSL) $CONFIGURATORCLAGS $INTERNFLAGS
+      echo $CPPFLAGS DEVORUSER(-I"$srcprefix/include" -I"$srcprefix/include/selforg",-I"$prefix/include") GSL(`gsl-config --cflags`, -DNO_GSL) $CONFIGURATORCLAGS $INTERNFLAGS
       ;;
     --libs)
       # Don't include configurator libs for now
