@@ -1,9 +1,7 @@
 # Configurator - Configuration library for LPZRobots
 
 # Set minimum CMake version if not already set by parent
-if(NOT CMAKE_VERSION)
-    cmake_minimum_required(VERSION 3.16)
-endif()
+cmake_minimum_required(VERSION 3.16)
 
 # If this is a standalone build, set up project
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)

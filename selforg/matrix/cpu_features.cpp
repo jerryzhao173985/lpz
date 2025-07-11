@@ -48,6 +48,24 @@ CPUFeatures::Features CPUFeatures::detect_features() {
         features.sse4_2 = (regs[2] & (1 << 20)) != 0;
         features.avx = (regs[2] & (1 << 28)) != 0;
         features.fma3 = (regs[2] & (1 << 12)) != 0;
+        
+        // OS support check for AVX (XSAVE/XRSTOR)
+        if (features.avx && (regs[2] & (1 << 27))) {  // OSXSAVE bit
+            uint32_t eax, edx;
+            __asm__ ("xgetbv" : "=a"(eax), "=d"(edx) : "c"(0));
+            uint64_t xcr0 = (static_cast<uint64_t>(edx) << 32) | eax;
+            // Bits 1 (XMM) & 2 (YMM) must both be set
+            if ((xcr0 & 0x6) != 0x6) {
+                features.avx = false;
+                features.avx2 = false;
+                features.fma3 = false;
+            }
+        } else if (features.avx) {
+            // CPU supports AVX but OS does not
+            features.avx = false;
+            features.avx2 = false;
+            features.fma3 = false;
+        }
     }
     
     // Check for extended features (leaf 7)
@@ -55,11 +73,15 @@ CPUFeatures::Features CPUFeatures::detect_features() {
         cpuid(7, 0, regs);
         
         // EBX register (regs[1])
-        features.avx2 = (regs[1] & (1 << 5)) != 0;
+        features.avx2 = (regs[1] & (1 << 5)) != 0 && features.avx;
         features.avx512f = (regs[1] & (1 << 16)) != 0;
     }
     
-    features.cpu_name = "x86_64";
+    #if defined(__x86_64__) || defined(_M_X64)
+        features.cpu_name = "x86_64";
+    #else
+        features.cpu_name = "x86";
+    #endif
     
 #elif defined(__aarch64__) || defined(_M_ARM64)
     // ARM64 feature detection using auxiliary vector

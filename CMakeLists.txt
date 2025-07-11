@@ -60,18 +60,22 @@ if(USE_SYSTEM_ODE)
     endif()
     if(ODE_FOUND)
         message(STATUS "Found system ODE: ${ODE_VERSION}")
+        set(USING_BUNDLED_ODE FALSE)
     else()
         message(WARNING "System ODE not found. ODE-dependent components will be disabled.")
+        set(USING_BUNDLED_ODE FALSE)
     endif()
 else()
     # Check for bundled ODE
     if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/opende/ode)
         message(STATUS "Using bundled ODE")
         set(ODE_FOUND TRUE)
+        set(USING_BUNDLED_ODE TRUE)
         add_subdirectory(opende)
     else()
         message(WARNING "Bundled ODE not found. ODE-dependent components will be disabled.")
         set(ODE_FOUND FALSE)
+        set(USING_BUNDLED_ODE FALSE)
     endif()
 endif()
 
@@ -83,17 +87,22 @@ if(BUILD_UTILS)
         if(NOT Qt6_FOUND)
             message(WARNING "Qt5/Qt6 not found. GUI utilities (guilogger, matrixviz) will be disabled.")
             set(BUILD_UTILS OFF)
+        else()
+            set(QT_VERSION_MAJOR 6)
+            set(QT_FOUND ${Qt6_FOUND})
         endif()
+    else()
+        set(QT_VERSION_MAJOR 5)
+        set(QT_FOUND ${Qt5_FOUND})
     endif()
 endif()
 
 # Configure installation paths
-set(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT TRUE)
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     if(APPLE OR CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-        set(CMAKE_INSTALL_PREFIX "/usr/local" CACHE PATH "Install path prefix" FORCE)
+        set(CMAKE_INSTALL_PREFIX "/usr/local" CACHE PATH "Install path prefix")
     else()
-        set(CMAKE_INSTALL_PREFIX "/usr/local" CACHE PATH "Install path prefix" FORCE)
+        set(CMAKE_INSTALL_PREFIX "/usr/local" CACHE PATH "Install path prefix")
     endif()
 endif()
 
@@ -122,12 +131,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 endif()
 
-# Create config files
-configure_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/install_prefix.conf"
-    "${CMAKE_CURRENT_BINARY_DIR}/install_prefix.conf"
-    COPYONLY
-)
+# Config files are already created above - no need to copy
 
 # Add subdirectories for components
 add_subdirectory(selforg)
@@ -234,6 +238,6 @@ message(STATUS "Dependencies:")
 message(STATUS "  GSL: ${GSL_FOUND}")
 message(STATUS "  ODE: ${ODE_FOUND}")
 if(BUILD_UTILS)
-    message(STATUS "  Qt${QT_VERSION_MAJOR}: ${Qt${QT_VERSION_MAJOR}_FOUND}")
+    message(STATUS "  Qt${QT_VERSION_MAJOR}: ${QT_FOUND}")
 endif()
 message(STATUS "")

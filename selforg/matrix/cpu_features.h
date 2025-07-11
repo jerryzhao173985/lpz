@@ -71,7 +71,7 @@ public:
     static MatrixImpl get_best_matrix_impl() {
         const auto& f = get();
         
-#if defined(__x86_64__) || defined(_M_X64)
+#if defined(__x86_64__) || defined(_M_X64) || defined(__i386__) || defined(_M_IX86)
         if (f.avx512f) return MatrixImpl::AVX512;
         if (f.avx2) return MatrixImpl::AVX2;
         if (f.avx) return MatrixImpl::AVX;

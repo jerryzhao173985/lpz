@@ -13,6 +13,7 @@
 #include <vector>
 #include <random>
 #include <iomanip>
+#include <numeric>
 
 namespace matrix {
 

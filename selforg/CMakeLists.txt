@@ -1,9 +1,7 @@
 # Selforg library - Self-organizing controller framework
 
 # Set minimum CMake version if not already set by parent
-if(NOT CMAKE_VERSION)
-    cmake_minimum_required(VERSION 3.16)
-endif()
+cmake_minimum_required(VERSION 3.16)
 
 # If this is a standalone build, set up project
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
@@ -57,7 +55,6 @@ add_library(lpzrobots::selforg ALIAS selforg)
 
 # Add compile definitions
 target_compile_definitions(selforg PUBLIC NOCONFIGURATOR)
-target_compile_definitions(selforg PUBLIC NO_GSL)
 
 # Set include directories
 target_include_directories(selforg
@@ -98,7 +95,7 @@ if(GSL_FOUND)
         endif()
     endif()
 else()
-    target_compile_definitions(selforg PRIVATE NOGSL)
+    target_compile_definitions(selforg PUBLIC NO_GSL)
 endif()
 
 # Platform-specific settings
@@ -168,8 +165,13 @@ foreach(header ${HEADER_FILES})
     # Create the source path (absolute)
     set(source_path "${CMAKE_CURRENT_SOURCE_DIR}/${header}")
     
-    # Create the destination path
-    set(dest_path "${CMAKE_CURRENT_BINARY_DIR}/include/selforg/${header_name}")
+    # Preserve directory structure to avoid name collisions
+    if(header_dir)
+        set(dest_path "${CMAKE_CURRENT_BINARY_DIR}/include/selforg/${header_dir}/${header_name}")
+        file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/include/selforg/${header_dir}")
+    else()
+        set(dest_path "${CMAKE_CURRENT_BINARY_DIR}/include/selforg/${header_name}")
+    endif()
     
     # Create symlink with absolute paths to avoid double path issues
     if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.14")

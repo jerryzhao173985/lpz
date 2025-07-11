@@ -1,9 +1,7 @@
 # OpenDE - Open Dynamics Engine (bundled version)
 
 # Set minimum CMake version if not already set by parent
-if(NOT CMAKE_VERSION)
-    cmake_minimum_required(VERSION 3.16)
-endif()
+cmake_minimum_required(VERSION 3.16)
 
 # If this is a standalone build, set up project
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
@@ -52,13 +50,11 @@ message(STATUS "Skipping OPCODE build due to compilation issues - trimesh suppor
 # Create the library if we have sources
 if(ODE_SOURCES)
     add_library(ode ${ODE_SOURCES})
-    add_library(lpzrobots::ode ALIAS ode)
     
     # Set target properties
     set_target_properties(ode PROPERTIES
         VERSION 0.16.0
         SOVERSION 0
-        PUBLIC_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/config.h"
     )
     
     # Include directories
@@ -68,8 +64,10 @@ if(ODE_SOURCES)
             $<INSTALL_INTERFACE:include>
     )
     
-    # Link with math library
-    target_link_libraries(ode PUBLIC m)
+    # Link with math library (Unix only - Windows has math in C runtime)
+    if(UNIX)
+        target_link_libraries(ode PUBLIC m)
+    endif()
     
     # Platform-specific settings
     if(WIN32)
