@@ -621,7 +621,19 @@ jobs:
       run: |
         # Set up environment for build
         export PREFIX="$HOME/lpzrobots"
-        export PATH="$PREFIX/bin:$PATH"
+        # Add source directories to PATH for DEVEL mode builds to find config scripts
+        export PATH="$(pwd)/selforg:$(pwd)/opende:$(pwd)/ode_robots:$PREFIX/bin:$PATH"
+        
+        # Verify config scripts are available
+        echo "=== Checking PATH for config scripts ==="
+        echo "PATH: $PATH"
+        if type ode-dbl-config >/dev/null 2>&1; then
+          echo "✓ ode-dbl-config found at: $(which ode-dbl-config)"
+        else
+          echo "✗ ode-dbl-config not found in PATH"
+          # Try to find it
+          find . -name "ode-dbl-config" -type f 2>/dev/null | head -5
+        fi
         
         # IMPORTANT: Build everything in DEVEL mode first, then switch to USER mode for installation
         echo "=== Phase 1: Build all components in DEVEL mode ==="
@@ -649,6 +661,24 @@ jobs:
         
         echo "=== Building opende ==="
         make ode || echo "ODE build failed (may be using system ODE)"
+        
+        # Ensure ODE headers are available for ode_robots
+        echo "=== Setting up ODE headers ==="
+        if [ ! -d "include/ode-dbl" ]; then
+          echo "Creating ODE header symlinks at root level..."
+          mkdir -p include/ode-dbl
+          if [ -d "/usr/include/ode" ]; then
+            ln -sf /usr/include/ode/*.h include/ode-dbl/
+            echo "Created symlinks: include/ode-dbl -> /usr/include/ode/*.h"
+            ls -la include/ode-dbl/ | head -5
+          elif [ -d "opende/include/ode-dbl" ]; then
+            ln -sf ../opende/include/ode-dbl/*.h include/ode-dbl/
+            echo "Created symlinks from bundled ODE"
+          fi
+        else
+          echo "ODE headers already exist at include/ode-dbl"
+          ls -la include/ode-dbl/ | head -5
+        fi
         
         # Configure ode_robots in DEVEL mode for building
         echo "Configuring ode_robots in DEVEL mode..."
