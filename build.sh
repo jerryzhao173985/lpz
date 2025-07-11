@@ -62,6 +62,7 @@ Options:
     --install               Install after building (may require sudo)
     --configure-only        Only configure, don't build
     --verbose               Verbose build output
+    --benchmark             Run matrix performance benchmarks after build
 
 Examples:
     $0                      # Basic build with defaults
@@ -78,6 +79,7 @@ CLEAN=false
 INSTALL=false
 CONFIGURE_ONLY=false
 VERBOSE=false
+BENCHMARK=false
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -137,6 +139,10 @@ while [[ $# -gt 0 ]]; do
             VERBOSE=true
             shift
             ;;
+        --benchmark)
+            BENCHMARK=true
+            shift
+            ;;
         *)
             print_error "Unknown option: $1"
             echo "Use --help for usage information"
@@ -156,6 +162,7 @@ echo "  Build examples: $BUILD_EXAMPLES"
 echo "  Build tests: $BUILD_TESTS"
 echo "  Use system ODE: $USE_SYSTEM_ODE"
 echo "  Enable SIMD: $ENABLE_SIMD"
+echo "  Run benchmarks: $BENCHMARK"
 echo ""
 
 # Check for CMake
@@ -231,6 +238,18 @@ if ! cmake "${BUILD_ARGS[@]}"; then
 fi
 
 print_success "Build completed successfully"
+
+# Run CPU feature detection if matrix benchmark was built
+if [[ -f "$BUILD_DIR/selforg/matrix/matrix_benchmark" ]]; then
+    print_status "Detecting CPU features for optimal performance..."
+    "$BUILD_DIR/selforg/matrix/matrix_benchmark" --cpu-info-only 2>/dev/null || true
+    
+    # Run benchmarks if requested
+    if $BENCHMARK; then
+        print_status "Running matrix performance benchmarks..."
+        "$BUILD_DIR/selforg/matrix/matrix_benchmark" || print_warning "Benchmarks failed or not available"
+    fi
+fi
 
 # Install if requested
 if $INSTALL; then

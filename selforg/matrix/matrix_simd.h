@@ -14,12 +14,15 @@
 #define __MATRIX_SIMD_H
 
 #include "matrix.h"
+#include "cpu_features.h"
 #include <cstring>
 
 // Platform-specific includes
-#if defined(USE_ARM_NEON) && defined(__ARM_NEON)
+#if defined(__ARM_NEON) || defined(_M_ARM64)
   #include <arm_neon.h>
-#elif defined(USE_AVX2) && defined(__AVX2__)
+#endif
+
+#if defined(__AVX2__) || defined(__AVX__) || defined(__SSE2__)
   #include <immintrin.h>
 #endif
 
@@ -28,18 +31,51 @@ namespace matrix {
 // SIMD-optimized matrix operations
 class MatrixSIMD {
 public:
-    // Optimized matrix multiplication
+    // Optimized matrix multiplication with runtime CPU detection
     static void multiply(const Matrix& A, const Matrix& B, Matrix& result) {
         assert(A.getN() == B.getM());
         assert(result.getM() == A.getM() && result.getN() == B.getN());
         
-#if defined(USE_ARM_NEON) && defined(__ARM_NEON)
-        multiply_neon(A, B, result);
-#elif defined(USE_AVX2) && defined(__AVX2__)
-        multiply_avx2(A, B, result);
-#else
-        multiply_scalar(A, B, result);
-#endif
+        // Use runtime CPU feature detection for optimal performance
+        const auto impl = CPUFeatures::get_best_matrix_impl();
+        
+        switch (impl) {
+            case CPUFeatures::MatrixImpl::ARM_NEON:
+                #if defined(__ARM_NEON) || defined(_M_ARM64)
+                multiply_neon(A, B, result);
+                #else
+                multiply_scalar(A, B, result);
+                #endif
+                break;
+                
+            case CPUFeatures::MatrixImpl::AVX2:
+                #if defined(__AVX2__)
+                multiply_avx2(A, B, result);
+                #else
+                multiply_scalar(A, B, result);
+                #endif
+                break;
+                
+            case CPUFeatures::MatrixImpl::AVX:
+                #if defined(__AVX__)
+                multiply_avx(A, B, result);
+                #else
+                multiply_scalar(A, B, result);
+                #endif
+                break;
+                
+            case CPUFeatures::MatrixImpl::SSE2:
+                #if defined(__SSE2__)
+                multiply_sse2(A, B, result);
+                #else
+                multiply_scalar(A, B, result);
+                #endif
+                break;
+                
+            default:
+                multiply_scalar(A, B, result);
+                break;
+        }
     }
     
     // Optimized matrix addition
