@@ -25,7 +25,7 @@ lpzrobots_add_component_library(ode_robots
         $<$<AND:$<PLATFORM_ID:Darwin>,$<BOOL:${OPENGL_LIBRARY}>>:${OPENGL_LIBRARY}>
         $<$<AND:$<NOT:$<PLATFORM_ID:Darwin>>,$<BOOL:${LPZROBOTS_HAS_OPENGL}>>:OpenGL::GL>
         $<$<AND:$<NOT:$<PLATFORM_ID:Darwin>>,$<BOOL:${LPZROBOTS_HAS_OPENGL}>>:OpenGL::GLU>
-        ${LPZROBOTS_ODE_LIBRARIES}
+        $<$<BOOL:${LPZROBOTS_ODE_LIBRARIES}>:${LPZROBOTS_ODE_LIBRARIES}>
     PRIVATE_DEPS
         $<$<BOOL:${READLINE_LIBRARY}>:${READLINE_LIBRARY}>
     DEFINES
@@ -63,6 +63,32 @@ if(LPZROBOTS_ODE_INCLUDE_DIRS)
     endif()
     if(TARGET ode_robots_dbg)
         target_include_directories(ode_robots_dbg PUBLIC ${LPZROBOTS_ODE_INCLUDE_DIRS})
+    endif()
+endif()
+
+# ODE library handling - ensure ODE is linked when using system ODE
+if(LPZROBOTS_USE_SYSTEM_ODE AND NOT LPZROBOTS_ODE_LIBRARIES)
+    # System ODE was requested but libraries weren't found properly
+    # Try to find ODE using pkg-config
+    find_package(PkgConfig)
+    if(PkgConfig_FOUND)
+        pkg_check_modules(ODE REQUIRED ode)
+        if(ODE_FOUND)
+            target_link_libraries(ode_robots PUBLIC ${ODE_LIBRARIES})
+            target_include_directories(ode_robots PUBLIC ${ODE_INCLUDE_DIRS})
+            target_link_directories(ode_robots PUBLIC ${ODE_LIBRARY_DIRS})
+            if(TARGET ode_robots_opt)
+                target_link_libraries(ode_robots_opt PUBLIC ${ODE_LIBRARIES})
+                target_include_directories(ode_robots_opt PUBLIC ${ODE_INCLUDE_DIRS})
+                target_link_directories(ode_robots_opt PUBLIC ${ODE_LIBRARY_DIRS})
+            endif()
+            if(TARGET ode_robots_dbg)
+                target_link_libraries(ode_robots_dbg PUBLIC ${ODE_LIBRARIES})
+                target_include_directories(ode_robots_dbg PUBLIC ${ODE_INCLUDE_DIRS})
+                target_link_directories(ode_robots_dbg PUBLIC ${ODE_LIBRARY_DIRS})
+            endif()
+            message(STATUS "ODE libraries linked via pkg-config: ${ODE_LIBRARIES}")
+        endif()
     endif()
 endif()
 
