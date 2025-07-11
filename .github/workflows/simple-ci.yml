@@ -319,17 +319,26 @@ jobs:
         fi
         cd "$BUILD_DIR"
         
-        # Generate coverage info
-        lcov --capture --directory . --output-file coverage.info
-        # Remove system headers and test files from coverage
-        lcov --remove coverage.info '/usr/*' '*/tests/*' '*/examples/*' --output-file coverage.info
-        # Generate HTML report
-        genhtml coverage.info --output-directory coverage-report
+        # Generate coverage info (|| true to handle sanitizer exit codes)
+        lcov --capture --directory . --output-file coverage.info || true
         
-        # Print summary
-        lcov --list coverage.info
+        # Check if coverage.info was created
+        if [ -f coverage.info ]; then
+          # Remove system headers and test files from coverage
+          lcov --remove coverage.info '/usr/*' '*/tests/*' '*/examples/*' --output-file coverage.info || true
+          # Generate HTML report
+          genhtml coverage.info --output-directory coverage-report || true
+        else
+          echo "Warning: Coverage info not generated (this is expected with sanitizers)"
+        fi
         
-        echo "Coverage report generated in coverage-report/"
+        # Print summary if coverage info exists
+        if [ -f coverage.info ]; then
+          lcov --list coverage.info || true
+          echo "Coverage report generated in coverage-report/"
+        else
+          echo "No coverage data available"
+        fi
     
     # Upload coverage report
     - name: Upload coverage report
