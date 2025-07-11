@@ -642,15 +642,13 @@ jobs:
         if [ ! -f "opende/ode-dbl-config" ]; then
           echo "Creating ode-dbl-config for system ODE..."
           mkdir -p opende
-          cat > opende/ode-dbl-config << 'EOF'
-#!/bin/sh
-# Minimal ode-dbl-config for system ODE
-case "$1" in
-  --cflags) echo "-I/usr/include -DdDOUBLE" ;;
-  --libs) echo "-lode" ;;
-  *) echo "Usage: ode-dbl-config [--cflags|--libs]" ;;
-esac
-EOF
+          echo '#!/bin/sh' > opende/ode-dbl-config
+          echo '# Minimal ode-dbl-config for system ODE' >> opende/ode-dbl-config
+          echo 'case "$1" in' >> opende/ode-dbl-config
+          echo '  --cflags) echo "-I/usr/include -DdDOUBLE" ;;' >> opende/ode-dbl-config
+          echo '  --libs) echo "-lode" ;;' >> opende/ode-dbl-config
+          echo '  *) echo "Usage: ode-dbl-config [--cflags|--libs]" ;;' >> opende/ode-dbl-config
+          echo 'esac' >> opende/ode-dbl-config
           chmod +x opende/ode-dbl-config
         fi
         
