@@ -24,7 +24,13 @@ configure_component() {
     fi
 }
 
-# Configure selforg first
+# Force reconfiguration of selforg to pick up any m4 template changes
+if [ -f "selforg/selforg-config" ]; then
+    echo "Removing old selforg-config to force regeneration..."
+    rm -f selforg/selforg-config
+fi
+
+# Configure selforg first (this will regenerate from m4)
 configure_component "selforg"
 
 # Configure bundled ODE if needed
