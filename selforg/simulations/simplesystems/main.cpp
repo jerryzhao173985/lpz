@@ -201,7 +201,7 @@ private:
 };
 
 
-voidprintRobot(MyRobot* robot){
+void printRobot(MyRobot* robot){
   char line[81];
   memset(line,'_', sizeof(char)*80);
   line[80]=0;

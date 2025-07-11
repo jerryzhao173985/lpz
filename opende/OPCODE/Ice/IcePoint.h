@@ -300,7 +300,7 @@
 		//! Computes distance to another point
 		inline_	float			Distance(const Point& b)			const
 								{
-									return sqrtf((x - b.x)*(x - b.x) + (y - b.y)*(y - b.y) + (z - b.z)*(z - b.z)) override;
+									return sqrtf((x - b.x)*(x - b.x) + (y - b.y)*(y - b.y) + (z - b.z)*(z - b.z));
 								}
 
 		//! Computes square distance to another point

@@ -40,7 +40,7 @@ namespace lpzrobots {
     /**
        @param exponent exponent of the sensor characteritic (default: 1 (linear))
     */
-    IRSensorWall(float exponent, const std::list<dGeomID>& avoids);
+    IRSensorWall(float exponent, const std::list<dGeomID>& avoid s);
 
     virtual ~IRSensorWall() {};
 
@@ -52,7 +52,7 @@ namespace lpzrobots {
                       const osg::Matrix pose, float range,
                       rayDrawMode drawMode = drawSensor);
   public:
-    std::list<dGeomID> avoids;
+    std::list<dGeomID> avoid s;
   };
 
 }

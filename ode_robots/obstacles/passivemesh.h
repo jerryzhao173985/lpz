@@ -80,7 +80,7 @@ class PassiveMesh{
   };
 
 
-  virtual const Primitive* getMainPrimitive() const const { return mesh; }
+  virtual const Primitive* getMainPrimitive() const override { return mesh; }
 
  protected:
 

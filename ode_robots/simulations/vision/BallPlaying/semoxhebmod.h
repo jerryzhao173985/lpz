@@ -193,14 +193,14 @@ protected:
   /// calculates xsi for the current time step using the delayed y values
   //  and x delayed by one
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual voidcalcXsi(int delay);
+  virtual void calcXsi(int delay);
 
   /// learn H,C with motors y and corresponding sensors x
   virtual void learnController();
 
   /// learn A, (and S) using motors y and corresponding sensors x
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual voidlearnModel(int delay);
+  virtual void learnModel(int delay);
 
   /// calculates the predicted sensor values
   virtual matrix::Matrix model(const matrix::Matrix* x_buffer, int delay, const matrix::Matrix& y);

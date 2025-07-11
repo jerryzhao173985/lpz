@@ -163,7 +163,7 @@ public:
     matrix::Matrix m(3,3); m.toId();  return m;
   };
 
-  virtual voidaddOtherRobot(const MyRobot* otherRobot) {
+  virtual void addOtherRobot(const MyRobot* otherRobot) {
     if(otherRobot!=this)
       otherRobots.push_back(otherRobot);
   }
@@ -253,7 +253,7 @@ void printRobots(const list<MyRobot*>& robots){
 
 }
 
-voidreinforce(Agent* a){
+void reinforce(Agent* a){
   MyRobot* r = static_cast<MyRobot*>(a)->getRobot();
   InvertMotorNStep* c = dynamic_cast<InvertMotorNStep*>(a->getController());
   if(c)

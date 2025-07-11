@@ -54,7 +54,7 @@ int RunAllTests(TestReporter& reporter, TestList const& list, char const* suiteN
 int RunAllTests()
 {
     TestReporterStdout reporter;
-    return RunAllTests(reporter, Test::GetTestList(), 0) override;
+    return RunAllTests(reporter, Test::GetTestList(), 0);
 }
 
 }

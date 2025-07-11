@@ -43,7 +43,7 @@ namespace lpzrobots
 
   /**
    * Class which holds all data used by CameraManipulators.
-   * The avoidance of static variables enables multithreaded (tasked)
+   * The avoid ance of static variables enables multithreaded (tasked)
    * simulations.
    */
   class CameraHandle{

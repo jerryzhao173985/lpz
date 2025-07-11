@@ -259,7 +259,7 @@ dReal SqrDistancePointTri( const dVector3 p, const dVector3 triOrigin,
   if ( pfTParam )
       *pfTParam = static_cast<float>(fT);
 
-  return dReal(fabs(fSqrDist)) override;
+  return dReal(fabs(fSqrDist));
 }
 
 //------------------------------------------------------------------------------
@@ -631,7 +631,7 @@ dReal SqrDistanceSegments( const dVector3 seg1Origin, const dVector3 seg1Directi
   if ( pfSegP1 )
     *pfSegP1 = fT;
     
-  return dReal(fabs(fSqrDist)) override;
+  return dReal(fabs(fSqrDist));
 }
 
 //------------------------------------------------------------------------------

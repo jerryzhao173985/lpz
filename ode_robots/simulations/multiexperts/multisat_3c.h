@@ -40,7 +40,7 @@
  *    getParam,setParam, getParamList is not to be overloaded anymore
  *
  *   Revision 1.1  2007/11/12 13:46:40  martius
- *   version used for obstactle avoidance stuff
+ *   version used for obstactle avoid ance stuff
  *
  *   Revision 1.9  2007/08/24 11:59:43  martius
  *   *** empty log message ***
@@ -135,7 +135,7 @@ public:
   // !!!!!!!!!!!!!!!!!!! MISC STUFF !!!!!!!!
 
   /// stores the sat networks into seperate files
-  voidstoreSats(const char* filestem);
+  void storeSats(const char* filestem);
 
 
   /************** CONFIGURABLE ********************************/

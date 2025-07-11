@@ -112,7 +112,7 @@ virtual doublegetWidthIdValue(const Position& p);
 
 
 
-virtual voidcreate(dSpaceID space);
+virtual void create(dSpaceID space);
 
 
 virtual  void destroy();

@@ -185,7 +185,7 @@ int coord(double phi,double len){
   return int(round((x+1.0)/2*(SIZEX-1))) + int((y+1.0)/2*SIZEY)*SIZEX;
 }
 
-voidprintRobots(Pendulum* robot){
+void printRobots(Pendulum* robot){
   char field[SIZEX*SIZEY];
   char color[SIZEX*SIZEY];
   memset(field,' ', sizeof(char)*SIZEX*SIZEY);
@@ -220,7 +220,7 @@ voidprintRobots(Pendulum* robot){
 
 }
 
-voidreinforce(Agent* a){
+void reinforce(Agent* a){
 //   MyRobot* r = static_cast<MyRobot*>(a)->getRobot();
 //   InvertMotorNStep* c = dynamic_cast<InvertMotorNStep*>(a->getController());
 //   if(c)

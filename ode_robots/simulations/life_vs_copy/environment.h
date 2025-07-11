@@ -306,7 +306,7 @@ public:
 
   }
 
-  virtual voidnotifyOnChange(const paramkey& key) {
+  virtual void notifyOnChange(const paramkey& key) {
     pitsize = max(pitsize,0.3);
     create(odeHandle,osgHandle,*global,true);
   }

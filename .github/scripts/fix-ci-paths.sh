@@ -138,4 +138,3 @@ fi
 
 echo "Build environment verification passed"
 echo "Ready for build"
-EOF < /dev/null

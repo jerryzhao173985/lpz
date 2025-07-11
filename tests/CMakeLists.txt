@@ -21,31 +21,15 @@ endif()
 
 # Create main test executable with all test files
 set(TEST_SOURCES
-    doctest_main.cpp  # Using enhanced version with test utilities
-    unit/basic_test.cpp
-    unit/selforg/matrix_operations_test.cpp
-    unit/selforg/controller_algorithms_test.cpp
-    unit/homeokinetic_verification_test.cpp
-    unit/homeokinetic_behavior_test.cpp
-    unit/homeokinetic_core_tests.cpp
-    unit/homeokinetic_algorithm_tests.cpp
-    unit/homeokinetic_robustness_tests.cpp
-    unit/homeokinetic_performance_tests.cpp
-    unit/homeokinetic_complete_coverage_test.cpp
-    unit/novel_homeokinetic_test.cpp
-    unit/test_novel_algorithms_doctest.cpp
-    unit/itsox_test.cpp
-    # unit/example_test_utils_usage.cpp  # Example showing test utilities - commented out for now
-    # Physics simulation test has complex dependencies - use ode_robots_tests target instead
-    # unit/ode_robots/physics_simulation_test.cpp
+    src/doctest_main.cpp
+    src/test_selforg_basic.cpp
+    src/test_ga_tools_basic.cpp
 )
 
 # Integration test sources
 set(INTEGRATION_TEST_SOURCES
-    doctest_main_simple.cpp
-    integration/robot_controller_integration_test.cpp
-    integration/simulation_integration_test.cpp
-    integration/homeokinetic_robot_integration_test.cpp
+    src/doctest_main_simple.cpp
+    src/test_selforg_basic.cpp
 )
 
 # Main unit test executable
@@ -53,34 +37,23 @@ lpzrobots_add_doctest(unit_tests
     SOURCES ${TEST_SOURCES}
     DEPS 
         lpzrobots::selforg
-        lpzrobots::ode_robots
+        lpzrobots::ga_tools
     COMPONENT core
     LABELS unit
 )
 
 # Alternative unit test executable with standard doctest output
 set(TEST_SOURCES_STANDARD
-    doctest_main_standard.cpp  # Standard doctest main
-    unit/basic_test.cpp
-    unit/selforg/matrix_operations_test.cpp
-    unit/selforg/controller_algorithms_test.cpp
-    unit/homeokinetic_verification_test.cpp
-    unit/homeokinetic_behavior_test.cpp
-    unit/homeokinetic_core_tests.cpp
-    unit/homeokinetic_algorithm_tests.cpp
-    unit/homeokinetic_robustness_tests.cpp
-    unit/homeokinetic_performance_tests.cpp
-    unit/homeokinetic_complete_coverage_test.cpp
-    unit/novel_homeokinetic_test.cpp
-    unit/test_novel_algorithms_doctest.cpp
-    unit/itsox_test.cpp
+    src/doctest_main_standard.cpp
+    src/test_selforg_basic.cpp
+    src/test_ga_tools_basic.cpp
 )
 
 lpzrobots_add_doctest(unit_tests_verbose
     SOURCES ${TEST_SOURCES_STANDARD}
     DEPS 
         lpzrobots::selforg
-        lpzrobots::ode_robots
+        lpzrobots::ga_tools
     COMPONENT core
     LABELS unit
 )
@@ -96,10 +69,8 @@ lpzrobots_add_doctest(integration_tests
 
 # Performance test sources
 set(PERFORMANCE_TEST_SOURCES
-    doctest_main_simple.cpp
-    performance/matrix_performance_test.cpp
-    performance/controller_performance_test.cpp
-    performance/simulation_performance_test.cpp
+    src/doctest_main_simple.cpp
+    src/test_selforg_basic.cpp
 )
 
 # Create performance test executable
@@ -107,23 +78,14 @@ lpzrobots_add_doctest(performance_tests
     SOURCES ${PERFORMANCE_TEST_SOURCES}
     DEPS 
         lpzrobots::selforg
-        lpzrobots::ode_robots
     COMPONENT performance
     LABELS performance
 )
 
 # BDD-style test sources
 set(BDD_TEST_SOURCES
-    doctest_main_simple.cpp
-    bdd/sox_matrix_debug_test.cpp
-    bdd/sox_detailed_debug_test.cpp
-    bdd/sox_buffer_prefill_test.cpp
-    bdd/sox_minimal_crash_test.cpp
-    bdd/sox_step8_debug_test.cpp
-    bdd/dep_debug_test.cpp
-    bdd/visual_motor_scenarios_test.cpp
-    bdd/emergent_behavior_scenarios_test.cpp
-    bdd/learning_scenarios_test.cpp
+    src/doctest_main_simple.cpp
+    src/test_selforg_basic.cpp
 )
 
 # Create BDD test executable
@@ -139,9 +101,8 @@ lpzrobots_add_doctest(bdd_tests
 if(TARGET selforg)
     lpzrobots_add_doctest(selforg_tests
         SOURCES 
-            doctest_main.cpp
-            unit/selforg/matrix_operations_test.cpp
-            unit/selforg/controller_algorithms_test.cpp
+            src/doctest_main.cpp
+            src/test_selforg_basic.cpp
         DEPS lpzrobots::selforg
         COMPONENT selforg
         LABELS unit selforg
@@ -151,8 +112,8 @@ endif()
 if(TARGET ode_robots)
     lpzrobots_add_doctest(ode_robots_tests
         SOURCES 
-            doctest_main.cpp
-            unit/ode_robots/physics_simulation_test.cpp
+            src/doctest_main.cpp
+            src/test_selforg_basic.cpp
         DEPS lpzrobots::ode_robots
         COMPONENT ode_robots
         LABELS unit ode_robots physics

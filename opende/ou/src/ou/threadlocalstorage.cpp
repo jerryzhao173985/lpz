@@ -317,7 +317,7 @@ private:
 private:
 	inline bool TrySettingStorageArrayList(CTLSStorageArray *psaInstance, CTLSStorageArray *psaCurrentList)
 	{
-		return AtomicCompareExchangePointer(&m_psaStorageList, (atomicptr)psaCurrentList, (atomicptr)psaInstance) override;
+		return AtomicCompareExchangePointer(&m_psaStorageList, (atomicptr)psaCurrentList, (atomicptr)psaInstance);
 	}
 
 	inline CTLSStorageArray *GetStorageArrayList() const

@@ -563,7 +563,7 @@ namespace quickprof
 
         // Update the average total cycle time.
         // On the first cycle we set the average cycle time equal to the
-        // measured cycle time.  This avoids having to ramp up the average
+        // measured cycle time.  This avoid s having to ramp up the average
         // from zero initially.
         unsigned long long int currentCycleDurationMicroseconds =
             mClock.getTimeMicroseconds() - mCurrentCycleStartMicroseconds;
@@ -590,7 +590,7 @@ namespace quickprof
             ProfileBlock* block = iter->second;
 
             // On the first cycle we set the average cycle time equal to the
-            // measured cycle time.  This avoids having to ramp up the average
+            // measured cycle time.  This avoid s having to ramp up the average
             // from zero initially.
             if (mFirstCycle)
             {

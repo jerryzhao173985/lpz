@@ -298,7 +298,7 @@ void printRobots(){
 
 }
 
-voidreinforce(Agent* a){
+void reinforce(Agent* a){
 //   MyRobot* r = static_cast<MyRobot*>(a)->getRobot();
 //   InvertMotorNStep* c = dynamic_cast<InvertMotorNStep*>(a->getController());
 //   if(c)

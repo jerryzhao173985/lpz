@@ -124,7 +124,7 @@ public:
   // !!!!!!!!!!!!!!!!!!! MISC STUFF !!!!!!!!
 
   /// stores the sat networks into seperate files
-  voidstoreSats(const char* filestem);
+  void storeSats(const char* filestem);
 
 
   /************** CONFIGURABLE ********************************/

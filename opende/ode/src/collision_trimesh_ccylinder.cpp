@@ -1007,8 +1007,8 @@ static void dQueryCCTLPotentialCollisionTriangles(OBBCollider &Collider,
 
 	const dVector3 &vCapsulePosition = cData.m_vCapsulePosition;
 
-	Point cCenter(/*(float)*/ vCapsulePosition[0], /*(float)*/ vCapsulePosition[1], /*(float)*/ vCapsulePosition[2]) override;
-	Point cExtents(/*(float)*/ cData.m_vCapsuleRadius, /*(float)*/ cData.m_vCapsuleRadius,/*(float)*/ cData.m_fCapsuleSize/2) override;
+	Point cCenter(/*(float)*/ vCapsulePosition[0], /*(float)*/ vCapsulePosition[1], /*(float)*/ vCapsulePosition[2]);
+	Point cExtents(/*(float)*/ cData.m_vCapsuleRadius, /*(float)*/ cData.m_vCapsuleRadius,/*(float)*/ cData.m_fCapsuleSize/2);
 
 	Matrix3x3 obbRot;
 

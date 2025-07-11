@@ -129,17 +129,25 @@ ode:
 	@echo "*************** Using system ODE with compatibility layer ***************"
 	@if command -v brew >/dev/null 2>&1 && brew list ode >/dev/null 2>&1; then \
 		echo "ODE is installed via Homebrew at: $$(brew --prefix ode)"; \
-                echo "Syncing headers into include/ode-dbl …"; \
-	        install -d include/ode-dbl; \
-	        for h in $(wildcard $(ODE_INC_DIR)/*.h); do \
-	            ln -sf $$h include/ode-dbl/$$(basename $$h); \
-	        done; \
-		echo "Compatibility layer created in include/ode-dbl/"; \
+		ODE_INC_DIR="$$(brew --prefix ode)/include/ode"; \
+	elif pkg-config --exists ode 2>/dev/null; then \
+		echo "ODE is installed via system package manager"; \
+		ODE_INC_DIR="$$(pkg-config --variable=includedir ode)/ode"; \
+	elif [ -d "/usr/include/ode" ]; then \
+		echo "ODE found in /usr/include/ode"; \
+		ODE_INC_DIR="/usr/include/ode"; \
 	else \
 		echo "ERROR: ODE not found. Please install it first:"; \
-		echo "  brew install ode"; \
+		echo "  Ubuntu/Debian: sudo apt-get install libode-dev"; \
+		echo "  macOS: brew install ode"; \
 		exit 1; \
-	fi
+	fi; \
+	echo "Syncing headers from $$ODE_INC_DIR into include/ode-dbl …"; \
+	install -d include/ode-dbl; \
+	for h in $$ODE_INC_DIR/*.h; do \
+		ln -sf $$h include/ode-dbl/$$(basename $$h); \
+	done; \
+	echo "Compatibility layer created in include/ode-dbl/"
 
 
 .PHONY: install_ode

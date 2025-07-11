@@ -81,14 +81,7 @@ function(lpzrobots_add_simulation name)
             target_link_libraries(${name} PRIVATE ${OPENSCENEGRAPH_LIBRARIES})
         endif()
         
-        # Add ODE
-        target_include_directories(${name} PRIVATE 
-            "${CMAKE_CURRENT_SOURCE_DIR}/../../../opende/include"
-        )
-        target_link_directories(${name} PRIVATE 
-            "${CMAKE_CURRENT_SOURCE_DIR}/../../../opende/ode/src/.libs"
-        )
-        target_link_libraries(${name} PRIVATE ode_dbl)
+        # ODE is already linked through ode_robots, no need to link again
     else()
         message(FATAL_ERROR "Cannot find ode_robots library")
     endif()

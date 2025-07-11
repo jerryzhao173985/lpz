@@ -63,7 +63,7 @@ namespace lpzrobots {
      */
     bool loadXMLFile(const std::string& XMLFile);
 
-    voidsetValidateXML(bool validate);
+    void setValidateXML(bool validate);
 
     /**
      * Tells if the DOMParser is validating the xml file. If yes,

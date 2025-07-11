@@ -6,25 +6,29 @@ set(ODE_ROBOTS_MAIN_SOURCES
     simulation.cpp
 )
 
+# Collect OSG sources if OpenSceneGraph is available
+if(LPZROBOTS_HAS_OSG)
+    file(GLOB OSG_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/osg/*.cpp)
+    list(APPEND ODE_ROBOTS_MAIN_SOURCES ${OSG_SOURCES})
+    set(ODE_ROBOTS_SUBDIRS agents motors obstacles osg robots sensors utils)
+else()
+    set(ODE_ROBOTS_SUBDIRS agents motors obstacles robots sensors utils)
+endif()
+
 # Use the unified library creation function
 lpzrobots_add_component_library(ode_robots
     SOURCES
         ${ODE_ROBOTS_MAIN_SOURCES}
     SUBDIRS
-        agents
-        motors
-        obstacles
-        osg
-        robots
-        sensors
-        utils
+        ${ODE_ROBOTS_SUBDIRS}
     PUBLIC_DEPS
         lpzrobots::selforg
         Threads::Threads
         ${OPENSCENEGRAPH_LIBRARIES}
-        $<$<PLATFORM_ID:Darwin>:${OPENGL_LIBRARY}>
-        $<$<NOT:$<PLATFORM_ID:Darwin>>:OpenGL::GL>
-        $<$<NOT:$<PLATFORM_ID:Darwin>>:OpenGL::GLU>
+        $<$<AND:$<PLATFORM_ID:Darwin>,$<BOOL:${OPENGL_LIBRARY}>>:${OPENGL_LIBRARY}>
+        $<$<AND:$<NOT:$<PLATFORM_ID:Darwin>>,$<BOOL:${LPZROBOTS_HAS_OPENGL}>>:OpenGL::GL>
+        $<$<AND:$<NOT:$<PLATFORM_ID:Darwin>>,$<BOOL:${LPZROBOTS_HAS_OPENGL}>>:OpenGL::GLU>
+        $<$<BOOL:${LPZROBOTS_ODE_LIBRARIES}>:${LPZROBOTS_ODE_LIBRARIES}>
     PRIVATE_DEPS
         $<$<BOOL:${READLINE_LIBRARY}>:${READLINE_LIBRARY}>
     DEFINES
@@ -54,63 +58,27 @@ if(TARGET ode_robots_dbg)
     )
 endif()
 
-# ODE include and library handling
-if(NOT LPZROBOTS_USE_SYSTEM_ODE AND EXISTS "${CMAKE_SOURCE_DIR}/include/ode-dbl")
-    target_include_directories(ode_robots PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/ode-dbl>
-        $<INSTALL_INTERFACE:include/ode-dbl>
-    )
+# ODE include handling
+if(LPZROBOTS_ODE_INCLUDE_DIRS)
+    target_include_directories(ode_robots PUBLIC ${LPZROBOTS_ODE_INCLUDE_DIRS})
     if(TARGET ode_robots_opt)
-        target_include_directories(ode_robots_opt PUBLIC
-            $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/ode-dbl>
-            $<INSTALL_INTERFACE:include/ode-dbl>
-        )
+        target_include_directories(ode_robots_opt PUBLIC ${LPZROBOTS_ODE_INCLUDE_DIRS})
     endif()
     if(TARGET ode_robots_dbg)
-        target_include_directories(ode_robots_dbg PUBLIC
-            $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/ode-dbl>
-            $<INSTALL_INTERFACE:include/ode-dbl>
-        )
-    endif()
-elseif(DEFINED ODE_INCLUDE_DIRS)
-    target_include_directories(ode_robots PUBLIC ${ODE_INCLUDE_DIRS})
-    if(TARGET ode_robots_opt)
-        target_include_directories(ode_robots_opt PUBLIC ${ODE_INCLUDE_DIRS})
-    endif()
-    if(TARGET ode_robots_dbg)
-        target_include_directories(ode_robots_dbg PUBLIC ${ODE_INCLUDE_DIRS})
+        target_include_directories(ode_robots_dbg PUBLIC ${LPZROBOTS_ODE_INCLUDE_DIRS})
     endif()
 endif()
 
-# ODE library
-if(LPZROBOTS_USE_SYSTEM_ODE AND DEFINED ODE_LIBRARIES)
-    target_link_libraries(ode_robots PUBLIC ${ODE_LIBRARIES})
+# ODE library handling - use the variables set by lpzrobots_find_ode()
+if(LPZROBOTS_ODE_LIBRARIES)
+    target_link_libraries(ode_robots PUBLIC ${LPZROBOTS_ODE_LIBRARIES})
     if(TARGET ode_robots_opt)
-        target_link_libraries(ode_robots_opt PUBLIC ${ODE_LIBRARIES})
+        target_link_libraries(ode_robots_opt PUBLIC ${LPZROBOTS_ODE_LIBRARIES})
     endif()
     if(TARGET ode_robots_dbg)
-        target_link_libraries(ode_robots_dbg PUBLIC ${ODE_LIBRARIES})
+        target_link_libraries(ode_robots_dbg PUBLIC ${LPZROBOTS_ODE_LIBRARIES})
     endif()
-elseif(APPLE)
-    # Find ODE via brew
-    find_library(ODE_LIBRARY NAMES ode)
-    if(ODE_LIBRARY)
-        target_link_libraries(ode_robots PUBLIC ${ODE_LIBRARY})
-        if(TARGET ode_robots_opt)
-            target_link_libraries(ode_robots_opt PUBLIC ${ODE_LIBRARY})
-        endif()
-        if(TARGET ode_robots_dbg)
-            target_link_libraries(ode_robots_dbg PUBLIC ${ODE_LIBRARY})
-        endif()
-    endif()
-else()
-    target_link_libraries(ode_robots PUBLIC ode)
-    if(TARGET ode_robots_opt)
-        target_link_libraries(ode_robots_opt PUBLIC ode)
-    endif()
-    if(TARGET ode_robots_dbg)
-        target_link_libraries(ode_robots_dbg PUBLIC ode)
-    endif()
+    message(STATUS "ODE libraries linked: ${LPZROBOTS_ODE_LIBRARIES}")
 endif()
 
 # OpenSceneGraph include directories (use SYSTEM to suppress warnings)

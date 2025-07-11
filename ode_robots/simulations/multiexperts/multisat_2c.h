@@ -112,7 +112,7 @@ public:
                               motor* , int number_motors);
 
   /// stores the sat networks into seperate files
-  voidstoreSats(const char* filestem);
+  void storeSats(const char* filestem);
 
 
   /************** CONFIGURABLE ********************************/

@@ -11,6 +11,13 @@ if(PkgConfig_FOUND)
     pkg_check_modules(GSL gsl QUIET)
 endif()
 
+# Find ODE if using system ODE
+set(LPZROBOTS_USE_SYSTEM_ODE @LPZROBOTS_USE_SYSTEM_ODE@)
+if(LPZROBOTS_USE_SYSTEM_ODE)
+    list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
+    find_dependency(ODE)
+endif()
+
 # Include the exported targets
 include("${CMAKE_CURRENT_LIST_DIR}/LPZRobotsTargets.cmake")
 

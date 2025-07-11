@@ -112,7 +112,7 @@ virtual doublegetWidthIdValue(const Position& p);
 /**
  * sets the width of the segment,
  */
- virtual voidsetWidth(double w);
+ virtual void setWidth(double w);
 
   Matrix getPoseMatrix() const {
     return pos;
@@ -132,7 +132,7 @@ virtual doublegetWidthIdValue(const Position& p);
 
 protected:
 
-  voidsetPoseMatrix(const Matrix& m){
+  void setPoseMatrix(const Matrix& m){
     pos = m;
     invpos = invert_4x4PoseMatrix(m);
   }
