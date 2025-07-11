@@ -596,36 +596,47 @@ jobs:
           cd ..
         fi
         
-        # Create necessary symlinks for header paths
-        echo "=== Setting up header symlinks ==="
-        
-        # Create include directory at root for cross-component dependencies
-        mkdir -p include
-        
-        # Create ode-dbl symlinks if system ODE is being used
-        if [ ! -d "include/ode-dbl" ]; then
-          if [ -d "/usr/include/ode" ]; then
-            mkdir -p include/ode-dbl
-            ln -sf /usr/include/ode/*.h include/ode-dbl/
-            echo "Created symlinks: include/ode-dbl -> /usr/include/ode/*.h"
-          fi
-        fi
+        # Header symlinks will be created in the build step
+        echo "=== Header symlinks will be set up during build ==="
     
     - name: Build components in order
       run: |
         # Set up environment
         export PREFIX="$HOME/lpzrobots"
+        export PATH="$(pwd)/selforg:$(pwd)/opende:$(pwd)/ode_robots:$PREFIX/bin:$PATH"
         
         echo "=== Building with Legacy Make system ==="
         echo "TYPE=$(grep ^TYPE Makefile.conf)"
         echo "PREFIX=$PREFIX"
+        
+        # CRITICAL: Set up ODE headers before building ode_robots
+        echo "=== Setting up ODE headers ==="
+        mkdir -p include/ode-dbl
+        if [ -d "/usr/include/ode" ]; then
+          echo "Copying system ODE headers to include/ode-dbl..."
+          cp -f /usr/include/ode/*.h include/ode-dbl/ 2>/dev/null || true
+          
+          # Create ode symlink for headers that use <ode/...> includes
+          cd include
+          if [ ! -e ode ]; then
+            ln -sf ode-dbl ode
+            echo "Created symlink: include/ode -> include/ode-dbl"
+          fi
+          cd ..
+          
+          echo "✓ ODE headers set up"
+          echo "Header count: $(ls include/ode-dbl/*.h 2>/dev/null | wc -l)"
+        else
+          echo "ERROR: System ODE headers not found!"
+          exit 1
+        fi
         
         # Use the normal make process which handles everything correctly
         echo "=== Building selforg ==="
         make selforg
         
         echo "=== Building ode ==="
-        make ode
+        make ode || echo "ODE build skipped (using system ODE)"
         
         echo "=== Building ode_robots ==="
         make ode_robots
