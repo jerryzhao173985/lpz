@@ -674,8 +674,9 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 case "$1" in
   --cflags) 
-    # Return the path to our include/ode-dbl directory
-    echo "-I$REPO_ROOT/include/ode-dbl -DdDOUBLE"
+    # Return the path to the parent of ode-dbl directory so #include <ode-dbl/xxx.h> works
+    # This is critical: we need -I.../include not -I.../include/ode-dbl
+    echo "-I$REPO_ROOT/include -DdDOUBLE"
     ;;
   --libs) 
     echo "-lode"
@@ -736,8 +737,16 @@ EOFDBLCONFIG
           echo "✓ Compiler can find ode-dbl/common.h"
         else
           echo "✗ Compiler cannot find ode-dbl/common.h"
-          echo "Trying with just ode-dbl-config flags:"
-          g++ -c $ODECFLAGS test_include.cpp -o test_include.o 2>&1 || echo "Still fails"
+          echo ""
+          echo "Trying with -isystem ../include instead:"
+          if g++ -c -isystem ../include $ODECFLAGS test_include.cpp -o test_include.o 2>&1; then
+            echo "✓ SUCCESS! The issue is that -isystem should point to ../include, not ../include/ode-dbl"
+          else
+            echo "✗ Still fails with -isystem ../include"
+            echo ""
+            echo "Trying with just ode-dbl-config flags:"
+            g++ -c $ODECFLAGS test_include.cpp -o test_include.o 2>&1 || echo "Still fails"
+          fi
         fi
         
         rm -f test_include.cpp test_include.o
