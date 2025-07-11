@@ -682,29 +682,46 @@ jobs:
         echo "=== FIXING: Forcing source paths for build ==="
         
         # Create wrapper scripts that force source paths
-        echo '#!/bin/bash' > selforg-config-wrapper
-        echo "exec $PROJECT_ROOT/selforg/selforg-config --srcprefix=\"$PROJECT_ROOT/selforg\" \"\$@\"" >> selforg-config-wrapper
-        chmod +x selforg-config-wrapper
+        echo '#!/bin/bash' > selforg-config
+        echo "exec $PROJECT_ROOT/selforg/selforg-config --srcprefix=\"$PROJECT_ROOT/selforg\" \"\$@\"" >> selforg-config
+        chmod +x selforg-config
         
-        echo '#!/bin/bash' > ode_robots-config-wrapper
-        echo "exec $PROJECT_ROOT/ode_robots/ode_robots-config --srcprefix=\"$PROJECT_ROOT/ode_robots\" \"\$@\"" >> ode_robots-config-wrapper
-        chmod +x ode_robots-config-wrapper
+        echo '#!/bin/bash' > ode_robots-config
+        echo "exec $PROJECT_ROOT/ode_robots/ode_robots-config --srcprefix=\"$PROJECT_ROOT/ode_robots\" \"\$@\"" >> ode_robots-config
+        chmod +x ode_robots-config
         
-        echo '#!/bin/bash' > ode-dbl-config-wrapper
-        echo "exec $PROJECT_ROOT/opende/ode-dbl-config --srcprefix=\"$PROJECT_ROOT/opende\" \"\$@\"" >> ode-dbl-config-wrapper
-        chmod +x ode-dbl-config-wrapper
+        # ode-dbl-config doesn't support --srcprefix, so we just pass through
+        echo '#!/bin/bash' > ode-dbl-config
+        echo "exec $PROJECT_ROOT/opende/ode-dbl-config \"\$@\"" >> ode-dbl-config
+        chmod +x ode-dbl-config
         
         # Put wrappers first in PATH
         export PATH="$(pwd):$PATH"
         
         # Debug what the wrappers produce
         echo "Wrapper output for --cflags:"
-        ./selforg-config-wrapper --cflags
-        ./ode_robots-config-wrapper --cflags
-        ./ode-dbl-config-wrapper --cflags
+        echo "selforg-config:"
+        ./selforg-config --cflags
+        echo "ode_robots-config:"
+        ./ode_robots-config --cflags
+        echo "ode-dbl-config:"
+        ./ode-dbl-config --cflags
+        
+        # Also check what the original scripts return
+        echo ""
+        echo "Original script outputs (for comparison):"
+        echo "Original selforg-config --cflags:"
+        $PROJECT_ROOT/selforg/selforg-config --cflags
+        echo "Original ode_robots-config --cflags:"  
+        $PROJECT_ROOT/ode_robots/ode_robots-config --cflags
         
         # CRITICAL: Create necessary header structure for simulation
         echo "=== Creating header structure for simulation ==="
+        
+        # First, ensure ode_robots is configured correctly for DEVEL mode
+        echo "Reconfiguring ode_robots for DEVEL mode..."
+        (cd $PROJECT_ROOT/ode_robots && ./configure --prefix="$PREFIX" --srcprefix="$PROJECT_ROOT/ode_robots" --type=DEVEL)
+        
         # Ensure ode_robots headers are accessible with #include <ode_robots/xxx.h>
         if [ ! -d "$PROJECT_ROOT/ode_robots/include/ode_robots" ]; then
             echo "Running make create_header_links in ode_robots..."
