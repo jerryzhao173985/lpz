@@ -92,18 +92,23 @@ if [ -d "selforg" ] && [ ! -L "include/selforg" ]; then
     ln -sf ../selforg include/selforg
 fi
 
+# Create symlinks in installation prefix for CI builds
+# This ensures simulations can find headers when they trigger rebuilds
+if [ -n "$PREFIX" ]; then
+    echo "Creating symlinks in installation prefix: $PREFIX"
+    mkdir -p "$PREFIX/include"
+    if [ ! -L "$PREFIX/include/selforg" ] && [ -d "$SRCROOT/selforg" ]; then
+        ln -sf "$SRCROOT/selforg" "$PREFIX/include/selforg"
+        echo "Created symlink: $PREFIX/include/selforg -> $SRCROOT/selforg"
+    fi
+fi
+
 # Also create symlinks in ode_robots include directory for CI builds
 if [ -d "ode_robots" ]; then
     mkdir -p ode_robots/include
-    if [ ! -L "ode_robots/include/selforg" ]; then
+    if [ ! -L "ode_robots/include/selforg" ] && [ -d "selforg" ]; then
         ln -sf ../../selforg ode_robots/include/selforg
-    fi
-    
-    # For CI builds, we need to ensure selforg headers are accessible from the installation prefix too
-    # This is needed when simulations trigger library rebuilds
-    mkdir -p "$PREFIX/include"
-    if [ ! -L "$PREFIX/include/selforg" ]; then
-        ln -sf "$SRCROOT/selforg" "$PREFIX/include/selforg"
+        echo "Created symlink: ode_robots/include/selforg -> ../../selforg"
     fi
 fi
 
