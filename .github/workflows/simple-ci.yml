@@ -830,8 +830,8 @@ jobs:
         
         echo "=== Reconfiguring components for USER mode installation ==="
         
-        # Reconfigure all components for user mode
-        make conf
+        # Skip interactive configuration - we already have the Makefile.conf we need
+        echo "Skipping interactive 'make conf' - using pre-configured Makefile.conf"
         
         # Install components using make system
         echo "=== Installing selforg ==="
