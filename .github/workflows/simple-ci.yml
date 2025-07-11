@@ -569,96 +569,145 @@ jobs:
         
         echo "✓ Build verification completed"
     
+    - name: Install components for simulation test
+      run: |
+        # Install libraries and headers properly
+        echo "=== Installing components to $HOME/lpzrobots ==="
+        
+        # Install selforg
+        echo "Installing selforg..."
+        cd selforg
+        make install || echo "selforg install failed (may not have install target)"
+        cd ..
+        
+        # Install ode_robots  
+        echo "Installing ode_robots..."
+        cd ode_robots
+        make install || echo "ode_robots install failed (may not have install target)"
+        cd ..
+        
+        # Verify installation
+        echo "=== Checking installed files ==="
+        ls -la $HOME/lpzrobots/include/ || echo "No include directory"
+        ls -la $HOME/lpzrobots/lib/ || echo "No lib directory"
+    
     - name: Test simulation build
       run: |
         # Save project root before changing directories
         PROJECT_ROOT=$(pwd)
-        
-        # CRITICAL: Set up symlinks needed for simulation build
-        # This is needed because the simulation's make might trigger ode_robots rebuild
-        
-        # 1. Create root include/selforg symlink
-        if [ ! -L "$PROJECT_ROOT/include/selforg" ] && [ -d "$PROJECT_ROOT/selforg/include/selforg" ]; then
-          mkdir -p "$PROJECT_ROOT/include"
-          ln -sf "$PROJECT_ROOT/selforg/include/selforg" "$PROJECT_ROOT/include/selforg"
-          echo "Created root include/selforg symlink"
-        fi
-        
-        # 2. Create ode_robots header symlink at root
-        if [ ! -L "$PROJECT_ROOT/include/ode_robots" ] && [ -d "$PROJECT_ROOT/ode_robots" ]; then
-          mkdir -p "$PROJECT_ROOT/include"
-          ln -sf "$PROJECT_ROOT/ode_robots" "$PROJECT_ROOT/include/ode_robots"
-          echo "Created root include/ode_robots symlink"
-        fi
-        
-        # 3. Create PREFIX include symlinks (after libraries are built)
         PREFIX="$HOME/lpzrobots"
-        if [ ! -L "$PREFIX/include/selforg" ] && [ -d "$PROJECT_ROOT/selforg/include/selforg" ]; then
-          mkdir -p "$PREFIX/include"
-          ln -sf "$PROJECT_ROOT/selforg/include/selforg" "$PREFIX/include/selforg"
-          echo "Created PREFIX include/selforg symlink for simulation build"
-        fi
         
-        if [ ! -L "$PREFIX/include/ode_robots" ] && [ -d "$PROJECT_ROOT/ode_robots" ]; then
-          ln -sf "$PROJECT_ROOT/ode_robots" "$PREFIX/include/ode_robots"
-          echo "Created PREFIX include/ode_robots symlink for simulation build"
-        fi
+        echo "=== DEBUGGING: Environment Setup ==="
+        echo "PROJECT_ROOT: $PROJECT_ROOT"
+        echo "PREFIX: $PREFIX"
+        echo "Current directory: $(pwd)"
         
-        # Set up PATH to include config scripts using absolute paths
+        # Set up PATH to include config scripts
         export PATH="$PROJECT_ROOT/selforg:$PROJECT_ROOT/opende:$PROJECT_ROOT/ode_robots:$PATH"
-        echo "PATH includes: $PATH"
+        echo "PATH: $PATH"
         
-        # Verify config scripts are accessible
-        which ode-dbl-config || echo "Warning: ode-dbl-config not in PATH"
-        which selforg-config || echo "Warning: selforg-config not in PATH"
+        # Verify config scripts
+        echo "=== DEBUGGING: Config Scripts ==="
+        echo "Checking selforg-config..."
+        if [ -x "$PROJECT_ROOT/selforg/selforg-config" ]; then
+          echo "✓ selforg-config found and executable"
+          echo "selforg-config --cflags: $($PROJECT_ROOT/selforg/selforg-config --cflags)"
+          echo "selforg-config --libs: $($PROJECT_ROOT/selforg/selforg-config --libs)"
+        else
+          echo "✗ selforg-config not found or not executable"
+        fi
         
+        echo "Checking ode_robots-config..."
+        if [ -x "$PROJECT_ROOT/ode_robots/ode_robots-config" ]; then
+          echo "✓ ode_robots-config found and executable"
+          echo "ode_robots-config --cflags: $($PROJECT_ROOT/ode_robots/ode_robots-config --cflags)"
+          echo "ode_robots-config --libs: $($PROJECT_ROOT/ode_robots/ode_robots-config --libs)"
+        else
+          echo "✗ ode_robots-config not found or not executable"
+        fi
+        
+        # Debug installed files
+        echo "=== DEBUGGING: Installed Files ==="
+        echo "Contents of $PREFIX/include:"
+        find $PREFIX/include -type f -name "*.h" | head -20 || echo "No headers found in PREFIX"
+        
+        echo "Contents of $PREFIX/include/ode_robots (if exists):"
+        ls -la $PREFIX/include/ode_robots/ 2>/dev/null | head -10 || echo "No ode_robots include dir"
+        
+        echo "Looking for odehandle.h specifically:"
+        find $PREFIX/include -name "odehandle.h" -type f || echo "odehandle.h not found in PREFIX"
+        find $PROJECT_ROOT -name "odehandle.h" -type f | head -5 || echo "odehandle.h not found in source"
+        
+        # Debug source directory structure
+        echo "=== DEBUGGING: Source Structure ==="
+        echo "ode_robots source headers:"
+        ls -la $PROJECT_ROOT/ode_robots/utils/*.h | head -10 || echo "No utils headers"
+        
+        # Navigate to simulation
         cd ode_robots/simulations
         
-        # Check if template_sphererobot needs Makefile generation
+        # Find a simulation to test
+        echo "=== DEBUGGING: Available Simulations ==="
+        ls -d */ | head -10
+        
         if [ -f template_sphererobot/Makefile ]; then
-          echo "Using existing Makefile in template_sphererobot"
+          echo "Using template_sphererobot"
           cd template_sphererobot
-        elif [ -f template_sphererobot/Makefile.4sim.m4 ]; then
-          echo "Generating Makefile from m4 template"
-          cd template_sphererobot
-          m4 -I ../.. ../../Makefile.4sim.m4 > Makefile
         else
-          # Fallback to a simulation that has a Makefile
-          echo "template_sphererobot not ready, trying template_hexabot"
-          if [ -d template_hexabot ] && [ -f template_hexabot/Makefile ]; then
-            cd template_hexabot
-          else
-            echo "No suitable simulation found with Makefile"
-            exit 0  # Don't fail CI for this
-          fi
+          echo "No Makefile in template_sphererobot, looking for alternatives..."
+          for sim in */Makefile; do
+            if [ -f "$sim" ]; then
+              echo "Found simulation with Makefile: $sim"
+              cd $(dirname $sim)
+              break
+            fi
+          done
         fi
         
-        # Export PATH for sub-makes
-        export PATH="$PROJECT_ROOT/selforg:$PROJECT_ROOT/opende:$PROJECT_ROOT/ode_robots:$PATH"
+        echo "Current directory: $(pwd)"
         
-        # Debug: Show what config scripts are available
-        echo "=== Available config scripts ==="
-        ls -la $PROJECT_ROOT/selforg/selforg-config || echo "selforg-config not found"
-        ls -la $PROJECT_ROOT/opende/ode-dbl-config || echo "ode-dbl-config not found"
-        echo "=== Testing config scripts ==="
-        $PROJECT_ROOT/selforg/selforg-config --libs || echo "selforg-config failed"
-        $PROJECT_ROOT/opende/ode-dbl-config --libs || echo "ode-dbl-config failed"
+        # Show the actual compile command that will be used
+        echo "=== DEBUGGING: Makefile Analysis ==="
+        echo "Makefile contents (first 50 lines):"
+        head -50 Makefile || echo "Cannot read Makefile"
         
-        # Build the simulation
+        echo "Checking what include paths will be used:"
+        make -n main.o 2>&1 | grep -E "g\+\+|gcc" | head -5 || echo "Cannot determine compile command"
+        
+        # Clean and try to build
+        echo "=== BUILDING: Starting Build ==="
         make clean || echo "Clean failed (may not exist yet)"
         
-        # CRITICAL: Tell ode_robots-config to use source paths
-        export ODE_ROBOTS_CONFIG_OPTS="--srcprefix=$PROJECT_ROOT/ode_robots"
-        
-        # Also ensure we can find headers by adding to CPPFLAGS
-        export CPPFLAGS="-I$PROJECT_ROOT/ode_robots/include -I$PROJECT_ROOT/ode_robots"
-        
-        make
+        # Show exact commands being run
+        echo "Running make with verbose output..."
+        make VERBOSE=1 2>&1 | tee build.log || {
+          echo "=== BUILD FAILED ==="
+          echo "Last 50 lines of build log:"
+          tail -50 build.log
+          
+          # Additional debugging for the specific error
+          echo "=== DEBUGGING: Include Path Issues ==="
+          echo "Looking for the problematic header in various locations:"
+          
+          # Check where headers actually are
+          echo "Searching for odeconfig.h:"
+          find $PROJECT_ROOT -name "odeconfig.h" -type f
+          
+          echo "Searching for odehandle.h:"  
+          find $PROJECT_ROOT -name "odehandle.h" -type f
+          
+          # Show the include structure
+          echo "Include directory structure in ode_robots:"
+          find $PROJECT_ROOT/ode_robots/include -type d 2>/dev/null || echo "No include dir"
+          
+          exit 1
+        }
         
         # Verify the binary was created
         if [ -f start ]; then
           echo "✓ Simulation built successfully"
+          ls -la start
         else
-          echo "Warning: Simulation binary not created"
+          echo "✗ Simulation binary not created"
           ls -la
         fi
