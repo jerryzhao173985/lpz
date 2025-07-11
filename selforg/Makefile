@@ -88,7 +88,7 @@ $(LIB):  $(UTILS) create_header_links $(OFILES)
 	@if [ "$(STRIP)" = "yes" ]; then strip -S $(LIB); fi
 
 
-${BUILD_DIR}/%.o: %.cpp
+${BUILD_DIR}/%.o: %.cpp | create_header_links
 	@mkdir -p $(dir $@)
 	$(CXX) -c $(CPPFLAGS) $(CFLAGS) -MMD -MP -o "$@" "$<"
 
