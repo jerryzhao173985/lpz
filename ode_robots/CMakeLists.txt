@@ -25,7 +25,7 @@ lpzrobots_add_component_library(ode_robots
         $<$<AND:$<PLATFORM_ID:Darwin>,$<BOOL:${OPENGL_LIBRARY}>>:${OPENGL_LIBRARY}>
         $<$<AND:$<NOT:$<PLATFORM_ID:Darwin>>,$<BOOL:${LPZROBOTS_HAS_OPENGL}>>:OpenGL::GL>
         $<$<AND:$<NOT:$<PLATFORM_ID:Darwin>>,$<BOOL:${LPZROBOTS_HAS_OPENGL}>>:OpenGL::GLU>
-        $<$<BOOL:${LPZROBOTS_ODE_LIBRARIES}>:${LPZROBOTS_ODE_LIBRARIES}>
+        ${LPZROBOTS_ODE_LIBRARIES}
     PRIVATE_DEPS
         $<$<BOOL:${READLINE_LIBRARY}>:${READLINE_LIBRARY}>
     DEFINES
