@@ -17,7 +17,12 @@ configure_component() {
     if [ -d "$component" ] && [ -x "$component/configure" ]; then
         echo "Configuring $component..."
         cd "$component"
-        ./configure --prefix="$PREFIX" --srcprefix="$SRCROOT/$component" --type=DEVEL $extra_args
+        # Check if we're in user mode from Makefile.conf
+        if [ -f "$SRCROOT/Makefile.conf" ] && grep -q "TYPE=user" "$SRCROOT/Makefile.conf"; then
+            ./configure --prefix="$PREFIX" --srcprefix="$SRCROOT/$component" --type=user $extra_args
+        else
+            ./configure --prefix="$PREFIX" --srcprefix="$SRCROOT/$component" --type=DEVEL $extra_args
+        fi
         cd ..
     else
         echo "Skipping $component (no configure script found)"

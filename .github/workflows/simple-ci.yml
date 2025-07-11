@@ -482,40 +482,70 @@ jobs:
         # Install m4 and autotools for config generation
         sudo apt-get install -y m4 autoconf automake libtool
         
-        # Debug: Check what's in opende directory
-        echo "=== Contents of opende directory ==="
-        ls -la opende/ | head -20
+        # Set up PREFIX for user installation
+        export PREFIX="$HOME/lpzrobots"
+        echo "PREFIX=$PREFIX"
         
-        # Ensure ode-dbl-config exists
-        if [ ! -f "opende/ode-dbl-config" ]; then
-          echo "=== Creating ode-dbl-config ==="
-          cd opende
+        # Configure each component properly with user installation paths
+        echo "=== Configuring components for user installation ==="
+        
+        # Configure selforg
+        echo "Configuring selforg..."
+        cd selforg
+        if [ -x ./configure ]; then
+          ./configure --prefix="$PREFIX" --type=user --system=LINUX
+        else
+          # Fallback: generate from m4 template
+          m4 -DPREFIX="$PREFIX" -DSRCPREFIX="$(pwd)" -DUSER -DLINUX -DVERSION="1.0" selforg-config.m4 > selforg-config
+          chmod +x selforg-config
+        fi
+        cd ..
+        
+        # Configure opende
+        echo "Configuring opende..."
+        cd opende
+        if [ ! -f "ode-dbl-config" ]; then
           if [ -f "generate-ode-dbl-config.sh" ]; then
             chmod +x generate-ode-dbl-config.sh
             ./generate-ode-dbl-config.sh
-          else
-            echo "ERROR: generate-ode-dbl-config.sh not found!"
           fi
+        fi
+        chmod +x ode-dbl-config 2>/dev/null || true
+        cd ..
+        
+        # Configure ode_robots
+        echo "Configuring ode_robots..."
+        cd ode_robots
+        if [ -x ./configure ]; then
+          ./configure --prefix="$PREFIX" --type=user --system=LINUX
+        else
+          # Fallback: generate from m4 template if it exists
+          if [ -f "ode_robots-config.m4" ]; then
+            m4 -DPREFIX="$PREFIX" -DSRCPREFIX="$(pwd)" -DUSER -DLINUX -DVERSION="1.0" ode_robots-config.m4 > ode_robots-config
+            chmod +x ode_robots-config
+          fi
+        fi
+        cd ..
+        
+        # Configure ga_tools
+        echo "Configuring ga_tools..."
+        if [ -d ga_tools ] && [ -x ga_tools/configure ]; then
+          cd ga_tools
+          ./configure --prefix="$PREFIX" --type=user --system=LINUX
           cd ..
         fi
         
-        # Verify it was created
-        if [ -f "opende/ode-dbl-config" ]; then
-          echo "=== ode-dbl-config created successfully ==="
-          chmod +x opende/ode-dbl-config
-        else
-          echo "ERROR: Failed to create ode-dbl-config"
-          exit 1
-        fi
-        
-        # Use the CI path fix script for other components
+        # Set up include paths - but use the CI script with correct config already done
         .github/scripts/fix-ci-paths.sh
     
     - name: Build components in order
       run: |
+        # Set up environment for build
+        export PREFIX="$HOME/lpzrobots"
+        export PATH="$(pwd)/selforg:$(pwd)/opende:$(pwd)/ode_robots:$PATH"
+        
         # Build components sequentially to respect dependencies
         echo "=== Building selforg first ==="
-        # Build selforg directly to avoid include path issues
         cd selforg
         
         # Clean up any bad symlinks first
@@ -529,10 +559,17 @@ jobs:
         make ode || echo "ODE build failed (may be using system ODE)"
         
         echo "=== Building ode_robots (depends on selforg) ==="
-        make ode_robots -j$(nproc) || echo "ode_robots build failed"
+        # Ensure ode_robots can find ode-dbl-config
+        cd ode_robots
+        make -j$(nproc)
+        cd ..
         
         echo "=== Building ga_tools ==="
-        make ga_tools -j$(nproc) || echo "ga_tools build failed (non-critical)"
+        if [ -d ga_tools ]; then
+          cd ga_tools
+          make -j$(nproc) || echo "ga_tools build failed (non-critical)"
+          cd ..
+        fi
     
     - name: Verify build
       run: |
@@ -571,237 +608,76 @@ jobs:
     
     - name: Install components for simulation test
       run: |
-        # Install libraries and headers properly
-        echo "=== Installing components to $HOME/lpzrobots ==="
+        # Set up environment
+        export PREFIX="$HOME/lpzrobots"
+        export PATH="$(pwd)/selforg:$(pwd)/opende:$(pwd)/ode_robots:$PATH"
+        
+        # Create installation directories
+        mkdir -p "$PREFIX"/{bin,lib,include,share}
+        
+        echo "=== Installing components to $PREFIX ==="
         
         # Install selforg
         echo "Installing selforg..."
         cd selforg
-        make install || echo "selforg install failed (may not have install target)"
+        # Use PREFIX to override installation paths
+        make PREFIX="$PREFIX" install || {
+          echo "Standard install failed, trying manual installation"
+          # Manual installation fallback
+          cp -v libselforg*.a "$PREFIX/lib/" || true
+          cp -v selforg-config "$PREFIX/bin/" || true
+          cp -rv include/selforg "$PREFIX/include/" || true
+        }
         cd ..
         
         # Install ode_robots  
         echo "Installing ode_robots..."
         cd ode_robots
-        make install || echo "ode_robots install failed (may not have install target)"
+        make PREFIX="$PREFIX" install || {
+          echo "Standard install failed, trying manual installation"
+          # Manual installation fallback
+          cp -v libode_robots*.a "$PREFIX/lib/" || true
+          cp -v ode_robots-config "$PREFIX/bin/" || true
+          # Create header structure
+          mkdir -p "$PREFIX/include/ode_robots"
+          cp -rv utils "$PREFIX/include/ode_robots/" || true
+          cp -rv osg "$PREFIX/include/ode_robots/" || true
+          cp -rv robots "$PREFIX/include/ode_robots/" || true
+          cp -rv obstacles "$PREFIX/include/ode_robots/" || true
+          cp -rv sensors "$PREFIX/include/ode_robots/" || true
+          cp -rv motors "$PREFIX/include/ode_robots/" || true
+          cp -v *.h "$PREFIX/include/ode_robots/" || true
+        }
         cd ..
+        
+        # Ensure ode headers are available
+        if [ ! -d "$PREFIX/include/ode-dbl" ]; then
+          if [ -d "opende/include/ode-dbl" ]; then
+            cp -rv opende/include/ode-dbl "$PREFIX/include/"
+          elif [ -d "include/ode-dbl" ]; then
+            cp -rv include/ode-dbl "$PREFIX/include/"
+          fi
+        fi
+        
+        # Install ode-dbl-config if available
+        if [ -x "opende/ode-dbl-config" ]; then
+          cp -v opende/ode-dbl-config "$PREFIX/bin/" || true
+        fi
         
         # Verify installation
         echo "=== Checking installed files ==="
-        ls -la $HOME/lpzrobots/include/ || echo "No include directory"
-        ls -la $HOME/lpzrobots/lib/ || echo "No lib directory"
+        echo "Include directory:"
+        ls -la "$PREFIX/include/" || echo "No include directory"
+        echo "Library directory:"
+        ls -la "$PREFIX/lib/" || echo "No lib directory"
+        echo "Binary directory:"
+        ls -la "$PREFIX/bin/" || echo "No bin directory"
     
     - name: Test simulation build
       run: |
-        # Save project root before changing directories
-        PROJECT_ROOT=$(pwd)
-        PREFIX="$HOME/lpzrobots"
+        # This tests that a user can build a simulation with the installed packages
+        export PROJECT_ROOT=$(pwd)
+        export PREFIX="$HOME/lpzrobots"
         
-        echo "=== DEBUGGING: Environment Setup ==="
-        echo "PROJECT_ROOT: $PROJECT_ROOT"
-        echo "PREFIX: $PREFIX"
-        echo "Current directory: $(pwd)"
-        
-        # Set up PATH to include config scripts
-        export PATH="$PROJECT_ROOT/selforg:$PROJECT_ROOT/opende:$PROJECT_ROOT/ode_robots:$PATH"
-        echo "PATH: $PATH"
-        
-        # Verify config scripts
-        echo "=== DEBUGGING: Config Scripts ==="
-        echo "Checking selforg-config..."
-        if [ -x "$PROJECT_ROOT/selforg/selforg-config" ]; then
-          echo "✓ selforg-config found and executable"
-          echo "selforg-config --cflags: $($PROJECT_ROOT/selforg/selforg-config --cflags)"
-          echo "selforg-config --libs: $($PROJECT_ROOT/selforg/selforg-config --libs)"
-        else
-          echo "✗ selforg-config not found or not executable"
-        fi
-        
-        echo "Checking ode_robots-config..."
-        if [ -x "$PROJECT_ROOT/ode_robots/ode_robots-config" ]; then
-          echo "✓ ode_robots-config found and executable"
-          echo "ode_robots-config --cflags: $($PROJECT_ROOT/ode_robots/ode_robots-config --cflags)"
-          echo "ode_robots-config --libs: $($PROJECT_ROOT/ode_robots/ode_robots-config --libs)"
-        else
-          echo "✗ ode_robots-config not found or not executable"
-        fi
-        
-        # Debug installed files
-        echo "=== DEBUGGING: Installed Files ==="
-        echo "Contents of $PREFIX/include:"
-        find $PREFIX/include -type f -name "*.h" | head -20 || echo "No headers found in PREFIX"
-        
-        echo "Contents of $PREFIX/include/ode_robots (if exists):"
-        ls -la $PREFIX/include/ode_robots/ 2>/dev/null | head -10 || echo "No ode_robots include dir"
-        
-        echo "Looking for odehandle.h specifically:"
-        find $PREFIX/include -name "odehandle.h" -type f || echo "odehandle.h not found in PREFIX"
-        find $PROJECT_ROOT -name "odehandle.h" -type f | head -5 || echo "odehandle.h not found in source"
-        
-        # Debug source directory structure
-        echo "=== DEBUGGING: Source Structure ==="
-        echo "ode_robots source headers:"
-        ls -la $PROJECT_ROOT/ode_robots/utils/*.h | head -10 || echo "No utils headers"
-        
-        # Navigate to simulation
-        cd ode_robots/simulations
-        
-        # Find a simulation to test
-        echo "=== DEBUGGING: Available Simulations ==="
-        ls -d */ | head -10
-        
-        if [ -f template_sphererobot/Makefile ]; then
-          echo "Using template_sphererobot"
-          cd template_sphererobot
-        else
-          echo "No Makefile in template_sphererobot, looking for alternatives..."
-          for sim in */Makefile; do
-            if [ -f "$sim" ]; then
-              echo "Found simulation with Makefile: $sim"
-              cd $(dirname $sim)
-              break
-            fi
-          done
-        fi
-        
-        echo "Current directory: $(pwd)"
-        
-        # Show the actual compile command that will be used
-        echo "=== DEBUGGING: Makefile Analysis ==="
-        echo "Makefile contents (first 50 lines):"
-        head -50 Makefile || echo "Cannot read Makefile"
-        
-        echo "Checking what include paths will be used:"
-        make -n main.o 2>&1 | grep -E "g\+\+|gcc" | head -5 || echo "Cannot determine compile command"
-        
-        # Clean and try to build
-        echo "=== BUILDING: Starting Build ==="
-        make clean || echo "Clean failed (may not exist yet)"
-        
-        # CRITICAL FIX: Force config scripts to use source paths
-        echo "=== FIXING: Forcing source paths for build ==="
-        
-        # CRITICAL: Ensure ode_robots is configured in DEVEL mode
-        echo "Checking ode_robots configuration mode..."
-        ODE_ROBOTS_TYPE=$($PROJECT_ROOT/ode_robots/ode_robots-config --type)
-        echo "ode_robots is configured as: $ODE_ROBOTS_TYPE"
-        
-        if [ "$ODE_ROBOTS_TYPE" != "DEVEL" ]; then
-            echo "ERROR: ode_robots is in USER mode, must reconfigure!"
-            # Force regeneration from M4 template with DEVEL mode
-            cd $PROJECT_ROOT/ode_robots
-            rm -f ode_robots-config
-            m4 -DPREFIX="$PREFIX" -DSRCPREFIX="$PROJECT_ROOT/ode_robots" -DDEVEL -DLINUX -DVERSION="1.0" ode_robots-config.m4 > ode_robots-config
-            chmod +x ode_robots-config
-            cd -
-            echo "Regenerated ode_robots-config in DEVEL mode"
-            # Verify it worked
-            echo "Checking regenerated config:"
-            ./ode_robots-config --type
-            echo "First few lines of regenerated config:"
-            head -30 ode_robots-config | grep -E "type=|--cflags"
-        fi
-        
-        # Do the same for selforg
-        SELFORG_TYPE=$($PROJECT_ROOT/selforg/selforg-config --type 2>/dev/null || echo "USER")
-        echo "selforg is configured as: $SELFORG_TYPE"
-        
-        if [ "$SELFORG_TYPE" != "DEVEL" ]; then
-            echo "Regenerating selforg-config in DEVEL mode..."
-            cd $PROJECT_ROOT/selforg
-            rm -f selforg-config
-            m4 -DPREFIX="$PREFIX" -DSRCPREFIX="$PROJECT_ROOT/selforg" -DDEVEL -DLINUX -DVERSION="1.0" selforg-config.m4 > selforg-config
-            chmod +x selforg-config
-            cd -
-        fi
-        
-        # Create simple passthrough wrapper for consistency
-        ln -sf $PROJECT_ROOT/selforg/selforg-config selforg-config
-        ln -sf $PROJECT_ROOT/ode_robots/ode_robots-config ode_robots-config
-        ln -sf $PROJECT_ROOT/opende/ode-dbl-config ode-dbl-config
-        
-        # Put wrappers first in PATH
-        export PATH="$(pwd):$PATH"
-        
-        # Debug what the config scripts produce
-        echo "Config script outputs after DEVEL mode fix:"
-        echo "selforg-config --cflags:"
-        ./selforg-config --cflags
-        echo "ode_robots-config --cflags:"
-        ./ode_robots-config --cflags
-        echo "ode-dbl-config --cflags:"
-        ./ode-dbl-config --cflags
-        
-        # CRITICAL: Create necessary header structure for simulation
-        echo "=== Creating header structure for simulation ==="
-        
-        # Header structure is already ensured by DEVEL mode configuration above
-        
-        # Ensure ode_robots headers are accessible with #include <ode_robots/xxx.h>
-        if [ ! -d "$PROJECT_ROOT/ode_robots/include/ode_robots" ]; then
-            echo "Running make create_header_links in ode_robots..."
-            (cd $PROJECT_ROOT/ode_robots && make create_header_links) || echo "Failed to create header links"
-        fi
-        
-        # Also ensure we have the proper symlinks in the current directory
-        if [ ! -L "ode_robots" ]; then
-            ln -sf $PROJECT_ROOT/ode_robots ode_robots
-            echo "Created local symlink to ode_robots"
-        fi
-        
-        # CRITICAL: Fix ODE header paths
-        # The simulation looks for ode-dbl headers in relative paths
-        echo "=== Fixing ODE header paths ==="
-        
-        # Create the expected include structure for ODE
-        mkdir -p $PROJECT_ROOT/include
-        if [ ! -L "$PROJECT_ROOT/include/ode-dbl" ]; then
-            # Link to system ODE headers
-            ln -sf /usr/local/include/ode $PROJECT_ROOT/include/ode-dbl
-            echo "Created symlink: $PROJECT_ROOT/include/ode-dbl -> /usr/local/include/ode"
-        fi
-        
-        # Also create in parent directories as expected by the Makefile
-        cd $PROJECT_ROOT/ode_robots/simulations
-        if [ ! -L "../../include/ode-dbl" ]; then
-            ln -sf ../../include/ode-dbl ../../include/ode-dbl 2>/dev/null || true
-        fi
-        cd template_sphererobot
-        
-        # Show exact commands being run
-        echo "Running make with verbose output..."
-        make VERBOSE=1 2>&1 | tee build.log || {
-          echo "=== BUILD FAILED ==="
-          echo "Last 50 lines of build log:"
-          tail -50 build.log
-          
-          # Additional debugging for the specific error
-          echo "=== DEBUGGING: Include Path Issues ==="
-          echo "Looking for the problematic header in various locations:"
-          
-          # Check where headers actually are
-          echo "Searching for odeconfig.h:"
-          find $PROJECT_ROOT -name "odeconfig.h" -type f
-          
-          echo "Searching for odehandle.h:"  
-          find $PROJECT_ROOT -name "odehandle.h" -type f
-          
-          # Show the include structure
-          echo "Include directory structure in ode_robots:"
-          find $PROJECT_ROOT/ode_robots/include -type d 2>/dev/null || echo "No include dir"
-          
-          exit 1
-        }
-        
-        # Verify the binary was created
-        if [ -f start ]; then
-          echo "✓ Simulation built successfully"
-          ls -la start
-          echo "=== SUCCESS: Legacy Make simulation test passed! ==="
-          exit 0
-        else
-          echo "✗ Simulation binary not created"
-          ls -la
-          echo "=== FAILURE: Legacy Make simulation test failed! ==="
-          exit 1
-        fi
+        # Run the user simulation test script
+        .github/scripts/test-user-simulation.sh
