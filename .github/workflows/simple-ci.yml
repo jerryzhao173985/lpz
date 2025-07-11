@@ -498,9 +498,6 @@ jobs:
         
         # Use the CI path fix script for other components
         .github/scripts/fix-ci-paths.sh
-        
-        # Ensure selforg headers are properly set up
-        .github/scripts/ensure-selforg-headers.sh
     
     - name: Build components in order
       run: |
@@ -557,6 +554,14 @@ jobs:
       run: |
         # Save project root before changing directories
         PROJECT_ROOT=$(pwd)
+        
+        # CRITICAL: Ensure include symlinks are set up before simulation build
+        # This is needed because the simulation's make might trigger ode_robots rebuild
+        if [ ! -L "$PROJECT_ROOT/include/selforg" ] && [ -d "$PROJECT_ROOT/selforg/include/selforg" ]; then
+          mkdir -p "$PROJECT_ROOT/include"
+          ln -sf "$PROJECT_ROOT/selforg/include/selforg" "$PROJECT_ROOT/include/selforg"
+          echo "Created root include/selforg symlink"
+        fi
         
         # Set up PATH to include config scripts using absolute paths
         export PATH="$PROJECT_ROOT/selforg:$PROJECT_ROOT/opende:$PROJECT_ROOT/ode_robots:$PATH"
