@@ -298,6 +298,9 @@ jobs:
         fi
         
         echo "✓ All core libraries built successfully"
+        
+        # Ensure the script exits with success
+        exit 0
 
   # Also test the legacy Make system
   make-build:
