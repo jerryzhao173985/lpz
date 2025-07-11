@@ -92,6 +92,19 @@ if [ -d "selforg" ] && [ ! -L "include/selforg" ]; then
     ln -sf ../selforg include/selforg
 fi
 
+# Create ode-dbl symlink at root include directory for ode_robots
+# This is needed when ode_robots is rebuilt from simulations
+if [ ! -L "include/ode-dbl" ]; then
+    if [ -d "opende/include/ode-dbl" ]; then
+        ln -sf ../opende/include/ode-dbl include/ode-dbl
+        echo "Created symlink: include/ode-dbl -> ../opende/include/ode-dbl"
+    elif [ -d "/usr/include/ode" ]; then
+        # For system ODE, create symlink to system headers
+        ln -sf /usr/include/ode include/ode-dbl
+        echo "Created symlink: include/ode-dbl -> /usr/include/ode"
+    fi
+fi
+
 # Create symlinks in installation prefix for CI builds
 # This ensures simulations can find headers when they trigger rebuilds
 if [ -n "$PREFIX" ]; then
