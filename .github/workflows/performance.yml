@@ -291,6 +291,7 @@ jobs:
                 report.append("⚠️ **Performance regression detected!**")
         
         # Write report
+        os.makedirs("benchmark_results", exist_ok=True)
         with open("benchmark_results/report.md", "w") as f:
             f.write("\n".join(report))
         
