@@ -139,7 +139,7 @@ endif
 # Create header symlinks (still needed for includes to work)
 create_header_links:
 	for file in $(HFILES); do \
-		ln -sf $(REVINCLUDEDIR)/$$file $(INCLUDEDIR)/; \
+		ln -sf $(REVINCLUDEDIR)/$$file $(INCLUDEDIR)/`basename $$file`; \
 	done
 
 # Modern dependency generation - no separate Makefile.depend needed
