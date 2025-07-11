@@ -646,6 +646,13 @@ jobs:
         
         # Build the simulation
         make clean || echo "Clean failed (may not exist yet)"
+        
+        # CRITICAL: Tell ode_robots-config to use source paths
+        export ODE_ROBOTS_CONFIG_OPTS="--srcprefix=$PROJECT_ROOT/ode_robots"
+        
+        # Also ensure we can find headers by adding to CPPFLAGS
+        export CPPFLAGS="-I$PROJECT_ROOT/ode_robots/include -I$PROJECT_ROOT/ode_robots"
+        
         make
         
         # Verify the binary was created

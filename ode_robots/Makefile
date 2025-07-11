@@ -48,7 +48,7 @@ UTILS = install_prefix.conf ode_robots-config
 
 # additional inc paths
 # Use -isystem for ode-dbl symlinks to suppress warnings from ODE headers
-INC +=  -I. -Iinclude -Iinclude/ode_robots -isystem ../include/ode-dbl
+INC +=  -I. -Iinclude -Iinclude/ode_robots -Iosg -isystem ../include/ode-dbl
 # INC += -include allincludes.h
 
 # use -pg for profiling
