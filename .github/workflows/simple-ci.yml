@@ -517,8 +517,10 @@ jobs:
         echo "=== Building selforg first ==="
         # Build selforg directly to avoid include path issues
         cd selforg
+        make clean
         make create_header_links
-        make -j$(nproc)
+        # Use serial make for selforg to avoid race conditions with header symlinks
+        make
         cd ..
         
         echo "=== Building opende ==="
