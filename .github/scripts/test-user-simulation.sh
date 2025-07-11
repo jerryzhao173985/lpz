@@ -1,117 +1,150 @@
-#!/bin/bash
-# Test script for building a simulation with user-installed lpzrobots packages
-# This simulates what a real user would do after installing lpzrobots
+#\!/bin/bash
+# Test that a user can build a simulation with installed LPZRobots packages
+# This simulates what a real user would do after installing LPZRobots
 
 set -e
 
-# Configuration
-PREFIX="${PREFIX:-$HOME/lpzrobots}"
+echo "=== User Simulation Build Test ==="
+echo "Testing that installed packages work correctly for users..."
+
+# User would have these in their environment
+export PREFIX="${PREFIX:-$HOME/lpzrobots}"
+export PATH="$PREFIX/bin:$PATH"
+
+# Save the project root for reference
 PROJECT_ROOT="${PROJECT_ROOT:-$(pwd)}"
 
-echo "=== Testing User Simulation Build ==="
+# Navigate to a simulation (as a user would)
+cd ode_robots/simulations/template_sphererobot
+
+echo "=== Environment Check ==="
 echo "PREFIX: $PREFIX"
+echo "PATH: $PATH"
 echo "PROJECT_ROOT: $PROJECT_ROOT"
+echo "Current directory: $(pwd)"
 
-# Set up environment as a user would
-export PATH="$PREFIX/bin:$PATH"
-export LD_LIBRARY_PATH="$PREFIX/lib:$LD_LIBRARY_PATH"
-
-# Check that required tools are available
+# Check that required config scripts are available
+echo ""
 echo "=== Checking installed tools ==="
 for tool in selforg-config ode_robots-config; do
+    echo -n "$tool: "
     if which $tool >/dev/null 2>&1; then
-        echo "✓ $tool found at: $(which $tool)"
-        echo "  $tool --version: $($tool --version 2>&1 || echo 'no version')"
-        echo "  $tool --cflags: $($tool --cflags)"
-        echo "  $tool --libs: $($tool --libs)"
+        echo "✓ Found at $(which $tool)"
+        $tool --version || true
     else
-        echo "✗ $tool not found in PATH"
+        echo "✗ Not found in PATH"
+        echo "ERROR: $tool is required but not found in PATH"
         exit 1
     fi
 done
 
-# Check for ode-dbl-config (optional, might use system ODE)
+# ode-dbl-config is optional (system ODE might be used)
+echo -n "ode-dbl-config: "
 if which ode-dbl-config >/dev/null 2>&1; then
-    echo "✓ ode-dbl-config found at: $(which ode-dbl-config)"
+    echo "✓ Found at $(which ode-dbl-config)"
+    ode-dbl-config --version || true
 else
-    echo "⚠ ode-dbl-config not found, will use system ODE"
+    echo "✗ Not found (will use system ODE)"
 fi
 
-# Create a test directory (simulating user workspace)
-TEST_DIR="/tmp/lpzrobots_test_$$"
-mkdir -p "$TEST_DIR"
-cd "$TEST_DIR"
+# Show what the config scripts provide
+echo ""
+echo "=== Config script outputs ==="
+echo "selforg-config --cflags:"
+selforg-config --cflags
 
-echo "=== Creating test simulation in $TEST_DIR ==="
+echo ""
+echo "ode_robots-config --cflags:"
+ode_robots-config --cflags
 
-# Copy a template simulation
-if [ -d "$PROJECT_ROOT/ode_robots/simulations/template_sphererobot" ]; then
-    cp -r "$PROJECT_ROOT/ode_robots/simulations/template_sphererobot" test_sim
-    cd test_sim
-else
-    echo "ERROR: template_sphererobot not found"
+echo ""
+echo "selforg-config --libs:"
+selforg-config --libs
+
+echo ""
+echo "ode_robots-config --libs:"
+ode_robots-config --libs
+
+# Check that Makefile exists
+echo ""
+echo "=== Checking simulation structure ==="
+if [ \! -f "Makefile" ]; then
+    echo "ERROR: No Makefile found in simulation directory"
+    echo "Available files:"
+    ls -la
     exit 1
 fi
 
-# Ensure ODE headers are available in the expected location
-# The simulation Makefile looks for ode-dbl headers in relative paths
-if [ ! -d "../../../include/ode-dbl" ]; then
-    mkdir -p ../../../include/ode-dbl
-    if [ -d "$PREFIX/include/ode-dbl" ]; then
-        ln -sf "$PREFIX/include/ode-dbl"/*.h ../../../include/ode-dbl/
-    elif [ -d "/usr/include/ode" ]; then
-        ln -sf /usr/include/ode/*.h ../../../include/ode-dbl/
-    fi
-    echo "Created ODE header links in ../../../include/ode-dbl"
-fi
-
-# Clean any existing build
+# Clean any previous build
+echo ""
+echo "=== Building simulation ==="
+echo "Cleaning previous build..."
 make clean || true
 
-# Show what the Makefile will use
-echo "=== Build configuration ==="
-echo "Makefile first 20 lines:"
-head -20 Makefile
-
-echo "=== Attempting build ==="
-# Try to build with verbose output
-if make VERBOSE=1; then
-    echo "✓ Build successful!"
-    if [ -f start ]; then
-        echo "✓ Executable 'start' created"
+# Build the simulation (this is what users do)
+echo ""
+echo "Building with: make"
+if make; then
+    echo ""
+    echo "✓ Build completed successfully"
+    
+    # Check that the binary was created
+    if [ -f "start" ]; then
+        echo "✓ Simulation binary 'start' created"
         ls -la start
-        echo "=== SUCCESS: User simulation test passed! ==="
-        # Clean up
-        cd /
-        rm -rf "$TEST_DIR"
-        exit 0
+        
+        # Verify it's executable
+        if [ -x "start" ]; then
+            echo "✓ Binary is executable"
+            
+            # Show library dependencies to verify linking
+            echo ""
+            echo "=== Checking library dependencies ==="
+            if command -v ldd >/dev/null 2>&1; then
+                echo "Library dependencies:"
+                ldd ./start | grep -E "(selforg|ode_robots|ode)" || true
+            elif command -v otool >/dev/null 2>&1; then
+                echo "Library dependencies (macOS):"
+                otool -L ./start | grep -E "(selforg|ode_robots|ode)" || true
+            fi
+            
+            echo ""
+            echo "=== SUCCESS: User installation test passed\! ==="
+            echo "Users can successfully build simulations with the installed LPZRobots packages."
+            exit 0
+        else
+            echo "✗ Binary exists but is not executable"
+            exit 1
+        fi
     else
-        echo "✗ Executable 'start' not found"
+        echo "✗ Simulation binary 'start' not found"
+        echo "Build output files:"
         ls -la
         exit 1
     fi
 else
+    echo ""
     echo "✗ Build failed"
-    echo "=== Debugging information ==="
+    echo ""
+    echo "=== Build Error Debugging ==="
     
     # Show the actual compile command that failed
-    echo "Failed compile command:"
-    make -n main.o 2>&1 | head -10
+    echo "Attempting verbose build to show error:"
+    make VERBOSE=1 2>&1 | tail -50
     
-    # Check include paths
-    echo "Include paths being used:"
-    make -n main.o 2>&1 | grep -o -- '-I[^ ]*' | sort -u || true
+    echo ""
+    echo "=== Makefile Analysis ==="
+    echo "First 30 lines of Makefile:"
+    head -30 Makefile
     
-    # Check for missing headers
-    echo "Looking for common headers:"
-    for header in odehandle.h simulation.h matrix.h; do
-        echo -n "  $header: "
-        if find "$PREFIX/include" -name "$header" 2>/dev/null | head -1; then
-            :
-        else
-            echo "NOT FOUND in $PREFIX/include"
-        fi
-    done
+    echo ""
+    echo "=== Directory Structure ==="
+    echo "Current directory contents:"
+    ls -la
+    
+    echo ""
+    echo "Parent directory contents:"
+    ls -la ..
     
     exit 1
 fi
