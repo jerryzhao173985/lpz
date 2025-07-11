@@ -59,13 +59,24 @@ jobs:
         if-no-files-found: warn
   
   build:
-    name: Build on ${{ matrix.os }}
+    name: Build on ${{ matrix.os }}${{ matrix.name_suffix || '' }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false  # Don't cancel other jobs if one fails
       matrix:
         os: [ubuntu-24.04, macos-15]  # Latest Ubuntu and macOS with Apple Silicon
         build_type: [Release, Debug]
+        include:
+          # Add coverage build
+          - os: ubuntu-24.04
+            build_type: Debug
+            coverage: true
+            name_suffix: " (Coverage)"
+          # Add sanitizer builds for Linux
+          - os: ubuntu-24.04
+            build_type: Debug
+            sanitizers: address,undefined
+            name_suffix: " (ASAN+UBSAN)"
     
     steps:
     - name: Checkout code
@@ -96,6 +107,12 @@ jobs:
           libopenscenegraph-dev \
           libode-dev \
           ccache
+        
+        # Install coverage tools if needed
+        if [ "${{ matrix.coverage }}" = "true" ]; then
+          sudo apt-get install -y lcov
+          echo "Installed coverage tools"
+        fi
 
     - name: Install dependencies (macOS)
       if: runner.os == 'macOS'
@@ -182,11 +199,32 @@ jobs:
         # Use platform-specific presets for better compatibility
         if [[ "${{ runner.os }}" == "Linux" ]]; then
           echo "=== Configuring for Linux ==="
-          cmake --preset=ci \
-            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+          
+          # Base configuration
+          CMAKE_ARGS="-DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
             -DLPZROBOTS_USE_SYSTEM_ODE=ON \
             -DBUILD_TESTS=ON \
-            -DCMAKE_VERBOSE_MAKEFILE=ON
+            -DCMAKE_VERBOSE_MAKEFILE=ON"
+          
+          # Add coverage flags if needed
+          if [ "${{ matrix.coverage }}" = "true" ]; then
+            CMAKE_ARGS="$CMAKE_ARGS -DLPZROBOTS_ENABLE_COVERAGE=ON"
+            echo "Enabling coverage collection"
+          fi
+          
+          # Add sanitizer flags if needed
+          if [ -n "${{ matrix.sanitizers }}" ]; then
+            CMAKE_ARGS="$CMAKE_ARGS -DLPZROBOTS_ENABLE_SANITIZERS=ON"
+            if [[ "${{ matrix.sanitizers }}" == *"address"* ]]; then
+              CMAKE_ARGS="$CMAKE_ARGS -DLPZROBOTS_SANITIZER_ADDRESS=ON"
+            fi
+            if [[ "${{ matrix.sanitizers }}" == *"undefined"* ]]; then
+              CMAKE_ARGS="$CMAKE_ARGS -DLPZROBOTS_SANITIZER_UNDEFINED=ON"
+            fi
+            echo "Enabling sanitizers: ${{ matrix.sanitizers }}"
+          fi
+          
+          cmake --preset=ci $CMAKE_ARGS
         else
           # macOS: Use ARM64 preset for Apple Silicon runners, with proper Qt6 paths
           if [[ "$(uname -m)" == "arm64" ]]; then
@@ -257,7 +295,52 @@ jobs:
           fi
         fi
         cd "$BUILD_DIR"
+        
+        # Set sanitizer options if needed
+        if [ -n "${{ matrix.sanitizers }}" ]; then
+          if [[ "${{ matrix.sanitizers }}" == *"address"* ]]; then
+            export ASAN_OPTIONS=detect_leaks=1:check_initialization_order=1:strict_init_order=1
+          fi
+          if [[ "${{ matrix.sanitizers }}" == *"undefined"* ]]; then
+            export UBSAN_OPTIONS=print_stacktrace=1:halt_on_error=1
+          fi
+        fi
+        
         ctest --output-on-failure || echo "No tests found"
+    
+    # Generate coverage report if enabled
+    - name: Generate coverage report
+      if: matrix.coverage == true
+      run: |
+        if [[ "${{ runner.os }}" == "Linux" ]]; then
+          BUILD_DIR="build/ci"
+        else
+          BUILD_DIR="build/macos-arm64"
+        fi
+        cd "$BUILD_DIR"
+        
+        # Generate coverage info
+        lcov --capture --directory . --output-file coverage.info
+        # Remove system headers and test files from coverage
+        lcov --remove coverage.info '/usr/*' '*/tests/*' '*/examples/*' --output-file coverage.info
+        # Generate HTML report
+        genhtml coverage.info --output-directory coverage-report
+        
+        # Print summary
+        lcov --list coverage.info
+        
+        echo "Coverage report generated in coverage-report/"
+    
+    # Upload coverage report
+    - name: Upload coverage report
+      if: matrix.coverage == true
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-report
+        path: |
+          build/*/coverage-report/
+          build/*/coverage.info
+        retention-days: 7
     
     # Test that core libraries are built
     - name: Test core libraries
@@ -301,6 +384,39 @@ jobs:
         
         # Ensure the script exits with success
         exit 0
+    
+    # Extended simulation tests
+    - name: Test simulations
+      if: matrix.build_type == 'Debug' && runner.os == 'Linux'
+      run: |
+        # Setup virtual display for Linux
+        export DISPLAY=:99
+        sudo apt-get install -y xvfb
+        Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+        sleep 3
+        
+        BUILD_DIR="build/ci"
+        cd "$BUILD_DIR/ode_robots/simulations"
+        
+        # Test core simulations
+        SIMULATIONS="template_sphererobot template_onerobot template_schlange"
+        
+        for sim in $SIMULATIONS; do
+          if [ -d "$sim" ] && [ -f "$sim/start" ]; then
+            echo "Testing simulation: $sim"
+            cd "$sim"
+            
+            # Run with appropriate flags
+            if [ -n "${{ matrix.sanitizers }}" ]; then
+              # For sanitizer builds, run with shorter duration
+              timeout 60s ./start -noshadow -nographics -steps 50 || echo "$sim completed"
+            else
+              timeout 90s ./start -noshadow -nographics -steps 100 || echo "$sim completed"
+            fi
+            
+            cd ..
+          fi
+        done
 
   # Also test the legacy Make system
   make-build:

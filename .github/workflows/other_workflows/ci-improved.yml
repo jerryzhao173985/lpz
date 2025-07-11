@@ -1,0 +1,321 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+    inputs:
+      full_matrix:
+        description: 'Run full build matrix'
+        type: boolean
+        default: false
+
+# Cancel duplicate runs
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+env:
+  CACHE_VERSION: v1
+  CMAKE_BUILD_PARALLEL_LEVEL: 4
+  CTEST_PARALLEL_LEVEL: 4
+  CTEST_OUTPUT_ON_FAILURE: 1
+
+jobs:
+  # Quick validation before expensive builds
+  pre-checks:
+    name: Pre-flight Checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      should_run_full: ${{ steps.check.outputs.should_run_full }}
+      cache_key: ${{ steps.cache_key.outputs.key }}
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Check changed files
+      id: check
+      run: |
+        # Determine if we need full CI based on changes
+        CHANGED_FILES=$(git diff --name-only ${{ github.event.before }}..${{ github.sha }} 2>/dev/null || git diff --name-only HEAD~1..HEAD)
+        
+        # Run full CI if core files changed
+        if echo "$CHANGED_FILES" | grep -qE "(CMakeLists\.txt|\.cmake|selforg/.*\.(cpp|h)|ode_robots/.*\.(cpp|h))"; then
+          echo "should_run_full=true" >> $GITHUB_OUTPUT
+        else
+          echo "should_run_full=false" >> $GITHUB_OUTPUT
+        fi
+        
+        # Always run full on main branch
+        if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+          echo "should_run_full=true" >> $GITHUB_OUTPUT
+        fi
+    
+    - name: Generate cache key
+      id: cache_key
+      run: |
+        # Create a cache key based on deps and compiler
+        echo "key=${{ runner.os }}-${{ env.CACHE_VERSION }}-${{ hashFiles('**/CMakeLists.txt') }}" >> $GITHUB_OUTPUT
+    
+    - name: Code format check
+      run: |
+        # Quick format check on changed files only
+        if [ -f .clang-format ]; then
+          CHANGED_CPP=$(git diff --name-only ${{ github.event.before }}..${{ github.sha }} | grep -E '\.(cpp|h|hpp|cc)$' || true)
+          if [ -n "$CHANGED_CPP" ]; then
+            # Just check, don't fix
+            clang-format --dry-run --Werror $CHANGED_CPP || {
+              echo "::error::Code formatting issues found. Run: clang-format -i <files>"
+              exit 1
+            }
+          fi
+        fi
+
+  # Main build and test job
+  build-test:
+    name: ${{ matrix.name }}
+    needs: pre-checks
+    if: needs.pre-checks.outputs.should_run_full == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    
+    strategy:
+      fail-fast: ${{ github.ref != 'refs/heads/main' }}
+      matrix:
+        # Minimal matrix for PRs
+        include:
+          - name: "Linux GCC"
+            os: ubuntu-22.04
+            compiler: gcc
+            cc: gcc-11
+            cxx: g++-11
+            preset: "ci-linux"
+            
+          - name: "macOS Clang"
+            os: macos-14
+            compiler: clang
+            cc: clang
+            cxx: clang++
+            preset: "ci-macos"
+            
+        # Extended matrix for main branch and manual runs
+        ${{ if: github.ref == 'refs/heads/main' || github.event.inputs.full_matrix == 'true' }}:
+          include:
+            - name: "Linux Clang"
+              os: ubuntu-22.04
+              compiler: clang
+              cc: clang-14
+              cxx: clang++-14
+              preset: "ci-linux"
+              
+            - name: "Linux Debug ASAN"
+              os: ubuntu-22.04
+              compiler: gcc
+              cc: gcc-11
+              cxx: g++-11
+              preset: "ci-linux-debug"
+              sanitizers: address,undefined
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    
+    # Restore caches
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cache
+          ~/Library/Caches/Homebrew
+          /opt/homebrew/Cellar
+        key: deps-${{ needs.pre-checks.outputs.cache_key }}
+        restore-keys: |
+          deps-${{ runner.os }}-${{ env.CACHE_VERSION }}-
+    
+    - name: Cache build artifacts
+      uses: actions/cache@v4
+      with:
+        path: |
+          build/**/*.o
+          build/**/*.a
+          build/**/CMakeCache.txt
+          build/**/CMakeFiles
+        key: build-${{ matrix.os }}-${{ matrix.compiler }}-${{ needs.pre-checks.outputs.cache_key }}
+        restore-keys: |
+          build-${{ matrix.os }}-${{ matrix.compiler }}-
+    
+    # Setup environment
+    - name: Setup Linux
+      if: runner.os == 'Linux'
+      run: |
+        # Use pre-built Docker image in the future, for now install deps
+        sudo apt-get update
+        sudo apt-get install -y --no-install-recommends \
+          ninja-build ccache \
+          libgsl-dev libreadline-dev libncurses5-dev \
+          libglu1-mesa-dev freeglut3-dev \
+          qt6-base-dev libopenscenegraph-dev
+        
+        # Setup compiler
+        echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
+        echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV
+    
+    - name: Setup macOS
+      if: runner.os == 'macOS'
+      run: |
+        # Install only if not cached
+        brew list cmake || brew install cmake
+        brew list ninja || brew install ninja
+        brew list ccache || brew install ccache
+        brew list gsl || brew install gsl
+        brew list qt@6 || brew install qt@6
+        brew list open-scene-graph || brew install open-scene-graph
+        
+        echo "$(brew --prefix qt@6)/bin" >> $GITHUB_PATH
+        echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
+        echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV
+    
+    # Build
+    - name: Configure
+      run: |
+        # Use CMake presets for consistency
+        cmake --preset ${{ matrix.preset }} \
+          -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+          -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+          -DBUILD_TESTS=ON \
+          -DBUILD_EXAMPLES=ON
+        
+        # Add sanitizers if requested
+        if [ -n "${{ matrix.sanitizers }}" ]; then
+          cmake --preset ${{ matrix.preset }} \
+            -DLPZROBOTS_ENABLE_SANITIZERS=ON \
+            -DLPZROBOTS_SANITIZER_ADDRESS=${{ contains(matrix.sanitizers, 'address') }} \
+            -DLPZROBOTS_SANITIZER_UNDEFINED=${{ contains(matrix.sanitizers, 'undefined') }}
+        fi
+    
+    - name: Build
+      run: |
+        # Show ccache stats
+        ccache -z
+        cmake --build build/${{ matrix.preset }} --target all
+        ccache -s
+    
+    # Test - Split into parallel groups
+    - name: Test Unit (Core)
+      run: |
+        cd build/${{ matrix.preset }}
+        ctest -L "unit&core" --output-on-failure --timeout 300
+    
+    - name: Test Unit (Controllers)
+      run: |
+        cd build/${{ matrix.preset }}
+        ctest -L "unit&controller" --output-on-failure --timeout 300
+    
+    - name: Test Integration
+      if: matrix.sanitizers == ''  # Skip for sanitizer builds
+      run: |
+        cd build/${{ matrix.preset }}
+        ctest -L integration --output-on-failure --timeout 600
+    
+    - name: Test Examples (Quick)
+      run: |
+        cd build/${{ matrix.preset }}
+        # Run only quick examples in PR
+        if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+          timeout 60s selforg/examples/controllertest || true
+          timeout 60s selforg/examples/test_controllers_simple || true
+        else
+          # Run more examples on main branch
+          for test in selforg/examples/test_*; do
+            [ -f "$test" ] && timeout 120s $test || true
+          done
+        fi
+    
+    # Upload results
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results-${{ matrix.os }}-${{ matrix.compiler }}
+        path: |
+          build/${{ matrix.preset }}/Testing/
+          build/${{ matrix.preset }}/**/*.log
+        retention-days: 7
+        compression-level: 9
+
+  # Quick static analysis (parallel to builds)
+  static-analysis:
+    name: Static Analysis
+    runs-on: ubuntu-latest
+    needs: pre-checks
+    if: github.event_name == 'pull_request'
+    timeout-minutes: 20
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Install tools
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y --no-install-recommends \
+          clang-tidy-14 cppcheck iwyu \
+          python3-pip cmake ninja-build
+        pip3 install --user cpplint lizard
+    
+    - name: Generate compile_commands.json
+      run: |
+        cmake -B build -G Ninja -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+    
+    - name: Run clang-tidy (changed files only)
+      run: |
+        # Get changed C++ files
+        CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E '\.(cpp|h)$' | grep -E '^(selforg|ode_robots)/' || true)
+        
+        if [ -n "$CHANGED_FILES" ]; then
+          # Run clang-tidy on changed files
+          clang-tidy-14 -p build $CHANGED_FILES \
+            --checks='-*,bugprone-*,performance-*,readability-*,modernize-*,-modernize-use-trailing-return-type' \
+            --warnings-as-errors='' || true
+        fi
+    
+    - name: Run cppcheck
+      run: |
+        cppcheck --enable=warning,performance,portability \
+          --suppress=missingInclude \
+          --suppress=unusedFunction \
+          --error-exitcode=0 \
+          --inline-suppr \
+          --std=c++17 \
+          selforg/controller selforg/utils || true
+    
+    - name: Complexity check
+      run: |
+        ~/.local/bin/lizard selforg ode_robots \
+          --CCN 15 --length 100 --arguments 10 \
+          --exclude "*/test/*" --exclude "*/examples/*" \
+          --warnings_only || true
+
+  # Summary job
+  ci-status:
+    name: CI Status
+    needs: [build-test, static-analysis]
+    if: always()
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Check status
+      run: |
+        if [ "${{ needs.build-test.result }}" == "success" ]; then
+          echo "✅ All builds passed!"
+        else
+          echo "❌ Build failures detected"
+          exit 1
+        fi

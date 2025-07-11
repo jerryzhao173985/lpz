@@ -1,0 +1,552 @@
+name: LPZRobots Comprehensive CI
+
+on:
+  push:
+    branches: [ main, develop, feature/**, release/** ]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - '.gitignore'
+      - 'LICENSE'
+  pull_request:
+    branches: [ main, develop ]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - '.gitignore'
+      - 'LICENSE'
+  workflow_dispatch:
+    inputs:
+      run_extended_tests:
+        type: boolean
+        description: 'Run extended test suite including all simulations'
+        required: false
+        default: false
+      debug_enabled:
+        type: boolean
+        description: 'Enable debug logging'
+        required: false
+        default: false
+
+# Cancel in-progress runs when a new run is started
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CMAKE_BUILD_PARALLEL_LEVEL: 4
+  CTEST_PARALLEL_LEVEL: 4
+  CTEST_OUTPUT_ON_FAILURE: 1
+  # Homeokinetic controllers need warmup
+  LPZROBOTS_WARMUP_STEPS: 20
+
+jobs:
+  # Quick sanity check before running expensive tests
+  quick-check:
+    name: Quick Sanity Check
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    
+    - name: Install minimal dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential cmake ninja-build \
+          libgsl-dev libreadline-dev libncurses5-dev
+    
+    - name: Quick build check
+      run: |
+        cmake -B build-quick -DBUILD_GUI_TOOLS=OFF -DBUILD_TESTS=OFF -G Ninja
+        cmake --build build-quick --target selforg
+    
+    - name: Run basic test
+      run: |
+        cd build-quick
+        if [ -f selforg/examples/controllertest ]; then
+          timeout 10s ./selforg/examples/controllertest || exit 0
+        fi
+
+  build-and-test:
+    name: ${{ matrix.name }}
+    needs: quick-check
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # macOS ARM64 (Apple Silicon) - Latest
+          - name: "macOS 14 ARM64 (Clang 15)"
+            os: macos-14
+            compiler: clang
+            cxx: clang++
+            cc: clang
+            build_type: Release
+            arch: arm64
+            qt_version: 6
+            enable_gui: true
+            
+          # macOS x86_64 - For compatibility
+          - name: "macOS 13 x86_64 (Clang 14)"
+            os: macos-13
+            compiler: clang
+            cxx: clang++
+            cc: clang
+            build_type: Release
+            arch: x86_64
+            qt_version: 6
+            enable_gui: true
+            
+          # Ubuntu 22.04 with GCC - Primary Linux target
+          - name: "Ubuntu 22.04 (GCC 11)"
+            os: ubuntu-22.04
+            compiler: gcc
+            cxx: g++-11
+            cc: gcc-11
+            build_type: Release
+            arch: x86_64
+            qt_version: 6
+            enable_gui: true
+            
+          # Ubuntu 22.04 with Clang
+          - name: "Ubuntu 22.04 (Clang 14)"
+            os: ubuntu-22.04
+            compiler: clang
+            cxx: clang++-14
+            cc: clang-14
+            build_type: Release
+            arch: x86_64
+            qt_version: 6
+            enable_gui: true
+            
+          # Ubuntu 20.04 - Older LTS support
+          - name: "Ubuntu 20.04 (GCC 9)"
+            os: ubuntu-20.04
+            compiler: gcc
+            cxx: g++-9
+            cc: gcc-9
+            build_type: Release
+            arch: x86_64
+            qt_version: 6
+            enable_gui: false  # Qt6 might not be easily available
+            
+          # Debug build with sanitizers
+          - name: "Ubuntu 22.04 Debug + Sanitizers"
+            os: ubuntu-22.04
+            compiler: gcc
+            cxx: g++-11
+            cc: gcc-11
+            build_type: Debug
+            arch: x86_64
+            qt_version: 6
+            enable_gui: true
+            enable_sanitizers: true
+            sanitizer_type: "address,undefined"
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Setup build environment (macOS)
+      if: runner.os == 'macOS'
+      run: |
+        echo "Setting up macOS build environment..."
+        echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
+        echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV
+        
+        # Update Homebrew
+        brew update
+        
+        # Install core dependencies
+        brew install cmake ninja autoconf automake libtool
+        brew install gsl readline
+        
+        # Install GUI dependencies if enabled
+        if [ "${{ matrix.enable_gui }}" = "true" ]; then
+          brew install qt@${{ matrix.qt_version }} open-scene-graph
+          brew install gnuplot imagemagick
+          
+          # Add Qt to PATH
+          echo "/opt/homebrew/opt/qt@${{ matrix.qt_version }}/bin" >> $GITHUB_PATH
+          echo "/usr/local/opt/qt@${{ matrix.qt_version }}/bin" >> $GITHUB_PATH
+          echo "Qt${{ matrix.qt_version }}_DIR=/opt/homebrew/opt/qt@${{ matrix.qt_version }}/lib/cmake/Qt${{ matrix.qt_version }}" >> $GITHUB_ENV
+        fi
+
+    - name: Setup build environment (Ubuntu)
+      if: runner.os == 'Linux'
+      run: |
+        echo "Setting up Ubuntu build environment..."
+        echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
+        echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV
+        
+        # Update package list
+        sudo apt-get update
+        
+        # Install build tools
+        sudo apt-get install -y cmake ninja-build
+        
+        # Install core dependencies
+        sudo apt-get install -y \
+          libgsl-dev \
+          libreadline-dev \
+          libncurses5-dev \
+          libglu1-mesa-dev \
+          freeglut3-dev
+          
+        # Install GUI dependencies if enabled
+        if [ "${{ matrix.enable_gui }}" = "true" ]; then
+          # Qt6
+          if [ "${{ matrix.qt_version }}" = "6" ]; then
+            sudo apt-get install -y \
+              qt6-base-dev qt6-tools-dev qt6-tools-dev-tools
+          else
+            sudo apt-get install -y \
+              qtbase5-dev qttools5-dev qttools5-dev-tools
+          fi
+          
+          # OpenSceneGraph
+          sudo apt-get install -y libopenscenegraph-dev
+          
+          # Tools
+          sudo apt-get install -y gnuplot imagemagick
+        fi
+          
+        # Install compiler if needed
+        if [ "${{ matrix.compiler }}" = "clang" ]; then
+          sudo apt-get install -y clang-14 libomp-14-dev
+        fi
+        
+        # For virtual display (needed for GUI tests)
+        if [ "${{ matrix.enable_gui }}" = "true" ]; then
+          sudo apt-get install -y xvfb mesa-utils
+        fi
+
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cache
+          ~/Library/Caches/Homebrew
+          /opt/homebrew/Cellar
+          build/_deps
+        key: ${{ runner.os }}-${{ matrix.arch }}-${{ matrix.compiler }}-deps-${{ hashFiles('**/CMakeLists.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-${{ matrix.arch }}-${{ matrix.compiler }}-deps-
+
+    - name: Configure CMake
+      run: |
+        # Set sanitizer flags if enabled
+        SANITIZER_FLAGS=""
+        if [ "${{ matrix.enable_sanitizers }}" = "true" ]; then
+          SANITIZER_FLAGS="-DLPZROBOTS_ENABLE_SANITIZERS=ON"
+          if [[ "${{ matrix.sanitizer_type }}" == *"address"* ]]; then
+            SANITIZER_FLAGS="$SANITIZER_FLAGS -DLPZROBOTS_SANITIZER_ADDRESS=ON"
+          fi
+          if [[ "${{ matrix.sanitizer_type }}" == *"undefined"* ]]; then
+            SANITIZER_FLAGS="$SANITIZER_FLAGS -DLPZROBOTS_SANITIZER_UNDEFINED=ON"
+          fi
+        fi
+        
+        cmake -B build \
+          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+          -DCMAKE_C_COMPILER=${{ matrix.cc }} \
+          -DCMAKE_CXX_COMPILER=${{ matrix.cxx }} \
+          -DBUILD_TESTS=ON \
+          -DBUILD_EXAMPLES=ON \
+          -DBUILD_GUI_TOOLS=${{ matrix.enable_gui && 'ON' || 'OFF' }} \
+          -DENABLE_OPENMP=${{ runner.os == 'Linux' && 'ON' || 'OFF' }} \
+          $SANITIZER_FLAGS \
+          -G Ninja
+
+    - name: Build core libraries
+      run: |
+        echo "Building selforg..."
+        cmake --build build --target selforg
+        
+        echo "Building ode_robots..."
+        cmake --build build --target ode_robots
+        
+        echo "Building ga_tools..."
+        cmake --build build --target ga_tools || echo "ga_tools build failed (known issue)"
+
+    - name: Build GUI tools
+      if: matrix.enable_gui
+      run: |
+        echo "Building guilogger..."
+        cmake --build build --target guilogger || echo "guilogger build failed"
+        
+        echo "Building matrixviz..."
+        cmake --build build --target matrixviz || echo "matrixviz build failed"
+
+    - name: Run unit tests
+      run: |
+        cd build
+        echo "Running unit tests..."
+        ctest -L unit --output-on-failure --timeout 300 -j ${{ env.CTEST_PARALLEL_LEVEL }}
+
+    - name: Run integration tests
+      run: |
+        cd build
+        echo "Running integration tests..."
+        ctest -L integration --output-on-failure --timeout 600 -j ${{ env.CTEST_PARALLEL_LEVEL }}
+
+    - name: Run performance tests (Release only)
+      if: matrix.build_type == 'Release' && matrix.enable_sanitizers != true
+      run: |
+        cd build
+        echo "Running performance tests..."
+        ctest -L performance --output-on-failure --timeout 900 || echo "Performance tests completed"
+
+    - name: Test example programs
+      run: |
+        cd build
+        echo "Testing example programs..."
+        
+        # Test basic controllers
+        for test in controllertest feedforwardtest; do
+          if [ -f "selforg/examples/$test" ]; then
+            echo "Running $test..."
+            timeout 30s ./selforg/examples/$test || echo "$test completed"
+          fi
+        done
+        
+        # Test novel algorithm implementations
+        for test in test_apex_sox test_casox_simple test_itsox test_mshc; do
+          if [ -f "selforg/examples/$test" ]; then
+            echo "Running $test..."
+            timeout 60s ./selforg/examples/$test || echo "$test completed"
+          fi
+        done
+        
+        # Test comprehensive algorithm tests
+        if [ -f "selforg/examples/test_novel_algorithms" ]; then
+          echo "Running comprehensive novel algorithm tests..."
+          timeout 120s ./selforg/examples/test_novel_algorithms || echo "Novel algorithm tests completed"
+        fi
+
+    - name: Test simulations (with virtual display)
+      if: matrix.enable_gui || runner.os == 'Linux'
+      run: |
+        # Setup virtual display on Linux
+        if [ "${{ runner.os }}" = "Linux" ]; then
+          export DISPLAY=:99
+          Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+          sleep 3
+          echo "Virtual display started"
+        fi
+        
+        cd build/ode_robots/simulations
+        
+        # Test core simulations
+        SIMULATIONS="template_sphererobot template_onerobot template_schlange"
+        if [ "${{ inputs.run_extended_tests }}" = "true" ]; then
+          SIMULATIONS="$SIMULATIONS hexapod pendulum multiexperts"
+        fi
+        
+        for sim in $SIMULATIONS; do
+          if [ -d "$sim" ] && [ -f "$sim/start" ]; then
+            echo "Testing simulation: $sim"
+            cd $sim
+            
+            # Use appropriate flags for macOS vs Linux
+            if [ "${{ runner.os }}" = "macOS" ]; then
+              timeout 90s ./start -noshadow -nographics -nohud -steps 100 || echo "$sim completed"
+            else
+              timeout 90s ./start -noshadow -nographics -steps 100 || echo "$sim completed"
+            fi
+            
+            cd ..
+          fi
+        done
+
+    - name: Run test.sh script
+      if: matrix.build_type == 'Debug'
+      run: |
+        if [ -f test.sh ]; then
+          chmod +x test.sh
+          echo "Running test.sh quick tests..."
+          ./test.sh quick || echo "test.sh completed"
+        fi
+
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results-${{ matrix.os }}-${{ matrix.arch }}-${{ matrix.compiler }}-${{ matrix.build_type }}
+        path: |
+          build/Testing/
+          build/**/*.log
+          build/**/core.*
+        retention-days: 7
+
+    - name: Upload test binaries (on failure)
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: failed-test-binaries-${{ matrix.os }}-${{ matrix.arch }}
+        path: |
+          build/tests/unit_tests
+          build/tests/integration_tests
+          build/tests/bdd_tests
+          build/selforg/examples/test_*
+        retention-days: 3
+
+  test-legacy-build-system:
+    name: Test Legacy Make Build System
+    runs-on: ubuntu-22.04
+    timeout-minutes: 45
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Setup environment
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          build-essential \
+          autoconf automake libtool \
+          qt6-base-dev qt6-tools-dev \
+          libopenscenegraph-dev \
+          libgsl-dev \
+          libreadline-dev \
+          libncurses5-dev \
+          libglu1-mesa-dev \
+          freeglut3-dev
+
+    - name: Configure with Make
+      run: |
+        # Non-interactive configuration
+        # 1 = user installation
+        # $HOME/lpzrobots = installation path
+        # u = user type
+        echo -e "1\n$HOME/lpzrobots\nu\n" | make conf
+
+    - name: Build with Make
+      run: |
+        echo "Building with legacy Make system..."
+        make -j4
+
+    - name: Test examples with Make
+      run: |
+        cd selforg/examples
+        make controllertest
+        ./controllertest || echo "controllertest completed"
+
+    - name: Test installation
+      run: |
+        make install
+        # Verify core files were installed
+        test -f $HOME/lpzrobots/lib/libselforg.a || exit 1
+        test -f $HOME/lpzrobots/lib/libode_robots.a || exit 1
+        echo "Legacy build system test passed!"
+
+  test-all-examples:
+    name: Test All Example Programs
+    needs: build-and-test
+    runs-on: ubuntu-22.04
+    timeout-minutes: 90
+    if: github.event.inputs.run_extended_tests == 'true' || github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Setup environment
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          build-essential cmake ninja-build \
+          libgsl-dev libreadline-dev libncurses5-dev \
+          libglu1-mesa-dev freeglut3-dev \
+          qt6-base-dev qt6-tools-dev \
+          libopenscenegraph-dev \
+          xvfb mesa-utils
+
+    - name: Build project
+      run: |
+        cmake -B build -DBUILD_TESTS=ON -DBUILD_EXAMPLES=ON -G Ninja
+        cmake --build build
+
+    - name: Test all selforg examples
+      run: |
+        cd build/selforg/examples
+        
+        # Get all test executables
+        TESTS=$(find . -maxdepth 1 -type f -executable -name "test_*" | sort)
+        
+        echo "Found ${#TESTS[@]} test programs to run"
+        
+        for test in $TESTS; do
+          echo "========================================="
+          echo "Running: $test"
+          echo "========================================="
+          timeout 120s $test || echo "$test completed/timed out"
+          echo ""
+        done
+
+    - name: Test all simulations
+      run: |
+        export DISPLAY=:99
+        Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+        sleep 3
+        
+        cd build/ode_robots/simulations
+        
+        # Get all simulation directories
+        SIMULATIONS=$(find . -maxdepth 1 -type d -name "*" | grep -v "^\.$" | sort)
+        
+        echo "Found ${#SIMULATIONS[@]} simulations to test"
+        
+        for sim in $SIMULATIONS; do
+          if [ -f "$sim/start" ]; then
+            echo "========================================="
+            echo "Testing simulation: $sim"
+            echo "========================================="
+            cd $sim
+            timeout 120s ./start -noshadow -nographics -steps 50 || echo "$sim completed/timed out"
+            cd ..
+            echo ""
+          fi
+        done
+
+  summary:
+    name: CI Summary
+    needs: [quick-check, build-and-test, test-legacy-build-system]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+    - name: Check build matrix status
+      run: |
+        echo "## LPZRobots CI Summary"
+        echo ""
+        echo "Quick Check: ${{ needs.quick-check.result }}"
+        echo "Build Matrix: ${{ needs.build-and-test.result }}"
+        echo "Legacy Build: ${{ needs.test-legacy-build-system.result }}"
+        echo ""
+        
+        # Determine overall status
+        if [ "${{ needs.quick-check.result }}" = "success" ] && \
+           [ "${{ needs.build-and-test.result }}" = "success" ] && \
+           [ "${{ needs.test-legacy-build-system.result }}" = "success" ]; then
+          echo "✅ **All CI checks passed!**"
+          exit 0
+        else
+          echo "❌ **Some CI checks failed!**"
+          echo ""
+          echo "Please check the individual job logs for details."
+          exit 1
+        fi

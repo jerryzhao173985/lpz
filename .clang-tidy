@@ -1,5 +1,9 @@
 ---
+# C++17 modernization and best practices for LPZRobots
+# Balanced between code quality and practical development
+
 Checks: '-*,
+  # C++17 Modernization (essential for migration)
   modernize-use-nullptr,
   modernize-use-override,
   modernize-use-default-member-init,
@@ -11,10 +15,190 @@ Checks: '-*,
   modernize-use-emplace,
   modernize-redundant-void-arg,
   modernize-raw-string-literal,
-  performance-unnecessary-value-param,
-  performance-move-const-arg,
-  performance-for-range-copy,
-  performance-unnecessary-copy-initialization'
+  modernize-avoid-bind,
+  modernize-replace-auto-ptr,
+  modernize-use-nodiscard,
+  modernize-deprecated-headers,
+  modernize-pass-by-value,
+  modernize-return-braced-init-list,
+  modernize-use-transparent-functors,
+  modernize-use-uncaught-exceptions,
+  modernize-concat-nested-namespaces,
+  modernize-avoid-c-arrays,
+  modernize-use-trailing-return-type,
+  
+  # Performance (critical for real-time simulation)
+  performance-*,
+  -performance-no-automatic-move,  # Can be overly pedantic
+  -performance-avoid-endl,         # Minor optimization
+  
+  # Bug detection
+  bugprone-*,
+  -bugprone-narrowing-conversions,      # Handled by cppcoreguidelines
+  -bugprone-easily-swappable-parameters, # Too noisy
+  -bugprone-exception-escape,           # May flag legitimate code
+  -bugprone-implicit-widening-of-multiplication-result, # Too strict
+  
+  # Readability (balanced selection)
+  readability-container-size-empty,
+  readability-delete-null-pointer,
+  readability-redundant-string-cstr,
+  readability-redundant-control-flow,
+  readability-simplify-boolean-expr,
+  readability-static-definition-in-anonymous-namespace,
+  readability-uniqueptr-delete-release,
+  readability-misleading-indentation,
+  readability-braces-around-statements,
+  readability-isolate-declaration,
+  readability-redundant-member-init,
+  readability-redundant-smartptr-get,
+  readability-string-compare,
+  readability-make-member-function-const,
+  readability-avoid-const-params-in-decls,
+  readability-non-const-parameter,
+  readability-qualified-auto,
+  
+  # Core Guidelines (selective - not too strict)
+  cppcoreguidelines-explicit-virtual-functions,
+  cppcoreguidelines-init-variables,
+  cppcoreguidelines-interfaces-global-init,
+  cppcoreguidelines-slicing,
+  cppcoreguidelines-narrowing-conversions,
+  cppcoreguidelines-pro-type-member-init,
+  cppcoreguidelines-prefer-member-initializer,
+  cppcoreguidelines-virtual-class-destructor,
+  cppcoreguidelines-rvalue-reference-param-not-moved,
+  
+  # Miscellaneous useful checks
+  misc-redundant-expression,
+  misc-unconventional-assign-operator,
+  misc-uniqueptr-reset-release,
+  misc-unused-using-decls,
+  misc-static-assert,
+  misc-throw-by-value-catch-by-reference,
+  misc-misplaced-const,
+  misc-new-delete-overloads,
+  
+  # Concurrency (important for physics simulation)
+  concurrency-mt-unsafe,
+  
+  # CERT security guidelines (selective)
+  cert-dcl50-cpp,
+  cert-dcl58-cpp,
+  cert-env33-c,
+  cert-err34-c,
+  cert-err52-cpp,
+  cert-err60-cpp,
+  cert-flp30-c,
+  cert-mem57-cpp,
+  cert-msc50-cpp,
+  cert-msc51-cpp'
+
+# Warnings as errors - empty for flexibility during development
 WarningsAsErrors: ''
-HeaderFilterRegex: '.*\.(h|hpp)$'
-FormatStyle:     file
+
+# Header filter - check all project headers
+HeaderFilterRegex: '(selforg|ode_robots|ga_tools|guilogger|matrixviz|opende|configurator)/.*\.(h|hpp|hxx)$'
+
+# Use project .clang-format for automatic fixes
+FormatStyle: file
+
+# Check-specific options
+CheckOptions:
+  # Modernization options
+  - key: modernize-use-auto.MinTypeNameLength
+    value: '10'  # Only use auto for long type names
+  - key: modernize-use-nullptr.NullMacros
+    value: 'NULL'
+  - key: modernize-loop-convert.MaxCopySize
+    value: '16'  # Allow small types in range loops
+  - key: modernize-loop-convert.MinConfidence
+    value: 'reasonable'  # Not too aggressive
+  - key: modernize-use-trailing-return-type
+    value: 'false'  # Optional C++11 feature
+  - key: modernize-avoid-c-arrays.AllowStringArrays
+    value: 'true'  # Allow string literal arrays
+    
+  # Performance options
+  - key: performance-move-const-arg.CheckTriviallyCopyableMove
+    value: 'false'  # Don't warn on trivially copyable types
+  - key: performance-unnecessary-value-param.AllowedTypes
+    value: '::std::string;::std::string_view;::std::vector;::std::map'
+  - key: performance-inefficient-string-concatenation.StrictMode
+    value: 'false'  # Allow some flexibility
+    
+  # Readability options
+  - key: readability-braces-around-statements.ShortStatementLines
+    value: '2'  # Allow short statements without braces
+  - key: readability-simplify-boolean-expr.ChainedConditionalReturn
+    value: 'true'
+  - key: readability-qualified-auto.AddConstToQualified
+    value: 'false'  # Don't require const auto
+    
+  # Naming conventions (following existing codebase style)
+  - key: readability-identifier-naming.ClassCase
+    value: 'CamelCase'
+  - key: readability-identifier-naming.StructCase
+    value: 'CamelCase'
+  - key: readability-identifier-naming.EnumCase
+    value: 'CamelCase'
+  - key: readability-identifier-naming.FunctionCase
+    value: 'camelBack'
+  - key: readability-identifier-naming.MethodCase
+    value: 'camelBack'
+  - key: readability-identifier-naming.VariableCase
+    value: 'camelBack'
+  - key: readability-identifier-naming.ParameterCase
+    value: 'camelBack'
+  - key: readability-identifier-naming.MemberCase
+    value: 'camelBack'
+  - key: readability-identifier-naming.PrivateMemberSuffix
+    value: ''  # No underscore suffix
+  - key: readability-identifier-naming.ProtectedMemberSuffix
+    value: ''
+  - key: readability-identifier-naming.GlobalConstantCase
+    value: 'UPPER_CASE'
+  - key: readability-identifier-naming.ConstantCase
+    value: 'UPPER_CASE'
+  - key: readability-identifier-naming.EnumConstantCase
+    value: 'UPPER_CASE'
+  - key: readability-identifier-naming.MacroCase
+    value: 'UPPER_CASE'
+  - key: readability-identifier-naming.NamespaceCase
+    value: 'lower_case'
+    
+  # Core guidelines options
+  - key: cppcoreguidelines-explicit-virtual-functions.IgnoreDestructors
+    value: 'true'  # Virtual destructors don't need override
+  - key: cppcoreguidelines-narrowing-conversions.PedanticMode
+    value: 'false'  # Allow some practical conversions
+  - key: cppcoreguidelines-pro-type-member-init.IgnoreArrays
+    value: 'true'  # Arrays are often initialized later
+    
+  # Bugprone options
+  - key: bugprone-argument-comment.StrictMode
+    value: 'false'
+  - key: bugprone-assert-side-effect.AssertMacros
+    value: 'assert,Assert,ASSERT,Q_ASSERT'
+  - key: bugprone-sizeof-expression.WarnOnSizeOfConstant
+    value: 'false'
+  - key: bugprone-string-constructor.WarnOnLargeLength
+    value: 'true'
+  - key: bugprone-suspicious-string-compare.WarnOnImplicitComparison
+    value: 'true'
+    
+  # Misc options
+  - key: misc-throw-by-value-catch-by-reference.CheckThrowTemporaries
+    value: 'true'
+    
+  # CERT options
+  - key: cert-dcl50-cpp.AllowedNames
+    value: 'setjmp;longjmp'  # Allow for specific use cases
+
+# System headers - treat as system headers to suppress warnings
+SystemHeaders: '^<(Q|osg|GL|gsl|ode|boost|eigen3|tbb|opencl|cuda)/'
+
+# Extra arguments for proper C++17 parsing
+ExtraArgs:
+  - '-std=c++17'
+  - '-DNDEBUG'  # Assume release mode for analysis

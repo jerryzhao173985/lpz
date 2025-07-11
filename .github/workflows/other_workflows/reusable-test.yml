@@ -1,0 +1,181 @@
+name: Reusable Test Workflow
+
+on:
+  workflow_call:
+    inputs:
+      test-category:
+        description: 'Test category to run'
+        required: true
+        type: string
+      build-path:
+        description: 'Path to build directory'
+        required: true
+        type: string
+      timeout-minutes:
+        description: 'Timeout for tests'
+        required: false
+        type: number
+        default: 30
+      parallel:
+        description: 'Number of parallel test jobs'
+        required: false
+        type: number
+        default: 4
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ inputs.timeout-minutes }}
+    
+    steps:
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: build-artifacts
+        path: ${{ inputs.build-path }}
+        
+    - name: Setup test environment
+      run: |
+        # Make binaries executable
+        find ${{ inputs.build-path }} -type f -name "test_*" -exec chmod +x {} \;
+        find ${{ inputs.build-path }} -type f -name "*_test" -exec chmod +x {} \;
+        
+        # Setup virtual display if needed
+        if [[ "${{ inputs.test-category }}" == *"gui"* ]] || [[ "${{ inputs.test-category }}" == *"simulation"* ]]; then
+          sudo apt-get update
+          sudo apt-get install -y xvfb mesa-utils
+          Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+          export DISPLAY=:99
+          echo "DISPLAY=:99" >> $GITHUB_ENV
+        fi
+        
+    - name: Run tests
+      id: test
+      run: |
+        cd ${{ inputs.build-path }}
+        
+        # Initialize test results
+        echo "# Test Results - ${{ inputs.test-category }}" > test_results.md
+        echo "| Test | Result | Time |" >> test_results.md
+        echo "|------|--------|------|" >> test_results.md
+        
+        FAILED_TESTS=""
+        PASSED_TESTS=""
+        
+        # Run tests based on category
+        case "${{ inputs.test-category }}" in
+          "unit-core")
+            TEST_PATTERN="unit&core"
+            ;;
+          "unit-controller")
+            TEST_PATTERN="unit&controller"
+            ;;
+          "unit-matrix")
+            TEST_PATTERN="unit&matrix"
+            ;;
+          "integration")
+            TEST_PATTERN="integration"
+            ;;
+          "performance")
+            TEST_PATTERN="performance"
+            ;;
+          "examples")
+            # Run example programs directly
+            for test in selforg/examples/test_*; do
+              if [ -f "$test" ] && [ -x "$test" ]; then
+                START_TIME=$(date +%s)
+                if timeout 60s $test > ${test}.log 2>&1; then
+                  END_TIME=$(date +%s)
+                  DURATION=$((END_TIME - START_TIME))
+                  echo "| $(basename $test) | ✅ PASS | ${DURATION}s |" >> test_results.md
+                  PASSED_TESTS="$PASSED_TESTS $(basename $test)"
+                else
+                  echo "| $(basename $test) | ❌ FAIL | timeout |" >> test_results.md
+                  FAILED_TESTS="$FAILED_TESTS $(basename $test)"
+                  echo "::error file=$test::Test failed or timed out"
+                fi
+              fi
+            done
+            ;;
+          *)
+            TEST_PATTERN="${{ inputs.test-category }}"
+            ;;
+        esac
+        
+        # Run CTest if not examples
+        if [[ "${{ inputs.test-category }}" != "examples" ]]; then
+          ctest -L "$TEST_PATTERN" \
+            --output-on-failure \
+            --timeout 300 \
+            --parallel ${{ inputs.parallel }} \
+            --output-junit test_results.xml || true
+            
+          # Parse results
+          if [ -f "Testing/Temporary/LastTest.log" ]; then
+            grep -E "(Test|Passed|Failed)" Testing/Temporary/LastTest.log >> test_results.md || true
+          fi
+        fi
+        
+        # Summary
+        echo "" >> test_results.md
+        echo "## Summary" >> test_results.md
+        echo "- Passed: $PASSED_TESTS" >> test_results.md
+        echo "- Failed: $FAILED_TESTS" >> test_results.md
+        
+        # Set outputs
+        if [ -n "$FAILED_TESTS" ]; then
+          echo "status=failed" >> $GITHUB_OUTPUT
+          echo "::error::Tests failed: $FAILED_TESTS"
+        else
+          echo "status=passed" >> $GITHUB_OUTPUT
+        fi
+        
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results-${{ inputs.test-category }}
+        path: |
+          ${{ inputs.build-path }}/test_results.md
+          ${{ inputs.build-path }}/test_results.xml
+          ${{ inputs.build-path }}/Testing/
+          ${{ inputs.build-path }}/**/*.log
+        retention-days: 7
+        
+    - name: Test report comment
+      if: github.event_name == 'pull_request' && always()
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const testResults = fs.readFileSync('${{ inputs.build-path }}/test_results.md', 'utf8');
+          
+          // Find or create comment
+          const { data: comments } = await github.rest.issues.listComments({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+          });
+          
+          const header = `## 🧪 Test Results: ${{ inputs.test-category }}`;
+          const body = `${header}\n\n${testResults}`;
+          
+          const existingComment = comments.find(comment => 
+            comment.body.includes(header)
+          );
+          
+          if (existingComment) {
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: existingComment.id,
+              body: body
+            });
+          } else {
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: body
+            });
+          }

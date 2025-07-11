@@ -1,0 +1,598 @@
+name: Nightly Build
+
+on:
+  schedule:
+    # Run at 2 AM UTC every day
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      run_extensive_tests:
+        description: 'Run extensive tests'
+        required: false
+        type: boolean
+        default: true
+
+env:
+  CMAKE_BUILD_PARALLEL_LEVEL: 8
+  CTEST_PARALLEL_LEVEL: 4
+
+jobs:
+  full-matrix-build:
+    name: Full Matrix Build
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-20.04, ubuntu-22.04, ubuntu-24.04, macos-13, macos-14]
+        compiler: [gcc, clang]
+        build_type: [Debug, Release, RelWithDebInfo]
+        exclude:
+          - os: macos-13
+            compiler: gcc
+          - os: macos-14
+            compiler: gcc
+        include:
+          - os: ubuntu-20.04
+            gcc_version: 10
+            clang_version: 12
+          - os: ubuntu-22.04
+            gcc_version: 11
+            clang_version: 15
+          - os: ubuntu-24.04
+            gcc_version: 13
+            clang_version: 17
+    
+    runs-on: ${{ matrix.os }}
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0  # Full history for better analysis
+      
+      - name: Set up compiler
+        run: |
+          if [ "${{ matrix.compiler }}" = "gcc" ]; then
+            echo "CC=gcc-${{ matrix.gcc_version }}" >> $GITHUB_ENV
+            echo "CXX=g++-${{ matrix.gcc_version }}" >> $GITHUB_ENV
+          elif [ "${{ matrix.compiler }}" = "clang" ]; then
+            if [ "${{ startsWith(matrix.os, 'ubuntu') }}" = "true" ]; then
+              sudo apt-get update
+              sudo apt-get install -y clang-${{ matrix.clang_version }}
+              echo "CC=clang-${{ matrix.clang_version }}" >> $GITHUB_ENV
+              echo "CXX=clang++-${{ matrix.clang_version }}" >> $GITHUB_ENV
+            else
+              echo "CC=clang" >> $GITHUB_ENV
+              echo "CXX=clang++" >> $GITHUB_ENV
+            fi
+          fi
+      
+      - name: Install Linux dependencies
+        if: startsWith(matrix.os, 'ubuntu')
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake ninja-build ccache \
+            libgsl-dev libreadline-dev libncurses5-dev \
+            libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev \
+            qt6-base-dev qt6-tools-dev qt6-xml-dev \
+            libopenscenegraph-dev openscenegraph \
+            gnuplot imagemagick ffmpeg xvfb \
+            valgrind massif-visualizer heaptrack
+      
+      - name: Install macOS dependencies
+        if: startsWith(matrix.os, 'macos')
+        run: |
+          brew update
+          brew install cmake ninja ccache gsl readline ncurses \
+            qt@6 open-scene-graph gnuplot imagemagick ffmpeg
+          echo "$(brew --prefix qt@6)/bin" >> $GITHUB_PATH
+          echo "Qt6_DIR=$(brew --prefix qt@6)/lib/cmake/Qt6" >> $GITHUB_ENV
+      
+      - name: Configure CMake
+        run: |
+          cmake --preset default \
+            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+            -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            -DBUILD_TESTS=ON \
+            -DBUILD_EXAMPLES=ON \
+            -DENABLE_PROFILING=ON \
+            -DWARNINGS_AS_ERRORS=OFF
+      
+      - name: Build everything
+        run: cmake --build build/default --parallel
+      
+      - name: Run extensive tests
+        if: ${{ github.event.inputs.run_extensive_tests != 'false' }}
+        run: |
+          cd build/default
+          ctest --output-on-failure --timeout 600 --repeat until-pass:3
+      
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-${{ matrix.os }}-${{ matrix.compiler }}-${{ matrix.build_type }}
+          path: |
+            build/default/selforg/libselforg*
+            build/default/ode_robots/libode_robots*
+            build/default/ga_tools/libga_tools*
+          retention-days: 7
+
+  memory-leak-detection:
+    name: Memory Leak Detection
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake ninja-build \
+            libgsl-dev libreadline-dev libncurses5-dev \
+            libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev \
+            qt6-base-dev qt6-tools-dev \
+            libopenscenegraph-dev openscenegraph \
+            valgrind massif-visualizer heaptrack xvfb
+      
+      - name: Build with debug symbols
+        run: |
+          cmake --preset default \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DCMAKE_CXX_FLAGS="-g -O0" \
+            -DBUILD_TESTS=ON
+          cmake --build build/default -j4
+      
+      - name: Run Valgrind memcheck
+        run: |
+          export DISPLAY=:99
+          Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+          sleep 3
+          
+          cd build/default
+          # Run tests with valgrind
+          valgrind --leak-check=full \
+                   --show-leak-kinds=all \
+                   --track-origins=yes \
+                   --verbose \
+                   --log-file=valgrind.log \
+                   --suppressions=${{ github.workspace }}/tests/valgrind_suppressions.txt \
+                   ctest -R "test_matrix" --timeout 1200 || true
+          
+          # Check for memory leaks in simulations
+          cd ${{ github.workspace }}/ode_robots/simulations/template_sphererobot
+          mkdir -p build && cd build
+          cmake .. -DCMAKE_PREFIX_PATH=${{ github.workspace }}/build/default
+          make -j4
+          
+          valgrind --leak-check=full \
+                   --show-leak-kinds=all \
+                   --log-file=sim_valgrind.log \
+                   ./template_sphererobot -noshadow -nographics -cycle 100 || true
+      
+      - name: Run Heaptrack analysis
+        continue-on-error: true
+        run: |
+          cd build/default
+          heaptrack ctest -R "test_matrix" || true
+          heaptrack --analyze heaptrack.*.gz > heaptrack_report.txt || true
+      
+      - name: Analyze memory reports
+        run: |
+          echo "=== Valgrind Summary ===" > memory_report.txt
+          if [ -f build/default/valgrind.log ]; then
+            grep -E "definitely lost:|indirectly lost:|possibly lost:" build/default/valgrind.log >> memory_report.txt || true
+          fi
+          echo -e "\n=== Simulation Memory Check ===" >> memory_report.txt
+          if [ -f ode_robots/simulations/template_sphererobot/build/sim_valgrind.log ]; then
+            grep -E "definitely lost:|indirectly lost:|possibly lost:" ode_robots/simulations/template_sphererobot/build/sim_valgrind.log >> memory_report.txt || true
+          fi
+          cat memory_report.txt
+      
+      - name: Upload memory analysis
+        uses: actions/upload-artifact@v4
+        with:
+          name: memory-analysis
+          path: |
+            build/default/valgrind.log
+            build/default/heaptrack_report.txt
+            memory_report.txt
+            ode_robots/simulations/template_sphererobot/build/sim_valgrind.log
+
+  thread-safety-analysis:
+    name: Thread Safety Analysis
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake ninja-build \
+            clang-15 clang-tools-15 libc++-15-dev libc++abi-15-dev \
+            libgsl-dev libreadline-dev libncurses5-dev \
+            libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev \
+            qt6-base-dev qt6-tools-dev \
+            libopenscenegraph-dev openscenegraph
+      
+      - name: Build with ThreadSanitizer
+        run: |
+          cmake --preset default \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DCMAKE_C_COMPILER=clang-15 \
+            -DCMAKE_CXX_COMPILER=clang++-15 \
+            -DCMAKE_CXX_FLAGS="-fsanitize=thread -g -O1" \
+            -DCMAKE_C_FLAGS="-fsanitize=thread -g -O1" \
+            -DBUILD_TESTS=ON
+          cmake --build build/default -j4
+      
+      - name: Run thread safety tests
+        continue-on-error: true
+        run: |
+          cd build/default
+          export TSAN_OPTIONS="suppressions=${{ github.workspace }}/tests/tsan_suppressions.txt:halt_on_error=0:history_size=7"
+          ctest --output-on-failure --timeout 1200 -j1 2>&1 | tee tsan_report.log || true
+      
+      - name: Static thread analysis
+        run: |
+          # Use clang-tidy for static thread safety analysis
+          find selforg -name "*.cpp" | head -20 | xargs \
+            clang-tidy-15 -checks='-*,concurrency-*,bugprone-*thread*' \
+            -p build/default > thread_static_analysis.log 2>&1 || true
+      
+      - name: Upload thread analysis
+        uses: actions/upload-artifact@v4
+        with:
+          name: thread-analysis
+          path: |
+            build/default/tsan_report.log
+            thread_static_analysis.log
+
+  performance-regression:
+    name: Performance Regression Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+      
+      - name: Checkout base branch
+        run: |
+          git fetch origin main || git fetch origin master || true
+          echo "BASE_SHA=$(git rev-parse origin/main 2>/dev/null || git rev-parse origin/master)" >> $GITHUB_ENV
+      
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake ninja-build \
+            libgsl-dev libreadline-dev libncurses5-dev \
+            libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev \
+            qt6-base-dev qt6-tools-dev \
+            libopenscenegraph-dev openscenegraph \
+            linux-tools-generic linux-tools-$(uname -r) \
+            python3-pip python3-numpy python3-matplotlib
+          pip3 install pandas seaborn
+      
+      - name: Build current version
+        run: |
+          cmake --preset default \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_CXX_FLAGS="-O3 -march=native -flto" \
+            -DBUILD_TESTS=ON
+          cmake --build build/default -j4
+          cp -r build/default build/current
+      
+      - name: Build base version
+        run: |
+          git checkout ${{ env.BASE_SHA }}
+          rm -rf build/default
+          cmake --preset default \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_CXX_FLAGS="-O3 -march=native -flto" \
+            -DBUILD_TESTS=ON
+          cmake --build build/default -j4 || true
+          cp -r build/default build/base
+          git checkout -
+      
+      - name: Run performance comparison
+        run: |
+          mkdir -p perf_results
+          
+          # Test matrix operations performance
+          echo "=== Matrix Performance ===" > perf_results/comparison.txt
+          
+          # Run base version
+          if [ -f build/base/selforg/tests/matrix_benchmark ]; then
+            build/base/selforg/tests/matrix_benchmark > perf_results/base_matrix.txt || true
+          fi
+          
+          # Run current version
+          if [ -f build/current/selforg/tests/matrix_benchmark ]; then
+            build/current/selforg/tests/matrix_benchmark > perf_results/current_matrix.txt || true
+          fi
+          
+          # Simple comparison
+          echo "Base version:" >> perf_results/comparison.txt
+          tail -n 10 perf_results/base_matrix.txt >> perf_results/comparison.txt || echo "No base results" >> perf_results/comparison.txt
+          echo -e "\nCurrent version:" >> perf_results/comparison.txt
+          tail -n 10 perf_results/current_matrix.txt >> perf_results/comparison.txt || echo "No current results" >> perf_results/comparison.txt
+      
+      - name: Profile with perf
+        continue-on-error: true
+        run: |
+          cd build/current
+          sudo perf record -g -o perf.data ctest -R "test_matrix" || true
+          sudo perf report --stdio > ../perf_profile.txt || true
+          sudo chown $USER:$USER perf.data ../perf_profile.txt || true
+      
+      - name: Generate performance report
+        run: |
+          python3 - << 'EOF' > perf_results/report.md
+          print("# Performance Regression Report")
+          print("\nDate: $(date)")
+          print("Commit: ${{ github.sha }}")
+          print("Base: ${{ env.BASE_SHA }}")
+          print("\n## Summary")
+          print("Performance comparison between current and base branch")
+          print("\nSee attached files for detailed results")
+          EOF
+      
+      - name: Upload performance results
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-regression
+          path: |
+            perf_results/
+            perf_profile.txt
+
+  full-coverage-analysis:
+    name: Full Coverage Analysis
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake ninja-build \
+            gcovr lcov genhtml \
+            libgsl-dev libreadline-dev libncurses5-dev \
+            libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev \
+            qt6-base-dev qt6-tools-dev \
+            libopenscenegraph-dev openscenegraph \
+            xvfb
+      
+      - name: Build with coverage
+        run: |
+          cmake --preset default \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DCMAKE_CXX_FLAGS="--coverage -fprofile-arcs -ftest-coverage -O0" \
+            -DCMAKE_C_FLAGS="--coverage -fprofile-arcs -ftest-coverage -O0" \
+            -DBUILD_TESTS=ON \
+            -DBUILD_EXAMPLES=ON
+          cmake --build build/default --parallel
+      
+      - name: Run all tests with coverage
+        run: |
+          export DISPLAY=:99
+          Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+          sleep 3
+          
+          cd build/default
+          # Run all tests
+          ctest --output-on-failure -j4 || true
+          
+          # Run simulations for coverage
+          cd ${{ github.workspace }}
+          for sim in template_sphererobot pendulum; do
+            if [ -d "ode_robots/simulations/$sim" ]; then
+              cd ode_robots/simulations/$sim
+              mkdir -p build && cd build
+              cmake .. -DCMAKE_PREFIX_PATH=${{ github.workspace }}/build/default \
+                       -DCMAKE_CXX_FLAGS="--coverage"
+              make -j4
+              ./$sim -noshadow -nographics -cycle 50 || true
+              cd ${{ github.workspace }}
+            fi
+          done
+      
+      - name: Generate detailed coverage report
+        run: |
+          cd build/default
+          
+          # Generate HTML report with gcovr
+          gcovr -r ../.. \
+            --html --html-details \
+            --html-title "LPZRobots Coverage Report" \
+            -o coverage_report.html \
+            --exclude '.*test.*' \
+            --exclude '.*/external/.*' \
+            --exclude '.*/opende/.*' \
+            --exclude '.*/build/.*' \
+            --print-summary
+          
+          # Generate lcov report
+          lcov --capture --directory . --output-file coverage.info
+          lcov --remove coverage.info \
+            '*/test/*' '*/tests/*' '*/external/*' '/usr/*' '*/opende/*' \
+            --output-file coverage_filtered.info
+          
+          # Generate detailed HTML with lcov
+          genhtml coverage_filtered.info \
+            --output-directory coverage_lcov \
+            --title "LPZRobots Detailed Coverage" \
+            --legend --show-details
+      
+      - name: Coverage summary
+        run: |
+          cd build/default
+          echo "=== Coverage Summary ===" > coverage_summary.txt
+          lcov --summary coverage_filtered.info >> coverage_summary.txt
+          cat coverage_summary.txt
+      
+      - name: Upload coverage reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: full-coverage-report
+          path: |
+            build/default/coverage_report.html
+            build/default/coverage_*.html
+            build/default/coverage_lcov/
+            build/default/coverage_summary.txt
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      
+      - name: Install security tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cppcheck clang-tools-15 python3-pip
+          pip3 install bandit safety flawfinder
+      
+      - name: Run cppcheck security scan
+        run: |
+          cppcheck --enable=warning,style,performance,portability \
+            --force --inconclusive --std=c++17 \
+            --xml --xml-version=2 \
+            selforg/ ode_robots/ 2> cppcheck_security.xml || true
+          
+          # Convert to readable format
+          cppcheck --enable=warning,style,performance,portability \
+            --force --inconclusive --std=c++17 \
+            selforg/ ode_robots/ 2> cppcheck_security.txt || true
+      
+      - name: Run flawfinder
+        run: |
+          flawfinder --html --context --minlevel=2 \
+            selforg/ ode_robots/ > flawfinder_report.html || true
+          flawfinder --minlevel=2 selforg/ ode_robots/ > flawfinder_report.txt || true
+      
+      - name: Static analysis with clang
+        run: |
+          scan-build-15 --use-cc=clang-15 --use-c++=clang++-15 \
+            -o clang_analysis \
+            cmake --preset default -DBUILD_TESTS=OFF || true
+      
+      - name: Generate security summary
+        run: |
+          echo "# Security Scan Summary" > security_summary.md
+          echo "Date: $(date)" >> security_summary.md
+          echo "Commit: ${{ github.sha }}" >> security_summary.md
+          echo "" >> security_summary.md
+          echo "## Flawfinder Results" >> security_summary.md
+          echo '```' >> security_summary.md
+          tail -n 20 flawfinder_report.txt >> security_summary.md || echo "No issues found" >> security_summary.md
+          echo '```' >> security_summary.md
+      
+      - name: Upload security reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-scan
+          path: |
+            cppcheck_security.*
+            flawfinder_report.*
+            clang_analysis/
+            security_summary.md
+
+  documentation-build:
+    name: Documentation Build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      
+      - name: Install documentation tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y doxygen graphviz plantuml
+          pip3 install sphinx breathe sphinx_rtd_theme
+      
+      - name: Generate Doxygen documentation
+        run: |
+          # Create Doxyfile if it doesn't exist
+          if [ ! -f Doxyfile ]; then
+            doxygen -g
+            # Customize Doxyfile
+            sed -i 's/PROJECT_NAME.*/PROJECT_NAME = "LPZRobots"/' Doxyfile
+            sed -i 's/PROJECT_BRIEF.*/PROJECT_BRIEF = "Self-Organization of Behavior in Autonomous Robots"/' Doxyfile
+            sed -i 's/INPUT.*/INPUT = selforg\/ ode_robots\/ ga_tools\//' Doxyfile
+            sed -i 's/RECURSIVE.*/RECURSIVE = YES/' Doxyfile
+            sed -i 's/EXTRACT_ALL.*/EXTRACT_ALL = YES/' Doxyfile
+            sed -i 's/GENERATE_LATEX.*/GENERATE_LATEX = NO/' Doxyfile
+            sed -i 's/HAVE_DOT.*/HAVE_DOT = YES/' Doxyfile
+            sed -i 's/CALL_GRAPH.*/CALL_GRAPH = YES/' Doxyfile
+            sed -i 's/CALLER_GRAPH.*/CALLER_GRAPH = YES/' Doxyfile
+          fi
+          doxygen Doxyfile || true
+      
+      - name: Check documentation coverage
+        run: |
+          # Count documented vs undocumented entities
+          echo "=== Documentation Coverage ===" > doc_coverage.txt
+          find selforg ode_robots -name "*.h" -exec grep -l "///" {} \; | wc -l > documented.tmp
+          find selforg ode_robots -name "*.h" | wc -l > total.tmp
+          echo "Documented headers: $(cat documented.tmp)/$(cat total.tmp)" >> doc_coverage.txt
+          rm documented.tmp total.tmp
+      
+      - name: Upload documentation
+        uses: actions/upload-artifact@v4
+        with:
+          name: documentation
+          path: |
+            html/
+            doc_coverage.txt
+
+  nightly-summary:
+    name: Nightly Summary
+    needs: [full-matrix-build, memory-leak-detection, thread-safety-analysis, 
+            performance-regression, full-coverage-analysis, security-scan,
+            documentation-build]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: Generate summary
+        run: |
+          echo "# Nightly Build Summary" > summary.md
+          echo "Date: $(date)" >> summary.md
+          echo "" >> summary.md
+          echo "## Job Results" >> summary.md
+          echo "- Full Matrix Build: ${{ needs.full-matrix-build.result }}" >> summary.md
+          echo "- Memory Leak Detection: ${{ needs.memory-leak-detection.result }}" >> summary.md
+          echo "- Thread Safety: ${{ needs.thread-safety-analysis.result }}" >> summary.md
+          echo "- Performance: ${{ needs.performance-regression.result }}" >> summary.md
+          echo "- Coverage: ${{ needs.full-coverage-analysis.result }}" >> summary.md
+          echo "- Security: ${{ needs.security-scan.result }}" >> summary.md
+          echo "- Documentation: ${{ needs.documentation-build.result }}" >> summary.md
+          
+          # Set exit code based on critical failures
+          if [ "${{ needs.full-matrix-build.result }}" != "success" ] || \
+             [ "${{ needs.memory-leak-detection.result }}" = "failure" ]; then
+            echo "" >> summary.md
+            echo "⚠️ **Critical issues detected!**" >> summary.md
+            exit 1
+          fi
+      
+      - name: Upload summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-summary
+          path: summary.md

@@ -1,6 +1,9 @@
 # LPZRobots -- a simulator for robotic experiments for Self-Organization of Control
 
 [![Build Status](https://github.com/georgmartius/lpzrobots/actions/workflows/simple-ci.yml/badge.svg)](https://github.com/georgmartius/lpzrobots/actions/workflows/simple-ci.yml)
+[![Code Quality](https://github.com/georgmartius/lpzrobots/actions/workflows/code-quality.yml/badge.svg)](https://github.com/georgmartius/lpzrobots/actions/workflows/code-quality.yml)
+[![Performance](https://github.com/georgmartius/lpzrobots/actions/workflows/performance.yml/badge.svg)](https://github.com/georgmartius/lpzrobots/actions/workflows/performance.yml)
+[![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](LICENSE)
 
 This is a 3D physics simulator that comes with a collection of algorithms, simulations, and tools
 developed by the Robotics Group for Self-Organization of Control.
@@ -84,6 +87,45 @@ It consists of the following directories (click for details):
   - `configurator`: a library implementing a GUI to change the parameters interactively which is otherwise done on the console.
   - `ga_tools`: genetic algorithms framework that can be used together with ode\_robots or for independent simulations.
   - `opende`: directory with a snapshot of the open dynamics engine (release 0.11.1) renamed to `ode-dbl` in order to avoid conflicts with packaged single precision versions. It contains the capsule-box collision bugfix which is upstream (in svn) (please follow the link for installation hints).
+
+-----
+
+## CI/CD and Quality Assurance
+
+LPZRobots uses a comprehensive CI/CD system to ensure code quality and performance:
+
+### Continuous Integration
+- **Build Testing**: Automated builds on Ubuntu 24.04 and macOS 15 (ARM64)
+- **Coverage Analysis**: Code coverage tracking with lcov for Debug builds
+- **Sanitizer Testing**: AddressSanitizer (ASAN) and UndefinedBehaviorSanitizer (UBSAN)
+- **Simulation Testing**: Automated testing of core simulations with virtual display
+
+### Code Quality
+- **Static Analysis**: clang-tidy and cppcheck integration
+- **Code Formatting**: Enforced with clang-format (Google style, C++17)
+- **Complexity Analysis**: Cyclomatic complexity tracking with pmccabe and lizard
+- **PR Reviews**: Automatic code quality reports on pull requests
+
+### Performance Tracking
+- **Benchmark Suite**: Matrix operation performance benchmarks
+- **Regression Detection**: Automatic performance comparison against baseline
+- **Weekly Monitoring**: Scheduled performance tracking runs
+
+### Build Options
+Enable advanced features during build:
+```bash
+# Code coverage
+cmake -B build -DLPZROBOTS_ENABLE_COVERAGE=ON
+
+# Sanitizers
+cmake -B build -DLPZROBOTS_ENABLE_SANITIZERS=ON
+
+# Benchmarks
+cmake -B build -DLPZROBOTS_ENABLE_BENCHMARKS=ON
+
+# Static analysis
+cmake -B build -DLPZROBOTS_ENABLE_CLANG_TIDY=ON
+```
 
 -----
 

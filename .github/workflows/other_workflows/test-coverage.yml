@@ -1,0 +1,454 @@
+name: Test Coverage
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  CMAKE_BUILD_TYPE: Debug
+  BUILD_DIR: build-coverage
+  COVERAGE_FLAGS: "-fprofile-arcs -ftest-coverage -fno-inline -fno-inline-small-functions -fno-default-inline"
+
+jobs:
+  coverage:
+    name: Coverage Analysis
+    runs-on: ubuntu-22.04
+    timeout-minutes: 60
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        submodules: recursive
+    
+    # Setup environment
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          ninja-build ccache lcov gcovr \
+          libgsl-dev libreadline-dev libncurses5-dev \
+          libglu1-mesa-dev freeglut3-dev \
+          qt6-base-dev libopenscenegraph-dev \
+          python3-pip
+        
+        # Install Python tools for coverage visualization
+        pip3 install --user \
+          coverage \
+          pytest-cov \
+          coverage-badge \
+          pycobertura \
+          diff-cover
+    
+    # Cache
+    - name: Cache build
+      uses: actions/cache@v4
+      with:
+        path: |
+          ${{ env.BUILD_DIR }}
+          ~/.ccache
+        key: coverage-${{ hashFiles('**/CMakeLists.txt') }}-${{ github.sha }}
+        restore-keys: |
+          coverage-${{ hashFiles('**/CMakeLists.txt') }}-
+          coverage-
+    
+    # Configure with coverage
+    - name: Configure with Coverage
+      run: |
+        cmake -B ${{ env.BUILD_DIR }} \
+          -G Ninja \
+          -DCMAKE_BUILD_TYPE=Debug \
+          -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+          -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+          -DBUILD_TESTS=ON \
+          -DLPZROBOTS_ENABLE_COVERAGE=ON \
+          -DCMAKE_CXX_FLAGS="${{ env.COVERAGE_FLAGS }}" \
+          -DCMAKE_C_FLAGS="${{ env.COVERAGE_FLAGS }}"
+    
+    # Build
+    - name: Build
+      run: |
+        cmake --build ${{ env.BUILD_DIR }} --parallel
+    
+    # Run tests with coverage collection
+    - name: Run Tests
+      run: |
+        cd ${{ env.BUILD_DIR }}
+        
+        # Reset coverage data
+        lcov --directory . --zerocounters
+        
+        # Run different test categories separately for better coverage analysis
+        echo "Running unit tests..."
+        ctest -L unit --output-on-failure || true
+        
+        echo "Running integration tests..."
+        ctest -L integration --output-on-failure || true
+        
+        echo "Running controller tests..."
+        ctest -R controller --output-on-failure || true
+        
+        echo "Running matrix tests..."
+        ctest -R matrix --output-on-failure || true
+    
+    # Generate coverage reports
+    - name: Generate Coverage Reports
+      run: |
+        cd ${{ env.BUILD_DIR }}
+        
+        # Capture coverage data
+        lcov --directory . --capture --output-file coverage.info \
+          --ignore-errors mismatch
+        
+        # Remove external libraries and test code from coverage
+        lcov --remove coverage.info \
+          '/usr/*' \
+          '*/test/*' \
+          '*/tests/*' \
+          '*/external/*' \
+          '*/build/*' \
+          '*/opende/*' \
+          '*/guilogger/*' \
+          '*/matrixviz/*' \
+          --output-file coverage_filtered.info
+        
+        # Generate HTML report
+        genhtml coverage_filtered.info \
+          --output-directory coverage_report \
+          --demangle-cpp \
+          --num-spaces 2 \
+          --sort \
+          --title "LPZRobots Test Coverage" \
+          --function-coverage \
+          --branch-coverage \
+          --legend
+        
+        # Generate XML report for tools
+        gcovr --xml-pretty --exclude-unreachable-branches \
+          --print-summary \
+          --root ${GITHUB_WORKSPACE} \
+          --xml coverage.xml
+        
+        # Generate text summary
+        lcov --list coverage_filtered.info > coverage_summary.txt
+        
+        # Extract coverage percentage
+        COVERAGE=$(lcov --summary coverage_filtered.info 2>&1 | grep "lines" | grep -o '[0-9.]*%' | head -1)
+        echo "COVERAGE_PERCENT=${COVERAGE}" >> $GITHUB_ENV
+        echo "Total coverage: ${COVERAGE}"
+    
+    # Generate detailed analysis
+    - name: Detailed Coverage Analysis
+      run: |
+        cd ${{ env.BUILD_DIR }}
+        
+        # Create coverage report by component
+        python3 - << 'EOF'
+        import xml.etree.ElementTree as ET
+        import json
+        from pathlib import Path
+        
+        # Parse coverage XML
+        tree = ET.parse('coverage.xml')
+        root = tree.getroot()
+        
+        # Analyze by component
+        components = {}
+        for package in root.findall('.//package'):
+            name = package.get('name', 'unknown')
+            
+            # Determine component
+            if 'selforg/controller' in name:
+                component = 'controllers'
+            elif 'selforg/matrix' in name:
+                component = 'matrix'
+            elif 'selforg/utils' in name:
+                component = 'utils'
+            elif 'ode_robots' in name:
+                component = 'ode_robots'
+            else:
+                component = 'other'
+            
+            if component not in components:
+                components[component] = {
+                    'lines_covered': 0,
+                    'lines_total': 0,
+                    'branches_covered': 0,
+                    'branches_total': 0,
+                    'files': []
+                }
+            
+            # Aggregate metrics
+            for cls in package.findall('.//class'):
+                filename = cls.get('filename', '')
+                lines = cls.find('.//lines')
+                if lines is not None:
+                    for line in lines:
+                        components[component]['lines_total'] += 1
+                        if int(line.get('hits', 0)) > 0:
+                            components[component]['lines_covered'] += 1
+        
+        # Calculate percentages
+        report = {"components": {}}
+        for comp, data in components.items():
+            if data['lines_total'] > 0:
+                coverage = (data['lines_covered'] / data['lines_total']) * 100
+                report["components"][comp] = {
+                    "coverage_percent": round(coverage, 2),
+                    "lines_covered": data['lines_covered'],
+                    "lines_total": data['lines_total']
+                }
+        
+        # Save report
+        with open('coverage_by_component.json', 'w') as f:
+            json.dump(report, f, indent=2)
+        
+        # Generate markdown report
+        with open('coverage_report.md', 'w') as f:
+            f.write("# Coverage Report by Component\n\n")
+            f.write("| Component | Coverage | Lines Covered | Total Lines |\n")
+            f.write("|-----------|----------|---------------|-------------|\n")
+            
+            for comp, data in sorted(report["components"].items()):
+                f.write(f"| {comp} | {data['coverage_percent']:.1f}% | ")
+                f.write(f"{data['lines_covered']} | {data['lines_total']} |\n")
+        EOF
+    
+    # Check coverage on changed files (for PRs)
+    - name: Diff Coverage
+      if: github.event_name == 'pull_request'
+      run: |
+        cd ${{ env.BUILD_DIR }}
+        
+        # Get list of changed files
+        git fetch origin ${{ github.base_ref }}
+        CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E '\.(cpp|h)$' || true)
+        
+        if [ -n "$CHANGED_FILES" ]; then
+          # Generate diff coverage report
+          diff-cover coverage.xml \
+            --compare-branch=origin/${{ github.base_ref }} \
+            --html-report diff_coverage.html \
+            --markdown-report diff_coverage.md \
+            --fail-under=80
+          
+          # Extract diff coverage percentage
+          DIFF_COVERAGE=$(grep "Total" diff_coverage.md | grep -o '[0-9.]*%' || echo "0%")
+          echo "DIFF_COVERAGE_PERCENT=${DIFF_COVERAGE}" >> $GITHUB_ENV
+        fi
+    
+    # Generate coverage badge
+    - name: Generate Coverage Badge
+      run: |
+        cd ${{ env.BUILD_DIR }}
+        
+        # Generate badge
+        coverage-badge -f -o coverage_badge.svg
+        
+        # Generate custom badges for components
+        python3 - << 'EOF'
+        import json
+        
+        # Simple badge generator
+        def generate_badge(label, value, color):
+            if float(value.rstrip('%')) >= 80:
+                color = "brightgreen"
+            elif float(value.rstrip('%')) >= 60:
+                color = "yellow"
+            else:
+                color = "red"
+            
+            svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="104" height="20">
+              <linearGradient id="b" x2="0" y2="100%">
+                <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
+                <stop offset="1" stop-opacity=".1"/>
+              </linearGradient>
+              <mask id="a">
+                <rect width="104" height="20" rx="3" fill="#fff"/>
+              </mask>
+              <g mask="url(#a)">
+                <path fill="#555" d="M0 0h63v20H0z"/>
+                <path fill="{color}" d="M63 0h41v20H63z"/>
+                <path fill="url(#b)" d="M0 0h104v20H0z"/>
+              </g>
+              <g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="11">
+                <text x="31.5" y="15" fill="#010101" fill-opacity=".3">{label}</text>
+                <text x="31.5" y="14">{label}</text>
+                <text x="82.5" y="15" fill="#010101" fill-opacity=".3">{value}</text>
+                <text x="82.5" y="14">{value}</text>
+              </g>
+            </svg>'''
+            
+            return svg
+        
+        # Load component coverage
+        with open('coverage_by_component.json') as f:
+            data = json.load(f)
+        
+        # Generate badges
+        for comp, info in data['components'].items():
+            badge = generate_badge(comp, f"{info['coverage_percent']}%", "green")
+            with open(f'badge_{comp}.svg', 'w') as f:
+                f.write(badge)
+        EOF
+    
+    # Create visual coverage report
+    - name: Create Visual Coverage Report
+      run: |
+        pip3 install matplotlib seaborn pandas
+        
+        cd ${{ env.BUILD_DIR }}
+        
+        python3 - << 'EOF'
+        import matplotlib.pyplot as plt
+        import seaborn as sns
+        import pandas as pd
+        import json
+        from pathlib import Path
+        
+        # Set style
+        plt.style.use('seaborn-v0_8-darkgrid')
+        sns.set_palette("husl")
+        
+        # Load coverage data
+        with open('coverage_by_component.json') as f:
+            data = json.load(f)
+        
+        # Create coverage chart
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
+        
+        # Bar chart of coverage by component
+        components = list(data['components'].keys())
+        coverages = [data['components'][c]['coverage_percent'] for c in components]
+        
+        bars = ax1.bar(components, coverages)
+        ax1.set_ylim(0, 100)
+        ax1.set_ylabel('Coverage %')
+        ax1.set_title('Test Coverage by Component')
+        ax1.axhline(y=80, color='green', linestyle='--', alpha=0.7, label='Target (80%)')
+        ax1.legend()
+        
+        # Color bars based on coverage
+        for bar, coverage in zip(bars, coverages):
+            if coverage >= 80:
+                bar.set_color('green')
+            elif coverage >= 60:
+                bar.set_color('orange')
+            else:
+                bar.set_color('red')
+        
+        # Pie chart of covered vs uncovered lines
+        total_covered = sum(data['components'][c]['lines_covered'] for c in components)
+        total_lines = sum(data['components'][c]['lines_total'] for c in components)
+        uncovered = total_lines - total_covered
+        
+        ax2.pie([total_covered, uncovered], 
+                labels=['Covered', 'Uncovered'],
+                autopct='%1.1f%%',
+                colors=['#2ecc71', '#e74c3c'])
+        ax2.set_title('Overall Code Coverage')
+        
+        plt.tight_layout()
+        plt.savefig('coverage_visualization.png', dpi=150, bbox_inches='tight')
+        
+        # Create detailed heatmap if line-by-line data available
+        # This would require parsing the detailed coverage data
+        EOF
+    
+    # Upload coverage reports
+    - name: Upload Coverage Reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-reports
+        path: |
+          ${{ env.BUILD_DIR }}/coverage_report/
+          ${{ env.BUILD_DIR }}/coverage_*.svg
+          ${{ env.BUILD_DIR }}/coverage_*.png
+          ${{ env.BUILD_DIR }}/coverage_*.json
+          ${{ env.BUILD_DIR }}/coverage_*.md
+          ${{ env.BUILD_DIR }}/diff_coverage.*
+        retention-days: 30
+    
+    # Upload to Codecov
+    - name: Upload to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        files: ${{ env.BUILD_DIR }}/coverage.xml
+        flags: unittests
+        name: lpzrobots-coverage
+        fail_ci_if_error: false
+        verbose: true
+    
+    # Comment on PR
+    - name: Comment Coverage on PR
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          
+          // Read coverage report
+          let coverageReport = '## 📊 Test Coverage Report\n\n';
+          
+          // Overall coverage
+          coverageReport += `**Overall Coverage**: ${{ env.COVERAGE_PERCENT }}\n`;
+          
+          // Diff coverage if available
+          if ('${{ env.DIFF_COVERAGE_PERCENT }}') {
+            coverageReport += `**Coverage of Changed Files**: ${{ env.DIFF_COVERAGE_PERCENT }}\n\n`;
+          }
+          
+          // Component coverage
+          if (fs.existsSync('${{ env.BUILD_DIR }}/coverage_report.md')) {
+            const componentReport = fs.readFileSync('${{ env.BUILD_DIR }}/coverage_report.md', 'utf8');
+            coverageReport += '\n' + componentReport;
+          }
+          
+          // Add visualization link
+          coverageReport += '\n\n📈 [View Full Coverage Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})';
+          
+          // Find or create comment
+          const { data: comments } = await github.rest.issues.listComments({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+          });
+          
+          const botComment = comments.find(comment => 
+            comment.user.type === 'Bot' && 
+            comment.body.includes('Test Coverage Report')
+          );
+          
+          if (botComment) {
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: botComment.id,
+              body: coverageReport
+            });
+          } else {
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: coverageReport
+            });
+          }
+    
+    # Deploy coverage report to GitHub Pages (optional)
+    - name: Deploy Coverage Report
+      if: github.ref == 'refs/heads/main'
+      run: |
+        # This would deploy the HTML coverage report to GitHub Pages
+        echo "Coverage report would be deployed to GitHub Pages"
+        
+        # Example deployment:
+        # cd ${{ env.BUILD_DIR }}/coverage_report
+        # git init
+        # git checkout -b gh-pages
+        # git add .
+        # git commit -m "Update coverage report"
+        # git push -f origin gh-pages

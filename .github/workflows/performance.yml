@@ -1,0 +1,349 @@
+name: Performance Tracking
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'selforg/matrix/**'
+      - 'selforg/controller/**'
+      - 'ode_robots/motors/**'
+      - 'CMakeLists.txt'
+      - '**/CMakeLists.txt'
+  pull_request:
+    branches: [ main, master ]
+    paths:
+      - 'selforg/matrix/**'
+      - 'selforg/controller/**'
+      - 'ode_robots/motors/**'
+  schedule:
+    - cron: '0 2 * * 1'  # Weekly on Monday at 2 AM
+  workflow_dispatch:
+    inputs:
+      baseline_ref:
+        description: 'Git ref for baseline comparison'
+        default: 'main'
+        type: string
+
+env:
+  CMAKE_BUILD_TYPE: Release
+  BUILD_DIR: build-perf
+
+jobs:
+  benchmark:
+    name: Performance Benchmarks - ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            name: Linux
+            cc: gcc
+            cxx: g++
+            
+          - os: macos-15
+            name: macOS-ARM64
+            cc: clang
+            cxx: clang++
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        submodules: recursive
+    
+    # Setup environment
+    - name: Setup Linux
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          ninja-build cmake \
+          libgsl-dev libreadline-dev libncurses5-dev \
+          libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev \
+          python3-pip
+        
+        pip3 install --user matplotlib pandas numpy
+        
+        # Try to set CPU governor for consistent performance
+        echo performance | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor 2>/dev/null || true
+        
+        echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
+        echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV
+    
+    - name: Setup macOS
+      if: runner.os == 'macOS'
+      run: |
+        brew install cmake ninja gsl python3
+        pip3 install matplotlib pandas numpy
+        
+        echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
+        echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV
+    
+    # Configure optimized build
+    - name: Configure
+      run: |
+        cmake -B ${{ env.BUILD_DIR }} \
+          -G Ninja \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DBUILD_TESTS=ON \
+          -DLPZROBOTS_ENABLE_BENCHMARKS=ON \
+          -DBUILD_GUI_TOOLS=OFF \
+          -DCMAKE_CXX_FLAGS="-O3 -march=native" \
+          -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
+    
+    # Build benchmarks (first check if they exist)
+    - name: Build
+      run: |
+        # Build core libraries first
+        cmake --build ${{ env.BUILD_DIR }} --target selforg --parallel
+        
+        # Check if benchmark tests exist
+        if grep -r "benchmark" ${{ env.BUILD_DIR }}/selforg/tests/CMakeFiles 2>/dev/null; then
+          echo "Building benchmarks..."
+          cmake --build ${{ env.BUILD_DIR }} --target matrix_benchmark --parallel || echo "No matrix_benchmark target"
+        else
+          echo "No benchmark targets found - creating simple benchmark"
+        fi
+    
+    # Run benchmarks or performance tests
+    - name: Run Performance Tests
+      id: benchmark
+      run: |
+        mkdir -p benchmark_results
+        cd ${{ env.BUILD_DIR }}
+        
+        # Look for benchmark executables
+        BENCH_FOUND=false
+        for bench in selforg/tests/*_benchmark tests/*_benchmark; do
+          if [ -x "$bench" ]; then
+            echo "Running $(basename $bench)..."
+            $bench --benchmark_out_format=json --benchmark_out="../benchmark_results/$(basename $bench).json" || true
+            BENCH_FOUND=true
+          fi
+        done
+        
+        # If no benchmarks found, run a simple performance test
+        if [ "$BENCH_FOUND" = "false" ]; then
+          echo "No benchmark executables found, running simple performance test"
+          cd ..
+          
+          # Create a simple matrix performance test
+          cat > simple_perf_test.cpp << 'EOF'
+        #include <selforg/matrix.h>
+        #include <chrono>
+        #include <iostream>
+        
+        using namespace matrix;
+        using namespace std::chrono;
+        
+        int main() {
+          const int sizes[] = {4, 16, 64, 128};
+          
+          std::cout << "Matrix Performance Test Results" << std::endl;
+          std::cout << "==============================" << std::endl;
+          
+          for (int size : sizes) {
+            Matrix A(size, size);
+            Matrix B(size, size);
+            A.toId();
+            B.toId();
+            
+            auto start = high_resolution_clock::now();
+            const int iterations = 10000 / size;
+            
+            for (int i = 0; i < iterations; ++i) {
+              Matrix C = A * B;
+            }
+            
+            auto end = high_resolution_clock::now();
+            auto duration = duration_cast<microseconds>(end - start).count();
+            double us_per_op = (double)duration / iterations;
+            
+            std::cout << "Matrix " << size << "x" << size << " multiply: " 
+                      << us_per_op << " µs/op" << std::endl;
+          }
+          
+          return 0;
+        }
+        EOF
+          
+          # Compile and run the simple test
+          $CXX -O3 -march=native -std=c++17 simple_perf_test.cpp \
+            -I selforg -L $BUILD_DIR/selforg -lselforg -lgsl -lgslcblas \
+            -o simple_perf_test
+          
+          ./simple_perf_test > benchmark_results/simple_performance.txt
+        fi
+        
+        cd ..
+        
+        # Generate summary
+        echo "benchmark_dir=benchmark_results" >> $GITHUB_OUTPUT
+    
+    # Compare with baseline (for PRs)
+    - name: Checkout baseline
+      if: github.event_name == 'pull_request'
+      run: |
+        git fetch origin ${{ github.base_ref }}
+        git worktree add baseline origin/${{ github.base_ref }}
+    
+    - name: Run baseline benchmarks
+      if: github.event_name == 'pull_request'
+      run: |
+        cd baseline
+        
+        # Quick build of baseline
+        cmake -B build-baseline \
+          -G Ninja \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DBUILD_TESTS=ON \
+          -DLPZROBOTS_ENABLE_BENCHMARKS=ON \
+          -DBUILD_GUI_TOOLS=OFF \
+          -DCMAKE_CXX_FLAGS="-O3 -march=native"
+        
+        cmake --build build-baseline --target selforg --parallel
+        
+        # Run same simple test on baseline
+        if [ -f "../simple_perf_test.cpp" ]; then
+          $CXX -O3 -march=native -std=c++17 ../simple_perf_test.cpp \
+            -I selforg -L build-baseline/selforg -lselforg -lgsl -lgslcblas \
+            -o baseline_perf_test
+          
+          mkdir -p ../baseline_results
+          ./baseline_perf_test > ../baseline_results/simple_performance.txt
+        fi
+    
+    # Generate comparison report
+    - name: Generate Performance Report
+      if: always()
+      run: |
+        python3 - << 'EOF'
+        import os
+        import re
+        from pathlib import Path
+        
+        # Create performance report
+        report = []
+        report.append("# Performance Benchmark Report")
+        report.append("")
+        report.append(f"**Platform**: ${{ matrix.name }}")
+        report.append(f"**Commit**: ${{ github.sha }}")
+        report.append("")
+        
+        # Parse current results
+        current_file = Path("benchmark_results/simple_performance.txt")
+        if current_file.exists():
+            report.append("## Current Performance")
+            report.append("")
+            report.append("| Operation | Time (µs) |")
+            report.append("|-----------|-----------|")
+            
+            with open(current_file) as f:
+                for line in f:
+                    if "multiply:" in line:
+                        match = re.search(r"Matrix (\d+)x\d+ multiply: ([\d.]+)", line)
+                        if match:
+                            size = match.group(1)
+                            time = match.group(2)
+                            report.append(f"| Matrix {size}x{size} multiply | {time} |")
+        
+        # Check for regression
+        regression_detected = False
+        baseline_file = Path("baseline_results/simple_performance.txt")
+        if baseline_file.exists() and current_file.exists():
+            report.append("")
+            report.append("## Performance Comparison")
+            report.append("")
+            
+            # Parse both files and compare
+            current_times = {}
+            baseline_times = {}
+            
+            with open(current_file) as f:
+                for line in f:
+                    if match := re.search(r"Matrix (\d+)x\d+ multiply: ([\d.]+)", line):
+                        current_times[match.group(1)] = float(match.group(2))
+            
+            with open(baseline_file) as f:
+                for line in f:
+                    if match := re.search(r"Matrix (\d+)x\d+ multiply: ([\d.]+)", line):
+                        baseline_times[match.group(1)] = float(match.group(2))
+            
+            report.append("| Operation | Baseline | Current | Change |")
+            report.append("|-----------|----------|---------|--------|")
+            
+            for size, current_time in current_times.items():
+                if size in baseline_times:
+                    baseline_time = baseline_times[size]
+                    change = ((current_time - baseline_time) / baseline_time) * 100
+                    
+                    status = "✅" if change <= 5 else "⚠️" if change <= 10 else "❌"
+                    report.append(f"| Matrix {size}x{size} | {baseline_time:.2f} | {current_time:.2f} | {status} {change:+.1f}% |")
+                    
+                    if change > 10:
+                        regression_detected = True
+            
+            if regression_detected:
+                report.append("")
+                report.append("⚠️ **Performance regression detected!**")
+        
+        # Write report
+        with open("benchmark_results/report.md", "w") as f:
+            f.write("\n".join(report))
+        
+        # Exit with error if regression detected
+        import sys
+        sys.exit(1 if regression_detected and os.getenv('GITHUB_EVENT_NAME') == 'pull_request' else 0)
+        EOF
+    
+    # Upload results
+    - name: Upload benchmark results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: benchmark-results-${{ matrix.name }}
+        path: |
+          benchmark_results/
+          baseline_results/
+        retention-days: 30
+    
+    # Comment on PR with results
+    - name: Comment Performance Results
+      if: github.event_name == 'pull_request' && always()
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const report = fs.readFileSync('benchmark_results/report.md', 'utf8');
+          
+          // Find existing comment
+          const { data: comments } = await github.rest.issues.listComments({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+          });
+          
+          const botComment = comments.find(comment => 
+            comment.user.type === 'Bot' && 
+            comment.body.includes('Performance Benchmark Report')
+          );
+          
+          const body = `## 📊 Performance Benchmark Results (${{ matrix.name }})\n\n${report}`;
+          
+          if (botComment) {
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: botComment.id,
+              body: body
+            });
+          } else {
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: body
+            });
+          }

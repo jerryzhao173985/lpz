@@ -1,0 +1,466 @@
+name: Code Quality
+
+on:
+  pull_request:
+    branches: [ main, master ]
+    paths:
+      - '**.cpp'
+      - '**.h'
+      - '**.hpp'
+      - '**.cc'
+      - '**.c'
+      - 'CMakeLists.txt'
+      - '**/CMakeLists.txt'
+      - '.clang-format'
+      - '.clang-tidy'
+  push:
+    branches: [ main, master ]
+    paths:
+      - '**.cpp'
+      - '**.h'
+      - '**.hpp'
+      - '**.cc'
+      - '**.c'
+      - 'CMakeLists.txt'
+      - '**/CMakeLists.txt'
+  workflow_dispatch:
+    inputs:
+      full_analysis:
+        description: 'Run full analysis (slower but more thorough)'
+        required: false
+        type: boolean
+        default: false
+
+# Cancel in-progress runs when a new run is started
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CLANG_TIDY_VERSION: '15'
+
+jobs:
+  code-formatting:
+    name: Code Formatting Check
+    runs-on: ubuntu-24.04
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Need full history for diff
+        
+    - name: Install clang-format
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y clang-format-15
+        
+    - name: Get changed files
+      id: changed-files
+      if: github.event_name == 'pull_request'
+      run: |
+        # Get list of changed C++ files
+        git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | \
+          grep -E '\.(cpp|h|hpp|cc|c)$' | tr '\n' ' ' > changed_files.txt || echo "" > changed_files.txt
+        echo "files=$(cat changed_files.txt)" >> $GITHUB_OUTPUT
+        
+    - name: Check formatting
+      run: |
+        # Check formatting
+        if [ "${{ github.event_name }}" = "pull_request" ] && [ -n "${{ steps.changed-files.outputs.files }}" ]; then
+          # Check only changed files in PR
+          echo "Checking formatting for changed files..."
+          clang-format-15 --dry-run --Werror ${{ steps.changed-files.outputs.files }} 2>&1 | tee format_check.log || true
+        else
+          # Check core directories
+          echo "Checking formatting for core directories..."
+          find selforg ode_robots ga_tools -name "*.cpp" -o -name "*.h" | \
+            head -100 | xargs clang-format-15 --dry-run --Werror 2>&1 | tee format_check.log || true
+        fi
+        
+        # Check if there were formatting issues
+        if grep -q "error:" format_check.log; then
+          echo "❌ Code formatting issues found!"
+          echo "Run 'clang-format -i <file>' to fix formatting issues."
+          echo ""
+          echo "Files with formatting issues:"
+          grep -l "error:" format_check.log | sort | uniq || true
+          exit 1
+        else
+          echo "✅ Code formatting check passed!"
+        fi
+        
+    - name: Upload formatting report
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: formatting-report
+        path: format_check.log
+
+  static-analysis:
+    name: Static Analysis
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+        
+    - name: Install analysis tools
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          clang-${{ env.CLANG_TIDY_VERSION }} \
+          clang-tidy-${{ env.CLANG_TIDY_VERSION }} \
+          clang-tools-${{ env.CLANG_TIDY_VERSION }} \
+          cppcheck \
+          cmake ninja-build \
+          libgsl-dev libreadline-dev libncurses5-dev \
+          libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev
+          
+    - name: Configure project for analysis
+      run: |
+        # Configure with compile_commands.json generation
+        cmake --preset=ci \
+          -DCMAKE_BUILD_TYPE=Debug \
+          -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+          -DBUILD_TESTS=OFF \
+          -DBUILD_GUI_TOOLS=OFF \
+          -DLPZROBOTS_USE_SYSTEM_ODE=ON
+          
+    - name: Run clang-tidy
+      id: clang-tidy
+      continue-on-error: true
+      run: |
+        cd build/ci
+        
+        # Run clang-tidy on changed files or sample files
+        if [ "${{ github.event_name }}" = "pull_request" ]; then
+          # Get changed files
+          CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT \
+            ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | \
+            grep -E '\.(cpp|h)$' | grep -E '^(selforg|ode_robots|ga_tools)/' || echo "")
+            
+          if [ -n "$CHANGED_FILES" ]; then
+            echo "Running clang-tidy on changed files..."
+            echo "$CHANGED_FILES" | xargs -I {} \
+              clang-tidy-${{ env.CLANG_TIDY_VERSION }} {} \
+              -p . \
+              --export-fixes=clang-tidy-fixes.yaml \
+              2>&1 | tee clang-tidy-report.txt || true
+          fi
+        else
+          # Run on sample files for push events
+          echo "Running clang-tidy on sample files..."
+          find ../../selforg/controller -name "*.cpp" | head -20 | xargs -I {} \
+            clang-tidy-${{ env.CLANG_TIDY_VERSION }} {} \
+            -p . \
+            --export-fixes=clang-tidy-fixes.yaml \
+            2>&1 | tee clang-tidy-report.txt || true
+        fi
+        
+        # Count issues
+        WARNINGS=$(grep -c "warning:" clang-tidy-report.txt || echo "0")
+        ERRORS=$(grep -c "error:" clang-tidy-report.txt || echo "0")
+        echo "Found $WARNINGS warnings and $ERRORS errors"
+        echo "warnings=$WARNINGS" >> $GITHUB_OUTPUT
+        echo "errors=$ERRORS" >> $GITHUB_OUTPUT
+        
+    - name: Run cppcheck
+      id: cppcheck
+      continue-on-error: true
+      run: |
+        cd build/ci
+        
+        # Run cppcheck with focused checks
+        cppcheck \
+          --enable=warning,style,performance,portability \
+          --std=c++17 \
+          --suppress=missingInclude \
+          --suppress=unmatchedSuppression \
+          --suppress=unusedFunction \
+          --suppress=unknownMacro \
+          --inline-suppr \
+          --quiet \
+          --project=compile_commands.json \
+          --xml \
+          --xml-version=2 \
+          2> cppcheck-report.xml || true
+          
+        # Convert to human-readable format
+        cppcheck \
+          --enable=warning,style,performance,portability \
+          --std=c++17 \
+          --suppress=missingInclude \
+          --suppress=unmatchedSuppression \
+          --suppress=unusedFunction \
+          --suppress=unknownMacro \
+          --inline-suppr \
+          --quiet \
+          --project=compile_commands.json \
+          --template='{file}:{line}: {severity}: {message} [{id}]' \
+          2> cppcheck-report.txt || true
+          
+        # Count issues
+        ISSUES=$(wc -l < cppcheck-report.txt)
+        echo "Found $ISSUES cppcheck issues"
+        echo "issues=$ISSUES" >> $GITHUB_OUTPUT
+        
+    - name: Generate analysis summary
+      run: |
+        cd build/ci
+        cat > analysis-summary.md << EOF
+        # Code Quality Analysis Summary
+        
+        ## Results
+        
+        ### Clang-Tidy
+        - Warnings: ${{ steps.clang-tidy.outputs.warnings || '0' }}
+        - Errors: ${{ steps.clang-tidy.outputs.errors || '0' }}
+        
+        ### Cppcheck  
+        - Issues: ${{ steps.cppcheck.outputs.issues || '0' }}
+        
+        ## Top Issues
+        
+        EOF
+        
+        # Add specific issues if any
+        if [ -f clang-tidy-report.txt ] && [ -s clang-tidy-report.txt ]; then
+          echo "### Most Common Clang-Tidy Issues" >> analysis-summary.md
+          grep "warning:" clang-tidy-report.txt | \
+            sed 's/.*\[\(.*\)\].*/\1/' | \
+            sort | uniq -c | sort -nr | head -10 >> analysis-summary.md || true
+        fi
+        
+        # Add fix suggestions
+        if [ -f clang-tidy-fixes.yaml ]; then
+          echo "" >> analysis-summary.md
+          echo "📝 Automated fixes are available in clang-tidy-fixes.yaml" >> analysis-summary.md
+          echo "Apply with: clang-apply-replacements ." >> analysis-summary.md
+        fi
+        
+    - name: Upload analysis reports
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: static-analysis-reports
+        path: |
+          build/ci/clang-tidy-report.txt
+          build/ci/clang-tidy-fixes.yaml
+          build/ci/cppcheck-report.xml
+          build/ci/cppcheck-report.txt
+          build/ci/analysis-summary.md
+          
+    - name: Comment PR with analysis results
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          
+          // Read summary
+          let summary = '## 🔍 Code Quality Analysis\n\n';
+          
+          try {
+            const analysisContent = fs.readFileSync('build/ci/analysis-summary.md', 'utf8');
+            summary += analysisContent;
+          } catch (e) {
+            summary += 'Analysis summary not available.';
+          }
+          
+          // Find existing comment
+          const { data: comments } = await github.rest.issues.listComments({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+          });
+          
+          const botComment = comments.find(comment => 
+            comment.user.type === 'Bot' && 
+            comment.body.includes('Code Quality Analysis')
+          );
+          
+          if (botComment) {
+            // Update existing comment
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: botComment.id,
+              body: summary
+            });
+          } else {
+            // Create new comment
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: summary
+            });
+          }
+
+  complexity-analysis:
+    name: Code Complexity Analysis
+    runs-on: ubuntu-24.04
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Install complexity tools
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          pmccabe \
+          cloc \
+          python3-pip
+          
+        pip3 install lizard
+        
+    - name: Run complexity analysis
+      run: |
+        echo "# Code Complexity Report" > complexity-report.md
+        echo "" >> complexity-report.md
+        
+        # Cyclomatic complexity with pmccabe
+        echo "## Cyclomatic Complexity (Top 20 Functions)" >> complexity-report.md
+        echo '```' >> complexity-report.md
+        find selforg ode_robots ga_tools -name "*.cpp" -o -name "*.h" | \
+          xargs pmccabe -v 2>/dev/null | sort -nr | head -20 >> complexity-report.md || true
+        echo '```' >> complexity-report.md
+        echo "" >> complexity-report.md
+        
+        # Detailed analysis with Lizard
+        echo "## Detailed Complexity Analysis" >> complexity-report.md
+        lizard selforg ode_robots ga_tools \
+          --CCN 15 \
+          --length 100 \
+          --arguments 10 \
+          --warnings_only \
+          --ignore_warnings 0 \
+          --exclude "*/test/*" \
+          --exclude "*/tests/*" \
+          --exclude "*/examples/*" \
+          -o complexity-lizard.txt || true
+          
+        if [ -f complexity-lizard.txt ]; then
+          echo '```' >> complexity-report.md
+          head -50 complexity-lizard.txt >> complexity-report.md
+          echo '```' >> complexity-report.md
+        fi
+        
+        # Lines of code statistics
+        echo "" >> complexity-report.md
+        echo "## Lines of Code Statistics" >> complexity-report.md
+        echo '```' >> complexity-report.md
+        cloc selforg ode_robots ga_tools --quiet --csv | tail -n +2 >> complexity-report.md || true
+        echo '```' >> complexity-report.md
+        
+    - name: Check complexity thresholds
+      run: |
+        # Check if any function exceeds complexity threshold
+        HIGH_COMPLEXITY=$(find selforg ode_robots ga_tools -name "*.cpp" | \
+          xargs pmccabe 2>/dev/null | awk '$1 > 20 {print $0}' | wc -l || echo "0")
+          
+        if [ "$HIGH_COMPLEXITY" -gt "0" ]; then
+          echo "⚠️  Found $HIGH_COMPLEXITY functions with cyclomatic complexity > 20"
+          echo "Consider refactoring complex functions for better maintainability."
+        else
+          echo "✅ All functions have acceptable complexity levels"
+        fi
+        
+    - name: Upload complexity report
+      uses: actions/upload-artifact@v4
+      with:
+        name: complexity-report
+        path: |
+          complexity-report.md
+          complexity-lizard.txt
+
+  code-quality-summary:
+    name: Code Quality Summary
+    needs: [code-formatting, static-analysis, complexity-analysis]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+    - name: Download all reports
+      uses: actions/download-artifact@v4
+      with:
+        path: reports
+        
+    - name: Generate final summary
+      run: |
+        cat > quality-summary.md << EOF
+        # 📊 Code Quality Report
+        
+        ## Summary
+        
+        | Check | Status |
+        |-------|--------|
+        | Code Formatting | ${{ needs.code-formatting.result == 'success' && '✅ Passed' || '❌ Failed' }} |
+        | Static Analysis | ${{ needs.static-analysis.result == 'success' && '✅ Passed' || '⚠️ Issues Found' }} |
+        | Complexity Analysis | ${{ needs.complexity-analysis.result == 'success' && '✅ Completed' || '❌ Failed' }} |
+        
+        ## Actions Required
+        
+        EOF
+        
+        # Add specific actions based on results
+        if [ "${{ needs.code-formatting.result }}" != "success" ]; then
+          echo "- 🔧 Fix code formatting issues (run clang-format)" >> quality-summary.md
+        fi
+        
+        if [ "${{ needs.static-analysis.result }}" != "success" ]; then
+          echo "- 🔍 Review static analysis warnings" >> quality-summary.md
+        fi
+        
+        echo "" >> quality-summary.md
+        echo "## Detailed Reports" >> quality-summary.md
+        echo "" >> quality-summary.md
+        echo "Download the artifacts for detailed analysis reports." >> quality-summary.md
+        
+        # Add to GitHub step summary
+        cat quality-summary.md >> $GITHUB_STEP_SUMMARY
+        
+    - name: Comment on PR
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const summary = fs.readFileSync('quality-summary.md', 'utf8');
+          
+          // Add download links
+          const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+          const fullSummary = summary + `\n\n[View Full Results](${runUrl})`;
+          
+          // Find existing summary comment
+          const { data: comments } = await github.rest.issues.listComments({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+          });
+          
+          const summaryComment = comments.find(comment => 
+            comment.user.type === 'Bot' && 
+            comment.body.includes('Code Quality Report')
+          );
+          
+          if (summaryComment) {
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: summaryComment.id,
+              body: fullSummary
+            });
+          } else {
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: fullSummary
+            });
+          }

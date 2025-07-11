@@ -1,0 +1,597 @@
+name: LPZRobots Code Quality
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+  push:
+    branches: [ main, develop ]
+    paths:
+      - '**.cpp'
+      - '**.h'
+      - '**.hpp'
+      - '**.cc'
+      - '**.c'
+      - 'CMakeLists.txt'
+      - '**/CMakeLists.txt'
+  workflow_dispatch:
+    inputs:
+      full_analysis:
+        description: 'Run full analysis (slower but more thorough)'
+        required: false
+        type: boolean
+        default: false
+
+# Cancel in-progress runs when a new run is started
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CPPCHECK_VERSION: '2.13'
+  CLANG_TIDY_VERSION: '15'
+
+jobs:
+  code-formatting:
+    name: Code Formatting Check
+    runs-on: ubuntu-22.04
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Need full history for diff
+        
+    - name: Install clang-format
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y clang-format-15
+        
+    - name: Get changed files
+      id: changed-files
+      if: github.event_name == 'pull_request'
+      run: |
+        # Get list of changed C++ files
+        git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | \
+          grep -E '\.(cpp|h|hpp|cc|c)$' | tr '\n' ' ' > changed_files.txt
+        echo "files=$(cat changed_files.txt)" >> $GITHUB_OUTPUT
+        
+    - name: Check formatting
+      run: |
+        # Create .clang-format if it doesn't exist
+        if [ ! -f .clang-format ]; then
+          cat > .clang-format << 'EOF'
+        ---
+        Language: Cpp
+        BasedOnStyle: Google
+        IndentWidth: 2
+        ColumnLimit: 100
+        AlignAfterOpenBracket: Align
+        AlignConsecutiveAssignments: false
+        AlignConsecutiveDeclarations: false
+        AlignOperands: true
+        AlignTrailingComments: true
+        AllowShortBlocksOnASingleLine: false
+        AllowShortFunctionsOnASingleLine: Inline
+        AllowShortIfStatementsOnASingleLine: false
+        AllowShortLoopsOnASingleLine: false
+        BinPackArguments: true
+        BinPackParameters: true
+        BreakBeforeBraces: Attach
+        BreakConstructorInitializers: BeforeColon
+        CompactNamespaces: false
+        ConstructorInitializerIndentWidth: 4
+        ContinuationIndentWidth: 4
+        Cpp11BracedListStyle: true
+        DerivePointerAlignment: false
+        FixNamespaceComments: true
+        IncludeBlocks: Regroup
+        IndentCaseLabels: true
+        IndentPPDirectives: None
+        KeepEmptyLinesAtTheStartOfBlocks: false
+        MaxEmptyLinesToKeep: 1
+        NamespaceIndentation: None
+        PointerAlignment: Right
+        ReflowComments: true
+        SortIncludes: true
+        SortUsingDeclarations: true
+        SpaceAfterCStyleCast: false
+        SpaceAfterTemplateKeyword: true
+        SpaceBeforeAssignmentOperators: true
+        SpaceBeforeParens: ControlStatements
+        SpaceInEmptyParentheses: false
+        SpacesInAngles: false
+        SpacesInCStyleCastParentheses: false
+        SpacesInParentheses: false
+        SpacesInSquareBrackets: false
+        Standard: c++17
+        UseTab: Never
+        EOF
+        fi
+        
+        # Check formatting
+        if [ "${{ github.event_name }}" = "pull_request" ] && [ -n "${{ steps.changed-files.outputs.files }}" ]; then
+          # Check only changed files in PR
+          echo "Checking formatting for changed files..."
+          clang-format-15 --dry-run --Werror ${{ steps.changed-files.outputs.files }} 2>&1 | tee format_check.log
+        else
+          # Check core directories
+          echo "Checking formatting for core directories..."
+          find selforg ode_robots -name "*.cpp" -o -name "*.h" | \
+            head -100 | xargs clang-format-15 --dry-run --Werror 2>&1 | tee format_check.log || true
+        fi
+        
+        # Check if there were formatting issues
+        if grep -q "error:" format_check.log; then
+          echo "❌ Code formatting issues found!"
+          echo "Run 'clang-format -i <file>' to fix formatting issues."
+          exit 1
+        else
+          echo "✅ Code formatting check passed!"
+        fi
+        
+    - name: Upload formatting report
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: formatting-report
+        path: format_check.log
+
+  static-analysis:
+    name: Static Analysis
+    runs-on: ubuntu-22.04
+    timeout-minutes: 60
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+        
+    - name: Install analysis tools
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          clang-${{ env.CLANG_TIDY_VERSION }} \
+          clang-tidy-${{ env.CLANG_TIDY_VERSION }} \
+          clang-tools-${{ env.CLANG_TIDY_VERSION }} \
+          cppcheck \
+          iwyu \
+          cmake ninja-build \
+          libgsl-dev libreadline-dev libncurses5-dev
+          
+    - name: Configure project for analysis
+      run: |
+        # Configure with compile_commands.json generation
+        cmake -B build \
+          -DCMAKE_BUILD_TYPE=Debug \
+          -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+          -DBUILD_TESTS=OFF \
+          -DBUILD_GUI_TOOLS=OFF \
+          -G Ninja
+          
+    - name: Run clang-tidy
+      id: clang-tidy
+      continue-on-error: true
+      run: |
+        # Create .clang-tidy configuration
+        cat > .clang-tidy << 'EOF'
+        ---
+        Checks: >
+          -*,
+          bugprone-*,
+          performance-*,
+          readability-*,
+          modernize-*,
+          cppcoreguidelines-*,
+          -modernize-use-trailing-return-type,
+          -readability-magic-numbers,
+          -cppcoreguidelines-avoid-magic-numbers,
+          -readability-braces-around-statements,
+          -cppcoreguidelines-pro-bounds-pointer-arithmetic,
+          -cppcoreguidelines-pro-bounds-array-to-pointer-decay,
+          -modernize-use-auto,
+          -readability-else-after-return,
+          -cppcoreguidelines-pro-type-vararg,
+          -cppcoreguidelines-owning-memory
+        WarningsAsErrors: ''
+        HeaderFilterRegex: '(selforg|ode_robots)\/.*\.h$'
+        AnalyzeTemporaryDtors: false
+        CheckOptions:
+          - key: readability-identifier-naming.ClassCase
+            value: CamelCase
+          - key: readability-identifier-naming.FunctionCase
+            value: camelBack
+          - key: readability-identifier-naming.VariableCase
+            value: lower_case
+          - key: readability-identifier-naming.GlobalConstantCase
+            value: UPPER_CASE
+          - key: performance-move-const-arg.CheckTriviallyCopyableMove
+            value: false
+        EOF
+        
+        # Run clang-tidy on changed files or sample files
+        if [ "${{ github.event_name }}" = "pull_request" ]; then
+          # Get changed files
+          CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT \
+            ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | \
+            grep -E '\.(cpp|h)$' | grep -E '^(selforg|ode_robots)/' || echo "")
+            
+          if [ -n "$CHANGED_FILES" ]; then
+            echo "Running clang-tidy on changed files..."
+            echo "$CHANGED_FILES" | xargs -I {} \
+              clang-tidy-${{ env.CLANG_TIDY_VERSION }} {} \
+              -p build \
+              --export-fixes=clang-tidy-fixes.yaml \
+              2>&1 | tee clang-tidy-report.txt
+          fi
+        else
+          # Run on sample files for push events
+          echo "Running clang-tidy on sample files..."
+          find selforg/controller -name "*.cpp" | head -20 | xargs -I {} \
+            clang-tidy-${{ env.CLANG_TIDY_VERSION }} {} \
+            -p build \
+            --export-fixes=clang-tidy-fixes.yaml \
+            2>&1 | tee clang-tidy-report.txt || true
+        fi
+        
+        # Count issues
+        WARNINGS=$(grep -c "warning:" clang-tidy-report.txt || echo "0")
+        ERRORS=$(grep -c "error:" clang-tidy-report.txt || echo "0")
+        echo "Found $WARNINGS warnings and $ERRORS errors"
+        echo "warnings=$WARNINGS" >> $GITHUB_OUTPUT
+        echo "errors=$ERRORS" >> $GITHUB_OUTPUT
+        
+    - name: Run cppcheck
+      id: cppcheck
+      continue-on-error: true
+      run: |
+        # Run cppcheck with comprehensive checks
+        cppcheck \
+          --enable=warning,style,performance,portability,information \
+          --std=c++17 \
+          --suppress=missingInclude \
+          --suppress=unmatchedSuppression \
+          --suppress=unusedFunction \
+          --inline-suppr \
+          --project=build/compile_commands.json \
+          --xml \
+          --xml-version=2 \
+          2> cppcheck-report.xml
+          
+        # Convert to human-readable format
+        cppcheck \
+          --enable=warning,style,performance,portability \
+          --std=c++17 \
+          --suppress=missingInclude \
+          --suppress=unmatchedSuppression \
+          --suppress=unusedFunction \
+          --inline-suppr \
+          --project=build/compile_commands.json \
+          --template='{file}:{line}: {severity}: {message} [{id}]' \
+          2> cppcheck-report.txt || true
+          
+        # Count issues
+        ISSUES=$(wc -l < cppcheck-report.txt)
+        echo "Found $ISSUES cppcheck issues"
+        echo "issues=$ISSUES" >> $GITHUB_OUTPUT
+        
+    - name: Run include-what-you-use
+      if: github.event.inputs.full_analysis == 'true'
+      continue-on-error: true
+      run: |
+        # Run IWYU on sample files
+        find selforg/controller -name "*.cpp" | head -10 | while read file; do
+          echo "Analyzing $file..."
+          iwyu -p build "$file" 2>&1 || true
+        done | tee iwyu-report.txt
+        
+    - name: Generate analysis summary
+      run: |
+        cat > analysis-summary.md << EOF
+        # Code Quality Analysis Summary
+        
+        ## Results
+        
+        ### Clang-Tidy
+        - Warnings: ${{ steps.clang-tidy.outputs.warnings || '0' }}
+        - Errors: ${{ steps.clang-tidy.outputs.errors || '0' }}
+        
+        ### Cppcheck  
+        - Issues: ${{ steps.cppcheck.outputs.issues || '0' }}
+        
+        ## Recommendations
+        
+        EOF
+        
+        # Add specific recommendations based on common issues
+        if [ -f clang-tidy-report.txt ]; then
+          echo "### Most Common Issues" >> analysis-summary.md
+          grep "warning:" clang-tidy-report.txt | \
+            sed 's/.*\[\(.*\)\].*/\1/' | \
+            sort | uniq -c | sort -nr | head -10 >> analysis-summary.md || true
+        fi
+        
+        # Add fix suggestions
+        if [ -f clang-tidy-fixes.yaml ]; then
+          echo "" >> analysis-summary.md
+          echo "📝 Automated fixes are available in clang-tidy-fixes.yaml" >> analysis-summary.md
+          echo "Apply with: clang-apply-replacements build/" >> analysis-summary.md
+        fi
+        
+    - name: Upload analysis reports
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: static-analysis-reports
+        path: |
+          clang-tidy-report.txt
+          clang-tidy-fixes.yaml
+          cppcheck-report.xml
+          cppcheck-report.txt
+          iwyu-report.txt
+          analysis-summary.md
+          
+    - name: Comment PR with analysis results
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          
+          // Read summary
+          let summary = '## 🔍 Code Quality Analysis\n\n';
+          
+          try {
+            const analysisContent = fs.readFileSync('analysis-summary.md', 'utf8');
+            summary += analysisContent;
+          } catch (e) {
+            summary += 'Analysis summary not available.';
+          }
+          
+          // Find existing comment
+          const { data: comments } = await github.rest.issues.listComments({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+          });
+          
+          const botComment = comments.find(comment => 
+            comment.user.type === 'Bot' && 
+            comment.body.includes('Code Quality Analysis')
+          );
+          
+          if (botComment) {
+            // Update existing comment
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: botComment.id,
+              body: summary
+            });
+          } else {
+            // Create new comment
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: summary
+            });
+          }
+
+  complexity-analysis:
+    name: Code Complexity Analysis
+    runs-on: ubuntu-22.04
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Install complexity tools
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          pmccabe \
+          cloc \
+          python3-pip
+          
+        pip3 install lizard
+        
+    - name: Run complexity analysis
+      run: |
+        echo "# Code Complexity Report" > complexity-report.md
+        echo "" >> complexity-report.md
+        
+        # Cyclomatic complexity with pmccabe
+        echo "## Cyclomatic Complexity (Top 20 Functions)" >> complexity-report.md
+        echo '```' >> complexity-report.md
+        find selforg ode_robots -name "*.cpp" -o -name "*.h" | \
+          xargs pmccabe -v | sort -nr | head -20 >> complexity-report.md || true
+        echo '```' >> complexity-report.md
+        echo "" >> complexity-report.md
+        
+        # Detailed analysis with Lizard
+        echo "## Detailed Complexity Analysis" >> complexity-report.md
+        lizard selforg ode_robots \
+          --CCN 15 \
+          --length 100 \
+          --arguments 10 \
+          --warnings_only \
+          --ignore_warnings 0 \
+          --exclude "*/test/*" \
+          --exclude "*/examples/*" \
+          -o complexity-lizard.txt || true
+          
+        if [ -f complexity-lizard.txt ]; then
+          echo '```' >> complexity-report.md
+          head -50 complexity-lizard.txt >> complexity-report.md
+          echo '```' >> complexity-report.md
+        fi
+        
+        # Lines of code statistics
+        echo "" >> complexity-report.md
+        echo "## Lines of Code Statistics" >> complexity-report.md
+        echo '```' >> complexity-report.md
+        cloc selforg ode_robots --quiet --csv | tail -n +2 >> complexity-report.md || true
+        echo '```' >> complexity-report.md
+        
+    - name: Check complexity thresholds
+      run: |
+        # Check if any function exceeds complexity threshold
+        HIGH_COMPLEXITY=$(find selforg ode_robots -name "*.cpp" | \
+          xargs pmccabe | awk '$1 > 20 {print $0}' | wc -l || echo "0")
+          
+        if [ "$HIGH_COMPLEXITY" -gt "0" ]; then
+          echo "⚠️  Found $HIGH_COMPLEXITY functions with cyclomatic complexity > 20"
+          echo "Consider refactoring complex functions for better maintainability."
+        else
+          echo "✅ All functions have acceptable complexity levels"
+        fi
+        
+    - name: Upload complexity report
+      uses: actions/upload-artifact@v4
+      with:
+        name: complexity-report
+        path: |
+          complexity-report.md
+          complexity-lizard.txt
+
+  security-analysis:
+    name: Security Analysis
+    runs-on: ubuntu-22.04
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Install security tools
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y python3-pip
+        pip3 install flawfinder bandit
+        
+    - name: Run Flawfinder
+      continue-on-error: true
+      run: |
+        echo "# Security Analysis Report" > security-report.md
+        echo "" >> security-report.md
+        echo "## Flawfinder Results" >> security-report.md
+        echo "" >> security-report.md
+        
+        # Run flawfinder
+        flawfinder \
+          --minlevel=2 \
+          --html \
+          --context \
+          selforg/ ode_robots/ > flawfinder-report.html || true
+          
+        # Also create text report
+        flawfinder \
+          --minlevel=2 \
+          --columns \
+          --context \
+          selforg/ ode_robots/ > flawfinder-report.txt || true
+          
+        # Extract summary
+        echo '```' >> security-report.md
+        head -20 flawfinder-report.txt >> security-report.md || echo "No issues found" >> security-report.md
+        echo '```' >> security-report.md
+        
+    - name: Check for hardcoded credentials
+      run: |
+        echo "" >> security-report.md
+        echo "## Credential Scan" >> security-report.md
+        
+        # Simple patterns for common credentials
+        PATTERNS="password|passwd|pwd|secret|key|token|api_key|apikey|auth"
+        
+        echo "Scanning for potential hardcoded credentials..." >> security-report.md
+        grep -r -i -E "$PATTERNS" selforg ode_robots \
+          --include="*.cpp" --include="*.h" \
+          --exclude-dir=".git" \
+          --exclude-dir="build" | \
+          grep -v -E "(\/\/|/\*|\*|#)" | \
+          head -10 >> credential-scan.txt || echo "No potential credentials found" >> credential-scan.txt
+          
+        if [ -s credential-scan.txt ]; then
+          echo "⚠️  Potential credentials found (review needed):" >> security-report.md
+          echo '```' >> security-report.md
+          cat credential-scan.txt >> security-report.md
+          echo '```' >> security-report.md
+        else
+          echo "✅ No hardcoded credentials detected" >> security-report.md
+        fi
+        
+    - name: Upload security reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: security-analysis
+        path: |
+          security-report.md
+          flawfinder-report.*
+          credential-scan.txt
+
+  code-quality-summary:
+    name: Code Quality Summary
+    needs: [code-formatting, static-analysis, complexity-analysis, security-analysis]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+    - name: Download all reports
+      uses: actions/download-artifact@v4
+      with:
+        path: reports
+        
+    - name: Generate final summary
+      run: |
+        cat > quality-summary.md << EOF
+        # 📊 Code Quality Report
+        
+        ## Summary
+        
+        | Check | Status |
+        |-------|--------|
+        | Code Formatting | ${{ needs.code-formatting.result == 'success' && '✅ Passed' || '❌ Failed' }} |
+        | Static Analysis | ${{ needs.static-analysis.result == 'success' && '✅ Passed' || '⚠️ Issues Found' }} |
+        | Complexity Analysis | ${{ needs.complexity-analysis.result == 'success' && '✅ Completed' || '❌ Failed' }} |
+        | Security Analysis | ${{ needs.security-analysis.result == 'success' && '✅ Completed' || '❌ Failed' }} |
+        
+        ## Actions Required
+        
+        EOF
+        
+        # Add specific actions based on results
+        if [ "${{ needs.code-formatting.result }}" != "success" ]; then
+          echo "- 🔧 Fix code formatting issues (run clang-format)" >> quality-summary.md
+        fi
+        
+        if [ "${{ needs.static-analysis.result }}" != "success" ]; then
+          echo "- 🔍 Review static analysis warnings" >> quality-summary.md
+        fi
+        
+        echo "" >> quality-summary.md
+        echo "## Detailed Reports" >> quality-summary.md
+        echo "" >> quality-summary.md
+        echo "Download the artifacts for detailed analysis reports." >> quality-summary.md
+        
+        # Add to GitHub step summary
+        cat quality-summary.md >> $GITHUB_STEP_SUMMARY
+        
+    - name: Comment on PR
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const summary = fs.readFileSync('quality-summary.md', 'utf8');
+          
+          // Add download links
+          const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+          const fullSummary = summary + `\n\n[View Full Results](${runUrl})`;
+          
+          github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+            body: fullSummary
+          });

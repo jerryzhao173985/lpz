@@ -1,0 +1,576 @@
+name: LPZRobots Test Examples & Simulations
+
+on:
+  schedule:
+    # Run every Sunday at 1 AM UTC
+    - cron: '0 1 * * 0'
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'selforg/examples/**'
+      - 'ode_robots/simulations/**'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'selforg/examples/**'
+      - 'ode_robots/simulations/**'
+  workflow_dispatch:
+    inputs:
+      test_category:
+        description: 'Category to test'
+        type: choice
+        required: false
+        default: 'all'
+        options:
+          - all
+          - examples
+          - simulations
+          - novel_algorithms
+          - templates
+      timeout_minutes:
+        description: 'Timeout per test (minutes)'
+        required: false
+        type: number
+        default: 5
+
+env:
+  CMAKE_BUILD_PARALLEL_LEVEL: 4
+  DISPLAY: :99
+  LPZROBOTS_WARMUP_STEPS: 20
+
+jobs:
+  test-selforg-examples:
+    name: Test Selforg Examples
+    runs-on: ubuntu-22.04
+    timeout-minutes: 120
+    if: github.event.inputs.test_category == 'all' || github.event.inputs.test_category == 'examples' || github.event.inputs.test_category == 'novel_algorithms'
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Core controller tests
+          - name: "Controller Tests"
+            tests: "controllertest feedforwardtest rl_test"
+            category: "core"
+            
+          # Matrix operation tests
+          - name: "Matrix Tests"
+            tests: "test_matrix_operations test_matrix_pool test_matrixview test_pseudoinverse"
+            category: "matrix"
+            
+          # Novel algorithm tests
+          - name: "Novel Algorithms - SOX Variants"
+            tests: "test_apex_sox test_casox_simple test_casox_fixed test_casox_dimensions"
+            category: "novel_sox"
+            
+          # Novel algorithm tests continued
+          - name: "Novel Algorithms - Others"
+            tests: "test_itsox test_mshc test_ahsox test_novel_algorithms test_novel_behaviors"
+            category: "novel_other"
+            
+          # Performance tests
+          - name: "Performance Tests"
+            tests: "test_algorithms_performance test_novel_algorithms_performance"
+            category: "performance"
+            
+          # Memory and advanced tests
+          - name: "Advanced Tests"
+            tests: "test_memory_simple test_modern_patterns test_advanced_opt test_comprehensive"
+            category: "advanced"
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+        
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          build-essential cmake ninja-build \
+          libgsl-dev libreadline-dev libncurses5-dev \
+          libglu1-mesa-dev freeglut3-dev \
+          xvfb mesa-utils
+          
+    - name: Build project
+      run: |
+        cmake -B build \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DBUILD_TESTS=ON \
+          -DBUILD_EXAMPLES=ON \
+          -DBUILD_GUI_TOOLS=OFF \
+          -G Ninja
+        cmake --build build
+        
+    - name: Setup virtual display
+      run: |
+        Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+        sleep 3
+        
+    - name: Test ${{ matrix.name }}
+      run: |
+        cd build/selforg/examples
+        
+        echo "Testing category: ${{ matrix.category }}"
+        echo "Tests to run: ${{ matrix.tests }}"
+        echo "========================================"
+        
+        TIMEOUT="${{ github.event.inputs.timeout_minutes || 5 }}"
+        FAILED_TESTS=""
+        PASSED_TESTS=""
+        
+        for test in ${{ matrix.tests }}; do
+          if [ -f "$test" ]; then
+            echo ""
+            echo "Running: $test"
+            echo "----------------------------------------"
+            
+            # Run test with timeout
+            if timeout ${TIMEOUT}m ./$test > ${test}.log 2>&1; then
+              echo "✅ $test passed"
+              PASSED_TESTS="$PASSED_TESTS $test"
+            else
+              EXIT_CODE=$?
+              if [ $EXIT_CODE -eq 124 ]; then
+                echo "⏱️  $test timed out after ${TIMEOUT} minutes"
+              else
+                echo "❌ $test failed with exit code $EXIT_CODE"
+              fi
+              FAILED_TESTS="$FAILED_TESTS $test"
+              
+              # Show last 50 lines of log for failed tests
+              echo "Last 50 lines of output:"
+              tail -50 ${test}.log
+            fi
+          else
+            echo "⚠️  $test not found (not built?)"
+          fi
+        done
+        
+        echo ""
+        echo "========================================"
+        echo "Summary for ${{ matrix.name }}:"
+        echo "Passed: $PASSED_TESTS"
+        echo "Failed: $FAILED_TESTS"
+        
+        # Set exit code based on failures
+        if [ -n "$FAILED_TESTS" ]; then
+          exit 1
+        fi
+        
+    - name: Upload test logs
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: example-logs-${{ matrix.category }}
+        path: |
+          build/selforg/examples/*.log
+        retention-days: 7
+
+  test-ode-robots-simulations:
+    name: Test ODE Robots Simulations
+    runs-on: ubuntu-22.04
+    timeout-minutes: 180
+    if: github.event.inputs.test_category == 'all' || github.event.inputs.test_category == 'simulations' || github.event.inputs.test_category == 'templates'
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Template simulations
+          - name: "Template Simulations"
+            simulations: "template_sphererobot template_onerobot template_schlange template_hexabot"
+            category: "templates"
+            
+          # Novel controller demonstrations
+          - name: "Novel Controller Demos"
+            simulations: "apex_sox_demo demo_itsox hexapod_novel_controllers sphererobot_novel_controllers"
+            category: "novel_demos"
+            
+          # Basic simulations
+          - name: "Basic Simulations"
+            simulations: "sphericalrobot pendulum multiexperts"
+            category: "basic"
+            
+          # Complex simulations (longer runtime)
+          - name: "Complex Simulations"
+            simulations: "hexapod humanoid wheelie"
+            category: "complex"
+            
+          # Test all algorithms simulation
+          - name: "Algorithm Test Suite"
+            simulations: "test_all_algorithms"
+            category: "algorithm_tests"
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+        
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          build-essential cmake ninja-build \
+          libgsl-dev libreadline-dev libncurses5-dev \
+          libglu1-mesa-dev freeglut3-dev \
+          qt6-base-dev qt6-tools-dev \
+          libopenscenegraph-dev \
+          xvfb mesa-utils
+          
+    - name: Build project
+      run: |
+        cmake -B build \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DBUILD_TESTS=OFF \
+          -DBUILD_EXAMPLES=ON \
+          -DBUILD_GUI_TOOLS=ON \
+          -G Ninja
+        cmake --build build
+        
+    - name: Setup virtual display
+      run: |
+        Xvfb :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
+        sleep 3
+        
+    - name: Test ${{ matrix.name }}
+      run: |
+        cd build/ode_robots/simulations
+        
+        echo "Testing category: ${{ matrix.category }}"
+        echo "Simulations to run: ${{ matrix.simulations }}"
+        echo "========================================"
+        
+        TIMEOUT="${{ github.event.inputs.timeout_minutes || 5 }}"
+        FAILED_SIMS=""
+        PASSED_SIMS=""
+        
+        for sim in ${{ matrix.simulations }}; do
+          if [ -d "$sim" ] && [ -f "$sim/start" ]; then
+            echo ""
+            echo "Running simulation: $sim"
+            echo "----------------------------------------"
+            
+            cd $sim
+            
+            # Determine steps based on category
+            if [ "${{ matrix.category }}" = "complex" ]; then
+              STEPS=200
+            else
+              STEPS=100
+            fi
+            
+            # Run simulation with timeout
+            if timeout ${TIMEOUT}m ./start -noshadow -nographics -steps $STEPS > ../${sim}.log 2>&1; then
+              echo "✅ $sim completed successfully"
+              PASSED_SIMS="$PASSED_SIMS $sim"
+            else
+              EXIT_CODE=$?
+              if [ $EXIT_CODE -eq 124 ]; then
+                echo "⏱️  $sim timed out after ${TIMEOUT} minutes"
+              else
+                echo "❌ $sim failed with exit code $EXIT_CODE"
+              fi
+              FAILED_SIMS="$FAILED_SIMS $sim"
+              
+              # Show last 50 lines of log for failed simulations
+              echo "Last 50 lines of output:"
+              tail -50 ../${sim}.log
+            fi
+            
+            cd ..
+          else
+            echo "⚠️  $sim not found or not built"
+          fi
+        done
+        
+        echo ""
+        echo "========================================"
+        echo "Summary for ${{ matrix.name }}:"
+        echo "Passed: $PASSED_SIMS"
+        echo "Failed: $FAILED_SIMS"
+        
+        # Set exit code based on failures
+        if [ -n "$FAILED_SIMS" ]; then
+          exit 1
+        fi
+        
+    - name: Upload simulation logs
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: simulation-logs-${{ matrix.category }}
+        path: |
+          build/ode_robots/simulations/*.log
+        retention-days: 7
+
+  test-interactive-simulations:
+    name: Test Interactive Simulations
+    runs-on: ubuntu-22.04
+    timeout-minutes: 60
+    if: github.event.inputs.test_category == 'all' || github.event.inputs.test_category == 'simulations'
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+        
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          build-essential cmake ninja-build \
+          libgsl-dev libreadline-dev libncurses5-dev \
+          libglu1-mesa-dev freeglut3-dev \
+          qt6-base-dev qt6-tools-dev \
+          libopenscenegraph-dev \
+          xvfb mesa-utils xdotool
+          
+    - name: Build project
+      run: |
+        cmake -B build \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DBUILD_GUI_TOOLS=ON \
+          -G Ninja
+        cmake --build build
+        
+    - name: Setup virtual display
+      run: |
+        Xvfb :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
+        sleep 3
+        
+    - name: Test GUI interaction
+      run: |
+        cd build/ode_robots/simulations/template_sphererobot
+        
+        echo "Testing GUI interaction capabilities..."
+        
+        # Start simulation in background
+        ./start -steps 0 > gui_test.log 2>&1 &
+        SIM_PID=$!
+        
+        # Wait for window to appear
+        sleep 10
+        
+        # Take screenshot
+        import -window root screenshot_start.png || echo "Screenshot failed"
+        
+        # Send keyboard commands using xdotool
+        xdotool key space  # Pause/unpause
+        sleep 2
+        xdotool key v      # Change view
+        sleep 2
+        xdotool key w      # Wireframe mode
+        sleep 2
+        
+        # Take another screenshot
+        import -window root screenshot_end.png || echo "Screenshot failed"
+        
+        # Gracefully terminate
+        xdotool key q || kill $SIM_PID
+        
+        wait $SIM_PID
+        EXIT_CODE=$?
+        
+        if [ $EXIT_CODE -eq 0 ] || [ $EXIT_CODE -eq 143 ]; then
+          echo "✅ GUI interaction test passed"
+        else
+          echo "❌ GUI interaction test failed with exit code $EXIT_CODE"
+          tail -50 gui_test.log
+          exit 1
+        fi
+        
+    - name: Upload GUI test artifacts
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: gui-test-artifacts
+        path: |
+          build/ode_robots/simulations/template_sphererobot/*.log
+          build/ode_robots/simulations/template_sphererobot/*.png
+        retention-days: 7
+
+  performance-benchmark:
+    name: Performance Benchmarks
+    runs-on: ubuntu-22.04
+    timeout-minutes: 90
+    if: github.event.inputs.test_category == 'all' || github.event.inputs.test_category == 'examples'
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+        
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          build-essential cmake ninja-build \
+          libgsl-dev libreadline-dev libncurses5-dev \
+          linux-tools-generic linux-tools-$(uname -r)
+          
+    - name: Build optimized version
+      run: |
+        cmake -B build \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_CXX_FLAGS="-O3 -march=native -flto" \
+          -DBUILD_EXAMPLES=ON \
+          -G Ninja
+        cmake --build build
+        
+    - name: Run performance benchmarks
+      run: |
+        cd build/selforg/examples
+        
+        echo "Running performance benchmarks..."
+        echo "========================================"
+        
+        # Matrix performance benchmark
+        if [ -f "test_algorithms_performance" ]; then
+          echo "Matrix Algorithm Performance:"
+          ./test_algorithms_performance > perf_matrix.txt
+          cat perf_matrix.txt
+        fi
+        
+        # Novel algorithms performance
+        if [ -f "test_novel_algorithms_performance" ]; then
+          echo ""
+          echo "Novel Algorithms Performance:"
+          ./test_novel_algorithms_performance > perf_novel.txt
+          cat perf_novel.txt
+        fi
+        
+        # Controller performance comparison
+        if [ -f "test_controllers_simple" ]; then
+          echo ""
+          echo "Controller Performance:"
+          # Run with perf stat if available
+          if command -v perf >/dev/null 2>&1; then
+            sudo perf stat -d ./test_controllers_simple 2>&1 | tee perf_controllers.txt
+          else
+            time ./test_controllers_simple > perf_controllers.txt
+          fi
+        fi
+        
+    - name: Generate performance report
+      run: |
+        cd build/selforg/examples
+        
+        cat > performance_report.md << EOF
+        # Performance Benchmark Report
+        
+        Date: $(date)
+        Commit: ${{ github.sha }}
+        
+        ## Results Summary
+        
+        ### Matrix Operations
+        EOF
+        
+        if [ -f "perf_matrix.txt" ]; then
+          echo '```' >> performance_report.md
+          tail -20 perf_matrix.txt >> performance_report.md
+          echo '```' >> performance_report.md
+        fi
+        
+        echo "" >> performance_report.md
+        echo "### Novel Algorithms" >> performance_report.md
+        
+        if [ -f "perf_novel.txt" ]; then
+          echo '```' >> performance_report.md
+          tail -20 perf_novel.txt >> performance_report.md
+          echo '```' >> performance_report.md
+        fi
+        
+    - name: Upload performance results
+      uses: actions/upload-artifact@v4
+      with:
+        name: performance-benchmarks
+        path: |
+          build/selforg/examples/perf_*.txt
+          build/selforg/examples/performance_report.md
+        retention-days: 30
+
+  test-summary:
+    name: Test Summary
+    needs: [test-selforg-examples, test-ode-robots-simulations, test-interactive-simulations, performance-benchmark]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+    - name: Generate summary
+      run: |
+        cat > test_summary.md << EOF
+        # 🧪 Examples & Simulations Test Summary
+        
+        ## Test Results
+        
+        | Category | Status |
+        |----------|--------|
+        | Selforg Examples | ${{ needs.test-selforg-examples.result == 'success' && '✅ Passed' || '❌ Failed' }} |
+        | ODE Robots Simulations | ${{ needs.test-ode-robots-simulations.result == 'success' && '✅ Passed' || '❌ Failed' }} |
+        | Interactive Simulations | ${{ needs.test-interactive-simulations.result == 'success' && '✅ Passed' || '❌ Failed' }} |
+        | Performance Benchmarks | ${{ needs.performance-benchmark.result == 'success' && '✅ Completed' || '❌ Failed' }} |
+        
+        ## Categories Tested
+        
+        ### Examples
+        - ✅ Core controller tests
+        - ✅ Matrix operation tests
+        - ✅ Novel algorithm implementations
+        - ✅ Performance benchmarks
+        - ✅ Memory and advanced tests
+        
+        ### Simulations
+        - ✅ Template simulations
+        - ✅ Novel controller demonstrations
+        - ✅ Basic simulations
+        - ✅ Complex simulations
+        - ✅ GUI interaction tests
+        
+        ## Next Steps
+        
+        EOF
+        
+        # Add recommendations based on results
+        if [ "${{ needs.test-selforg-examples.result }}" != "success" ]; then
+          echo "- 🔧 Fix failing examples in selforg/examples" >> test_summary.md
+        fi
+        
+        if [ "${{ needs.test-ode-robots-simulations.result }}" != "success" ]; then
+          echo "- 🔧 Fix failing simulations in ode_robots/simulations" >> test_summary.md
+        fi
+        
+        echo "" >> test_summary.md
+        echo "View individual job logs for detailed results." >> test_summary.md
+        
+        # Add to GitHub step summary
+        cat test_summary.md >> $GITHUB_STEP_SUMMARY
+        
+    - name: Create issue for failures
+      if: failure() && github.event_name == 'schedule'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const title = `Examples/Simulations Test Failures - ${new Date().toISOString().split('T')[0]}`;
+          const body = `The scheduled test run for examples and simulations has failed.
+          
+          **Failed Jobs:**
+          - Selforg Examples: ${{ needs.test-selforg-examples.result }}
+          - ODE Robots Simulations: ${{ needs.test-ode-robots-simulations.result }}
+          - Interactive Simulations: ${{ needs.test-interactive-simulations.result }}
+          
+          Please check the [workflow run](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}) for details.`;
+          
+          github.rest.issues.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: title,
+            body: body,
+            labels: ['test-failure', 'examples', 'automated']
+          });

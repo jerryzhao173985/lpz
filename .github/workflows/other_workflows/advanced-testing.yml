@@ -1,0 +1,782 @@
+name: Advanced Testing
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 4 * * 6'  # Weekly on Saturday at 4 AM
+  workflow_dispatch:
+    inputs:
+      test_type:
+        description: 'Type of advanced testing to run'
+        type: choice
+        options:
+          - all
+          - property
+          - fuzz
+          - mutation
+          - stress
+        default: all
+      
+      duration:
+        description: 'Test duration in minutes (for fuzzing/stress)'
+        type: number
+        default: 30
+
+env:
+  CMAKE_BUILD_TYPE: Debug
+  FUZZING_TIME: ${{ github.event.inputs.duration || 30 }}
+
+jobs:
+  property-based-testing:
+    name: Property-Based Tests
+    if: github.event.inputs.test_type == 'all' || github.event.inputs.test_type == 'property'
+    runs-on: ubuntu-22.04
+    timeout-minutes: 45
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    
+    - name: Setup Environment
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          ninja-build cmake g++-11 \
+          libgsl-dev libreadline-dev libncurses5-dev \
+          libglu1-mesa-dev freeglut3-dev \
+          qt6-base-dev libopenscenegraph-dev
+        
+        # Install rapidcheck for property-based testing
+        git clone https://github.com/emil-e/rapidcheck.git
+        cd rapidcheck
+        cmake -B build -DCMAKE_INSTALL_PREFIX=/usr/local -DRC_ENABLE_TESTS=OFF
+        cmake --build build --parallel
+        sudo cmake --install build
+    
+    - name: Configure with Property Tests
+      run: |
+        cmake -B build-property \
+          -G Ninja \
+          -DCMAKE_BUILD_TYPE=Debug \
+          -DBUILD_TESTS=ON \
+          -DLPZROBOTS_ENABLE_PROPERTY_TESTS=ON \
+          -DLPZROBOTS_PROPERTY_TEST_ITERATIONS=1000
+    
+    - name: Build Property Tests
+      run: |
+        cmake --build build-property --target property_tests --parallel
+    
+    - name: Run Property Tests
+      run: |
+        cd build-property
+        
+        # Run all property-based tests
+        ctest -L property --output-on-failure --timeout 300 -j4
+        
+        # Generate detailed report
+        ./tests/generate_property_report.py > property_test_report.md || true
+    
+    - name: Analyze Property Test Results
+      run: |
+        cd build-property
+        
+        # Analyze shrinking effectiveness
+        python3 - << 'EOF'
+        import json
+        import re
+        from pathlib import Path
+        
+        # Parse test output for property failures
+        failures = []
+        shrink_stats = []
+        
+        for log_file in Path("Testing/Temporary").glob("*.log"):
+            with open(log_file) as f:
+                content = f.read()
+                
+                # Look for property failures
+                if "Property failed" in content:
+                    # Extract failure info
+                    match = re.search(r"Shrinking.*?(\d+) steps", content)
+                    if match:
+                        shrink_steps = int(match.group(1))
+                        shrink_stats.append(shrink_steps)
+                    
+                    failures.append({
+                        "test": log_file.stem,
+                        "shrink_steps": shrink_steps if match else 0
+                    })
+        
+        # Generate report
+        report = {
+            "total_properties_tested": len(list(Path("Testing/Temporary").glob("*.log"))),
+            "failures": len(failures),
+            "average_shrink_steps": sum(shrink_stats) / len(shrink_stats) if shrink_stats else 0,
+            "failed_properties": failures
+        }
+        
+        with open("property_analysis.json", "w") as f:
+            json.dump(report, f, indent=2)
+        
+        print(f"Property test analysis complete: {len(failures)} failures found")
+        EOF
+    
+    - name: Upload Property Test Results
+      uses: actions/upload-artifact@v4
+      with:
+        name: property-test-results
+        path: |
+          build-property/property_test_report.md
+          build-property/property_analysis.json
+          build-property/Testing/
+        retention-days: 30
+
+  fuzz-testing:
+    name: Fuzz Testing
+    if: github.event.inputs.test_type == 'all' || github.event.inputs.test_type == 'fuzz'
+    runs-on: ubuntu-22.04
+    timeout-minutes: 120
+    
+    strategy:
+      matrix:
+        component:
+          - matrix
+          - sox
+          - dep
+          - ahsox
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    
+    - name: Setup Fuzzing Environment
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          clang-14 llvm-14 \
+          libfuzzer-14-dev \
+          ninja-build \
+          libgsl-dev
+        
+        # Set up AFL++ as alternative fuzzer
+        git clone https://github.com/AFLplusplus/AFLplusplus
+        cd AFLplusplus
+        make
+        sudo make install
+    
+    - name: Configure for Fuzzing
+      run: |
+        # LibFuzzer build
+        CC=clang-14 CXX=clang++-14 cmake -B build-fuzz \
+          -G Ninja \
+          -DCMAKE_BUILD_TYPE=Debug \
+          -DLPZROBOTS_ENABLE_FUZZING=ON \
+          -DCMAKE_CXX_FLAGS="-fsanitize=fuzzer,address,undefined -fno-omit-frame-pointer" \
+          -DCMAKE_C_FLAGS="-fsanitize=fuzzer,address,undefined -fno-omit-frame-pointer"
+        
+        # AFL++ build
+        CC=afl-clang-fast CXX=afl-clang-fast++ cmake -B build-afl \
+          -G Ninja \
+          -DCMAKE_BUILD_TYPE=Debug \
+          -DLPZROBOTS_ENABLE_FUZZING=ON \
+          -DLPZROBOTS_FUZZER_TYPE=AFL
+    
+    - name: Build Fuzz Targets
+      run: |
+        # Build LibFuzzer targets
+        cmake --build build-fuzz --target ${{ matrix.component }}_fuzz
+        
+        # Build AFL++ targets
+        cmake --build build-afl --target ${{ matrix.component }}_fuzz_afl
+    
+    - name: Prepare Corpus
+      run: |
+        # Create corpus directories
+        mkdir -p corpus/${{ matrix.component }}
+        mkdir -p corpus_minimized/${{ matrix.component }}
+        mkdir -p crashes/${{ matrix.component }}
+        
+        # Generate initial corpus
+        python3 - << 'EOF'
+        import struct
+        import random
+        from pathlib import Path
+        
+        component = "${{ matrix.component }}"
+        corpus_dir = Path(f"corpus/{component}")
+        
+        # Generate diverse inputs
+        for i in range(100):
+            data = bytearray()
+            
+            # Add structured data based on component
+            if component == "matrix":
+                # Matrix dimensions
+                data.extend(struct.pack('BB', random.randint(1, 50), random.randint(1, 50)))
+                # Matrix values
+                for _ in range(100):
+                    data.extend(struct.pack('d', random.uniform(-10, 10)))
+            
+            elif component in ["sox", "dep", "ahsox"]:
+                # Controller parameters
+                data.extend(struct.pack('BB', random.randint(1, 20), random.randint(1, 20)))
+                # Sensor values
+                for _ in range(20):
+                    data.extend(struct.pack('d', random.uniform(-1, 1)))
+            
+            # Save corpus file
+            (corpus_dir / f"input_{i:04d}").write_bytes(data)
+        
+        print(f"Generated {len(list(corpus_dir.iterdir()))} corpus files for {component}")
+        EOF
+    
+    - name: Run LibFuzzer
+      run: |
+        # Run fuzzing for specified duration
+        timeout ${{ env.FUZZING_TIME }}m \
+          ./build-fuzz/tests/${{ matrix.component }}_fuzz \
+          -max_total_time=$((FUZZING_TIME * 60)) \
+          -print_stats=1 \
+          -print_coverage=1 \
+          -artifact_prefix=crashes/${{ matrix.component }}/ \
+          corpus/${{ matrix.component }} \
+          || true
+        
+        # Minimize corpus
+        ./build-fuzz/tests/${{ matrix.component }}_fuzz \
+          -merge=1 \
+          corpus_minimized/${{ matrix.component }} \
+          corpus/${{ matrix.component }}
+    
+    - name: Run AFL++
+      run: |
+        # Run AFL++ in parallel
+        export AFL_SKIP_CPUFREQ=1
+        export AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1
+        
+        # Master instance
+        timeout ${{ env.FUZZING_TIME }}m \
+          afl-fuzz -M master -i corpus/${{ matrix.component }} \
+          -o afl_output/${{ matrix.component }} \
+          -- ./build-afl/tests/${{ matrix.component }}_fuzz_afl @@ \
+          || true &
+        
+        # Slave instances
+        for i in {1..3}; do
+          timeout ${{ env.FUZZING_TIME }}m \
+            afl-fuzz -S slave$i -i corpus/${{ matrix.component }} \
+            -o afl_output/${{ matrix.component }} \
+            -- ./build-afl/tests/${{ matrix.component }}_fuzz_afl @@ \
+            || true &
+        done
+        
+        wait
+    
+    - name: Analyze Fuzzing Results
+      run: |
+        # Analyze crashes and coverage
+        python3 - << 'EOF'
+        import json
+        from pathlib import Path
+        import subprocess
+        
+        component = "${{ matrix.component }}"
+        results = {
+            "component": component,
+            "duration_minutes": ${{ env.FUZZING_TIME }},
+            "libfuzzer": {
+                "crashes": 0,
+                "unique_crashes": 0,
+                "corpus_size": 0,
+                "coverage": {}
+            },
+            "afl": {
+                "crashes": 0,
+                "unique_crashes": 0,
+                "corpus_size": 0,
+                "executions": 0
+            }
+        }
+        
+        # Count LibFuzzer crashes
+        crash_dir = Path(f"crashes/{component}")
+        if crash_dir.exists():
+            crashes = list(crash_dir.glob("*"))
+            results["libfuzzer"]["crashes"] = len(crashes)
+            
+            # Deduplicate crashes
+            unique_crashes = set()
+            for crash in crashes:
+                # Simple deduplication based on file size
+                unique_crashes.add(crash.stat().st_size)
+            results["libfuzzer"]["unique_crashes"] = len(unique_crashes)
+        
+        # Count corpus size
+        corpus_dir = Path(f"corpus_minimized/{component}")
+        if corpus_dir.exists():
+            results["libfuzzer"]["corpus_size"] = len(list(corpus_dir.iterdir()))
+        
+        # Parse AFL++ stats
+        afl_dir = Path(f"afl_output/{component}")
+        if afl_dir.exists():
+            # Count crashes
+            for fuzzer_dir in afl_dir.iterdir():
+                if fuzzer_dir.is_dir():
+                    crash_dir = fuzzer_dir / "crashes"
+                    if crash_dir.exists():
+                        # Skip README files
+                        crashes = [f for f in crash_dir.iterdir() if not f.name.startswith("README")]
+                        results["afl"]["crashes"] += len(crashes)
+            
+            # Get execution stats from master
+            stats_file = afl_dir / "master" / "fuzzer_stats"
+            if stats_file.exists():
+                with open(stats_file) as f:
+                    for line in f:
+                        if line.startswith("execs_done"):
+                            results["afl"]["executions"] = int(line.split(":")[1].strip())
+        
+        # Save results
+        with open(f"fuzz_results_{component}.json", "w") as f:
+            json.dump(results, f, indent=2)
+        
+        # Print summary
+        print(f"\nFuzzing Results for {component}:")
+        print(f"LibFuzzer: {results['libfuzzer']['crashes']} crashes found")
+        print(f"AFL++: {results['afl']['crashes']} crashes found")
+        print(f"Total executions: {results['afl']['executions']:,}")
+        EOF
+    
+    - name: Reproduce and Minimize Crashes
+      if: always()
+      run: |
+        # Try to reproduce and minimize each crash
+        for crash in crashes/${{ matrix.component }}/*; do
+          if [ -f "$crash" ]; then
+            echo "Reproducing crash: $crash"
+            
+            # Run with crash input to verify
+            ./build-fuzz/tests/${{ matrix.component }}_fuzz "$crash" 2>&1 | head -50 || true
+            
+            # Try to minimize
+            ./build-fuzz/tests/${{ matrix.component }}_fuzz \
+              -minimize_crash=1 \
+              -max_total_time=60 \
+              "$crash" || true
+          fi
+        done
+    
+    - name: Upload Fuzzing Results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: fuzz-results-${{ matrix.component }}
+        path: |
+          crashes/
+          corpus_minimized/
+          afl_output/
+          fuzz_results_*.json
+        retention-days: 90
+
+  mutation-testing:
+    name: Mutation Testing
+    if: github.event.inputs.test_type == 'all' || github.event.inputs.test_type == 'mutation'
+    runs-on: ubuntu-22.04
+    timeout-minutes: 180
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    
+    - name: Setup Mutation Testing
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          ninja-build cmake g++-11 \
+          libgsl-dev libreadline-dev \
+          python3-pip
+        
+        # Install mutation testing tools
+        pip3 install --user mutmut
+        
+        # Install Pitest for C++ (alternative)
+        wget https://github.com/hcoles/pitest/releases/download/pitest-parent-1.11.0/pitest-command-line-1.11.0.jar
+        sudo mv pitest-command-line-1.11.0.jar /usr/local/bin/pitest.jar
+    
+    - name: Configure Build
+      run: |
+        cmake -B build-mutation \
+          -G Ninja \
+          -DCMAKE_BUILD_TYPE=Debug \
+          -DBUILD_TESTS=ON \
+          -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+    
+    - name: Build Project and Tests
+      run: |
+        cmake --build build-mutation --parallel
+    
+    - name: Run Baseline Tests
+      run: |
+        cd build-mutation
+        ctest --output-on-failure
+        
+        # Store baseline test results
+        cp Testing/Temporary/LastTest.log baseline_test_results.log
+    
+    - name: Run Mutation Testing on Controllers
+      run: |
+        # Create mutation config
+        cat > .mutmut.conf << EOF
+        [mutmut]
+        paths_to_mutate = selforg/controller/
+        tests_dir = selforg/tests/
+        dict_synonyms = update, step
+        EOF
+        
+        # Run mutation testing on key controllers
+        for controller in sox dep ahsox; do
+          echo "Running mutation testing on $controller..."
+          
+          # Configure mutmut for specific controller
+          cat > mutmut_config.py << EOF
+        def init():
+            pass
+        
+        def pre_mutation(context):
+            if context.filename != "selforg/controller/${controller}.cpp":
+                return mutmut.SKIP
+        
+        def post_mutation(context):
+            # Rebuild only what's needed
+            import subprocess
+            subprocess.run(["ninja", "-C", "build-mutation", "${controller}_test"])
+        EOF
+          
+          # Run mutmut
+          python3 -m mutmut run \
+            --paths-to-mutate selforg/controller/${controller}.cpp \
+            --runner "cd build-mutation && ctest -R ${controller}_test" \
+            --use-coverage || true
+          
+          # Generate report
+          python3 -m mutmut report > mutation_report_${controller}.txt
+          
+          # HTML report
+          python3 -m mutmut html > mutation_report_${controller}.html
+        done
+    
+    - name: Analyze Mutation Results
+      run: |
+        # Parse mutation testing results
+        python3 - << 'EOF'
+        import re
+        import json
+        from pathlib import Path
+        
+        results = {}
+        
+        for report_file in Path(".").glob("mutation_report_*.txt"):
+            controller = report_file.stem.replace("mutation_report_", "")
+            
+            with open(report_file) as f:
+                content = f.read()
+                
+                # Parse statistics
+                stats = {
+                    "total_mutants": 0,
+                    "killed_mutants": 0,
+                    "survived_mutants": 0,
+                    "timeout_mutants": 0,
+                    "mutation_score": 0.0
+                }
+                
+                # Extract numbers from report
+                if match := re.search(r"Killed (\d+)", content):
+                    stats["killed_mutants"] = int(match.group(1))
+                if match := re.search(r"Survived (\d+)", content):
+                    stats["survived_mutants"] = int(match.group(1))
+                if match := re.search(r"Timeout (\d+)", content):
+                    stats["timeout_mutants"] = int(match.group(1))
+                
+                stats["total_mutants"] = (stats["killed_mutants"] + 
+                                        stats["survived_mutants"] + 
+                                        stats["timeout_mutants"])
+                
+                if stats["total_mutants"] > 0:
+                    stats["mutation_score"] = (stats["killed_mutants"] / 
+                                             stats["total_mutants"]) * 100
+                
+                results[controller] = stats
+        
+        # Generate summary report
+        with open("mutation_summary.json", "w") as f:
+            json.dump(results, f, indent=2)
+        
+        # Generate markdown report
+        with open("mutation_summary.md", "w") as f:
+            f.write("# Mutation Testing Summary\n\n")
+            f.write("| Component | Total Mutants | Killed | Survived | Score |\n")
+            f.write("|-----------|---------------|--------|----------|-------|\n")
+            
+            for controller, stats in results.items():
+                f.write(f"| {controller} | {stats['total_mutants']} | ")
+                f.write(f"{stats['killed_mutants']} | {stats['survived_mutants']} | ")
+                f.write(f"{stats['mutation_score']:.1f}% |\n")
+        
+        # Check if mutation score meets threshold
+        avg_score = sum(s["mutation_score"] for s in results.values()) / len(results)
+        print(f"Average mutation score: {avg_score:.1f}%")
+        
+        if avg_score < 70:
+            print("WARNING: Mutation score below 70% threshold")
+            exit(1)
+        EOF
+    
+    - name: Upload Mutation Testing Results
+      uses: actions/upload-artifact@v4
+      with:
+        name: mutation-testing-results
+        path: |
+          mutation_report_*.txt
+          mutation_report_*.html
+          mutation_summary.*
+        retention-days: 30
+
+  stress-testing:
+    name: Stress Testing
+    if: github.event.inputs.test_type == 'all' || github.event.inputs.test_type == 'stress'
+    runs-on: ubuntu-22.04
+    timeout-minutes: 120
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    
+    - name: Setup Stress Testing Environment
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          ninja-build cmake g++-11 \
+          libgsl-dev libreadline-dev \
+          htop iotop sysstat
+        
+        # Configure system for stress testing
+        sudo sysctl -w kernel.core_pattern=/tmp/core-%e-%p-%t
+        ulimit -c unlimited
+    
+    - name: Configure Stress Build
+      run: |
+        cmake -B build-stress \
+          -G Ninja \
+          -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+          -DBUILD_TESTS=ON \
+          -DLPZROBOTS_ENABLE_STRESS_TESTS=ON \
+          -DCMAKE_CXX_FLAGS="-g -O2"
+    
+    - name: Build Stress Tests
+      run: |
+        cmake --build build-stress --target stress_tests --parallel
+    
+    - name: Run Memory Stress Tests
+      run: |
+        cd build-stress
+        
+        # Monitor system resources
+        sar -r 1 > memory_usage.log &
+        SAR_PID=$!
+        
+        # Run memory stress tests
+        ./tests/memory_stress_test \
+          --iterations 10000 \
+          --max-memory-gb 8 \
+          --allocation-pattern random \
+          > memory_stress_results.log 2>&1
+        
+        kill $SAR_PID || true
+        
+        # Analyze memory usage
+        python3 - << 'EOF' > memory_analysis.md
+        import subprocess
+        
+        # Parse sar output
+        with open("memory_usage.log") as f:
+            lines = f.readlines()
+        
+        # Find peak memory usage
+        max_usage = 0
+        for line in lines:
+            if "%" in line and not line.startswith("Average"):
+                parts = line.split()
+                if len(parts) > 3:
+                    try:
+                        usage = float(parts[3])
+                        max_usage = max(max_usage, usage)
+                    except:
+                        pass
+        
+        print(f"# Memory Stress Test Results\n")
+        print(f"Peak memory usage: {max_usage:.1f}%\n")
+        
+        # Check for memory leaks
+        leaks = subprocess.run(["grep", "definitely lost", "memory_stress_results.log"], 
+                             capture_output=True, text=True)
+        if "definitely lost: 0 bytes" in leaks.stdout:
+            print("✅ No memory leaks detected")
+        else:
+            print("❌ Memory leaks detected:")
+            print(leaks.stdout)
+        EOF
+    
+    - name: Run Concurrency Stress Tests
+      run: |
+        cd build-stress
+        
+        # Test thread safety with many threads
+        for threads in 2 4 8 16 32; do
+          echo "Testing with $threads threads..."
+          
+          ./tests/concurrency_stress_test \
+            --threads $threads \
+            --duration 60 \
+            --operations-per-thread 100000 \
+            > concurrency_${threads}_threads.log 2>&1
+        done
+        
+        # Check for race conditions
+        grep -i "race\|deadlock\|assert" concurrency_*.log > race_conditions.log || true
+    
+    - name: Run Performance Stress Tests
+      run: |
+        cd build-stress
+        
+        # Long-running performance test
+        ./tests/performance_stress_test \
+          --duration-minutes ${{ env.FUZZING_TIME }} \
+          --warmup-seconds 30 \
+          --measure-interval 10 \
+          > performance_stress.log
+        
+        # Generate performance degradation report
+        python3 - << 'EOF'
+        import re
+        import matplotlib.pyplot as plt
+        
+        # Parse performance over time
+        times = []
+        throughputs = []
+        
+        with open("performance_stress.log") as f:
+            for line in f:
+                if match := re.search(r"t=(\d+)s.*throughput=(\d+)", line):
+                    times.append(int(match.group(1)))
+                    throughputs.append(int(match.group(2)))
+        
+        # Plot performance over time
+        if times and throughputs:
+            plt.figure(figsize=(10, 6))
+            plt.plot(times, throughputs)
+            plt.xlabel("Time (seconds)")
+            plt.ylabel("Throughput (ops/sec)")
+            plt.title("Performance Over Time")
+            plt.grid(True)
+            plt.savefig("performance_degradation.png")
+            
+            # Check for degradation
+            if throughputs:
+                initial = sum(throughputs[:10]) / 10
+                final = sum(throughputs[-10:]) / 10
+                degradation = (initial - final) / initial * 100
+                
+                print(f"Performance degradation: {degradation:.1f}%")
+                if degradation > 10:
+                    print("WARNING: Significant performance degradation detected")
+        EOF
+    
+    - name: Upload Stress Test Results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: stress-test-results
+        path: |
+          build-stress/*.log
+          build-stress/*.png
+          build-stress/memory_analysis.md
+          build-stress/core-*
+        retention-days: 30
+
+  # Summary job
+  advanced-testing-summary:
+    name: Advanced Testing Summary
+    needs: [property-based-testing, fuzz-testing, mutation-testing, stress-testing]
+    if: always()
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: artifacts
+    
+    - name: Generate Summary Report
+      run: |
+        # Create comprehensive summary
+        cat > advanced_testing_summary.md << 'EOF'
+        # Advanced Testing Summary
+        
+        ## Test Results
+        
+        | Test Type | Status | Key Findings |
+        |-----------|--------|--------------|
+        | Property-Based | ${{ needs.property-based-testing.result }} | Check artifacts |
+        | Fuzz Testing | ${{ needs.fuzz-testing.result }} | Check artifacts |
+        | Mutation Testing | ${{ needs.mutation-testing.result }} | Check artifacts |
+        | Stress Testing | ${{ needs.stress-testing.result }} | Check artifacts |
+        
+        ## Recommendations
+        
+        Based on the test results, consider:
+        1. Reviewing any crashes found during fuzzing
+        2. Improving test coverage for mutants that survived
+        3. Investigating any performance degradation
+        4. Adding more property-based test cases
+        
+        EOF
+        
+        echo "## Advanced Testing Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        cat advanced_testing_summary.md >> $GITHUB_STEP_SUMMARY
+    
+    - name: Create Issue for Failures
+      if: contains(needs.*.result, 'failure')
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const title = 'Advanced Testing Failures Detected';
+          const body = `
+          ## Advanced Testing Failures
+          
+          The following advanced tests have failed:
+          - Property-Based Testing: ${{ needs.property-based-testing.result }}
+          - Fuzz Testing: ${{ needs.fuzz-testing.result }}
+          - Mutation Testing: ${{ needs.mutation-testing.result }}
+          - Stress Testing: ${{ needs.stress-testing.result }}
+          
+          Please review the [test artifacts](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details.
+          
+          **Action Required**: Review and fix the identified issues.
+          `;
+          
+          await github.rest.issues.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: title,
+            body: body,
+            labels: ['testing', 'automated']
+          });

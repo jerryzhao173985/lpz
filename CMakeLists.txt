@@ -28,6 +28,20 @@ option(BUILD_GUI_TOOLS "Build GUI tools (requires Qt6)" ON)
 option(ENABLE_SIMD "Enable SIMD optimizations" ON)
 option(ENABLE_OPENMP "Enable OpenMP parallelization" ON)
 
+# Testing and Quality Options
+option(LPZROBOTS_ENABLE_COVERAGE "Enable code coverage collection" OFF)
+option(LPZROBOTS_ENABLE_BENCHMARKS "Enable benchmark tests" OFF)
+option(LPZROBOTS_ENABLE_SANITIZERS "Enable sanitizers" OFF)
+option(LPZROBOTS_SANITIZER_ADDRESS "Enable AddressSanitizer" OFF)
+option(LPZROBOTS_SANITIZER_THREAD "Enable ThreadSanitizer" OFF)
+option(LPZROBOTS_SANITIZER_UNDEFINED "Enable UndefinedBehaviorSanitizer" OFF)
+option(LPZROBOTS_SANITIZER_MEMORY "Enable MemorySanitizer" OFF)
+
+# Static Analysis Options
+option(LPZROBOTS_ENABLE_CLANG_TIDY "Enable clang-tidy" OFF)
+option(LPZROBOTS_ENABLE_CPPCHECK "Enable cppcheck" OFF)
+option(LPZROBOTS_ENABLE_IWYU "Enable include-what-you-use" OFF)
+
 # Set default build type
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
@@ -56,6 +70,121 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
     
     if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
         add_compile_options(-Wlogical-op -Wnoexcept)
+    endif()
+endif()
+
+# Coverage configuration
+if(LPZROBOTS_ENABLE_COVERAGE)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
+        message(STATUS "Enabling code coverage collection")
+        add_compile_options(-fprofile-arcs -ftest-coverage)
+        add_link_options(-fprofile-arcs -ftest-coverage)
+        
+        # Find required programs
+        find_program(LCOV lcov)
+        find_program(GENHTML genhtml)
+        
+        if(LCOV AND GENHTML)
+            message(STATUS "Found lcov and genhtml for coverage reports")
+        else()
+            message(WARNING "lcov/genhtml not found - coverage reports will not be available")
+        endif()
+    else()
+        message(WARNING "Coverage is only supported with GCC/Clang compilers")
+        set(LPZROBOTS_ENABLE_COVERAGE OFF)
+    endif()
+endif()
+
+# Sanitizer configuration
+if(LPZROBOTS_ENABLE_SANITIZERS)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
+        set(SANITIZER_FLAGS "")
+        
+        # Auto-enable individual sanitizers if main option is ON
+        if(NOT LPZROBOTS_SANITIZER_ADDRESS AND NOT LPZROBOTS_SANITIZER_THREAD 
+           AND NOT LPZROBOTS_SANITIZER_UNDEFINED AND NOT LPZROBOTS_SANITIZER_MEMORY)
+            set(LPZROBOTS_SANITIZER_ADDRESS ON)
+            set(LPZROBOTS_SANITIZER_UNDEFINED ON)
+        endif()
+        
+        if(LPZROBOTS_SANITIZER_ADDRESS)
+            message(STATUS "Enabling AddressSanitizer")
+            list(APPEND SANITIZER_FLAGS "address")
+        endif()
+        
+        if(LPZROBOTS_SANITIZER_THREAD)
+            if(LPZROBOTS_SANITIZER_ADDRESS OR LPZROBOTS_SANITIZER_MEMORY)
+                message(FATAL_ERROR "ThreadSanitizer cannot be used with Address or Memory sanitizers")
+            endif()
+            message(STATUS "Enabling ThreadSanitizer")
+            list(APPEND SANITIZER_FLAGS "thread")
+        endif()
+        
+        if(LPZROBOTS_SANITIZER_UNDEFINED)
+            message(STATUS "Enabling UndefinedBehaviorSanitizer")
+            list(APPEND SANITIZER_FLAGS "undefined")
+        endif()
+        
+        if(LPZROBOTS_SANITIZER_MEMORY)
+            if(LPZROBOTS_SANITIZER_ADDRESS OR LPZROBOTS_SANITIZER_THREAD)
+                message(FATAL_ERROR "MemorySanitizer cannot be used with Address or Thread sanitizers")
+            endif()
+            message(STATUS "Enabling MemorySanitizer")
+            list(APPEND SANITIZER_FLAGS "memory")
+        endif()
+        
+        if(SANITIZER_FLAGS)
+            string(JOIN "," SANITIZER_FLAGS_STR ${SANITIZER_FLAGS})
+            add_compile_options(-fsanitize=${SANITIZER_FLAGS_STR} -fno-omit-frame-pointer)
+            add_link_options(-fsanitize=${SANITIZER_FLAGS_STR})
+        endif()
+    else()
+        message(WARNING "Sanitizers are only supported with GCC/Clang compilers")
+        set(LPZROBOTS_ENABLE_SANITIZERS OFF)
+    endif()
+endif()
+
+# Benchmark configuration
+if(LPZROBOTS_ENABLE_BENCHMARKS)
+    message(STATUS "Enabling benchmark tests")
+    # Find Google Benchmark
+    find_package(benchmark QUIET)
+    if(NOT benchmark_FOUND)
+        message(STATUS "Google Benchmark not found - will fetch during build if needed")
+    endif()
+endif()
+
+# Static Analysis configuration
+if(LPZROBOTS_ENABLE_CLANG_TIDY)
+    find_program(CLANG_TIDY_EXE NAMES "clang-tidy" "clang-tidy-15" "clang-tidy-14")
+    if(CLANG_TIDY_EXE)
+        message(STATUS "Found clang-tidy: ${CLANG_TIDY_EXE}")
+        set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXE}")
+    else()
+        message(WARNING "clang-tidy requested but not found")
+        set(LPZROBOTS_ENABLE_CLANG_TIDY OFF)
+    endif()
+endif()
+
+if(LPZROBOTS_ENABLE_CPPCHECK)
+    find_program(CPPCHECK_EXE NAMES "cppcheck")
+    if(CPPCHECK_EXE)
+        message(STATUS "Found cppcheck: ${CPPCHECK_EXE}")
+        set(CMAKE_CXX_CPPCHECK "${CPPCHECK_EXE};--enable=warning,style,performance,portability;--inline-suppr;--quiet")
+    else()
+        message(WARNING "cppcheck requested but not found")
+        set(LPZROBOTS_ENABLE_CPPCHECK OFF)
+    endif()
+endif()
+
+if(LPZROBOTS_ENABLE_IWYU)
+    find_program(IWYU_EXE NAMES "include-what-you-use" "iwyu")
+    if(IWYU_EXE)
+        message(STATUS "Found include-what-you-use: ${IWYU_EXE}")
+        set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${IWYU_EXE}")
+    else()
+        message(WARNING "include-what-you-use requested but not found")
+        set(LPZROBOTS_ENABLE_IWYU OFF)
     endif()
 endif()
 

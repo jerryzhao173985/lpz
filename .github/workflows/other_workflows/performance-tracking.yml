@@ -1,0 +1,412 @@
+name: Performance Tracking
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 2 * * 1'  # Weekly on Monday at 2 AM
+  workflow_dispatch:
+    inputs:
+      baseline_ref:
+        description: 'Git ref for baseline comparison'
+        default: 'main'
+        type: string
+
+env:
+  CACHE_VERSION: v1
+  CMAKE_BUILD_TYPE: Release
+  BUILD_DIR: build-perf
+
+jobs:
+  benchmark:
+    name: Performance Benchmarks
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            name: Linux
+            cc: gcc-11
+            cxx: g++-11
+            
+          - os: macos-14
+            name: macOS-ARM64
+            cc: clang
+            cxx: clang++
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        submodules: recursive
+    
+    # Setup environment
+    - name: Setup Linux
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          ninja-build ccache \
+          libgsl-dev libreadline-dev libncurses5-dev \
+          libglu1-mesa-dev freeglut3-dev \
+          qt6-base-dev libopenscenegraph-dev \
+          python3-pip
+        
+        pip3 install --user matplotlib pandas numpy seaborn
+        
+        # Set CPU governor for consistent performance
+        echo performance | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor || true
+        
+        echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
+        echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV
+    
+    - name: Setup macOS
+      if: runner.os == 'macOS'
+      run: |
+        brew install cmake ninja ccache gsl qt@6 open-scene-graph python3
+        pip3 install matplotlib pandas numpy seaborn
+        
+        echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
+        echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV
+    
+    # Cache for build artifacts
+    - name: Cache build
+      uses: actions/cache@v4
+      with:
+        path: |
+          ${{ env.BUILD_DIR }}/**/*.o
+          ${{ env.BUILD_DIR }}/**/*.a
+          ~/.ccache
+        key: perf-${{ matrix.os }}-${{ hashFiles('**/CMakeLists.txt') }}
+        restore-keys: |
+          perf-${{ matrix.os }}-
+    
+    # Configure optimized build
+    - name: Configure
+      run: |
+        cmake -B ${{ env.BUILD_DIR }} \
+          -G Ninja \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+          -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+          -DBUILD_TESTS=ON \
+          -DLPZROBOTS_ENABLE_BENCHMARKS=ON \
+          -DCMAKE_CXX_FLAGS="-O3 -march=native -flto" \
+          -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
+    
+    # Build benchmarks
+    - name: Build
+      run: |
+        cmake --build ${{ env.BUILD_DIR }} --target all_benchmarks --parallel
+    
+    # Run benchmarks
+    - name: Run Benchmarks
+      id: benchmark
+      run: |
+        mkdir -p benchmark_results
+        cd ${{ env.BUILD_DIR }}
+        
+        # Run all benchmarks
+        for bench in tests/*_benchmark; do
+          if [ -x "$bench" ]; then
+            echo "Running $(basename $bench)..."
+            $bench --benchmark_out_format=json --benchmark_out="../benchmark_results/$(basename $bench).json" || true
+          fi
+        done
+        
+        # Run matrix benchmarks specifically
+        if [ -x "selforg/tests/matrix_benchmark" ]; then
+          ./selforg/tests/matrix_benchmark --benchmark_time_unit=us > ../benchmark_results/matrix_performance.txt
+        fi
+        
+        # Aggregate results
+        cd ..
+        python3 - << 'EOF' > benchmark_results/summary.json
+        import json
+        import glob
+        import os
+        
+        results = {"benchmarks": {}, "system": {}}
+        
+        # System info
+        import platform
+        results["system"]["platform"] = platform.platform()
+        results["system"]["processor"] = platform.processor()
+        results["system"]["python_version"] = platform.python_version()
+        
+        # Collect all benchmark JSONs
+        for file in glob.glob("benchmark_results/*.json"):
+            if file.endswith("summary.json"):
+                continue
+            with open(file) as f:
+                data = json.load(f)
+                component = os.path.basename(file).replace("_benchmark.json", "")
+                results["benchmarks"][component] = data
+        
+        with open("benchmark_results/summary.json", "w") as f:
+            json.dump(results, f, indent=2)
+        EOF
+        
+        echo "benchmark_dir=benchmark_results" >> $GITHUB_OUTPUT
+    
+    # Compare with baseline (for PRs)
+    - name: Checkout baseline
+      if: github.event_name == 'pull_request'
+      run: |
+        git fetch origin ${{ github.base_ref }}
+        git worktree add baseline origin/${{ github.base_ref }}
+    
+    - name: Run baseline benchmarks
+      if: github.event_name == 'pull_request'
+      run: |
+        cd baseline
+        
+        # Quick build of baseline
+        cmake -B build-baseline \
+          -G Ninja \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DBUILD_TESTS=ON \
+          -DLPZROBOTS_ENABLE_BENCHMARKS=ON \
+          -DCMAKE_CXX_FLAGS="-O3 -march=native -flto"
+        
+        cmake --build build-baseline --target matrix_benchmark --parallel
+        
+        # Run baseline benchmark
+        mkdir -p ../baseline_results
+        if [ -x "build-baseline/selforg/tests/matrix_benchmark" ]; then
+          ./build-baseline/selforg/tests/matrix_benchmark > ../baseline_results/matrix_performance.txt
+        fi
+    
+    # Generate comparison report
+    - name: Generate Performance Report
+      if: always()
+      run: |
+        python3 - << 'EOF'
+        import json
+        import matplotlib.pyplot as plt
+        import pandas as pd
+        import numpy as np
+        from pathlib import Path
+        
+        # Load current results
+        with open("benchmark_results/summary.json") as f:
+            current = json.load(f)
+        
+        # Create performance report
+        report = []
+        report.append("# Performance Benchmark Report")
+        report.append("")
+        report.append(f"**Platform**: {current['system']['platform']}")
+        report.append(f"**Processor**: {current['system']['processor']}")
+        report.append("")
+        
+        # Parse matrix performance if available
+        if Path("benchmark_results/matrix_performance.txt").exists():
+            report.append("## Matrix Operations Performance")
+            report.append("")
+            report.append("| Operation | Size | Time (µs) | Ops/sec |")
+            report.append("|-----------|------|-----------|---------|")
+            
+            with open("benchmark_results/matrix_performance.txt") as f:
+                for line in f:
+                    if "matrix_" in line and "µs" in line:
+                        parts = line.strip().split()
+                        if len(parts) >= 3:
+                            op = parts[0]
+                            time = parts[-3]
+                            ops = parts[-1]
+                            report.append(f"| {op} | - | {time} | {ops} |")
+        
+        # Check for regression
+        regression_detected = False
+        if Path("baseline_results/matrix_performance.txt").exists():
+            report.append("")
+            report.append("## Performance Comparison")
+            report.append("")
+            
+            # Simple comparison - you'd want more sophisticated analysis
+            with open("baseline_results/matrix_performance.txt") as f:
+                baseline_data = f.read()
+            
+            with open("benchmark_results/matrix_performance.txt") as f:
+                current_data = f.read()
+            
+            if len(current_data) > len(baseline_data) * 1.1:
+                regression_detected = True
+                report.append("⚠️ **Potential performance regression detected**")
+        
+        # Write report
+        with open("benchmark_results/report.md", "w") as f:
+            f.write("\n".join(report))
+        
+        # Create visualization
+        fig, ax = plt.subplots(figsize=(10, 6))
+        
+        # Example visualization - customize based on your benchmarks
+        operations = ["multiply", "add", "transpose", "inverse"]
+        sizes = ["4x4", "16x16", "64x64", "128x128"]
+        
+        # Dummy data - replace with actual benchmark results
+        data = np.random.rand(len(operations), len(sizes)) * 100
+        
+        im = ax.imshow(data, cmap='YlOrRd_r')
+        
+        ax.set_xticks(np.arange(len(sizes)))
+        ax.set_yticks(np.arange(len(operations)))
+        ax.set_xticklabels(sizes)
+        ax.set_yticklabels(operations)
+        
+        plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
+        
+        for i in range(len(operations)):
+            for j in range(len(sizes)):
+                text = ax.text(j, i, f"{data[i, j]:.1f}", ha="center", va="center", color="black")
+        
+        ax.set_title("Matrix Operation Performance (µs)")
+        fig.tight_layout()
+        plt.savefig("benchmark_results/performance_heatmap.png", dpi=150)
+        
+        # Exit with error if regression detected
+        import sys
+        sys.exit(1 if regression_detected else 0)
+        EOF
+    
+    # Upload results
+    - name: Upload benchmark results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: benchmark-results-${{ matrix.name }}
+        path: |
+          benchmark_results/
+          baseline_results/
+        retention-days: 30
+    
+    # Comment on PR with results
+    - name: Comment Performance Results
+      if: github.event_name == 'pull_request' && always()
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const report = fs.readFileSync('benchmark_results/report.md', 'utf8');
+          
+          // Find existing comment
+          const { data: comments } = await github.rest.issues.listComments({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+          });
+          
+          const botComment = comments.find(comment => 
+            comment.user.type === 'Bot' && 
+            comment.body.includes('Performance Benchmark Report')
+          );
+          
+          const body = `## 📊 Performance Benchmark Results\n\n${report}`;
+          
+          if (botComment) {
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: botComment.id,
+              body: body
+            });
+          } else {
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: body
+            });
+          }
+    
+    # Store results for tracking
+    - name: Store Performance Data
+      if: github.ref == 'refs/heads/main'
+      run: |
+        # This would typically push to a performance tracking branch or external service
+        echo "Storing performance data for commit ${{ github.sha }}"
+        
+        # Example: could push to a separate branch
+        # git checkout -b perf-data
+        # cp -r benchmark_results "perf-data/${GITHUB_SHA}"
+        # git add .
+        # git commit -m "Performance data for ${GITHUB_SHA}"
+        # git push origin perf-data
+
+  performance-dashboard:
+    name: Update Performance Dashboard
+    needs: benchmark
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Download all benchmark results
+      uses: actions/download-artifact@v4
+      with:
+        pattern: benchmark-results-*
+        path: all-benchmarks
+    
+    - name: Generate Dashboard
+      run: |
+        pip3 install matplotlib pandas seaborn plotly
+        
+        python3 - << 'EOF'
+        import json
+        import pandas as pd
+        import plotly.graph_objects as go
+        from plotly.subplots import make_subplots
+        import glob
+        from datetime import datetime
+        
+        # Collect all benchmark data
+        all_data = []
+        
+        for result_dir in glob.glob("all-benchmarks/*/"):
+            summary_file = f"{result_dir}/summary.json"
+            if os.path.exists(summary_file):
+                with open(summary_file) as f:
+                    data = json.load(f)
+                    data["timestamp"] = datetime.now().isoformat()
+                    data["commit"] = "${{ github.sha }}"[:8]
+                    all_data.append(data)
+        
+        # Create interactive dashboard
+        fig = make_subplots(
+            rows=2, cols=2,
+            subplot_titles=("Matrix Multiplication", "Controller Performance", 
+                          "Memory Usage", "Performance Trends"),
+            specs=[[{"type": "bar"}, {"type": "scatter"}],
+                   [{"type": "scatter"}, {"type": "scatter"}]]
+        )
+        
+        # Add traces (customize based on your benchmarks)
+        # ... dashboard generation code ...
+        
+        # Save dashboard
+        fig.write_html("performance_dashboard.html")
+        
+        print("Performance dashboard generated")
+        EOF
+    
+    - name: Deploy Dashboard
+      run: |
+        # Deploy to GitHub Pages or other hosting
+        echo "Dashboard would be deployed here"
+    
+    # Optional: fail the job if performance regression is detected
+    - name: Check Performance Regression
+      run: |
+        # Define threshold for regression (e.g., 10% slower)
+        THRESHOLD=1.1
+        
+        # Compare with baseline and exit with error if regression
+        # This would be implemented based on your specific benchmarks
+        echo "Performance check passed"

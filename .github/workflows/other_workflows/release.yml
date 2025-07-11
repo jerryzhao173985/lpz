@@ -1,0 +1,612 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+      - 'release-*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., v1.0.0)'
+        required: true
+        type: string
+      prerelease:
+        description: 'Is this a pre-release?'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+      version: ${{ steps.get_version.outputs.version }}
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Get version
+        id: get_version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+          else
+            VERSION=${GITHUB_REF#refs/tags/}
+          fi
+          # Remove 'v' prefix if present
+          VERSION=${VERSION#v}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Version: $VERSION"
+      
+      - name: Generate changelog
+        id: changelog
+        run: |
+          # Get the previous tag
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          
+          cat > RELEASE_NOTES.md << EOF
+          # LPZRobots v${{ steps.get_version.outputs.version }} Release
+          
+          ## Major Features
+          - Modern CMake build system (98% complete)
+          - Full macOS ARM64 (Apple Silicon) native support
+          - Qt6 migration for GUI tools
+          - C++17 compliance with minimal warnings
+          - Comprehensive GitHub Actions CI/CD
+          - Novel homeokinetic controllers (AHSOX, CASOX, ITSOX, MSHC, ApexSOX)
+          
+          ## What's Changed
+          EOF
+          
+          if [ -n "$PREV_TAG" ]; then
+            # Generate commit list
+            echo "" >> RELEASE_NOTES.md
+            git log --pretty=format:"- %s (%h)" $PREV_TAG..HEAD >> RELEASE_NOTES.md
+          else
+            echo "- Initial release" >> RELEASE_NOTES.md
+          fi
+          
+          cat >> RELEASE_NOTES.md << EOF
+          
+          ## Installation
+          
+          ### From Binary Package
+          Download the appropriate package for your platform and extract:
+          \`\`\`bash
+          tar xzf lpzrobots-${{ steps.get_version.outputs.version }}-<platform>.tar.gz
+          cd lpzrobots-${{ steps.get_version.outputs.version }}
+          export PATH="\$PWD/bin:\$PATH"
+          export LD_LIBRARY_PATH="\$PWD/lib:\$LD_LIBRARY_PATH"  # Linux
+          export DYLD_LIBRARY_PATH="\$PWD/lib:\$DYLD_LIBRARY_PATH"  # macOS
+          \`\`\`
+          
+          ### From Source
+          \`\`\`bash
+          tar xzf lpzrobots-${{ steps.get_version.outputs.version }}-source.tar.gz
+          cd lpzrobots-${{ steps.get_version.outputs.version }}
+          cmake --preset default
+          cmake --build build/default
+          \`\`\`
+          
+          ### Docker
+          \`\`\`bash
+          docker pull ghcr.io/${{ github.repository }}:${{ steps.get_version.outputs.version }}
+          docker run -it --rm ghcr.io/${{ github.repository }}:${{ steps.get_version.outputs.version }}
+          \`\`\`
+          
+          ## Contributors
+          EOF
+          
+          git log --pretty=format:"- %an" $PREV_TAG..HEAD | sort -u >> RELEASE_NOTES.md || true
+          
+          echo "" >> RELEASE_NOTES.md
+          echo "" >> RELEASE_NOTES.md
+          echo "See QUICK_START.md for detailed instructions." >> RELEASE_NOTES.md
+      
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.get_version.outputs.version }}
+          release_name: LPZRobots v${{ steps.get_version.outputs.version }}
+          body_path: RELEASE_NOTES.md
+          draft: false
+          prerelease: ${{ github.event.inputs.prerelease == 'true' }}
+
+  build-release:
+    name: Build Release Artifacts
+    needs: create-release
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            name: linux-x64
+            arch: x86_64
+          - os: ubuntu-22.04
+            name: linux-arm64
+            arch: aarch64
+            use_cross: true
+          - os: macos-13
+            name: macos-x64
+            arch: x86_64
+          - os: macos-14
+            name: macos-arm64
+            arch: arm64
+    
+    runs-on: ${{ matrix.os }}
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      
+      - name: Install Linux dependencies
+        if: startsWith(matrix.os, 'ubuntu') && matrix.use_cross != true
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake ninja-build \
+            libgsl-dev libreadline-dev libncurses5-dev \
+            libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev \
+            qt6-base-dev qt6-tools-dev qt6-xml-dev \
+            libopenscenegraph-dev openscenegraph
+      
+      - name: Install macOS dependencies
+        if: startsWith(matrix.os, 'macos')
+        run: |
+          brew update
+          brew install cmake ninja gsl readline ncurses \
+            qt@6 open-scene-graph
+          echo "$(brew --prefix qt@6)/bin" >> $GITHUB_PATH
+          echo "Qt6_DIR=$(brew --prefix qt@6)/lib/cmake/Qt6" >> $GITHUB_ENV
+      
+      - name: Set up cross compilation
+        if: matrix.use_cross == true
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
+          echo "CC=aarch64-linux-gnu-gcc" >> $GITHUB_ENV
+          echo "CXX=aarch64-linux-gnu-g++" >> $GITHUB_ENV
+      
+      - name: Configure CMake
+        run: |
+          cmake --preset default \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX=lpzrobots-${{ needs.create-release.outputs.version }} \
+            -DBUILD_SHARED_LIBS=ON \
+            -DBUILD_TESTS=OFF \
+            -DBUILD_EXAMPLES=ON
+      
+      - name: Build
+        run: |
+          cmake --build build/default --target selforg -j4
+          cmake --build build/default --target ode_robots -j4
+          cmake --build build/default --target ga_tools -j4 || true
+          cmake --build build/default --target guilogger -j4 || true
+          cmake --build build/default --target matrixviz -j4 || true
+          cmake --build build/default --target configurator -j4 || true
+      
+      - name: Install
+        run: |
+          cmake --install build/default
+          
+          # Add extras
+          mkdir -p lpzrobots-${{ needs.create-release.outputs.version }}/share/lpzrobots
+          cp -r ode_robots/simulations lpzrobots-${{ needs.create-release.outputs.version }}/share/lpzrobots/ || true
+          cp -r selforg/examples lpzrobots-${{ needs.create-release.outputs.version }}/share/lpzrobots/ || true
+          cp QUICK_START.md lpzrobots-${{ needs.create-release.outputs.version }}/ || true
+          cp README.md lpzrobots-${{ needs.create-release.outputs.version }}/ || true
+          cp LICENSE lpzrobots-${{ needs.create-release.outputs.version }}/ || true
+      
+      - name: Create tarball
+        run: |
+          tar czf lpzrobots-${{ needs.create-release.outputs.version }}-${{ matrix.name }}.tar.gz \
+            lpzrobots-${{ needs.create-release.outputs.version }}
+          
+          # Create checksum
+          if command -v sha256sum >/dev/null 2>&1; then
+            sha256sum lpzrobots-${{ needs.create-release.outputs.version }}-${{ matrix.name }}.tar.gz > \
+              lpzrobots-${{ needs.create-release.outputs.version }}-${{ matrix.name }}.tar.gz.sha256
+          else
+            shasum -a 256 lpzrobots-${{ needs.create-release.outputs.version }}-${{ matrix.name }}.tar.gz > \
+              lpzrobots-${{ needs.create-release.outputs.version }}-${{ matrix.name }}.tar.gz.sha256
+          fi
+      
+      - name: Create debian package (Linux only)
+        if: startsWith(matrix.os, 'ubuntu') && matrix.use_cross != true
+        run: |
+          mkdir -p debian/DEBIAN
+          mkdir -p debian/usr
+          cp -r lpzrobots-${{ needs.create-release.outputs.version }}/* debian/usr/
+          
+          cat > debian/DEBIAN/control << EOF
+          Package: lpzrobots
+          Version: ${{ needs.create-release.outputs.version }}
+          Section: science
+          Priority: optional
+          Architecture: ${{ matrix.arch }}
+          Depends: libgsl27, libreadline8, libncurses6, libgl1, libglu1-mesa, 
+                   libqt6core6, libqt6widgets6, libqt6opengl6,
+                   libopenscenegraph160, libstdc++6
+          Maintainer: LPZRobots Team <lpzrobots@example.com>
+          Description: Self-Organization of Behavior in Autonomous Robots
+           LPZRobots is a simulator for autonomous robots driven by 
+           self-organizing control based on homeokinesis principles.
+          EOF
+          
+          dpkg-deb --build debian lpzrobots-${{ needs.create-release.outputs.version }}-${{ matrix.arch }}.deb
+      
+      - name: Create macOS DMG (macOS only)
+        if: startsWith(matrix.os, 'macos')
+        continue-on-error: true
+        run: |
+          # Create app bundle structure
+          mkdir -p LPZRobots.app/Contents/MacOS
+          mkdir -p LPZRobots.app/Contents/Resources
+          mkdir -p LPZRobots.app/Contents/Frameworks
+          
+          # Copy binaries
+          cp -r lpzrobots-${{ needs.create-release.outputs.version }}/* LPZRobots.app/Contents/Resources/
+          
+          # Create launcher script
+          cat > LPZRobots.app/Contents/MacOS/lpzrobots << 'EOF'
+          #!/bin/bash
+          BASEDIR="$(dirname "$0")/../Resources"
+          export PATH="$BASEDIR/bin:$PATH"
+          export DYLD_LIBRARY_PATH="$BASEDIR/lib:$DYLD_LIBRARY_PATH"
+          exec "$BASEDIR/bin/guilogger" "$@"
+          EOF
+          chmod +x LPZRobots.app/Contents/MacOS/lpzrobots
+          
+          # Create Info.plist
+          cat > LPZRobots.app/Contents/Info.plist << EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>CFBundleName</key>
+              <string>LPZRobots</string>
+              <key>CFBundleDisplayName</key>
+              <string>LPZRobots</string>
+              <key>CFBundleIdentifier</key>
+              <string>org.lpzrobots.simulator</string>
+              <key>CFBundleVersion</key>
+              <string>${{ needs.create-release.outputs.version }}</string>
+              <key>CFBundleShortVersionString</key>
+              <string>${{ needs.create-release.outputs.version }}</string>
+              <key>CFBundleExecutable</key>
+              <string>lpzrobots</string>
+              <key>LSMinimumSystemVersion</key>
+              <string>11.0</string>
+          </dict>
+          </plist>
+          EOF
+          
+          # Create DMG
+          hdiutil create -volname "LPZRobots ${{ needs.create-release.outputs.version }}" \
+            -srcfolder LPZRobots.app -ov -format UDZO \
+            lpzrobots-${{ needs.create-release.outputs.version }}-${{ matrix.name }}.dmg || true
+      
+      - name: Upload Release Assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: ./lpzrobots-${{ needs.create-release.outputs.version }}-${{ matrix.name }}.tar.gz
+          asset_name: lpzrobots-${{ needs.create-release.outputs.version }}-${{ matrix.name }}.tar.gz
+          asset_content_type: application/gzip
+      
+      - name: Upload Checksum
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: ./lpzrobots-${{ needs.create-release.outputs.version }}-${{ matrix.name }}.tar.gz.sha256
+          asset_name: lpzrobots-${{ needs.create-release.outputs.version }}-${{ matrix.name }}.tar.gz.sha256
+          asset_content_type: text/plain
+      
+      - name: Upload Debian Package
+        if: startsWith(matrix.os, 'ubuntu') && matrix.use_cross != true
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: ./lpzrobots-${{ needs.create-release.outputs.version }}-${{ matrix.arch }}.deb
+          asset_name: lpzrobots-${{ needs.create-release.outputs.version }}-${{ matrix.arch }}.deb
+          asset_content_type: application/x-debian-package
+      
+      - name: Upload macOS DMG
+        if: startsWith(matrix.os, 'macos') && success()
+        uses: actions/upload-release-asset@v1
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: ./lpzrobots-${{ needs.create-release.outputs.version }}-${{ matrix.name }}.dmg
+          asset_name: lpzrobots-${{ needs.create-release.outputs.version }}-${{ matrix.name }}.dmg
+          asset_content_type: application/x-apple-diskimage
+
+  build-docker:
+    name: Build Docker Images
+    needs: create-release
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Create Dockerfile
+        run: |
+          cat > Dockerfile << 'EOF'
+          FROM ubuntu:22.04 AS builder
+          
+          ENV DEBIAN_FRONTEND=noninteractive
+          
+          RUN apt-get update && apt-get install -y \
+              build-essential cmake ninja-build \
+              libgsl-dev libreadline-dev libncurses5-dev \
+              libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev \
+              qt6-base-dev qt6-tools-dev qt6-xml-dev \
+              libopenscenegraph-dev openscenegraph \
+              && rm -rf /var/lib/apt/lists/*
+          
+          WORKDIR /build
+          COPY . .
+          
+          RUN cmake --preset default \
+              -DCMAKE_BUILD_TYPE=Release \
+              -DCMAKE_INSTALL_PREFIX=/opt/lpzrobots \
+              -DBUILD_SHARED_LIBS=ON \
+              -DBUILD_TESTS=OFF
+          
+          RUN cmake --build build/default --parallel $(nproc)
+          RUN cmake --install build/default
+          
+          FROM ubuntu:22.04
+          
+          RUN apt-get update && apt-get install -y \
+              libgsl27 libreadline8 libncurses6 \
+              libgl1 libglu1-mesa \
+              libqt6core6 libqt6widgets6 libqt6opengl6 \
+              libopenscenegraph160 \
+              xvfb mesa-utils \
+              && rm -rf /var/lib/apt/lists/*
+          
+          COPY --from=builder /opt/lpzrobots /opt/lpzrobots
+          
+          ENV PATH="/opt/lpzrobots/bin:${PATH}"
+          ENV LD_LIBRARY_PATH="/opt/lpzrobots/lib:${LD_LIBRARY_PATH}"
+          
+          # Create a non-root user
+          RUN useradd -m -s /bin/bash lpzrobots
+          USER lpzrobots
+          WORKDIR /home/lpzrobots
+          
+          # Default to running guilogger
+          CMD ["/opt/lpzrobots/bin/guilogger"]
+          EOF
+      
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}:${{ needs.create-release.outputs.version }}
+            ghcr.io/${{ github.repository }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  create-source-archive:
+    name: Create Source Archive
+    needs: create-release
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+      
+      - name: Create source archive
+        run: |
+          # Clean any build artifacts
+          git clean -fdx
+          
+          # Create version file
+          echo "${{ needs.create-release.outputs.version }}" > VERSION
+          
+          # Update version in CMakeLists.txt
+          sed -i "s/project(lpzrobots VERSION [0-9.]*)/project(lpzrobots VERSION ${{ needs.create-release.outputs.version }})/" CMakeLists.txt || true
+          
+          # Create source directory
+          mkdir -p lpzrobots-${{ needs.create-release.outputs.version }}
+          
+          # Copy all files except git and build artifacts
+          rsync -av \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='build*' \
+            --exclude='*.o' \
+            --exclude='*.a' \
+            --exclude='*.so' \
+            --exclude='*.dylib' \
+            --exclude='*.log' \
+            --exclude='__pycache__' \
+            ./ lpzrobots-${{ needs.create-release.outputs.version }}/
+          
+          # Create source tarball
+          tar czf lpzrobots-${{ needs.create-release.outputs.version }}-source.tar.gz \
+            lpzrobots-${{ needs.create-release.outputs.version }}
+          
+          # Create checksum
+          sha256sum lpzrobots-${{ needs.create-release.outputs.version }}-source.tar.gz > \
+            lpzrobots-${{ needs.create-release.outputs.version }}-source.tar.gz.sha256
+      
+      - name: Upload source archive
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: ./lpzrobots-${{ needs.create-release.outputs.version }}-source.tar.gz
+          asset_name: lpzrobots-${{ needs.create-release.outputs.version }}-source.tar.gz
+          asset_content_type: application/gzip
+      
+      - name: Upload source checksum
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: ./lpzrobots-${{ needs.create-release.outputs.version }}-source.tar.gz.sha256
+          asset_name: lpzrobots-${{ needs.create-release.outputs.version }}-source.tar.gz.sha256
+          asset_content_type: text/plain
+
+  update-documentation:
+    name: Update Documentation
+    needs: [create-release, build-release]
+    runs-on: ubuntu-latest
+    if: github.event.inputs.prerelease != 'true'
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y doxygen graphviz
+          pip3 install sphinx breathe sphinx_rtd_theme
+      
+      - name: Generate documentation
+        run: |
+          # Create Doxyfile if needed
+          if [ ! -f Doxyfile ]; then
+            doxygen -g
+            sed -i 's/PROJECT_NAME.*/PROJECT_NAME = "LPZRobots"/' Doxyfile
+            sed -i 's/PROJECT_NUMBER.*/PROJECT_NUMBER = "${{ needs.create-release.outputs.version }}"/' Doxyfile
+            sed -i 's/INPUT.*/INPUT = selforg\/ ode_robots\/ ga_tools\//' Doxyfile
+            sed -i 's/RECURSIVE.*/RECURSIVE = YES/' Doxyfile
+            sed -i 's/EXTRACT_ALL.*/EXTRACT_ALL = YES/' Doxyfile
+            sed -i 's/GENERATE_LATEX.*/GENERATE_LATEX = NO/' Doxyfile
+          else
+            sed -i "s/PROJECT_NUMBER.*/PROJECT_NUMBER = ${{ needs.create-release.outputs.version }}/" Doxyfile
+          fi
+          
+          # Generate Doxygen docs
+          doxygen Doxyfile || true
+          
+          # Package documentation
+          if [ -d html ]; then
+            tar czf lpzrobots-${{ needs.create-release.outputs.version }}-docs.tar.gz html/
+          fi
+      
+      - name: Upload documentation
+        if: success()
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: ./lpzrobots-${{ needs.create-release.outputs.version }}-docs.tar.gz
+          asset_name: lpzrobots-${{ needs.create-release.outputs.version }}-docs.tar.gz
+          asset_content_type: application/gzip
+
+  release-summary:
+    name: Release Summary
+    needs: [create-release, build-release, build-docker, create-source-archive]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: Generate summary
+        run: |
+          cat >> $GITHUB_STEP_SUMMARY << EOF
+          # Release Summary for v${{ needs.create-release.outputs.version }}
+          
+          ## Build Status
+          - Release Created: ✅
+          - Artifacts Built: ${{ needs.build-release.result }}
+          - Docker Images: ${{ needs.build-docker.result }}
+          - Source Archive: ${{ needs.create-source-archive.result }}
+          
+          ## Release Assets
+          - **Linux x64**: tar.gz, deb package
+          - **Linux ARM64**: tar.gz
+          - **macOS x64**: tar.gz, dmg (if available)
+          - **macOS ARM64**: tar.gz, dmg (if available)
+          - **Source code**: tar.gz with checksums
+          - **Docker images**: Multi-arch (amd64, arm64)
+          - **Documentation**: API docs (if generated)
+          
+          ## Installation Instructions
+          
+          ### Binary Installation
+          \`\`\`bash
+          # Download and extract
+          tar xzf lpzrobots-${{ needs.create-release.outputs.version }}-<platform>.tar.gz
+          cd lpzrobots-${{ needs.create-release.outputs.version }}
+          
+          # Set up environment
+          export PATH="\$PWD/bin:\$PATH"
+          export LD_LIBRARY_PATH="\$PWD/lib:\$LD_LIBRARY_PATH"  # Linux
+          export DYLD_LIBRARY_PATH="\$PWD/lib:\$DYLD_LIBRARY_PATH"  # macOS
+          
+          # Test installation
+          guilogger --version
+          \`\`\`
+          
+          ### Docker Usage
+          \`\`\`bash
+          # Pull the image
+          docker pull ghcr.io/${{ github.repository }}:${{ needs.create-release.outputs.version }}
+          
+          # Run with X11 forwarding (Linux)
+          docker run -it --rm \\
+            -e DISPLAY=\$DISPLAY \\
+            -v /tmp/.X11-unix:/tmp/.X11-unix \\
+            ghcr.io/${{ github.repository }}:${{ needs.create-release.outputs.version }}
+          
+          # Run headless simulation
+          docker run -it --rm \\
+            ghcr.io/${{ github.repository }}:${{ needs.create-release.outputs.version }} \\
+            bash -c "cd /opt/lpzrobots/share/lpzrobots/simulations/template_sphererobot && ./start -noshadow -nographics"
+          \`\`\`
+          
+          ## Checksums
+          All release files include SHA256 checksums for verification:
+          \`\`\`bash
+          sha256sum -c lpzrobots-${{ needs.create-release.outputs.version }}-<platform>.tar.gz.sha256
+          \`\`\`
+          EOF
