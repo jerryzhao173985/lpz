@@ -503,8 +503,11 @@ jobs:
       run: |
         # Build components sequentially to respect dependencies
         echo "=== Building selforg first ==="
-        cd selforg && make create_header_links && cd ..
-        make selforg -j$(nproc)
+        # Build selforg directly to avoid include path issues
+        cd selforg
+        make create_header_links
+        make -j$(nproc)
+        cd ..
         
         echo "=== Building opende ==="
         make ode || echo "ODE build failed (may be using system ODE)"
