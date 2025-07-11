@@ -98,6 +98,13 @@ if [ -d "ode_robots" ]; then
     if [ ! -L "ode_robots/include/selforg" ]; then
         ln -sf ../../selforg ode_robots/include/selforg
     fi
+    
+    # For CI builds, we need to ensure selforg headers are accessible from the installation prefix too
+    # This is needed when simulations trigger library rebuilds
+    mkdir -p "$PREFIX/include"
+    if [ ! -L "$PREFIX/include/selforg" ]; then
+        ln -sf "$SRCROOT/selforg" "$PREFIX/include/selforg"
+    fi
 fi
 
 # Configure ode_robots (needs selforg configured first)

@@ -1,70 +1,30 @@
-# Git attributes for LPZRobots - focused on simulation-specific files
+# Git attributes for LPZRobots - Essential for cross-platform C++ development
 
-# Ensure consistent line endings for text files
+# Critical: Normalize line endings to LF for cross-platform compatibility
 * text=auto eol=lf
 
-# Source files
+# C++ source files
 *.cpp text diff=cpp
-*.c text diff=cpp  
+*.c text diff=cpp
 *.h text diff=cpp
 *.hpp text diff=cpp
 
-# Build files - preserve exact formatting
+# Critical: Preserve exact formatting in build files
 Makefile* -text
 *.mk -text
 *.m4 -text
 
-# Simulation data files
-*.log text eol=lf
-*.sel binary
-*.ctrl text eol=lf
-*.conf text eol=lf
-
 # Scripts must have LF endings
 *.sh text eol=lf
-*.pl text eol=lf
-*.py text eol=lf diff=python
 
-# Qt project files
-*.pro text
-*.pri text
-
-# Documentation
-*.md text diff=markdown
-README* text
-LICENSE text
-INSTALL text
-
-# Binary files
-*.png binary
-*.jpg binary
-*.pdf binary
+# Binary files - prevent corruption
+*.o binary
+*.a binary
 *.so binary
 *.dylib binary
-*.a binary
-*.o binary
+*.dll binary
+*.exe binary
 
-# OpenSceneGraph/ODE model files
-*.osg text
-*.osgt text
-*.osgb binary
-*.dae text
-*.stl binary
-*.3ds binary
-
-# Simulation recordings
-*.avi binary
-*.mp4 binary
-*.mpg binary
-
-# Windows-specific files (if any)
+# Windows batch files need CRLF
 *.bat text eol=crlf
 *.cmd text eol=crlf
-
-# Files to exclude from archives
-.gitignore export-ignore
-.gitattributes export-ignore
-.editorconfig export-ignore
-.clang-tidy export-ignore
-.clang-format export-ignore
-.pre-commit-config.yaml export-ignore
