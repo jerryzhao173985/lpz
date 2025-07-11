@@ -92,6 +92,14 @@ if [ -d "selforg" ] && [ ! -L "include/selforg" ]; then
     ln -sf ../selforg include/selforg
 fi
 
+# Also create symlinks in ode_robots include directory for CI builds
+if [ -d "ode_robots" ]; then
+    mkdir -p ode_robots/include
+    if [ ! -L "ode_robots/include/selforg" ]; then
+        ln -sf ../../selforg ode_robots/include/selforg
+    fi
+fi
+
 # Configure ode_robots (needs selforg configured first)
 configure_component "ode_robots"
 

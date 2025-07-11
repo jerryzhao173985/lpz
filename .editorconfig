@@ -1,40 +1,12 @@
-# EditorConfig for LPZRobots - minimal, focused configuration
+# EditorConfig for LPZRobots - Essential settings only
 
 root = true
 
-# Default for all files
-[*]
-charset = utf-8
-end_of_line = lf
-insert_final_newline = true
-trim_trailing_whitespace = true
-
-# Makefiles - MUST use tabs
+# Critical: Makefiles MUST use tabs or build will fail
 [{Makefile,*.mk,GNUmakefile}]
 indent_style = tab
-tab_width = 4
 
-# Configuration files
-[*.{conf,ctrl,sel}]
-indent_style = space
-indent_size = 2
-
-# Shell scripts
-[*.sh]
-indent_style = space
-indent_size = 2
-
-# M4 macro files
+# M4 files (build system)
 [*.m4]
 indent_style = space
 indent_size = 2
-
-# Qt project files
-[*.{pro,pri}]
-indent_style = space
-indent_size = 2
-
-# Don't modify simulation data files
-[*.log]
-insert_final_newline = false
-trim_trailing_whitespace = false
