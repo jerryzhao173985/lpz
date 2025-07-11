@@ -728,6 +728,37 @@ jobs:
           # Test if we can actually read the header
           if [ -f "../include/ode-dbl/common.h" ]; then
             echo "✓ Can access common.h"
+            
+            # Test compiler access
+            echo "Testing if compiler can include the header..."
+            echo '#include <ode-dbl/common.h>' > test_ode.cpp
+            echo 'int main() { return 0; }' >> test_ode.cpp
+            
+            if g++ -isystem ../include/ode-dbl -c test_ode.cpp -o test_ode.o 2>error.log; then
+              echo "✓ Compiler can successfully include ode-dbl/common.h"
+              rm -f test_ode.cpp test_ode.o error.log
+            else
+              echo "✗ Compiler CANNOT include ode-dbl/common.h!"
+              echo "Error message:"
+              cat error.log
+              
+              # The issue might be that headers expect to find each other with <ode/...> not <ode-dbl/...>
+              echo ""
+              echo "Creating ode symlink to ode-dbl..."
+              cd ../include
+              ln -sf ode-dbl ode
+              cd ../ode_robots
+              
+              # Test again
+              if g++ -isystem ../include/ode-dbl -isystem ../include -c test_ode.cpp -o test_ode.o 2>/dev/null; then
+                echo "✓ Works with ode symlink!"
+              else
+                echo "✗ Still failing. Trying with just -I../include..."
+                # Some systems need -I instead of -isystem
+                sed -i 's|-isystem ../include/ode-dbl|-I../include|g' Makefile || true
+              fi
+              rm -f test_ode.cpp test_ode.o error.log
+            fi
           else
             echo "✗ Cannot access common.h from ode_robots directory!"
           fi
@@ -735,9 +766,26 @@ jobs:
           echo "✗ ../include/ode-dbl does not exist from ode_robots directory!"
           echo "Looking for include directory:"
           ls -la ../ | grep include
+          exit 1
         fi
         
-        make -j$(nproc)
+        # Also ensure ode-dbl-config is in PATH as expected by Makefile
+        if [ ! -x "../opende/ode-dbl-config" ] && type ode-dbl-config >/dev/null 2>&1; then
+          echo "Setting up ode-dbl-config..."
+          mkdir -p ../opende
+          ln -sf $(which ode-dbl-config) ../opende/ode-dbl-config
+        fi
+        
+        echo ""
+        echo "Starting build with make..."
+        make -j$(nproc) || {
+          echo "Build failed! Checking common issues..."
+          echo "1. Include paths in Makefile:"
+          grep "^INC" Makefile || true
+          echo ""
+          echo "2. Looking for actual error in build output"
+          exit 1
+        }
         cd ..
         
         echo "=== Building ga_tools ==="
