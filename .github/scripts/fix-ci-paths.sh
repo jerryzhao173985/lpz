@@ -109,6 +109,17 @@ if [ -n "$PREFIX" ]; then
         ln -sf "$SRCROOT/selforg/include/selforg" "$PREFIX/include/selforg"
         echo "Created symlink: $PREFIX/include/selforg -> $SRCROOT/selforg/include/selforg"
     fi
+    
+    # Also link ode-dbl headers to PREFIX
+    if [ ! -L "$PREFIX/include/ode-dbl" ]; then
+        if [ -d "$SRCROOT/include/ode-dbl" ]; then
+            ln -sf "$SRCROOT/include/ode-dbl" "$PREFIX/include/ode-dbl"
+            echo "Created symlink: $PREFIX/include/ode-dbl -> $SRCROOT/include/ode-dbl"
+        elif [ -d "$SRCROOT/opende/include/ode-dbl" ]; then
+            ln -sf "$SRCROOT/opende/include/ode-dbl" "$PREFIX/include/ode-dbl"
+            echo "Created symlink: $PREFIX/include/ode-dbl -> $SRCROOT/opende/include/ode-dbl"
+        fi
+    fi
 fi
 
 # Also create symlinks in ode_robots include directory for CI builds
@@ -117,6 +128,17 @@ if [ -d "ode_robots" ]; then
     if [ ! -L "ode_robots/include/selforg" ] && [ -d "selforg" ]; then
         ln -sf ../../selforg ode_robots/include/selforg
         echo "Created symlink: ode_robots/include/selforg -> ../../selforg"
+    fi
+    
+    # Also link ode-dbl headers for ode_robots
+    if [ ! -L "ode_robots/include/ode-dbl" ]; then
+        if [ -d "../include/ode-dbl" ]; then
+            ln -sf ../../../include/ode-dbl ode_robots/include/ode-dbl
+            echo "Created symlink: ode_robots/include/ode-dbl -> ../../../include/ode-dbl"
+        elif [ -d "opende/include/ode-dbl" ]; then
+            ln -sf ../../opende/include/ode-dbl ode_robots/include/ode-dbl
+            echo "Created symlink: ode_robots/include/ode-dbl -> ../../opende/include/ode-dbl"
+        fi
     fi
 fi
 
