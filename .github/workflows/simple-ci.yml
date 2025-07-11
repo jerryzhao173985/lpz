@@ -371,17 +371,17 @@ jobs:
         # Use the CI path fix script for other components
         .github/scripts/fix-ci-paths.sh
     
-    - name: Build components in order
+    - name: Build ODE
+      run: make ode -j$(nproc)
+        
+    - name: Build selforg
+      run: make selforg -j$(nproc)
+        
+    - name: Build ode_robots
+      run: make ode_robots -j$(nproc)
+        
+    - name: Build optional components
       run: |
-        # Build bundled ODE first
-        make ode -j$(nproc)
-        
-        # Build selforg
-        make selforg -j$(nproc)
-        
-        # Build ode_robots
-        make ode_robots -j$(nproc)
-        
         # Try to build optional components
         make ga_tools -j$(nproc) || echo "ga_tools build failed (known issue)"
         make guilogger -j$(nproc) || echo "guilogger build skipped"
