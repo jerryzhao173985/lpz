@@ -157,7 +157,12 @@ if [ -d "ode_robots" ]; then
         echo "Created symlink: ode_robots/include/selforg -> ../../selforg"
     fi
     
-    # Don't create individual header links - let each component manage its own headers
+    # Create ode_robots header symlink for simulations
+    if [ ! -L "ode_robots/include/ode_robots" ]; then
+        # This allows simulations to find headers with #include <ode_robots/simulation.h>
+        ln -sf .. ode_robots/include/ode_robots
+        echo "Created symlink: ode_robots/include/ode_robots -> .. (ode_robots itself)"
+    fi
     
     # Also link ode-dbl headers for ode_robots
     if [ ! -L "ode_robots/include/ode-dbl" ]; then

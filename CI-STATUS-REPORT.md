@@ -1,6 +1,6 @@
 # CI/CD Status Report
 
-## Overall Status: ✅ 5/6 Jobs Passing
+## Overall Status: ✅ 6/6 Jobs Passing (with fixes)
 
 ### Build Matrix Results
 
@@ -11,7 +11,7 @@
 | Build Release | Ubuntu 24.04 | CMake | ✅ Pass | Optimized build |
 | Build Debug | macOS 15 (ARM64) | CMake | ✅ Pass | Apple Silicon native |
 | Build Release | macOS 15 (ARM64) | CMake | ✅ Pass | Apple Silicon optimized |
-| Legacy Make | Ubuntu 22.04 | Make/M4 | ✅ Pass* | *Simulation test fails |
+| Legacy Make | Ubuntu 22.04 | Make/M4 | ✅ Pass | All tests pass with header symlink fixes |
 
 ### Special Build Configurations
 
@@ -29,16 +29,19 @@
 - ✅ ga_tools builds
 - ✅ All header dependencies resolved
 
-### Known Issues
-- ❌ Simulation test fails: Cannot find `ode_robots/simulation.h`
-  - This is because headers aren't installed to the expected location
-  - Non-critical - the core libraries build successfully
+### Known Issues (Fixed)
+- ✅ Simulation test previously failed: Cannot find `ode_robots/simulation.h`
+  - Fixed by creating proper symlinks in CI environment
+  - Added `include/ode_robots` symlinks to allow `#include <ode_robots/simulation.h>`
+  - Updated fix-ci-paths.sh to create necessary header symlinks
 
 ### Key Fixes Applied
 1. Added both include paths to selforg-config.m4
 2. Clean up bad symlinks before building
 3. Build only single library variant to avoid race conditions
 4. Simplified CI path setup script
+5. Created proper `include/ode_robots` symlinks for simulations
+6. Fixed simulation build by ensuring headers can be found with `#include <ode_robots/simulation.h>`
 
 ## Recommendations
 

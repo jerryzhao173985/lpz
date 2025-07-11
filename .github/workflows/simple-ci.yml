@@ -584,12 +584,24 @@ jobs:
           echo "Created root include/selforg symlink"
         fi
         
-        # 2. Create PREFIX include/selforg symlink (after selforg is built)
+        # 2. Create ode_robots header symlink at root
+        if [ ! -L "$PROJECT_ROOT/include/ode_robots" ] && [ -d "$PROJECT_ROOT/ode_robots" ]; then
+          mkdir -p "$PROJECT_ROOT/include"
+          ln -sf "$PROJECT_ROOT/ode_robots" "$PROJECT_ROOT/include/ode_robots"
+          echo "Created root include/ode_robots symlink"
+        fi
+        
+        # 3. Create PREFIX include symlinks (after libraries are built)
         PREFIX="$HOME/lpzrobots"
         if [ ! -L "$PREFIX/include/selforg" ] && [ -d "$PROJECT_ROOT/selforg/include/selforg" ]; then
           mkdir -p "$PREFIX/include"
           ln -sf "$PROJECT_ROOT/selforg/include/selforg" "$PREFIX/include/selforg"
           echo "Created PREFIX include/selforg symlink for simulation build"
+        fi
+        
+        if [ ! -L "$PREFIX/include/ode_robots" ] && [ -d "$PROJECT_ROOT/ode_robots" ]; then
+          ln -sf "$PROJECT_ROOT/ode_robots" "$PREFIX/include/ode_robots"
+          echo "Created PREFIX include/ode_robots symlink for simulation build"
         fi
         
         # Set up PATH to include config scripts using absolute paths
