@@ -634,7 +634,8 @@ jobs:
           
           echo "✓ ODE headers set up"
           echo "Header count: $(ls include/ode-dbl/*.h 2>/dev/null | wc -l)"
-          echo "Sample headers: $(ls include/ode-dbl/*.h 2>/dev/null | head -5)"
+          echo "Sample headers:"
+          ls include/ode-dbl/*.h 2>/dev/null | head -5 || echo "No headers found"
           
           # Debug: Verify headers are accessible from ode_robots directory
           echo ""
@@ -700,21 +701,24 @@ EOFDBLCONFIG
         # Debug: Verify headers are still in place before ode_robots build
         echo ""
         echo "=== Verifying ODE headers before ode_robots build ==="
-        echo "Header count in include/ode-dbl: $(ls include/ode-dbl/*.h 2>/dev/null | wc -l)"
+        echo "Header count in include/ode-dbl:"
+        ls include/ode-dbl/*.h 2>/dev/null | wc -l || echo "0"
         echo "Checking critical headers:"
         ls -la include/ode-dbl/common.h include/ode-dbl/ode.h 2>/dev/null || echo "Critical headers missing!"
         
         # Also verify the PATH includes opende for ode-dbl-config
         echo ""
         echo "PATH check: $PATH"
-        echo "Which ode-dbl-config: $(which ode-dbl-config 2>/dev/null || echo 'not in PATH')"
+        echo "Which ode-dbl-config:"
+        which ode-dbl-config 2>/dev/null || echo 'not in PATH'
         
         echo "=== Building ode_robots ==="
         
         # Final check: Ensure headers are still there
         echo "Final header check before ode_robots build:"
         ls -la include/ode-dbl/common.h || echo "ERROR: common.h missing!"
-        echo "Total headers: $(ls include/ode-dbl/*.h 2>/dev/null | wc -l)"
+        echo "Total headers:"
+        ls include/ode-dbl/*.h 2>/dev/null | wc -l || echo "0"
         
         # Also check from ode_robots perspective
         echo "Checking from ode_robots directory:"
