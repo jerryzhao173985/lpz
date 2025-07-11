@@ -485,6 +485,16 @@ jobs:
         export PREFIX="$HOME/lpzrobots"
         echo "PREFIX=$PREFIX"
         
+        # Debug: Check initial state of config scripts
+        echo "=== Initial state check ==="
+        echo "Checking existing config scripts..."
+        if [ -f "selforg/selforg-config" ]; then
+          echo "Found selforg-config with prefix: $(selforg/selforg-config --prefix)"
+        fi
+        if [ -f "ode_robots/ode_robots-config" ]; then
+          echo "Found ode_robots-config with prefix: $(ode_robots/ode_robots-config --prefix)"
+        fi
+        
         # Configure each component properly with user installation paths
         echo "=== Configuring components for user installation ==="
         
@@ -599,84 +609,54 @@ jobs:
       run: |
         # Set up environment for build
         export PREFIX="$HOME/lpzrobots"
-        export PATH="$(pwd)/selforg:$(pwd)/opende:$(pwd)/ode_robots:$PATH"
+        export PATH="$PREFIX/bin:$PATH"
         
-        # Build components sequentially to respect dependencies
-        echo "=== Building selforg first ==="
+        # IMPORTANT: Build everything in DEVEL mode first, then switch to USER mode for installation
+        echo "=== Phase 1: Build all components in DEVEL mode ==="
+        
+        # Configure selforg in DEVEL mode for building
+        echo "Configuring selforg in DEVEL mode..."
         cd selforg
         
-        # Clean up any bad symlinks first
-        find . -type l -name "*.h" ! -path "./include/*" -delete || true
+        # Generate DEVEL mode config for building
+        rm -f selforg-config
+        VERSION=$(cat VERSION.txt 2>/dev/null || echo "1.0")
+        m4 -DPREFIX="$(pwd)" -DSRCPREFIX="$(pwd)" -DDEVEL -DLINUX -DVERSION="$VERSION" selforg-config.m4 > selforg-config
+        chmod +x selforg-config
         
+        # Run configure
+        if [ -x ./configure ]; then
+          ./configure --prefix="$PREFIX" --type=DEVEL --system=LINUX
+        fi
+        
+        # Build selforg
+        echo "Building selforg..."
         make create_header_links
         make lib -j$(nproc)
-        
-        # Verify headers were created
-        echo "Checking selforg headers..."
-        if [ -d "include/selforg" ]; then
-          echo "✓ selforg headers found in include/selforg"
-          ls -la include/selforg/ | head -10
-        else
-          echo "✗ selforg headers not found!"
-          exit 1
-        fi
-        
-        # Install selforg headers to PREFIX for ode_robots to find
-        echo "Installing selforg headers to $PREFIX/include..."
-        mkdir -p "$PREFIX/include"
-        cp -r include/selforg "$PREFIX/include/" || {
-          echo "Failed to install selforg headers"
-          exit 1
-        }
-        
-        # Also install the library
-        cp libselforg*.a "$PREFIX/lib/" || {
-          echo "Creating lib directory and retrying..."
-          mkdir -p "$PREFIX/lib"
-          cp libselforg*.a "$PREFIX/lib/"
-        }
-        
-        # Install selforg-config
-        if [ -x "selforg-config" ]; then
-          mkdir -p "$PREFIX/bin"
-          cp selforg-config "$PREFIX/bin/"
-          chmod +x "$PREFIX/bin/selforg-config"
-        fi
-        
-        echo "✓ selforg headers and libraries installed to $PREFIX"
         cd ..
         
         echo "=== Building opende ==="
         make ode || echo "ODE build failed (may be using system ODE)"
         
-        # Install ODE headers to PREFIX if not already there
-        echo "Ensuring ODE headers are available..."
-        if [ ! -d "$PREFIX/include/ode-dbl" ]; then
-          if [ -d "include/ode-dbl" ]; then
-            echo "Installing ODE headers from include/ode-dbl to $PREFIX/include..."
-            cp -r include/ode-dbl "$PREFIX/include/"
-          elif [ -d "opende/include/ode-dbl" ]; then
-            echo "Installing ODE headers from opende/include/ode-dbl to $PREFIX/include..."
-            cp -r opende/include/ode-dbl "$PREFIX/include/"
-          fi
-        fi
-        
-        # Install ode-dbl-config if available
-        if [ -x "opende/ode-dbl-config" ]; then
-          cp opende/ode-dbl-config "$PREFIX/bin/"
-          chmod +x "$PREFIX/bin/ode-dbl-config"
-        fi
-        
-        echo "=== Building ode_robots (depends on selforg) ==="
-        # Update PATH to use installed config scripts
-        export PATH="$PREFIX/bin:$PATH"
-        
-        # Verify that we're using the installed selforg-config
-        echo "Which selforg-config: $(which selforg-config)"
-        echo "selforg-config --cflags: $(selforg-config --cflags)"
-        echo "selforg-config --prefix: $(selforg-config --prefix)"
-        
+        # Configure ode_robots in DEVEL mode for building
+        echo "Configuring ode_robots in DEVEL mode..."
         cd ode_robots
+        
+        # Generate DEVEL mode config if m4 template exists
+        if [ -f "ode_robots-config.m4" ]; then
+          rm -f ode_robots-config
+          VERSION=$(cat VERSION.txt 2>/dev/null || echo "1.0")
+          m4 -DPREFIX="$(pwd)" -DSRCPREFIX="$(pwd)" -DDEVEL -DLINUX -DVERSION="$VERSION" ode_robots-config.m4 > ode_robots-config
+          chmod +x ode_robots-config
+        fi
+        
+        # Run configure in DEVEL mode
+        if [ -x ./configure ]; then
+          ./configure --prefix="$PREFIX" --type=DEVEL --system=LINUX
+        fi
+        
+        # Build ode_robots (it will use ../selforg/selforg-config in DEVEL mode)
+        echo "Building ode_robots..."
         make -j$(nproc)
         cd ..
         
@@ -726,21 +706,27 @@ jobs:
       run: |
         # Set up environment
         export PREFIX="$HOME/lpzrobots"
-        export PATH="$(pwd)/selforg:$(pwd)/opende:$(pwd)/ode_robots:$PATH"
+        export PATH="$PREFIX/bin:$PATH"
         
         # Create installation directories
         mkdir -p "$PREFIX"/{bin,lib,include,share}
         
-        echo "=== Installing components to $PREFIX ==="
+        echo "=== Phase 2: Regenerate configs for USER mode and install ==="
+        
+        # Regenerate selforg-config for USER mode installation
+        echo "Regenerating selforg-config for USER mode..."
+        cd selforg
+        rm -f selforg-config
+        VERSION=$(cat VERSION.txt 2>/dev/null || echo "1.0")
+        m4 -DPREFIX="$PREFIX" -DSRCPREFIX="$(pwd)" -DUSER -DLINUX -DVERSION="$VERSION" selforg-config.m4 > selforg-config
+        chmod +x selforg-config
+        
+        # Verify it has correct prefix
+        CONFIG_PREFIX=$(./selforg-config --prefix)
+        echo "selforg-config now reports prefix: $CONFIG_PREFIX"
         
         # Install selforg
         echo "Installing selforg..."
-        cd selforg
-        
-        # Ensure headers are created before installation
-        make create_header_links
-        
-        # Use PREFIX to override installation paths
         make PREFIX="$PREFIX" install || {
           echo "Standard install failed, trying manual installation"
           # Manual installation fallback
@@ -774,13 +760,23 @@ jobs:
         fi
         cd ..
         
-        # Install ode_robots  
-        echo "Installing ode_robots..."
+        # Regenerate ode_robots-config for USER mode installation
+        echo "Regenerating ode_robots-config for USER mode..."
         cd ode_robots
         
-        # Ensure headers are created before installation
-        make create_header_links || echo "No create_header_links target"
+        if [ -f "ode_robots-config.m4" ]; then
+          rm -f ode_robots-config
+          VERSION=$(cat VERSION.txt 2>/dev/null || echo "1.0")
+          m4 -DPREFIX="$PREFIX" -DSRCPREFIX="$(pwd)" -DUSER -DLINUX -DVERSION="$VERSION" ode_robots-config.m4 > ode_robots-config
+          chmod +x ode_robots-config
+          
+          # Verify it has correct prefix
+          CONFIG_PREFIX=$(./ode_robots-config --prefix)
+          echo "ode_robots-config now reports prefix: $CONFIG_PREFIX"
+        fi
         
+        # Install ode_robots  
+        echo "Installing ode_robots..."
         make PREFIX="$PREFIX" install || {
           echo "Standard install failed, trying manual installation"
           # Manual installation fallback
@@ -831,10 +827,28 @@ jobs:
         echo "=== Checking installed files ==="
         echo "Include directory:"
         ls -la "$PREFIX/include/" || echo "No include directory"
+        
+        echo ""
+        echo "Selforg headers:"
+        ls "$PREFIX/include/selforg/" | head -10 || echo "No selforg headers found"
+        
+        echo ""
         echo "Library directory:"
         ls -la "$PREFIX/lib/" || echo "No lib directory"
+        
+        echo ""
         echo "Binary directory:"
         ls -la "$PREFIX/bin/" || echo "No bin directory"
+        
+        echo ""
+        echo "Testing installed config scripts:"
+        echo "selforg-config --prefix: $($PREFIX/bin/selforg-config --prefix)"
+        echo "selforg-config --cflags: $($PREFIX/bin/selforg-config --cflags)"
+        
+        if [ -x "$PREFIX/bin/ode_robots-config" ]; then
+          echo "ode_robots-config --prefix: $($PREFIX/bin/ode_robots-config --prefix)"
+          echo "ode_robots-config --cflags: $($PREFIX/bin/ode_robots-config --cflags)"
+        fi
     
     - name: Test simulation build
       run: |
