@@ -109,6 +109,10 @@ echo "Component configuration complete"
 
 # ODE compatibility headers are already set up above
 
+# Export PATH with config scripts for Legacy Make build
+export PATH="$SRCROOT/selforg:$SRCROOT/opende:$SRCROOT/ode_robots:$PATH"
+echo "Updated PATH to include config scripts: $PATH"
+
 # Verify critical paths exist
 echo "Verifying build environment..."
 errors=0
@@ -117,12 +121,21 @@ errors=0
 if [ ! -f "selforg/selforg-config" ]; then
     echo "ERROR: selforg/selforg-config not found after configuration"
     errors=$((errors + 1))
+else
+    chmod +x selforg/selforg-config
 fi
 
 # Check ODE config
 if [ ! -f "opende/ode-dbl-config" ]; then
     echo "ERROR: opende/ode-dbl-config not found after configuration"
     errors=$((errors + 1))
+else
+    chmod +x opende/ode-dbl-config
+fi
+
+# Check ode_robots config if it exists
+if [ -f "ode_robots/ode_robots-config" ]; then
+    chmod +x ode_robots/ode_robots-config
 fi
 
 # Check ODE headers

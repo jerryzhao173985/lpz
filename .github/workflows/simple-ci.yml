@@ -551,6 +551,17 @@ jobs:
     
     - name: Test simulation build
       run: |
+        # Save project root before changing directories
+        PROJECT_ROOT=$(pwd)
+        
+        # Set up PATH to include config scripts using absolute paths
+        export PATH="$PROJECT_ROOT/selforg:$PROJECT_ROOT/opende:$PROJECT_ROOT/ode_robots:$PATH"
+        echo "PATH includes: $PATH"
+        
+        # Verify config scripts are accessible
+        which ode-dbl-config || echo "Warning: ode-dbl-config not in PATH"
+        which selforg-config || echo "Warning: selforg-config not in PATH"
+        
         cd ode_robots/simulations
         
         # Check if template_sphererobot needs Makefile generation
@@ -572,9 +583,9 @@ jobs:
           fi
         fi
         
-        # Build the simulation
-        make clean || echo "Clean failed (may not exist yet)"
-        make
+        # Build the simulation - preserve PATH
+        PATH="$PROJECT_ROOT/selforg:$PROJECT_ROOT/opende:$PROJECT_ROOT/ode_robots:$PATH" make clean || echo "Clean failed (may not exist yet)"
+        PATH="$PROJECT_ROOT/selforg:$PROJECT_ROOT/opende:$PROJECT_ROOT/ode_robots:$PATH" make
         
         # Verify the binary was created
         if [ -f start ]; then
