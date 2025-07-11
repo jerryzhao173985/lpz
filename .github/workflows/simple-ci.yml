@@ -662,40 +662,8 @@ jobs:
         echo "=== Building opende ==="
         make ode || echo "ODE build failed (may be using system ODE)"
         
-        # Ensure ODE headers are available for ode_robots
-        echo "=== Setting up ODE headers ==="
-        # Remove any existing directory/symlinks and start fresh
-        rm -rf include/ode-dbl
-        mkdir -p include/ode-dbl
-        
-        if [ -d "/usr/include/ode" ]; then
-          echo "Copying ODE headers from system to include/ode-dbl..."
-          # Copy instead of symlink to avoid issues
-          cp -v /usr/include/ode/*.h include/ode-dbl/
-          echo "Copied $(ls include/ode-dbl/*.h | wc -l) header files"
-          
-          # Verify the headers are readable
-          echo "Verifying headers..."
-          if [ -f "include/ode-dbl/common.h" ]; then
-            echo "✓ common.h exists and contains:"
-            head -3 include/ode-dbl/common.h
-          else
-            echo "✗ common.h not found!"
-            exit 1
-          fi
-        elif [ -d "opende/include/ode-dbl" ]; then
-          echo "Copying ODE headers from bundled ODE..."
-          cp -r opende/include/ode-dbl/* include/ode-dbl/
-        else
-          echo "ERROR: No ODE headers found!"
-          exit 1
-        fi
-        
-        # Debug: Show what's in the include directory
-        echo "Include directory structure:"
-        ls -la include/
-        echo "ODE headers:"
-        ls -la include/ode-dbl/ | head -10
+        # ODE headers will be set up when needed in the ode_robots directory
+        echo "=== ODE headers will be configured during ode_robots build ==="
         
         # Configure ode_robots in DEVEL mode for building
         echo "Configuring ode_robots in DEVEL mode..."
@@ -717,55 +685,53 @@ jobs:
         # Build ode_robots (it will use ../selforg/selforg-config in DEVEL mode)
         echo "Building ode_robots..."
         
-        # Debug: Verify paths before building
+        # CRITICAL FIX: Ensure ODE headers are in the correct location relative to ode_robots
+        echo "=== Setting up ODE headers for ode_robots build ==="
         echo "Current directory: $(pwd)"
-        echo "Checking for ODE headers from ode_robots directory:"
-        if [ -d "../include/ode-dbl" ]; then
-          echo "✓ ../include/ode-dbl exists"
-          echo "Contents:"
-          ls ../include/ode-dbl/*.h | head -5
+        
+        # The ode_robots Makefile expects headers at ../include/ode-dbl
+        # So we need to ensure they exist there relative to the ode_robots directory
+        
+        # First, check if headers already exist in the expected location
+        if [ ! -d "../include/ode-dbl" ]; then
+          echo "Creating ../include/ode-dbl directory..."
+          mkdir -p ../include/ode-dbl
+        fi
+        
+        # Always refresh the headers to ensure they're up to date
+        if [ -d "/usr/include/ode" ]; then
+          echo "Copying system ODE headers to ../include/ode-dbl..."
+          cp -f /usr/include/ode/*.h ../include/ode-dbl/ 2>/dev/null || true
           
-          # Test if we can actually read the header
-          if [ -f "../include/ode-dbl/common.h" ]; then
-            echo "✓ Can access common.h"
-            
-            # Test compiler access
-            echo "Testing if compiler can include the header..."
-            echo '#include <ode-dbl/common.h>' > test_ode.cpp
-            echo 'int main() { return 0; }' >> test_ode.cpp
-            
-            if g++ -isystem ../include/ode-dbl -c test_ode.cpp -o test_ode.o 2>error.log; then
-              echo "✓ Compiler can successfully include ode-dbl/common.h"
-              rm -f test_ode.cpp test_ode.o error.log
-            else
-              echo "✗ Compiler CANNOT include ode-dbl/common.h!"
-              echo "Error message:"
-              cat error.log
-              
-              # The issue might be that headers expect to find each other with <ode/...> not <ode-dbl/...>
-              echo ""
-              echo "Creating ode symlink to ode-dbl..."
-              cd ../include
-              ln -sf ode-dbl ode
-              cd ../ode_robots
-              
-              # Test again
-              if g++ -isystem ../include/ode-dbl -isystem ../include -c test_ode.cpp -o test_ode.o 2>/dev/null; then
-                echo "✓ Works with ode symlink!"
-              else
-                echo "✗ Still failing. Trying with just -I../include..."
-                # Some systems need -I instead of -isystem
-                sed -i 's|-isystem ../include/ode-dbl|-I../include|g' Makefile || true
-              fi
-              rm -f test_ode.cpp test_ode.o error.log
-            fi
-          else
-            echo "✗ Cannot access common.h from ode_robots directory!"
+          # Also create an 'ode' symlink since some headers may use <ode/...> includes
+          cd ../include
+          if [ ! -e ode ]; then
+            ln -sf ode-dbl ode
+            echo "Created symlink: include/ode -> include/ode-dbl"
           fi
+          cd ../ode_robots
+        fi
+        
+        # Verify headers are accessible
+        if [ -f "../include/ode-dbl/common.h" ]; then
+          echo "✓ Headers are in place at ../include/ode-dbl"
+          echo "Header count: $(ls ../include/ode-dbl/*.h 2>/dev/null | wc -l)"
+          
+          # Quick compile test
+          echo "Testing compiler access..."
+          echo '#include <ode-dbl/common.h>' > test_ode.cpp
+          echo 'int main() { return 0; }' >> test_ode.cpp
+          
+          if g++ -isystem ../include/ode-dbl -c test_ode.cpp -o test_ode.o 2>/dev/null; then
+            echo "✓ Compiler can access ODE headers"
+          else
+            echo "⚠️ Compiler test failed, but continuing anyway..."
+          fi
+          rm -f test_ode.cpp test_ode.o
         else
-          echo "✗ ../include/ode-dbl does not exist from ode_robots directory!"
-          echo "Looking for include directory:"
-          ls -la ../ | grep include
+          echo "ERROR: Failed to set up ODE headers!"
+          echo "Contents of ../include:"
+          ls -la ../include/ 2>/dev/null || echo "Directory doesn't exist"
           exit 1
         fi
         
