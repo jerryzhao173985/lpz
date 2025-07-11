@@ -833,18 +833,18 @@ jobs:
         # Skip interactive configuration - we already have the Makefile.conf we need
         echo "Skipping interactive 'make conf' - using pre-configured Makefile.conf"
         
-        # Install components using make system
+        # Install components using make system with explicit PREFIX
         echo "=== Installing selforg ==="
-        make install_selforg
+        make PREFIX="$PREFIX" install_selforg
         
         echo "=== Installing ode ==="
-        make install_ode
+        make PREFIX="$PREFIX" install_ode
         
         echo "=== Installing ode_robots ==="
-        make install_ode_robots
+        make PREFIX="$PREFIX" install_ode_robots
         
         echo "=== Installing ga_tools ==="
-        make install_ga_tools || echo "ga_tools install failed (non-critical)"
+        make PREFIX="$PREFIX" install_ga_tools || echo "ga_tools install failed (non-critical)"
         
         # Verify installation
         echo "=== Checking installed files ==="
