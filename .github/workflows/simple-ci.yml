@@ -695,6 +695,11 @@ jobs:
             chmod +x ode_robots-config
             cd -
             echo "Regenerated ode_robots-config in DEVEL mode"
+            # Verify it worked
+            echo "Checking regenerated config:"
+            ./ode_robots-config --type
+            echo "First few lines of regenerated config:"
+            head -30 ode_robots-config | grep -E "type=|--cflags"
         fi
         
         # Do the same for selforg
@@ -743,6 +748,25 @@ jobs:
             ln -sf $PROJECT_ROOT/ode_robots ode_robots
             echo "Created local symlink to ode_robots"
         fi
+        
+        # CRITICAL: Fix ODE header paths
+        # The simulation looks for ode-dbl headers in relative paths
+        echo "=== Fixing ODE header paths ==="
+        
+        # Create the expected include structure for ODE
+        mkdir -p $PROJECT_ROOT/include
+        if [ ! -L "$PROJECT_ROOT/include/ode-dbl" ]; then
+            # Link to system ODE headers
+            ln -sf /usr/local/include/ode $PROJECT_ROOT/include/ode-dbl
+            echo "Created symlink: $PROJECT_ROOT/include/ode-dbl -> /usr/local/include/ode"
+        fi
+        
+        # Also create in parent directories as expected by the Makefile
+        cd $PROJECT_ROOT/ode_robots/simulations
+        if [ ! -L "../../include/ode-dbl" ]; then
+            ln -sf ../../include/ode-dbl ../../include/ode-dbl 2>/dev/null || true
+        fi
+        cd template_sphererobot
         
         # Show exact commands being run
         echo "Running make with verbose output..."

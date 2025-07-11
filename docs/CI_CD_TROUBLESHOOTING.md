@@ -1,227 +1,303 @@
-# CI/CD Troubleshooting Guide
+# CI/CD Troubleshooting Guide for LPZRobots
+
+## Quick Diagnosis Checklist
+
+Before diving into specific issues, check these common problems:
+
+1. ✓ Are all dependencies installed?
+2. ✓ Is the build directory clean?
+3. ✓ Are config scripts in DEVEL mode for CI?
+4. ✓ Do header symlinks exist?
+5. ✓ Is PATH set correctly?
 
 ## Common CI/CD Issues and Solutions
 
-### 1. Config Script Issues
+### 1. Config Script Path Issues
 
-#### Problem: "SRCPREFIX/libselforg.a" Error
-**Symptom:**
+**Symptoms:**
 ```
-/usr/bin/ld: cannot find SRCPREFIX/libselforg.a
-```
-
-**Cause:** Config scripts haven't been properly generated from M4 templates.
-
-**Solution:**
-```bash
-# Regenerate config scripts
-cd selforg
-./configure --prefix=/your/install/path --srcprefix=$(pwd) --type=USER
-cd ../ode_robots
-./configure --prefix=/your/install/path --srcprefix=$(pwd) --type=USER
+fatal error: ode_robots/odehandle.h: No such file or directory
 ```
 
-#### Problem: "ode-dbl-config not found"
-**Solution:**
-```bash
-cd opende
-./generate-ode-dbl-config.sh
-# Or if using system ODE:
-sudo apt-get install libode-dev
-```
-
-### 2. Library Linking Issues
-
-#### Problem: Libraries not found during simulation build
 **Diagnosis:**
 ```bash
-# Check what paths the config scripts return
-./selforg/selforg-config --libfile
-./ode_robots/ode_robots-config --libfile
-
-# Verify libraries exist at those paths
-ls -la $(./selforg/selforg-config --libfile)
+# Check config script mode
+./selforg/selforg-config --type
+# Should output "DEVEL" for CI builds
 ```
 
-**Common Fixes:**
-1. Build libraries first: `make selforg ode_robots`
-2. Use correct config script paths in simulations
-3. For macOS: Use `--static` flag for static linking
-
-### 3. Header Include Issues
-
-#### Problem: "ode_robots/simulation.h not found"
 **Solution:**
 ```bash
-# Create header structure
-cd ode_robots
-make create_header_links
-# Or manually:
-mkdir -p include/ode_robots
-ln -sf .. include/ode_robots
+# Regenerate in DEVEL mode
+cd selforg
+m4 -DPREFIX="$HOME/lpzrobots" -DSRCPREFIX="$(pwd)" \
+   -DDEVEL -DLINUX -DVERSION="1.0" \
+   selforg-config.m4 > selforg-config
+chmod +x selforg-config
 ```
 
-#### Problem: "ode/ode.h not found"
+### 2. Missing Header Symlinks
+
+**Symptoms:**
+```
+Cannot find include file: <selforg/matrix.h>
+```
+
+**Diagnosis:**
+```bash
+# Check if symlinks exist
+ls -la selforg/include/selforg/
+ls -la ode_robots/include/ode_robots/
+```
+
 **Solution:**
 ```bash
-# For bundled ODE
-mkdir -p include/ode-dbl
-ln -sf ../opende/include/ode/* include/ode-dbl/
-
-# For system ODE
-ln -sf /usr/include/ode include/ode-dbl
+# Create header symlinks
+cd selforg && make create_header_links
+cd ../ode_robots && make create_header_links
 ```
 
-### 4. CI-Specific Issues
+### 3. Library Linking Failures
 
-#### Problem: Different behavior in CI vs local
-**Debugging Steps:**
-1. Check CI environment variables
-2. Verify paths: `echo $PATH`, `pwd`, `ls -la`
-3. Use verbose make: `make VERBOSE=1`
-4. Add debugging to config scripts
+**Symptoms:**
+```
+undefined reference to `matrix::Matrix::Matrix()'
+```
 
-#### Problem: Qt6 not found on macOS CI
-**Solution:** Update CMake prefix path:
+**Diagnosis:**
+```bash
+# Check library paths
+./selforg-config --libs
+# Check if libraries exist
+ls -la selforg/*.a
+```
+
+**Solution:**
+```bash
+# Ensure libraries are built
+cd selforg && make clean && make
+# Verify config script outputs correct paths
+./selforg-config --libfile
+```
+
+### 4. macOS-Specific Issues
+
+#### AGL Framework Error
+
+**Symptoms:**
+```
+ld: framework not found AGL
+```
+
+**Solution:**
+```bash
+# Remove AGL references from Qt project files
+sed -i '' 's/-framework AGL//g' guilogger/src/src.pro
+# Or add to .pro file:
+CONFIG -= opengl
+```
+
+#### Qt6 Path Issues
+
+**Symptoms:**
+```
+Project ERROR: Unknown module(s) in QT: opengl
+```
+
+**Solution:**
+```bash
+# Set Qt6 paths
+export CMAKE_PREFIX_PATH="/opt/homebrew/opt/qt@6:$CMAKE_PREFIX_PATH"
+export PATH="/opt/homebrew/opt/qt@6/bin:$PATH"
+```
+
+### 5. Simulation Build Failures
+
+**Symptoms:**
+```
+make: *** No rule to make target 'main.o'
+```
+
+**Diagnosis:**
+```bash
+# Check Makefile generation
+ls -la Makefile
+# Check for M4 template
+ls -la ../../Makefile.4sim.m4
+```
+
+**Solution:**
+```bash
+# Regenerate Makefile from template
+m4 -DSRCPREFIX="$HOME/src/lpzrobots" \
+   ../../Makefile.4sim.m4 > Makefile
+```
+
+### 6. CI-Specific Path Issues
+
+**Problem:** CI uses different paths than local development
+
+**Solution in CI workflow:**
 ```yaml
-- name: Configure
-  run: |
-    QT_PREFIX="/opt/homebrew/opt/qt@6"  # ARM64
-    cmake -DCMAKE_PREFIX_PATH="$QT_PREFIX" ...
+# Force source paths in CI
+PROJECT_ROOT=$(pwd)
+export PATH="$PROJECT_ROOT/selforg:$PROJECT_ROOT/ode_robots:$PATH"
+
+# Create wrapper scripts
+echo '#!/bin/bash' > selforg-config
+echo "exec $PROJECT_ROOT/selforg/selforg-config --srcprefix=\"$PROJECT_ROOT/selforg\" \"\$@\"" >> selforg-config
+chmod +x selforg-config
 ```
 
-### 5. Build System Selection
+### 7. Virtual Display Issues (Linux CI)
 
-#### When to use CMake vs Make
-- **CMake**: Preferred for CI, cross-platform builds
-- **Make**: Required for simulations, legacy compatibility
-
-#### Switching between build systems:
-```bash
-# CMake build
-cmake --preset=ci
-cmake --build build/ci
-
-# Make build
-make conf
-make all
+**Symptoms:**
+```
+Cannot connect to X server
 ```
 
-### 6. Simulation Testing Issues
-
-#### Problem: "Cannot open display" error
-**Solution:** Use virtual display:
+**Solution:**
 ```bash
+# Set up virtual display
 export DISPLAY=:99
-Xvfb :99 -screen 0 1024x768x24 &
-./start -noshadow -nographics
+Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+sleep 3
 ```
 
-#### Problem: Simulation hangs in CI
-**Solution:** Use timeout and step limit:
+## Debugging Commands
+
+### Check Build Environment
 ```bash
-timeout 60s ./start -noshadow -nographics -steps 100
-```
-
-### 7. Platform-Specific Issues
-
-#### macOS ARM64 Issues
-- Use `-arch arm64` flag in config scripts
-- Check for universal binaries: `file ./start`
-- Verify architecture: `uname -m`
-
-#### Linux Distribution Differences
-- Ubuntu 24.04: Uses Qt6 packages
-- Older Ubuntu: May need Qt5 fallback
-- Check package names: `apt-cache search qt6-base`
-
-### 8. Performance Issues
-
-#### Slow CI Builds
-1. Enable ccache: Already configured in CI
-2. Use parallel builds: `-j$(nproc)`
-3. Cache dependencies between runs
-4. Consider splitting tests into separate jobs
-
-#### Out of Memory
-- Reduce parallel jobs: `-j2` instead of `-j$(nproc)`
-- Disable optimization for debug builds
-- Use swap file in CI if needed
-
-### 9. Debugging CI Failures
-
-#### Getting More Information
-1. **Enable verbose output:**
-   ```yaml
-   - name: Build
-     run: make VERBOSE=1 2>&1 | tee build.log
-   ```
-
-2. **Upload logs as artifacts:**
-   ```yaml
-   - name: Upload logs
-     if: failure()
-     uses: actions/upload-artifact@v4
-     with:
-       name: build-logs
-       path: |
-         build.log
-         config.log
-   ```
-
-3. **SSH debugging (GitHub Actions):**
-   - Use `mxschmitt/action-tmate@v3` for interactive debugging
-
-### 10. Common Error Messages
-
-#### "multiple definition of" linker errors
-- Check for duplicate symbols
-- Ensure proper include guards
-- Verify no accidental includes of .cpp files
-
-#### "undefined reference to" errors
-- Check library link order (dependencies last)
-- Verify all required libraries are linked
-- Check for missing template instantiations
-
-#### Permission denied errors
-- Ensure scripts are executable: `chmod +x script.sh`
-- Check file ownership in CI
-- Verify write permissions for build directory
-
-## Quick Diagnostic Commands
-
-```bash
-# Check environment
+# Show all relevant paths
 echo "PATH: $PATH"
+echo "CMAKE_PREFIX_PATH: $CMAKE_PREFIX_PATH"
+echo "PKG_CONFIG_PATH: $PKG_CONFIG_PATH"
 echo "LD_LIBRARY_PATH: $LD_LIBRARY_PATH"
-echo "Current dir: $(pwd)"
-which g++ cmake make
 
-# Check dependencies
-pkg-config --list-all | grep -E "gsl|qt|ode"
-ldconfig -p | grep -E "libode|libgsl|libQt"
+# Check installed packages (Ubuntu)
+dpkg -l | grep -E "qt6|gsl|openscenegraph|ode"
 
-# Check build files
-find . -name "*.a" -o -name "*.so" -o -name "*.dylib" | sort
-find . -name "*-config" -executable | sort
+# Check installed packages (macOS)
+brew list | grep -E "qt|gsl|open-scene-graph|ode"
+```
 
-# Test config scripts
-for cfg in $(find . -name "*-config" -executable); do
-    echo "=== $cfg ==="
-    $cfg --version
-    $cfg --cflags
-    $cfg --libs
+### Verify Config Scripts
+```bash
+# Test all config scripts
+for config in selforg-config ode_robots-config ode-dbl-config; do
+    echo "=== $config ==="
+    ./$config --version
+    ./$config --type
+    ./$config --cflags
+    ./$config --libs
+    ./$config --libfile
 done
 ```
 
+### Check Library Dependencies
+```bash
+# Linux
+ldd ./start | grep -E "selforg|ode_robots"
+
+# macOS
+otool -L ./start | grep -E "selforg|ode_robots"
+```
+
+### Verbose Build Output
+```bash
+# CMake build
+cmake --build build --verbose
+
+# Make build
+make VERBOSE=1
+
+# Show actual compile commands
+make -n main.o
+```
+
+## CI Workflow Debugging
+
+### Enable Debug Mode
+```yaml
+- name: Debug step
+  run: |
+    set -x  # Enable command echo
+    # Your commands here
+```
+
+### Check Artifacts
+```yaml
+- name: Upload debug artifacts
+  if: always()
+  uses: actions/upload-artifact@v4
+  with:
+    name: debug-logs
+    path: |
+      build.log
+      config.log
+      **/CMakeCache.txt
+```
+
+### Common CI Environment Variables
+```bash
+# GitHub Actions
+echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
+echo "RUNNER_OS: $RUNNER_OS"
+echo "RUNNER_ARCH: $RUNNER_ARCH"
+```
+
+## Platform-Specific Tips
+
+### Ubuntu CI
+- Use `ubuntu-24.04` for latest dependencies
+- Install `xvfb` for headless testing
+- Use `apt-get` with `-y` flag
+
+### macOS CI
+- Use `macos-15` for ARM64 support
+- Handle both `/opt/homebrew` (ARM64) and `/usr/local` (x64)
+- Check for Xcode command line tools
+
+## Best Practices
+
+1. **Always Clean Before Build**
+   ```bash
+   make clean || true
+   rm -rf build/
+   ```
+
+2. **Use Explicit Paths**
+   ```bash
+   # Good
+   $PROJECT_ROOT/selforg/selforg-config
+   # Bad
+   selforg-config  # Might find wrong version
+   ```
+
+3. **Check Return Codes**
+   ```bash
+   make || { echo "Build failed"; exit 1; }
+   ```
+
+4. **Log Verbose Output**
+   ```bash
+   make VERBOSE=1 2>&1 | tee build.log
+   ```
+
+5. **Test Incrementally**
+   - Build one component at a time
+   - Test config scripts after generation
+   - Verify paths before building
+
 ## Getting Help
 
-1. Check CI logs carefully - the error is usually there
-2. Run the same commands locally to reproduce
-3. Check the [CI/CD Comprehensive Review](../CI_CD_COMPREHENSIVE_REVIEW.md)
-4. Open an issue with:
+If you're still stuck:
+
+1. Check the [CI logs](https://github.com/jerryzhao173985/lpz/actions)
+2. Look for similar issues in [GitHub Issues](https://github.com/jerryzhao173985/lpz/issues)
+3. Enable verbose output and check error messages
+4. Compare with successful local builds
+5. Ask in discussions with:
    - Full error message
-   - Platform and configuration
+   - Platform and environment details
    - Steps to reproduce
-   - Relevant config files
