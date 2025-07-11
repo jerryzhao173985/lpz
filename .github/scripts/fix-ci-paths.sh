@@ -117,10 +117,14 @@ if [ -n "$PREFIX" ]; then
         (cd "$SRCROOT/selforg" && make create_header_links) || echo "Failed to create header links"
     fi
     
-    # Link to the include/selforg directory which has all the header symlinks
-    if [ ! -L "$PREFIX/include/selforg" ] && [ -d "$SRCROOT/selforg/include/selforg" ]; then
-        ln -sf "$SRCROOT/selforg/include/selforg" "$PREFIX/include/selforg"
-        echo "Created symlink: $PREFIX/include/selforg -> $SRCROOT/selforg/include/selforg"
+    # Instead of linking to include/selforg (which has symlinks), link directly to selforg source
+    # This preserves the directory structure needed for relative includes
+    if [ ! -L "$PREFIX/include/selforg" ]; then
+        # Remove any existing symlink or directory
+        rm -rf "$PREFIX/include/selforg"
+        # Create a symlink to the actual selforg directory
+        ln -sf "$SRCROOT/selforg" "$PREFIX/include/selforg"
+        echo "Created symlink: $PREFIX/include/selforg -> $SRCROOT/selforg"
     fi
     
     # Also link ode-dbl headers to PREFIX
@@ -141,6 +145,18 @@ if [ -d "ode_robots" ]; then
     if [ ! -L "ode_robots/include/selforg" ] && [ -d "selforg" ]; then
         ln -sf ../../selforg ode_robots/include/selforg
         echo "Created symlink: ode_robots/include/selforg -> ../../selforg"
+    fi
+    
+    # CRITICAL: Also create individual header links in ode_robots/include/selforg
+    # This ensures relative includes work correctly when headers are accessed via symlinks
+    mkdir -p ode_robots/include/selforg/utils
+    if [ -d "selforg/utils" ]; then
+        for header in selforg/utils/*.h; do
+            if [ -f "$header" ]; then
+                ln -sf "../../../$header" "ode_robots/include/selforg/utils/$(basename $header)"
+            fi
+        done
+        echo "Created utils header symlinks in ode_robots/include/selforg/utils/"
     fi
     
     # Also link ode-dbl headers for ode_robots
