@@ -21,6 +21,7 @@
 #include "robotfactory.h"
 #include <iostream>
 #include <algorithm>
+#include <optional>
 
 // Include robot headers
 #include "nimm2.h"
@@ -55,7 +56,7 @@ void RobotFactory::ensureInitialized() {
     }
 }
 
-std::unique_ptr<OdeRobot> RobotFactory::createRobot(
+std::optional<std::unique_ptr<OdeRobot>> RobotFactory::createRobot(
     const std::string& type,
     const OdeHandle& odeHandle,
     const OsgHandle& osgHandle,
@@ -77,10 +78,10 @@ std::unique_ptr<OdeRobot> RobotFactory::createRobot(
     }
     std::cerr << std::endl;
     
-    return nullptr;
+    return std::nullopt;
 }
 
-std::unique_ptr<OdeRobot> RobotFactory::createRobot(
+std::optional<std::unique_ptr<OdeRobot>> RobotFactory::createRobot(
     const std::string& type,
     const OdeHandle& odeHandle,
     const OsgHandle& osgHandle,

@@ -26,6 +26,8 @@
 
 #include <iostream>
 #include <string>
+#include <optional>
+#include <string_view>
 
 using namespace std;
 
@@ -46,8 +48,8 @@ AbstractController::motorInfos(const std::list<SensorMotorInfo>& motorInfos) {
 }
 
 int
-AbstractController::SIdx(const std::string& name) const {
-  if (auto iter = sensorIndexMap.find(name); iter != sensorIndexMap.end()) {
+AbstractController::SIdx(std::string_view name) const {
+  if (auto iter = sensorIndexMap.find(std::string(name)); iter != sensorIndexMap.end()) {
     return iter->second;
   }
 
@@ -61,8 +63,8 @@ AbstractController::SIdx(const std::string& name) const {
 }
 
 int
-AbstractController::MIdx(const std::string& name) const {
-  if (auto iter = motorIndexMap.find(name); iter != motorIndexMap.end()) {
+AbstractController::MIdx(std::string_view name) const {
+  if (auto iter = motorIndexMap.find(std::string(name)); iter != motorIndexMap.end()) {
     return iter->second;
   }
 
@@ -93,4 +95,38 @@ AbstractController::MInfo(int index) const {
 
   cerr << "No info for Motor with index " << index << "! Out of bounds?" << endl;
   return SensorMotorInfo();
+}
+
+// C++17 std::optional versions for improved error handling
+
+std::optional<int>
+AbstractController::SIdxOpt(std::string_view name) const {
+  if (auto iter = sensorIndexMap.find(std::string(name)); iter != sensorIndexMap.end()) {
+    return iter->second;
+  }
+  return std::nullopt;
+}
+
+std::optional<int>
+AbstractController::MIdxOpt(std::string_view name) const {
+  if (auto iter = motorIndexMap.find(std::string(name)); iter != motorIndexMap.end()) {
+    return iter->second;
+  }
+  return std::nullopt;
+}
+
+std::optional<SensorMotorInfo>
+AbstractController::SInfoOpt(int index) const {
+  if (auto iter = sensorInfoMap.find(index); iter != sensorInfoMap.end()) {
+    return iter->second;
+  }
+  return std::nullopt;
+}
+
+std::optional<SensorMotorInfo>
+AbstractController::MInfoOpt(int index) const {
+  if (auto iter = motorInfoMap.find(index); iter != motorInfoMap.end()) {
+    return iter->second;
+  }
+  return std::nullopt;
 }

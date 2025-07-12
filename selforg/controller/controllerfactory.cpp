@@ -21,6 +21,7 @@
 #include "controllerfactory.h"
 #include <iostream>
 #include <algorithm>
+#include <string_view>
 
 // Include controller headers
 #include "sox.h"
@@ -77,11 +78,11 @@ void ControllerFactory::ensureInitialized() {
     }
 }
 
-std::unique_ptr<AbstractController> ControllerFactory::createController(const std::string& type) {
+std::unique_ptr<AbstractController> ControllerFactory::createController(std::string_view type) {
     ensureInitialized();
     
     auto& creators = getCreatorMap();
-    auto it = creators.find(type);
+    auto it = creators.find(std::string(type));  // TODO: Use heterogeneous lookup to avoid allocation
     
     if (it != creators.end()) {
         return it->second();
@@ -98,7 +99,7 @@ std::unique_ptr<AbstractController> ControllerFactory::createController(const st
 }
 
 std::unique_ptr<AbstractController> ControllerFactory::createController(
-    const std::string& type,
+    std::string_view type,
     const ControllerConfig& config) {
     
     auto controller = createController(type);
@@ -116,7 +117,7 @@ std::unique_ptr<AbstractController> ControllerFactory::createController(
 }
 
 std::unique_ptr<AbstractController> ControllerFactory::createController(
-    const std::string& type,
+    std::string_view type,
     const std::map<std::string, double>& params) {
     
     auto controller = createController(type);
@@ -180,16 +181,16 @@ std::vector<std::string> ControllerFactory::getRegisteredTypes() {
     return types;
 }
 
-bool ControllerFactory::isTypeRegistered(const std::string& type) {
+bool ControllerFactory::isTypeRegistered(std::string_view type) {
     ensureInitialized();
     const auto& creators = getCreatorMap();
-    return creators.find(type) != creators.end();
+    return creators.find(std::string(type)) != creators.end();
 }
 
-std::string ControllerFactory::getControllerDescription(const std::string& type) {
+std::string ControllerFactory::getControllerDescription(std::string_view type) {
     ensureInitialized();
     const auto& descriptions = getDescriptionMap();
-    auto it = descriptions.find(type);
+    auto it = descriptions.find(std::string(type));
     return (it != descriptions.end()) ? it->second : "";
 }
 

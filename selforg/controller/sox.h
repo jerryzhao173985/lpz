@@ -19,7 +19,7 @@
 #ifndef __SOX_H
 #define __SOX_H
 
-#include <selforg/abstractcontroller.h>
+#include <selforg/controllerbase.h>
 #include <selforg/controller_misc.h>
 
 #include <cassert>
@@ -52,7 +52,7 @@ struct SoxConf {
  * This controller implements the standard algorihm described the the Chapter 5 (Homeokinesis)
  *  with extensions of Chapter 15 of book Der/Martius 2011: The Playful Machine
  */
-class Sox : public AbstractController, public Teachable {
+class Sox : public ControllerBase, public Teachable {
 
 public:
   /// constructor
@@ -133,15 +133,10 @@ public:
   virtual int setParameters(const std::list<matrix::Matrix>& params);
 
 protected:
-  unsigned short number_sensors = 0;
-  unsigned short number_motors = 0;
   static constexpr unsigned short buffersize = 10;
 
-  matrix::Matrix A;                    // Model Matrix
-  matrix::Matrix C;                    // Controller Matrix
-  matrix::Matrix S;                    // Model Matrix (sensor branch)
-  matrix::Matrix h;                    // Controller Bias
-  matrix::Matrix b;                    // Model Bias
+  // Note: A, C, S, h, b matrices inherited from ControllerBase
+  // Note: number_sensors, number_motors, t inherited from ControllerBase
   matrix::Matrix L;                    // Jacobi Matrix
   matrix::Matrix R;                    //
   matrix::Matrix C_native;             // Controller Matrix obtained from motor babbling
@@ -149,9 +144,9 @@ protected:
   lpzrobots::MatrixBuffer<buffersize> y_buffer; // buffer needed for delay
   lpzrobots::MatrixBuffer<buffersize> x_buffer; // buffer of sensor values
   matrix::Matrix v_avg;
-  matrix::Matrix x;        // current sensor value vector
+  // Note: x inherited from ControllerBase  
   matrix::Matrix x_smooth; // time average of x values
-  int t = 0;
+  // Note: t inherited from ControllerBase
 
   bool loga = false;
 

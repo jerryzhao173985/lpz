@@ -22,6 +22,7 @@
 
 #include <memory>
 #include <string>
+#include <string_view>
 #include <functional>
 #include <unordered_map>
 #include <vector>
@@ -37,8 +38,7 @@ namespace lpzrobots {
  * 
  * @example
  * ```cpp
- * auto controller = ControllerFactory::createController("Sox");
- * if (controller) {
+ * if (auto controller = ControllerFactory::createController("Sox")) {
  *     controller->setParam("epsC", 0.1);
  *     controller->setParam("epsA", 0.05);
  * }
@@ -62,7 +62,7 @@ public:
      * @param type The type name of the controller (e.g., "Sox", "DEP", "Pimax")
      * @return Unique pointer to the created controller, or nullptr if type not found
      */
-    static std::unique_ptr<AbstractController> createController(const std::string& type);
+    [[nodiscard]] static std::unique_ptr<AbstractController> createController(std::string_view type);
 
     /**
      * @brief Creates a controller with configuration
@@ -70,8 +70,8 @@ public:
      * @param config Configuration parameters
      * @return Unique pointer to the created controller, or nullptr if type not found
      */
-    static std::unique_ptr<AbstractController> createController(
-        const std::string& type,
+    [[nodiscard]] static std::unique_ptr<AbstractController> createController(
+        std::string_view type,
         const ControllerConfig& config);
 
     /**
@@ -80,8 +80,8 @@ public:
      * @param params Map of parameter name to value
      * @return Unique pointer to the created controller, or nullptr if type not found
      */
-    static std::unique_ptr<AbstractController> createController(
-        const std::string& type,
+    [[nodiscard]] static std::unique_ptr<AbstractController> createController(
+        std::string_view type,
         const std::map<std::string, double>& params);
 
     /**
@@ -110,14 +110,14 @@ public:
      * @param type The type name to check
      * @return true if type is registered
      */
-    static bool isTypeRegistered(const std::string& type);
+    static bool isTypeRegistered(std::string_view type);
 
     /**
      * @brief Gets a brief description of a controller type
      * @param type The type name
      * @return Description string, or empty if type not found
      */
-    static std::string getControllerDescription(const std::string& type);
+    static std::string getControllerDescription(std::string_view type);
 
     /**
      * @brief Registers all built-in controller types
@@ -168,6 +168,9 @@ private:
  *         []() { return std::make_unique<TestController>(); });
  *     
  *     auto controller = ControllerFactory::createController("TestController");
+ *     if (controller) {
+ *         // Use controller...
+ *     }
  * } // TestController automatically unregistered here
  * ```
  */

@@ -7,6 +7,7 @@
 #include <list>
 #include <string>
 #include <vector>
+#include <type_traits>
 
 // iterators for stl containers. Do not use for removal because the end is determined at the
 // beginning.
@@ -41,14 +42,25 @@
        ++it1, ++it2)
 
 /// contains some additions to the standard template library
-namespace std {
 
-/// absolute function for all types
+/// utility functions (avoiding std namespace extension which is UB)
+namespace lpzrobots {
+
+/// absolute function for all types (C++17 optimized with if constexpr)
 template<typename T>
-inline T
-abs(T v) {
-  return ((v > 0) ? v : -v);
+constexpr T abs(T v) noexcept {
+  if constexpr (std::is_unsigned_v<T>) {
+    // Unsigned types are always non-negative
+    return v;
+  } else {
+    // Standard abs implementation for signed types
+    return (v < T{0}) ? -v : v;
+  }
 }
+
+} // namespace lpzrobots
+
+namespace std {
 
 /// += operators for list (list concat)
 template<class T>
