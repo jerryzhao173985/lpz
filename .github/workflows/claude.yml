@@ -41,16 +41,16 @@ jobs:
             actions: read
           
           # Optional: Specify model (defaults to Claude Sonnet 4, uncomment for Claude Opus 4)
-          # model: "claude-opus-4-20250514"
+          model: "claude-opus-4-20250514"
           
           # Optional: Customize the trigger phrase (default: @claude)
           # trigger_phrase: "/claude"
           
           # Optional: Trigger when specific user is assigned to an issue
-          # assignee_trigger: "claude-bot"
+          assignee_trigger: "claude-bot"
           
           # Optional: Allow Claude to run specific commands
-          # allowed_tools: "Bash(npm install),Bash(npm run build),Bash(npm run test:*),Bash(npm run lint:*)"
+          allowed_tools: "Bash(apt-get update:*),Bash(apt-get install:*),Bash(apt-get upgrade:*),Bash(apt update:*),Bash(apt install:*),Bash(apt upgrade:*),Bash(sudo:*),Bash(git add:*),Bash(git commit:*),Bash(git push:*),Bash(git pull:*),Bash(git merge:*),Bash(git checkout:*),Bash(git branch:*),Bash(git clone:*),Bash(git fetch:*),Bash(git reset:*),Bash(git stash:*),Bash(git cherry-pick:*),Bash(git diff:*),Bash(git log:*),Bash(git status:*),Bash(git rebase:*),Bash(gh api:*),Bash(gh pr:*),Bash(gh repo:*),Bash(gh run:*),Bash(gh workflow:*),Bash(cmake:*),Bash(make:*),Bash(g++:*),Bash(gcc:*),Bash(clang:*),Bash(cppcheck),Bash(cargo:*),Bash(go:*),Bash(node:*),Bash(npm install:*),Bash(npm run build:*),Bash(npm run test:*),Bash(npm run lint:*),Bash(yarn:*),Bash(pnpm:*),Bash(pip install:*),Bash(pip3 install:*),Bash(python:*),Bash(python3:*),Bash(curl:*),Bash(wget:*),Bash(ls:*),Bash(cp:*),Bash(mv:*),Bash(rm:*),Bash(cat:*),Bash(touch:*),Bash(echo:*),Bash(find:*),Bash(grep:*),Bash(sed:*),Bash(awk:*),Bash(chmod:*),Bash(chown:*),Bash(ln:*),Bash(mkdir:*),Bash(rmdir:*),Bash(tar:*),Bash(zip:*),Bash(unzip:*),Bash(du:*),Bash(df:*),Bash(ps:*),Bash(kill:*),Bash(xargs:*),Bash(head:*),Bash(tail:*),Bash(sort:*),Bash(uniq:*),Bash(tr:*),Bash(ssh:*),Bash(ssh-keygen:*),Bash(docker build:*),Bash(docker run:*),Bash(docker compose:*),Bash(kubectl:*),Bash(systemctl:*),Bash(jq:*),Bash(shellcheck:*),Bash(yamllint:*),WebFetch(domain:**),Edit,Replace,Bash(true),Bash(test:*),Bash(done),Bash(do:*),Bash(/dev/null),Bash(npm install),Bash(npm run build),Bash(npm run test:*),Bash(npm run lint:*)"
           
           # Optional: Add custom instructions for Claude to customize its behavior for your project
           # custom_instructions: |
