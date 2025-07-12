@@ -22,9 +22,11 @@
 
 #include <memory>
 #include <string>
+#include <string_view>
 #include <functional>
 #include <unordered_map>
 #include <vector>
+#include <optional>
 #include "abstractcontroller.h"
 
 namespace lpzrobots {
@@ -37,8 +39,8 @@ namespace lpzrobots {
  * 
  * @example
  * ```cpp
- * auto controller = ControllerFactory::createController("Sox");
- * if (controller) {
+ * if (auto controller_opt = ControllerFactory::createController("Sox")) {
+ *     auto& controller = controller_opt.value();
  *     controller->setParam("epsC", 0.1);
  *     controller->setParam("epsA", 0.05);
  * }
@@ -60,28 +62,28 @@ public:
     /**
      * @brief Creates a controller of the specified type
      * @param type The type name of the controller (e.g., "Sox", "DEP", "Pimax")
-     * @return Unique pointer to the created controller, or nullptr if type not found
+     * @return Optional containing unique pointer to the created controller, or std::nullopt if type not found
      */
-    static std::unique_ptr<AbstractController> createController(const std::string& type);
+    [[nodiscard]] static std::optional<std::unique_ptr<AbstractController>> createController(std::string_view type);
 
     /**
      * @brief Creates a controller with configuration
      * @param type The type name of the controller
      * @param config Configuration parameters
-     * @return Unique pointer to the created controller, or nullptr if type not found
+     * @return Optional containing unique pointer to the created controller, or std::nullopt if type not found
      */
-    static std::unique_ptr<AbstractController> createController(
-        const std::string& type,
+    [[nodiscard]] static std::optional<std::unique_ptr<AbstractController>> createController(
+        std::string_view type,
         const ControllerConfig& config);
 
     /**
      * @brief Creates a controller with custom parameters
      * @param type The type name of the controller
      * @param params Map of parameter name to value
-     * @return Unique pointer to the created controller, or nullptr if type not found
+     * @return Optional containing unique pointer to the created controller, or std::nullopt if type not found
      */
-    static std::unique_ptr<AbstractController> createController(
-        const std::string& type,
+    [[nodiscard]] static std::optional<std::unique_ptr<AbstractController>> createController(
+        std::string_view type,
         const std::map<std::string, double>& params);
 
     /**
@@ -110,14 +112,14 @@ public:
      * @param type The type name to check
      * @return true if type is registered
      */
-    static bool isTypeRegistered(const std::string& type);
+    static bool isTypeRegistered(std::string_view type);
 
     /**
      * @brief Gets a brief description of a controller type
      * @param type The type name
      * @return Description string, or empty if type not found
      */
-    static std::string getControllerDescription(const std::string& type);
+    static std::string getControllerDescription(std::string_view type);
 
     /**
      * @brief Registers all built-in controller types

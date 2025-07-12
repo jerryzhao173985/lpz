@@ -21,6 +21,8 @@
 #include "controllerfactory.h"
 #include <iostream>
 #include <algorithm>
+#include <optional>
+#include <string_view>
 
 // Include controller headers
 #include "sox.h"
@@ -77,11 +79,11 @@ void ControllerFactory::ensureInitialized() {
     }
 }
 
-std::unique_ptr<AbstractController> ControllerFactory::createController(const std::string& type) {
+std::optional<std::unique_ptr<AbstractController>> ControllerFactory::createController(std::string_view type) {
     ensureInitialized();
     
     auto& creators = getCreatorMap();
-    auto it = creators.find(type);
+    auto it = creators.find(std::string(type));  // Convert to string for map lookup
     
     if (it != creators.end()) {
         return it->second();
@@ -94,15 +96,16 @@ std::unique_ptr<AbstractController> ControllerFactory::createController(const st
     }
     std::cerr << std::endl;
     
-    return nullptr;
+    return std::nullopt;
 }
 
-std::unique_ptr<AbstractController> ControllerFactory::createController(
-    const std::string& type,
+std::optional<std::unique_ptr<AbstractController>> ControllerFactory::createController(
+    std::string_view type,
     const ControllerConfig& config) {
     
-    auto controller = createController(type);
-    if (controller) {
+    auto controller_opt = createController(type);
+    if (controller_opt) {
+        auto& controller = controller_opt.value();
         // Apply common configuration
         if (controller->hasParam("eps")) {
             controller->setParam("eps", config.learningRate);
@@ -111,23 +114,26 @@ std::unique_ptr<AbstractController> ControllerFactory::createController(
             controller->setParam("noise", config.noiseLevel);
         }
         // Add more parameter mappings as needed
+        return controller_opt;
     }
-    return controller;
+    return std::nullopt;
 }
 
-std::unique_ptr<AbstractController> ControllerFactory::createController(
-    const std::string& type,
+std::optional<std::unique_ptr<AbstractController>> ControllerFactory::createController(
+    std::string_view type,
     const std::map<std::string, double>& params) {
     
-    auto controller = createController(type);
-    if (controller) {
+    auto controller_opt = createController(type);
+    if (controller_opt) {
+        auto& controller = controller_opt.value();
         for (const auto& [param, value] : params) {
             if (controller->hasParam(param)) {
                 controller->setParam(param, value);
             }
         }
+        return controller_opt;
     }
-    return controller;
+    return std::nullopt;
 }
 
 bool ControllerFactory::registerControllerType(const std::string& type, CreatorFunc creator) {
@@ -180,16 +186,16 @@ std::vector<std::string> ControllerFactory::getRegisteredTypes() {
     return types;
 }
 
-bool ControllerFactory::isTypeRegistered(const std::string& type) {
+bool ControllerFactory::isTypeRegistered(std::string_view type) {
     ensureInitialized();
     const auto& creators = getCreatorMap();
-    return creators.find(type) != creators.end();
+    return creators.find(std::string(type)) != creators.end();
 }
 
-std::string ControllerFactory::getControllerDescription(const std::string& type) {
+std::string ControllerFactory::getControllerDescription(std::string_view type) {
     ensureInitialized();
     const auto& descriptions = getDescriptionMap();
-    auto it = descriptions.find(type);
+    auto it = descriptions.find(std::string(type));
     return (it != descriptions.end()) ? it->second : "";
 }
 

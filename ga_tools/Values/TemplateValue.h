@@ -29,6 +29,7 @@
 
 //includes
 #include <string>
+#include <type_traits>
 
 //ga_tools includes
 #include "IValue.h"
@@ -46,17 +47,22 @@ inline std::string doubleToString(double value) {
 }
 
 /**
- * Generic toString function template
+ * Generic toString function template (C++17 with if constexpr)
  */
 template<typename T>
 inline std::string toString(const T& value) {
-  return std::to_string(value);
-}
-
-// Specialization for double to use doubleToString
-template<>
-inline std::string toString<double>(const double& value) {
-  return doubleToString(value);
+  if constexpr (std::is_same_v<T, double>) {
+    // Use high-precision formatting for double
+    return doubleToString(value);
+  } else if constexpr (std::is_floating_point_v<T>) {
+    // Use standard conversion for other floating point types
+    char buffer[64];
+    snprintf(buffer, sizeof(buffer), "%.9g", static_cast<double>(value));
+    return buffer;
+  } else {
+    // Use std::to_string for integral types
+    return std::to_string(value);
+  }
 }
 
 /**

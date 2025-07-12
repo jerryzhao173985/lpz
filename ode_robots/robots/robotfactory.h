@@ -24,6 +24,7 @@
 #include <string>
 #include <functional>
 #include <unordered_map>
+#include <optional>
 #include "oderobot.h"
 
 namespace lpzrobots {
@@ -41,8 +42,8 @@ class Primitive;
  * 
  * @example
  * ```cpp
- * auto robot = RobotFactory::createRobot("Sphererobot3Masses", odeHandle, osgHandle);
- * if (robot) {
+ * if (auto robot_opt = RobotFactory::createRobot("Sphererobot3Masses", odeHandle, osgHandle)) {
+ *     auto& robot = robot_opt.value();
  *     robot->place(Pos(0, 0, 0.5));
  * }
  * ```
@@ -67,9 +68,9 @@ public:
      * @param odeHandle Handle to the ODE physics world
      * @param osgHandle Handle to the OSG graphics world
      * @param name Optional name for the robot instance
-     * @return Unique pointer to the created robot, or nullptr if type not found
+     * @return Optional containing unique pointer to the created robot, or std::nullopt if type not found
      */
-    static std::unique_ptr<OdeRobot> createRobot(
+    [[nodiscard]] static std::optional<std::unique_ptr<OdeRobot>> createRobot(
         const std::string& type,
         const OdeHandle& odeHandle,
         const OsgHandle& osgHandle,
@@ -81,9 +82,9 @@ public:
      * @param odeHandle Handle to the ODE physics world
      * @param osgHandle Handle to the OSG graphics world
      * @param config Configuration parameters
-     * @return Unique pointer to the created robot, or nullptr if type not found
+     * @return Optional containing unique pointer to the created robot, or std::nullopt if type not found
      */
-    static std::unique_ptr<OdeRobot> createRobot(
+    [[nodiscard]] static std::optional<std::unique_ptr<OdeRobot>> createRobot(
         const std::string& type,
         const OdeHandle& odeHandle,
         const OsgHandle& osgHandle,

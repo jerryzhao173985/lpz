@@ -7,6 +7,7 @@
 #include <list>
 #include <string>
 #include <vector>
+#include <type_traits>
 
 // iterators for stl containers. Do not use for removal because the end is determined at the
 // beginning.
@@ -43,11 +44,17 @@
 /// contains some additions to the standard template library
 namespace std {
 
-/// absolute function for all types
+/// absolute function for all types (C++17 optimized with if constexpr)
 template<typename T>
 inline T
 abs(T v) {
-  return ((v > 0) ? v : -v);
+  if constexpr (std::is_unsigned_v<T>) {
+    // Unsigned types are always non-negative, no need for comparison
+    return v;
+  } else {
+    // Only perform abs calculation for signed types
+    return ((v > 0) ? v : -v);
+  }
 }
 
 /// += operators for list (list concat)

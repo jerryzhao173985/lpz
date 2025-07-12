@@ -32,6 +32,8 @@
 #include <cstdio>
 #include <list>
 #include <map>
+#include <optional>
+#include <string_view>
 
 /**
  * Abstract class for robot controller (with some basic functionality).
@@ -112,14 +114,27 @@ public:
 
   /** returns the index of the sensor with the given name
       (if not found then 0 and all sensor names are printed) */
-  virtual int SIdx(const std::string& name) const ;
+  virtual int SIdx(std::string_view name) const ;
   /** returns the index of the motor with the given name
       (if not found then 0 and all motor names are printed) */
-  virtual int MIdx(const std::string& name) const ;
+  virtual int MIdx(std::string_view name) const ;
   /** returns the Information for the sensor with given index */
   virtual SensorMotorInfo SInfo(int index) const ;
   /** returns the Information for the motor with given index */
   virtual SensorMotorInfo MInfo(int index) const ;
+
+  /** returns the index of the sensor with the given name (C++17 version)
+      @return std::optional containing the index, or std::nullopt if not found */
+  [[nodiscard]] virtual std::optional<int> SIdxOpt(std::string_view name) const ;
+  /** returns the index of the motor with the given name (C++17 version)
+      @return std::optional containing the index, or std::nullopt if not found */
+  [[nodiscard]] virtual std::optional<int> MIdxOpt(std::string_view name) const ;
+  /** returns the Information for the sensor with given index (C++17 version)
+      @return std::optional containing the info, or std::nullopt if index invalid */
+  [[nodiscard]] virtual std::optional<SensorMotorInfo> SInfoOpt(int index) const ;
+  /** returns the Information for the motor with given index (C++17 version)
+      @return std::optional containing the info, or std::nullopt if index invalid */
+  [[nodiscard]] virtual std::optional<SensorMotorInfo> MInfoOpt(int index) const ;
 
 protected:
   std::map<std::string, int> sensorIndexMap{};
