@@ -22,10 +22,7 @@ using namespace matrix;
 using namespace std;
 
 Sox::Sox(const SoxConf& conf)
-  : AbstractController("Sox", "1.1")
-  , number_sensors(0)
-  , number_motors(0)
-  , t(0)
+  : ControllerBase("Sox", "1.1")
   , loga(false)
   , conf(conf)
   , intern_isTeaching(false) {
@@ -33,10 +30,7 @@ Sox::Sox(const SoxConf& conf)
 }
 
 Sox::Sox(double init_feedback_strength, bool useExtendedModel, bool useTeaching)
-  : AbstractController("Sox", "1.1")
-  , number_sensors(0)
-  , number_motors(0)
-  , t(0)
+  : ControllerBase("Sox", "1.1")
   , loga(false)
   , conf(getDefaultConf())
   , intern_isTeaching(false) {
@@ -100,10 +94,10 @@ Sox::~Sox() {}
 
 void
 Sox::init(int sensornumber, int motornumber, RandGen* randGen) {
-  // randGen parameter is unused but kept for interface compatibility
-
-  number_sensors = sensornumber;
-  number_motors = motornumber;
+  // Call base class initialization (handles common setup)
+  ControllerBase::init(sensornumber, motornumber, randGen);
+  
+  // Initialize matrices using base class dimensions
   A.set(number_sensors, number_motors);
   S.set(number_sensors, number_sensors);
   C.set(number_motors, number_sensors);
@@ -130,7 +124,7 @@ Sox::init(int sensornumber, int motornumber, RandGen* randGen) {
 
   y_teaching.set(number_motors, 1);
 
-  x.set(number_sensors, 1);
+  // Note: x is initialized by ControllerBase::init()
   x_smooth.set(number_sensors, 1);
   for (unsigned int k = 0; k < buffersize; ++k) {
     Matrix x_init(number_sensors, 1);
