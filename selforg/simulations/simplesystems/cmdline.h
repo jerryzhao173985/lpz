@@ -4,7 +4,7 @@
 #include <selforg/configurable.h> 
 #include <vector>
 
-typedef std::vector<Configurable*> ConfigList; 
+using ConfigList = std::vector<Configurable*>; 
 
 std::vector<std::string> splitString(const std::string& str, char seperator);
 

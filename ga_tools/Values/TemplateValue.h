@@ -48,9 +48,12 @@ inline std::string doubleToString(double value) {
 
 /**
  * Generic toString function template (C++17 with if constexpr)
+ * Constrained to arithmetic types for type safety
  */
 template<typename T>
 inline std::string toString(const T& value) {
+  static_assert(std::is_arithmetic_v<T>, "toString only supports arithmetic types");
+  
   if constexpr (std::is_same_v<T, double>) {
     // Use high-precision formatting for double
     return doubleToString(value);
@@ -60,7 +63,7 @@ inline std::string toString(const T& value) {
     snprintf(buffer, sizeof(buffer), "%.9g", static_cast<double>(value));
     return buffer;
   } else {
-    // Use std::to_string for integral types
+    // Use std::to_string for integral types (safe now with static_assert)
     return std::to_string(value);
   }
 }

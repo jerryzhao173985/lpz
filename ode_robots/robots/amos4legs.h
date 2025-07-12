@@ -480,16 +480,16 @@ namespace lpzrobots {
 
     private:
 
-      /** typedefs */
-      typedef std::map<LegPos, HingeJoint*> HingeJointMap;
-      typedef std::map<LegPos, Leg> LegMap;
-      typedef std::map<LegPos, ContactSensor*> LegContactMap;
-      typedef std::map<MotorName, OneAxisServo*> MotorMap;
-      typedef std::map<LegPos, LegPosUsage> LegPosUsageMap;
-      typedef std::map<LegPos, IRSensor*> LegIRSensorMap;
-      typedef std::vector<Primitive*> PrimitiveList;
-      typedef std::vector<Joint*> JointList;
-      typedef std::vector<OneAxisServo*> ServoList;
+      /** type aliases (C++17 modern syntax) */
+      using HingeJointMap = std::map<LegPos, HingeJoint*>;
+      using LegMap = std::map<LegPos, Leg>;
+      using LegContactMap = std::map<LegPos, ContactSensor*>;
+      using MotorMap = std::map<MotorName, OneAxisServo*>;
+      using LegPosUsageMap = std::map<LegPos, LegPosUsage>;
+      using LegIRSensorMap = std::map<LegPos, IRSensor*>;
+      using PrimitiveList = std::vector<Primitive*>;
+      using JointList = std::vector<Joint*>;
+      using ServoList = std::vector<OneAxisServo*>;
 
       AmosFourConf conf;
       bool created; // true if robot was created

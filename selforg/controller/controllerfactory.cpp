@@ -21,7 +21,6 @@
 #include "controllerfactory.h"
 #include <iostream>
 #include <algorithm>
-#include <optional>
 #include <string_view>
 
 // Include controller headers
@@ -79,11 +78,11 @@ void ControllerFactory::ensureInitialized() {
     }
 }
 
-std::optional<std::unique_ptr<AbstractController>> ControllerFactory::createController(std::string_view type) {
+std::unique_ptr<AbstractController> ControllerFactory::createController(std::string_view type) {
     ensureInitialized();
     
     auto& creators = getCreatorMap();
-    auto it = creators.find(std::string(type));  // Convert to string for map lookup
+    auto it = creators.find(std::string(type));  // TODO: Use heterogeneous lookup to avoid allocation
     
     if (it != creators.end()) {
         return it->second();
@@ -96,16 +95,15 @@ std::optional<std::unique_ptr<AbstractController>> ControllerFactory::createCont
     }
     std::cerr << std::endl;
     
-    return std::nullopt;
+    return nullptr;
 }
 
-std::optional<std::unique_ptr<AbstractController>> ControllerFactory::createController(
+std::unique_ptr<AbstractController> ControllerFactory::createController(
     std::string_view type,
     const ControllerConfig& config) {
     
-    auto controller_opt = createController(type);
-    if (controller_opt) {
-        auto& controller = controller_opt.value();
+    auto controller = createController(type);
+    if (controller) {
         // Apply common configuration
         if (controller->hasParam("eps")) {
             controller->setParam("eps", config.learningRate);
@@ -114,26 +112,23 @@ std::optional<std::unique_ptr<AbstractController>> ControllerFactory::createCont
             controller->setParam("noise", config.noiseLevel);
         }
         // Add more parameter mappings as needed
-        return controller_opt;
     }
-    return std::nullopt;
+    return controller;
 }
 
-std::optional<std::unique_ptr<AbstractController>> ControllerFactory::createController(
+std::unique_ptr<AbstractController> ControllerFactory::createController(
     std::string_view type,
     const std::map<std::string, double>& params) {
     
-    auto controller_opt = createController(type);
-    if (controller_opt) {
-        auto& controller = controller_opt.value();
+    auto controller = createController(type);
+    if (controller) {
         for (const auto& [param, value] : params) {
             if (controller->hasParam(param)) {
                 controller->setParam(param, value);
             }
         }
-        return controller_opt;
     }
-    return std::nullopt;
+    return controller;
 }
 
 bool ControllerFactory::registerControllerType(const std::string& type, CreatorFunc creator) {
