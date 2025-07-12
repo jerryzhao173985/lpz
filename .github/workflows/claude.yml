@@ -49,50 +49,9 @@ jobs:
           # Optional: Trigger when specific user is assigned to an issue
           assignee_trigger: "claude-bot"
           
-          # Comprehensive developer tools for interactive Claude assistance
-          allowed_tools: |
-            Bash(apt:*),Bash(apt-get:*),Bash(apt-cache:*),Bash(dpkg:*),Bash(sudo:*),
-            Bash(git:*),Bash(gh:*),Bash(svn:*),Bash(hg:*),
-            Bash(cmake:*),Bash(make:*),Bash(ninja:*),Bash(autoconf:*),Bash(automake:*),Bash(./configure:*),Bash(pkg-config:*),Bash(ldconfig:*),
-            Bash(gcc:*),Bash(g++:*),Bash(clang:*),Bash(clang++:*),Bash(ld:*),Bash(ar:*),Bash(nm:*),Bash(objdump:*),Bash(readelf:*),Bash(ldd:*),Bash(c++filt:*),
-            Bash(gdb:*),Bash(lldb:*),Bash(valgrind:*),Bash(strace:*),Bash(ltrace:*),Bash(perf:*),Bash(time:*),Bash(gprof:*),Bash(gcov:*),Bash(lcov:*),
-            Bash(cppcheck:*),Bash(clang-tidy:*),Bash(clang-format:*),Bash(cpplint:*),Bash(include-what-you-use:*),Bash(iwyu:*),Bash(shellcheck:*),Bash(pylint:*),Bash(flake8:*),Bash(black:*),Bash(yapf:*),Bash(autopep8:*),Bash(eslint:*),Bash(prettier:*),Bash(rustfmt:*),Bash(gofmt:*),
-            Bash(python:*),Bash(python3:*),Bash(pip:*),Bash(pip3:*),Bash(pipenv:*),Bash(poetry:*),Bash(virtualenv:*),Bash(conda:*),Bash(pytest:*),Bash(unittest:*),Bash(nose:*),
-            Bash(node:*),Bash(npm:*),Bash(npx:*),Bash(yarn:*),Bash(pnpm:*),Bash(nvm:*),Bash(jest:*),Bash(mocha:*),Bash(vitest:*),
-            Bash(cargo:*),Bash(rustc:*),Bash(rustup:*),Bash(go:*),Bash(javac:*),Bash(java:*),Bash(mvn:*),Bash(gradle:*),Bash(ant:*),Bash(ruby:*),Bash(gem:*),Bash(bundle:*),Bash(php:*),Bash(composer:*),Bash(perl:*),Bash(cpan:*),
-            Bash(docker:*),Bash(docker-compose:*),Bash(podman:*),Bash(kubectl:*),Bash(helm:*),Bash(terraform:*),Bash(ansible:*),Bash(vagrant:*),
-            Bash(ls:*),Bash(ll:*),Bash(la:*),Bash(dir:*),Bash(pwd:*),Bash(cd:*),Bash(pushd:*),Bash(popd:*),Bash(dirs:*),
-            Bash(cp:*),Bash(mv:*),Bash(rm:*),Bash(rmdir:*),Bash(mkdir:*),Bash(touch:*),Bash(ln:*),Bash(readlink:*),Bash(realpath:*),Bash(basename:*),Bash(dirname:*),
-            Bash(cat:*),Bash(tac:*),Bash(head:*),Bash(tail:*),Bash(less:*),Bash(more:*),Bash(view:*),Bash(bat:*),Bash(nl:*),
-            Bash(grep:*),Bash(egrep:*),Bash(fgrep:*),Bash(rg:*),Bash(ag:*),Bash(ack:*),Bash(find:*),Bash(fd:*),Bash(locate:*),Bash(which:*),Bash(whereis:*),Bash(type:*),Bash(command:*),
-            Bash(sed:*),Bash(awk:*),Bash(cut:*),Bash(paste:*),Bash(tr:*),Bash(sort:*),Bash(uniq:*),Bash(comm:*),Bash(diff:*),Bash(patch:*),Bash(cmp:*),Bash(wc:*),Bash(bc:*),Bash(expr:*),
-            Bash(chmod:*),Bash(chown:*),Bash(chgrp:*),Bash(umask:*),Bash(getfacl:*),Bash(setfacl:*),Bash(stat:*),Bash(file:*),Bash(du:*),Bash(df:*),Bash(mount:*),Bash(umount:*),Bash(lsblk:*),Bash(blkid:*),
-            Bash(tar:*),Bash(zip:*),Bash(unzip:*),Bash(gzip:*),Bash(gunzip:*),Bash(zcat:*),Bash(bzip2:*),Bash(bunzip2:*),Bash(xz:*),Bash(unxz:*),Bash(7z:*),Bash(rar:*),Bash(unrar:*),
-            Bash(ps:*),Bash(pgrep:*),Bash(pkill:*),Bash(kill:*),Bash(killall:*),Bash(jobs:*),Bash(bg:*),Bash(fg:*),Bash(nohup:*),Bash(disown:*),Bash(top:*),Bash(htop:*),Bash(free:*),Bash(vmstat:*),Bash(iostat:*),Bash(sar:*),Bash(uptime:*),Bash(who:*),Bash(w:*),Bash(last:*),
-            Bash(echo:*),Bash(printf:*),Bash(read:*),Bash(test:*),Bash([:*),Bash([[:*),Bash(true),Bash(false),Bash(yes:*),Bash(seq:*),Bash(shuf:*),Bash(tee:*),Bash(xargs:*),Bash(parallel:*),Bash(watch:*),Bash(script:*),
-            Bash(export:*),Bash(source:*),Bash(.:*),Bash(env:*),Bash(printenv:*),Bash(set:*),Bash(unset:*),Bash(alias:*),Bash(unalias:*),
-            Bash(curl:*),Bash(wget:*),Bash(nc:*),Bash(netcat:*),Bash(telnet:*),Bash(ping:*),Bash(traceroute:*),Bash(dig:*),Bash(nslookup:*),Bash(host:*),Bash(ss:*),Bash(netstat:*),Bash(lsof:*),Bash(iptables:*),Bash(ip:*),Bash(ifconfig:*),Bash(route:*),
-            Bash(ssh:*),Bash(scp:*),Bash(rsync:*),Bash(sftp:*),Bash(ssh-keygen:*),Bash(ssh-copy-id:*),Bash(ssh-add:*),Bash(ssh-agent:*),
-            Bash(mysql:*),Bash(mysqldump:*),Bash(psql:*),Bash(pg_dump:*),Bash(sqlite3:*),Bash(redis-cli:*),Bash(mongo:*),Bash(mongodump:*),
-            Bash(vim:*),Bash(vi:*),Bash(nano:*),Bash(emacs:*),Bash(code:*),
-            Bash(man:*),Bash(info:*),Bash(help:*),Bash(whatis:*),Bash(apropos:*),
-            Bash(date:*),Bash(cal:*),Bash(sleep:*),Bash(timeout:*),Bash(wait:*),
-            Bash(uname:*),Bash(hostname:*),Bash(hostnamectl:*),Bash(lsb_release:*),Bash(systemctl:*),Bash(service:*),Bash(journalctl:*),Bash(dmesg:*),
-            Bash(strings:*),Bash(od:*),Bash(xxd:*),Bash(hexdump:*),Bash(base64:*),Bash(md5sum:*),Bash(sha1sum:*),Bash(sha256sum:*),Bash(sha512sum:*),
-            Bash(screen:*),Bash(tmux:*),Bash(dtach:*),
-            Bash(jq:*),Bash(yq:*),Bash(xmllint:*),Bash(xmlstarlet:*),Bash(yamllint:*),
-            Bash(ab:*),Bash(siege:*),Bash(wrk:*),Bash(hey:*),
-            Bash(for:*),Bash(while:*),Bash(if:*),Bash(then:*),Bash(else:*),Bash(elif:*),Bash(fi:*),Bash(do:*),Bash(done:*),Bash(case:*),Bash(esac:*),Bash(function:*),Bash(return:*),Bash(exit:*),Bash(break:*),Bash(continue:*),
-            Bash(>:*),Bash(>>:*),Bash(<:*),Bash(2>:*),Bash(2>&1:*),Bash(&>:*),Bash(|:*),Bash(||:*),Bash(&&:*),Bash(;:*),Bash(&:*),
-            WebFetch(domain:**),
-            Edit,
-            Replace,
-            MultiEdit,
-            Read,
-            Write,
-            Glob,
-            Grep,
-            Task
+          # Complete LPZRobots C++ development tools - includes all actually useful tools
+          # See .github/claude-allowed-tools-lpzrobots-complete.txt for categorized list
+          allowed_tools: "Bash(bash:*),Bash(sh:*),Bash(zsh:*),Bash(sudo:*),Bash(git:*),Bash(gh:*),Bash(diff:*),Bash(patch:*),Bash(ls:*),Bash(cp:*),Bash(mv:*),Bash(rm:*),Bash(mkdir:*),Bash(rmdir:*),Bash(touch:*),Bash(ln:*),Bash(cd:*),Bash(pwd:*),Bash(basename:*),Bash(dirname:*),Bash(realpath:*),Bash(cat:*),Bash(head:*),Bash(tail:*),Bash(less:*),Bash(grep:*),Bash(rg:*),Bash(find:*),Bash(fd:*),Bash(xargs:*),Bash(tee:*),Bash(sort:*),Bash(uniq:*),Bash(cut:*),Bash(paste:*),Bash(tr:*),Bash(printf:*),Bash(echo:*),Bash(file:*),Bash(stat:*),Bash(du:*),Bash(df:*),Bash(wc:*),Bash(tar:*),Bash(gzip:*),Bash(gunzip:*),Bash(zip:*),Bash(unzip:*),Bash(mktemp:*),Bash(sed:*),Bash(awk:*),Bash(cmake:*),Bash(make:*),Bash(gmake:*),Bash(ninja:*),Bash(autoconf:*),Bash(automake:*),Bash(autoreconf:*),Bash(libtool:*),Bash(m4:*),Bash(pkg-config:*),Bash(pkgconf:*),Bash(./configure:*),Bash(./bootstrap:*),Bash(./autogen.sh:*),Bash(./createNewSimulation.sh:*),Bash(./start:*),Bash(./start_opt:*),Bash(./start_asan:*),Bash(./start_tsan:*),Bash(./start_ubsan:*),Bash(gcc:*),Bash(g++:*),Bash(clang:*),Bash(clang++:*),Bash(cc:*),Bash(c++:*),Bash(ld:*),Bash(ar:*),Bash(ranlib:*),Bash(nm:*),Bash(objdump:*),Bash(readelf:*),Bash(ldd:*),Bash(c++filt:*),Bash(strings:*),Bash(strip:*),Bash(otool:*),Bash(install_name_tool:*),Bash(cppcheck:*),Bash(clang-tidy:*),Bash(clang-format:*),Bash(include-what-you-use:*),Bash(iwyu:*),Bash(scan-build:*),Bash(cpplint:*),Bash(gdb:*),Bash(lldb:*),Bash(valgrind:*),Bash(perf:*),Bash(gprof:*),Bash(gcov:*),Bash(lcov:*),Bash(gcovr:*),Bash(addr2line:*),Bash(qmake:*),Bash(moc:*),Bash(uic:*),Bash(rcc:*),Bash(doxygen:*),Bash(pandoc:*),Bash(gnuplot:*),Bash(java:*),Bash(javac:*),Bash(jar:*),Bash(hyperfine:*),Bash(time:*),Bash(curl:*),Bash(wget:*),Bash(ping:*),Bash(ps:*),Bash(kill:*),Bash(killall:*),Bash(pgrep:*),Bash(pkill:*),Bash(jobs:*),Bash(top:*),Bash(uname:*),Bash(hostname:*),Bash(whoami:*),Bash(which:*),Bash(whereis:*),Bash(type:*),Bash(if:*),Bash(then:*),Bash(else:*),Bash(elif:*),Bash(fi:*),Bash(for:*),Bash(while:*),Bash(do:*),Bash(done:*),Bash(case:*),Bash(esac:*),Bash(function:*),Bash(return:*),Bash(exit:*),Bash(break:*),Bash(continue:*),Bash(shift:*),Bash([[:*),Bash(]]:*),Bash(>:*),Bash(>>:*),Bash(<:*),Bash(2>:*),Bash(2>&1:*),Bash(|:*),Bash(||:*),Bash(&&:*),Bash(;:*),Bash(&:*),Bash(env:*),Bash(printenv:*),Bash(export:*),Bash(source:*),Bash(.:*),Bash(set:*),Bash(unset:*),Bash(chmod:*),Bash(chown:*),Bash(umask:*),Bash(date:*),Bash(sleep:*),Bash(timeout:*),Bash(wait:*),Bash(yes:*),Bash(seq:*),Bash(test:*),Bash(true),Bash(false),Bash(expr:*),Bash(bc:*),Bash(od:*),Bash(hexdump:*),Bash(md5sum:*),Bash(sha256sum:*),Bash(shasum:*),Bash(man:*),Bash(tldr:*),Bash(help:*),Bash(brew:*),Task,TodoWrite,Read,Write,Edit,Replace,MultiEdit,Glob,Grep,WebFetch(domain:**)"
           
           # Optional: Add custom instructions for Claude to customize its behavior for your project
           # custom_instructions: |

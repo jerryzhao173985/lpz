@@ -1,0 +1,72 @@
+# Claude Allowed Tools - Complete LPZRobots Development Kit
+# This includes all tools that are actually useful for LPZRobots development
+# Including occasional but important use cases
+
+# Core shells and sudo
+Bash(bash:*),Bash(sh:*),Bash(zsh:*),Bash(sudo:*),
+
+# Version control
+Bash(git:*),Bash(gh:*),Bash(diff:*),Bash(patch:*),
+
+# File and shell essentials
+Bash(ls:*),Bash(cp:*),Bash(mv:*),Bash(rm:*),Bash(mkdir:*),Bash(rmdir:*),Bash(touch:*),Bash(ln:*),Bash(cd:*),Bash(pwd:*),Bash(basename:*),Bash(dirname:*),Bash(realpath:*),Bash(cat:*),Bash(head:*),Bash(tail:*),Bash(less:*),Bash(grep:*),Bash(rg:*),Bash(find:*),Bash(fd:*),Bash(xargs:*),Bash(tee:*),Bash(sort:*),Bash(uniq:*),Bash(cut:*),Bash(paste:*),Bash(tr:*),Bash(printf:*),Bash(echo:*),Bash(file:*),Bash(stat:*),Bash(du:*),Bash(df:*),Bash(wc:*),Bash(tar:*),Bash(gzip:*),Bash(gunzip:*),Bash(zip:*),Bash(unzip:*),Bash(mktemp:*),
+
+# Text processing (important for config files, logs)
+Bash(sed:*),Bash(awk:*),
+
+# Build systems (all are used in LPZRobots)
+Bash(cmake:*),Bash(make:*),Bash(gmake:*),Bash(ninja:*),Bash(autoconf:*),Bash(automake:*),Bash(autoreconf:*),Bash(libtool:*),Bash(m4:*),Bash(pkg-config:*),Bash(pkgconf:*),Bash(./configure:*),Bash(./bootstrap:*),Bash(./autogen.sh:*),
+
+# LPZRobots specific scripts
+Bash(./createNewSimulation.sh:*),Bash(./start:*),Bash(./start_opt:*),Bash(./start_asan:*),Bash(./start_tsan:*),Bash(./start_ubsan:*),
+
+# Compilers and binutils
+Bash(gcc:*),Bash(g++:*),Bash(clang:*),Bash(clang++:*),Bash(cc:*),Bash(c++:*),Bash(ld:*),Bash(ar:*),Bash(ranlib:*),Bash(nm:*),Bash(objdump:*),Bash(readelf:*),Bash(ldd:*),Bash(c++filt:*),Bash(strings:*),Bash(strip:*),
+
+# macOS specific (needed for macOS development)
+Bash(otool:*),Bash(install_name_tool:*),
+
+# Static analysis and formatting
+Bash(cppcheck:*),Bash(clang-tidy:*),Bash(clang-format:*),Bash(include-what-you-use:*),Bash(iwyu:*),Bash(scan-build:*),Bash(cpplint:*),
+
+# Debugging and profiling
+Bash(gdb:*),Bash(lldb:*),Bash(valgrind:*),Bash(perf:*),Bash(gprof:*),Bash(gcov:*),Bash(lcov:*),Bash(gcovr:*),Bash(addr2line:*),
+
+# Qt tools (for GUI components)
+Bash(qmake:*),Bash(moc:*),Bash(uic:*),Bash(rcc:*),
+
+# Documentation and visualization
+Bash(doxygen:*),Bash(pandoc:*),Bash(gnuplot:*),
+
+# Java support (for soundman and javacontroller)
+Bash(java:*),Bash(javac:*),Bash(jar:*),
+
+# Testing and benchmarking
+Bash(hyperfine:*),Bash(time:*),
+
+# Networking basics (for downloading dependencies)
+Bash(curl:*),Bash(wget:*),Bash(ping:*),
+
+# Process and system info
+Bash(ps:*),Bash(kill:*),Bash(killall:*),Bash(pgrep:*),Bash(pkill:*),Bash(jobs:*),Bash(top:*),Bash(uname:*),Bash(hostname:*),Bash(whoami:*),Bash(which:*),Bash(whereis:*),Bash(type:*),
+
+# Shell control flow and scripting
+Bash(if:*),Bash(then:*),Bash(else:*),Bash(elif:*),Bash(fi:*),Bash(for:*),Bash(while:*),Bash(do:*),Bash(done:*),Bash(case:*),Bash(esac:*),Bash(function:*),Bash(return:*),Bash(exit:*),Bash(break:*),Bash(continue:*),Bash(shift:*),Bash([[:*),Bash(]]:*),
+
+# I/O redirection
+Bash(>:*),Bash(>>:*),Bash(<:*),Bash(2>:*),Bash(2>&1:*),Bash(|:*),Bash(||:*),Bash(&&:*),Bash(;:*),Bash(&:*),
+
+# Environment and permissions
+Bash(env:*),Bash(printenv:*),Bash(export:*),Bash(source:*),Bash(.:*),Bash(set:*),Bash(unset:*),Bash(chmod:*),Bash(chown:*),Bash(umask:*),
+
+# Utilities
+Bash(date:*),Bash(sleep:*),Bash(timeout:*),Bash(wait:*),Bash(yes:*),Bash(seq:*),Bash(test:*),Bash(true),Bash(false),Bash(expr:*),Bash(bc:*),Bash(od:*),Bash(hexdump:*),Bash(md5sum:*),Bash(sha256sum:*),Bash(shasum:*),
+
+# Help and documentation
+Bash(man:*),Bash(tldr:*),Bash(help:*),
+
+# Package manager (just for macOS, often needed)
+Bash(brew:*),
+
+# Claude workflow helpers
+Task,TodoWrite,Read,Write,Edit,Replace,MultiEdit,Glob,Grep,WebFetch(domain:**)
