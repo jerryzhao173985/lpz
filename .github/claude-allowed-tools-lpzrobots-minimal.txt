@@ -1,0 +1,44 @@
+# Claude Allowed Tools - Minimal Safe LPZRobots Development Kit
+# Only tools that are actually used and safe for CI/CD
+
+# Core shells (no sudo for safety)
+Bash(bash:*),Bash(sh:*),
+
+# Version control
+Bash(git:*),Bash(gh:*),Bash(diff:*),Bash(patch:*),
+
+# File operations (essential)
+Bash(ls:*),Bash(cp:*),Bash(mv:*),Bash(rm:*),Bash(mkdir:*),Bash(touch:*),Bash(ln:*),Bash(cd:*),Bash(pwd:*),Bash(basename:*),Bash(dirname:*),Bash(realpath:*),Bash(cat:*),Bash(head:*),Bash(tail:*),Bash(less:*),Bash(grep:*),Bash(find:*),Bash(xargs:*),Bash(tee:*),Bash(sort:*),Bash(uniq:*),Bash(cut:*),Bash(tr:*),Bash(printf:*),Bash(echo:*),Bash(file:*),Bash(stat:*),Bash(du:*),Bash(wc:*),Bash(tar:*),Bash(gzip:*),Bash(gunzip:*),Bash(zip:*),Bash(unzip:*),Bash(mktemp:*),
+
+# Text processing (used in build scripts)
+Bash(sed:*),Bash(awk:*),
+
+# Build systems (all used by LPZRobots)
+Bash(cmake:*),Bash(make:*),Bash(ninja:*),Bash(autoconf:*),Bash(automake:*),Bash(autoreconf:*),Bash(libtool:*),Bash(m4:*),Bash(pkg-config:*),Bash(./configure:*),Bash(./bootstrap:*),
+
+# LPZRobots specific scripts
+Bash(./createNewSimulation.sh:*),Bash(./start:*),
+
+# C++ compilation
+Bash(gcc:*),Bash(g++:*),Bash(clang:*),Bash(clang++:*),Bash(ar:*),Bash(ranlib:*),Bash(nm:*),Bash(objdump:*),Bash(ldd:*),Bash(c++filt:*),Bash(strings:*),
+
+# Static analysis
+Bash(cppcheck:*),Bash(clang-tidy:*),Bash(clang-format:*),
+
+# Debugging (non-interactive)
+Bash(addr2line:*),Bash(gcov:*),Bash(lcov:*),Bash(gcovr:*),
+
+# Qt tools (needed for GUI)
+Bash(qmake:*),Bash(moc:*),
+
+# Documentation
+Bash(doxygen:*),
+
+# Essential utilities
+Bash(env:*),Bash(export:*),Bash(which:*),Bash(test:*),Bash(true),Bash(false),Bash(date:*),Bash(sleep:*),
+
+# Network (for dependencies)
+Bash(curl:*),Bash(wget:*),
+
+# Claude helpers
+Task,TodoWrite,Read,Write,Edit,Replace,MultiEdit,Glob,Grep,WebFetch(domain:**)

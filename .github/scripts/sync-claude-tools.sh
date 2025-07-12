@@ -6,7 +6,7 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-TOOLS_FILE="$PROJECT_ROOT/.github/claude-allowed-tools-lpzrobots-complete.txt"
+TOOLS_FILE="$PROJECT_ROOT/.github/claude-allowed-tools-lpzrobots-final.txt"
 CLAUDE_WORKFLOW="$PROJECT_ROOT/.github/workflows/claude.yml"
 REVIEW_WORKFLOW="$PROJECT_ROOT/.github/workflows/claude-code-review.yml"
 

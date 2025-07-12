@@ -1,0 +1,53 @@
+# Claude Allowed Tools - LPZRobots Actual Usage
+# Based on thorough codebase analysis - only tools that are ACTUALLY USED
+
+# Core shells
+Bash(bash:*),Bash(sh:*),
+
+# Version control (heavily used)
+Bash(git:*),Bash(gh:*),Bash(diff:*),Bash(patch:*),
+
+# File operations (all frequently used)
+Bash(ls:*),Bash(cp:*),Bash(mv:*),Bash(rm:*),Bash(mkdir:*),Bash(rmdir:*),Bash(touch:*),Bash(ln:*),Bash(cd:*),Bash(pwd:*),Bash(basename:*),Bash(dirname:*),Bash(cat:*),Bash(head:*),Bash(tail:*),Bash(grep:*),Bash(find:*),Bash(xargs:*),Bash(sort:*),Bash(uniq:*),Bash(cut:*),Bash(tr:*),Bash(echo:*),Bash(file:*),Bash(wc:*),Bash(tar:*),Bash(gzip:*),Bash(zip:*),Bash(unzip:*),
+
+# Text processing (heavily used in scripts)
+Bash(sed:*),Bash(awk:*),
+
+# Build systems (primary tools)
+Bash(make:*),Bash(cmake:*),Bash(autoconf:*),Bash(automake:*),Bash(libtool:*),Bash(m4:*),Bash(pkg-config:*),
+
+# Package managers (used in CI)
+Bash(apt:*),Bash(apt-get:*),Bash(brew:*),
+
+# C++ compilation (essential)
+Bash(gcc:*),Bash(g++:*),Bash(clang:*),Bash(clang++:*),Bash(ar:*),Bash(ld:*),
+
+# Code quality (used in CI)
+Bash(cppcheck:*),Bash(clang-tidy:*),Bash(clang-format:*),
+
+# Testing
+Bash(test:*),Bash([[:*),
+
+# Permissions
+Bash(chmod:*),
+
+# Process control
+Bash(ps:*),Bash(kill:*),
+
+# System info
+Bash(uname:*),Bash(which:*),
+
+# Shell scripting essentials
+Bash(if:*),Bash(then:*),Bash(else:*),Bash(fi:*),Bash(for:*),Bash(do:*),Bash(done:*),Bash(true),Bash(false),
+
+# Environment
+Bash(export:*),Bash(source:*),
+
+# Video processing (used in utils)
+Bash(ffmpeg:*),Bash(avconv:*),
+
+# LPZRobots scripts
+Bash(./start:*),Bash(./createNewSimulation.sh:*),
+
+# Claude helpers
+Task,TodoWrite,Read,Write,Edit,Replace,MultiEdit,Glob,Grep,WebFetch(domain:**)
