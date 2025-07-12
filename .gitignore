@@ -627,3 +627,11 @@ matrixviz/*.a
 !Dockerfile*
 !docker-compose*.yml
 !.dockerignore
+
+#=============================================================================
+# IDE/editor backup artifacts (Added 2025-07-12 to fix CI failures)
+#=============================================================================
+
+# IDE/editor backup artifacts
+.!*!.*
+*~
