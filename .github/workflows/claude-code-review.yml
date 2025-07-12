@@ -68,8 +68,50 @@ jobs:
           #   'Welcome! Please review this PR from a first-time contributor. Be encouraging and provide detailed explanations for any suggestions.' ||
           #   'Please provide a thorough code review focusing on our coding standards and best practices.' }}
           
-          # Optional: Add specific tools for running tests or linting
-          allowed_tools: "Bash(apt-get update:*),Bash(apt-get install:*),Bash(apt-get upgrade:*),Bash(apt update:*),Bash(apt install:*),Bash(apt upgrade:*),Bash(sudo:*),Bash(git add:*),Bash(git commit:*),Bash(git push:*),Bash(git pull:*),Bash(git merge:*),Bash(git checkout:*),Bash(git branch:*),Bash(git clone:*),Bash(git fetch:*),Bash(git reset:*),Bash(git stash:*),Bash(git cherry-pick:*),Bash(git diff:*),Bash(git log:*),Bash(git status:*),Bash(git rebase:*),Bash(gh api:*),Bash(gh pr:*),Bash(gh repo:*),Bash(gh run:*),Bash(gh workflow:*),Bash(cmake:*),Bash(make:*),Bash(g++:*),Bash(gcc:*),Bash(clang:*),Bash(cppcheck),Bash(cargo:*),Bash(go:*),Bash(node:*),Bash(npm install:*),Bash(npm run build:*),Bash(npm run test:*),Bash(npm run lint:*),Bash(yarn:*),Bash(pnpm:*),Bash(pip install:*),Bash(pip3 install:*),Bash(python:*),Bash(python3:*),Bash(curl:*),Bash(wget:*),Bash(ls:*),Bash(cp:*),Bash(mv:*),Bash(rm:*),Bash(cat:*),Bash(touch:*),Bash(echo:*),Bash(find:*),Bash(grep:*),Bash(sed:*),Bash(awk:*),Bash(chmod:*),Bash(chown:*),Bash(ln:*),Bash(mkdir:*),Bash(rmdir:*),Bash(tar:*),Bash(zip:*),Bash(unzip:*),Bash(du:*),Bash(df:*),Bash(ps:*),Bash(kill:*),Bash(xargs:*),Bash(head:*),Bash(tail:*),Bash(sort:*),Bash(uniq:*),Bash(tr:*),Bash(ssh:*),Bash(ssh-keygen:*),Bash(docker build:*),Bash(docker run:*),Bash(docker compose:*),Bash(kubectl:*),Bash(systemctl:*),Bash(jq:*),Bash(shellcheck:*),Bash(yamllint:*),WebFetch(domain:**),Edit,Replace,Bash(true),Bash(test:*),Bash(done),Bash(do:*),Bash(/dev/null),Bash(npm install),Bash(npm run build),Bash(npm run test:*),Bash(npm run lint:*)"
+          # Comprehensive developer tools for code review and analysis
+          allowed_tools: |
+            Bash(apt:*),Bash(apt-get:*),Bash(apt-cache:*),Bash(dpkg:*),Bash(sudo:*),
+            Bash(git:*),Bash(gh:*),Bash(svn:*),Bash(hg:*),
+            Bash(cmake:*),Bash(make:*),Bash(ninja:*),Bash(autoconf:*),Bash(automake:*),Bash(./configure:*),Bash(pkg-config:*),Bash(ldconfig:*),
+            Bash(gcc:*),Bash(g++:*),Bash(clang:*),Bash(clang++:*),Bash(ld:*),Bash(ar:*),Bash(nm:*),Bash(objdump:*),Bash(readelf:*),Bash(ldd:*),Bash(c++filt:*),
+            Bash(gdb:*),Bash(lldb:*),Bash(valgrind:*),Bash(strace:*),Bash(ltrace:*),Bash(perf:*),Bash(time:*),Bash(gprof:*),Bash(gcov:*),Bash(lcov:*),
+            Bash(cppcheck:*),Bash(clang-tidy:*),Bash(clang-format:*),Bash(cpplint:*),Bash(include-what-you-use:*),Bash(iwyu:*),Bash(shellcheck:*),Bash(pylint:*),Bash(flake8:*),Bash(black:*),Bash(yapf:*),Bash(autopep8:*),Bash(eslint:*),Bash(prettier:*),Bash(rustfmt:*),Bash(gofmt:*),
+            Bash(python:*),Bash(python3:*),Bash(pip:*),Bash(pip3:*),Bash(pipenv:*),Bash(poetry:*),Bash(virtualenv:*),Bash(conda:*),Bash(pytest:*),Bash(unittest:*),Bash(nose:*),
+            Bash(node:*),Bash(npm:*),Bash(npx:*),Bash(yarn:*),Bash(pnpm:*),Bash(nvm:*),Bash(jest:*),Bash(mocha:*),Bash(vitest:*),
+            Bash(cargo:*),Bash(rustc:*),Bash(rustup:*),Bash(go:*),Bash(javac:*),Bash(java:*),Bash(mvn:*),Bash(gradle:*),Bash(ant:*),Bash(ruby:*),Bash(gem:*),Bash(bundle:*),Bash(php:*),Bash(composer:*),Bash(perl:*),Bash(cpan:*),
+            Bash(docker:*),Bash(docker-compose:*),Bash(podman:*),Bash(kubectl:*),Bash(helm:*),Bash(terraform:*),Bash(ansible:*),Bash(vagrant:*),
+            Bash(ls:*),Bash(ll:*),Bash(la:*),Bash(dir:*),Bash(pwd:*),Bash(cd:*),Bash(pushd:*),Bash(popd:*),Bash(dirs:*),
+            Bash(cp:*),Bash(mv:*),Bash(rm:*),Bash(rmdir:*),Bash(mkdir:*),Bash(touch:*),Bash(ln:*),Bash(readlink:*),Bash(realpath:*),Bash(basename:*),Bash(dirname:*),
+            Bash(cat:*),Bash(tac:*),Bash(head:*),Bash(tail:*),Bash(less:*),Bash(more:*),Bash(view:*),Bash(bat:*),Bash(nl:*),
+            Bash(grep:*),Bash(egrep:*),Bash(fgrep:*),Bash(rg:*),Bash(ag:*),Bash(ack:*),Bash(find:*),Bash(fd:*),Bash(locate:*),Bash(which:*),Bash(whereis:*),Bash(type:*),Bash(command:*),
+            Bash(sed:*),Bash(awk:*),Bash(cut:*),Bash(paste:*),Bash(tr:*),Bash(sort:*),Bash(uniq:*),Bash(comm:*),Bash(diff:*),Bash(patch:*),Bash(cmp:*),Bash(wc:*),Bash(bc:*),Bash(expr:*),
+            Bash(chmod:*),Bash(chown:*),Bash(chgrp:*),Bash(umask:*),Bash(getfacl:*),Bash(setfacl:*),Bash(stat:*),Bash(file:*),Bash(du:*),Bash(df:*),Bash(mount:*),Bash(umount:*),Bash(lsblk:*),Bash(blkid:*),
+            Bash(tar:*),Bash(zip:*),Bash(unzip:*),Bash(gzip:*),Bash(gunzip:*),Bash(zcat:*),Bash(bzip2:*),Bash(bunzip2:*),Bash(xz:*),Bash(unxz:*),Bash(7z:*),Bash(rar:*),Bash(unrar:*),
+            Bash(ps:*),Bash(pgrep:*),Bash(pkill:*),Bash(kill:*),Bash(killall:*),Bash(jobs:*),Bash(bg:*),Bash(fg:*),Bash(nohup:*),Bash(disown:*),Bash(top:*),Bash(htop:*),Bash(free:*),Bash(vmstat:*),Bash(iostat:*),Bash(sar:*),Bash(uptime:*),Bash(who:*),Bash(w:*),Bash(last:*),
+            Bash(echo:*),Bash(printf:*),Bash(read:*),Bash(test:*),Bash([:*),Bash([[:*),Bash(true),Bash(false),Bash(yes:*),Bash(seq:*),Bash(shuf:*),Bash(tee:*),Bash(xargs:*),Bash(parallel:*),Bash(watch:*),Bash(script:*),
+            Bash(export:*),Bash(source:*),Bash(.:*),Bash(env:*),Bash(printenv:*),Bash(set:*),Bash(unset:*),Bash(alias:*),Bash(unalias:*),
+            Bash(curl:*),Bash(wget:*),Bash(nc:*),Bash(netcat:*),Bash(telnet:*),Bash(ping:*),Bash(traceroute:*),Bash(dig:*),Bash(nslookup:*),Bash(host:*),Bash(ss:*),Bash(netstat:*),Bash(lsof:*),Bash(iptables:*),Bash(ip:*),Bash(ifconfig:*),Bash(route:*),
+            Bash(ssh:*),Bash(scp:*),Bash(rsync:*),Bash(sftp:*),Bash(ssh-keygen:*),Bash(ssh-copy-id:*),Bash(ssh-add:*),Bash(ssh-agent:*),
+            Bash(mysql:*),Bash(mysqldump:*),Bash(psql:*),Bash(pg_dump:*),Bash(sqlite3:*),Bash(redis-cli:*),Bash(mongo:*),Bash(mongodump:*),
+            Bash(vim:*),Bash(vi:*),Bash(nano:*),Bash(emacs:*),Bash(code:*),
+            Bash(man:*),Bash(info:*),Bash(help:*),Bash(whatis:*),Bash(apropos:*),
+            Bash(date:*),Bash(cal:*),Bash(sleep:*),Bash(timeout:*),Bash(wait:*),
+            Bash(uname:*),Bash(hostname:*),Bash(hostnamectl:*),Bash(lsb_release:*),Bash(systemctl:*),Bash(service:*),Bash(journalctl:*),Bash(dmesg:*),
+            Bash(strings:*),Bash(od:*),Bash(xxd:*),Bash(hexdump:*),Bash(base64:*),Bash(md5sum:*),Bash(sha1sum:*),Bash(sha256sum:*),Bash(sha512sum:*),
+            Bash(screen:*),Bash(tmux:*),Bash(dtach:*),
+            Bash(jq:*),Bash(yq:*),Bash(xmllint:*),Bash(xmlstarlet:*),Bash(yamllint:*),
+            Bash(ab:*),Bash(siege:*),Bash(wrk:*),Bash(hey:*),
+            Bash(for:*),Bash(while:*),Bash(if:*),Bash(then:*),Bash(else:*),Bash(elif:*),Bash(fi:*),Bash(do:*),Bash(done:*),Bash(case:*),Bash(esac:*),Bash(function:*),Bash(return:*),Bash(exit:*),Bash(break:*),Bash(continue:*),
+            Bash(>:*),Bash(>>:*),Bash(<:*),Bash(2>:*),Bash(2>&1:*),Bash(&>:*),Bash(|:*),Bash(||:*),Bash(&&:*),Bash(;:*),Bash(&:*),
+            WebFetch(domain:**),
+            Edit,
+            Replace,
+            MultiEdit,
+            Read,
+            Write,
+            Glob,
+            Grep,
+            Task
           
           # Optional: Skip review for certain conditions
           # if: |
