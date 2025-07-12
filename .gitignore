@@ -245,6 +245,10 @@ nbdist/
 Session.vim
 .netrwhist
 
+# IDE/editor backup artefacts
+.!*!.*
+*~
+
 # Emacs
 \#*\#
 .\#*
