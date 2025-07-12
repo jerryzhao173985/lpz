@@ -485,6 +485,10 @@ downloads/
 *.bz2
 *.xz
 
+# IDE/editor backup artefacts
+.!*!.*
+*~
+
 # Patch files (except intentional ones)
 *.patch
 *.diff
