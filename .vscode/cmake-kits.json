@@ -1,0 +1,48 @@
+[
+    {
+        "name": "Clang 14.0.0 arm64-apple-darwin",
+        "compilers": {
+            "C": "/usr/bin/clang",
+            "CXX": "/usr/bin/clang++"
+        },
+        "isTrusted": true,
+        "preferredGenerator": {
+            "name": "Unix Makefiles"
+        }
+    },
+    {
+        "name": "Homebrew GCC",
+        "compilers": {
+            "C": "/opt/homebrew/bin/gcc-13",
+            "CXX": "/opt/homebrew/bin/g++-13"
+        },
+        "isTrusted": true,
+        "preferredGenerator": {
+            "name": "Unix Makefiles"
+        }
+    },
+    {
+        "name": "Debug Build",
+        "compilers": {
+            "C": "/usr/bin/clang",
+            "CXX": "/usr/bin/clang++"
+        },
+        "cmakeSettings": {
+            "CMAKE_BUILD_TYPE": "Debug",
+            "CMAKE_CXX_FLAGS": "-g -O0 -Wall -Wextra"
+        },
+        "isTrusted": true
+    },
+    {
+        "name": "Release Build",
+        "compilers": {
+            "C": "/usr/bin/clang",
+            "CXX": "/usr/bin/clang++"
+        },
+        "cmakeSettings": {
+            "CMAKE_BUILD_TYPE": "Release",
+            "CMAKE_CXX_FLAGS": "-O3 -DNDEBUG"
+        },
+        "isTrusted": true
+    }
+]

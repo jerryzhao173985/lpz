@@ -1,0 +1,73 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run All Tests",
+            "type": "shell",
+            "command": "./test.sh",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Quick Tests",
+            "type": "shell",
+            "command": "./test.sh quick",
+            "group": "test",
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Unit Tests",
+            "type": "shell",
+            "command": "./test.sh unit",
+            "group": "test",
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Clean and Test",
+            "type": "shell",
+            "command": "./test.sh clean && ./test.sh",
+            "group": "test",
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Build Project",
+            "type": "shell",
+            "command": "make -C build -j8",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "Configure Project",
+            "type": "shell",
+            "command": "mkdir -p build && cd build && cmake .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTS=ON",
+            "group": "build",
+            "problemMatcher": []
+        }
+    ]
+}

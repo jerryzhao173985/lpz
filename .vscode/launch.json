@@ -1,0 +1,109 @@
+{
+    // LPZRobots Debug Launch Configurations
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Current Target",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${command:cmake.launchTargetPath}",
+            "args": ["-noshadow", "-g"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [
+                {
+                    "name": "DYLD_LIBRARY_PATH",
+                    "value": "${workspaceFolder}/build/selforg:${workspaceFolder}/build/ode_robots:${workspaceFolder}/build/ga_tools"
+                }
+            ],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "cmake: build"
+        },
+        {
+            "name": "Debug Simulation (template_sphererobot)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/ode_robots/simulations/template_sphererobot/start",
+            "args": ["-noshadow"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/build/ode_robots/simulations/template_sphererobot",
+            "environment": [
+                {
+                    "name": "DYLD_LIBRARY_PATH",
+                    "value": "${workspaceFolder}/build/selforg:${workspaceFolder}/build/ode_robots:${workspaceFolder}/build/ga_tools"
+                }
+            ],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "preLaunchTask": "Build template_sphererobot"
+        },
+        {
+            "name": "Debug with Guilogger",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${command:cmake.launchTargetPath}",
+            "args": ["-noshadow", "-g"],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [
+                {
+                    "name": "DYLD_LIBRARY_PATH",
+                    "value": "${workspaceFolder}/build/selforg:${workspaceFolder}/build/ode_robots:${workspaceFolder}/build/ga_tools"
+                },
+                {
+                    "name": "PATH",
+                    "value": "${workspaceFolder}/build/guilogger:${env:PATH}"
+                }
+            ],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "preLaunchTask": "cmake: build"
+        },
+        {
+            "name": "Debug Guilogger",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/guilogger/guilogger",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb"
+        },
+        {
+            "name": "Debug Matrixviz",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/matrixviz/matrixviz",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb"
+        },
+        {
+            "name": "Attach to Process",
+            "type": "cppdbg",
+            "request": "attach",
+            "processId": "${command:pickProcess}",
+            "MIMode": "lldb"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Debug Simulation + Guilogger",
+            "configurations": ["Debug with Guilogger", "Debug Guilogger"],
+            "stopAll": true
+        }
+    ]
+}

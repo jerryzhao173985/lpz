@@ -1,0 +1,178 @@
+{
+    // LPZRobots VS Code Settings - Enhanced for CMake Build System
+    // CMake Configuration
+    "cmake.configureOnOpen": true,
+    "cmake.sourceDirectory": "${workspaceFolder}",
+    "cmake.buildDirectory": "${workspaceFolder}/build",
+    // Force use of CMake presets
+    "cmake.useCMakePresets": "always",
+    "cmake.defaultConfigure.configurePreset": "default",
+    // CMake Configure Settings (backup if presets fail)
+    "cmake.configureSettings": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+        "LPZROBOTS_INSTALL_TYPE": "DEVEL",
+        "BUILD_SHARED_LIBS": "OFF",
+        "BUILD_EXAMPLES": "ON",
+        "BUILD_GUI_TOOLS": "ON",
+        "BUILD_JAVA_TOOLS": "ON",
+        "BUILD_OPT_LIBRARIES": "ON",
+        "BUILD_DBG_LIBRARIES": "ON",
+        "BUILD_TESTS": "OFF",
+        "ENABLE_OPENMP": "OFF",
+        "CMAKE_INSTALL_PREFIX": "${workspaceFolder}/local",
+        "CMAKE_PREFIX_PATH": "/opt/homebrew",
+        "CMAKE_OSX_ARCHITECTURES": "arm64",
+        "ENABLE_SIMD": "ON"
+    },
+    // CMake Tools Extension
+    "cmake.generator": "Unix Makefiles",
+    "cmake.parallelJobs": 0,
+    "cmake.saveBeforeBuild": true,
+    "cmake.clearOutputBeforeBuild": false,
+    "cmake.autoSelectActiveFolder": false,
+    "cmake.configureOnEdit": false,
+    "cmake.options.statusBarVisibility": "visible",
+    "cmake.showOptionsMovedNotification": false,
+    "cmake.copyCompileCommands": "${workspaceFolder}/compile_commands.json",
+    "cmake.buildTask": true,
+    "cmake.defaultVariants": {
+        "buildType": {
+            "default": "debug"
+        }
+    },
+    "cmake.ctestDefaultArgs": [
+        "--output-on-failure"
+    ],
+    "cmake.outputLogLevel": "info",
+    // IntelliSense Configuration
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+    "C_Cpp.default.cppStandard": "c++17",
+    "C_Cpp.default.intelliSenseMode": "${default}",
+    "C_Cpp.errorSquiggles": "enabled",
+    "C_Cpp.intelliSenseEngineFallback": "enabled",
+    "C_Cpp.autocompleteAddParentheses": true,
+    // File Associations
+    "files.associations": {
+        "qwidget": "cpp",
+        "iostream": "cpp",
+        "string": "cpp",
+        "cstring": "cpp",
+        "*.m4": "m4",
+        "*.xjava": "java",
+        "Makefile.*": "makefile",
+        "*.h": "cpp",
+        "*.hpp": "cpp",
+        "*.cpp": "cpp",
+        "*.cc": "cpp",
+        "*.tcc": "cpp",
+        "matrix": "cpp",
+        "configurable": "cpp",
+        "abstractcontroller": "cpp",
+        "oderobot": "cpp",
+        "list": "cpp",
+        "algorithm": "cpp",
+        "cmath": "cpp",
+        "sstream": "cpp",
+        "vector": "cpp",
+        "random": "cpp"
+    },
+    // Code Formatting
+    "editor.formatOnSave": true,
+    "C_Cpp.formatting": "clangFormat",
+    "C_Cpp.clang_format_style": "file",
+    // Terminal Environment (macOS specific)
+    "terminal.integrated.env.osx": {
+        "PATH": "/opt/homebrew/bin:${env:PATH}",
+        "JAVA_HOME": "${env:JAVA_HOME}",
+        "DYLD_LIBRARY_PATH": "${workspaceFolder}/build/selforg:${workspaceFolder}/build/ode_robots:${workspaceFolder}/build/ga_tools",
+        "DYLD_FALLBACK_LIBRARY_PATH": "/opt/homebrew/lib",
+        "LPZROBOTS_ROOT": "${workspaceFolder}"
+    },
+    // Terminal Environment (Linux specific)
+    "terminal.integrated.env.linux": {
+        "LD_LIBRARY_PATH": "${workspaceFolder}/build/selforg:${workspaceFolder}/build/ode_robots:${workspaceFolder}/build/ga_tools:${env:LD_LIBRARY_PATH}",
+        "LPZROBOTS_ROOT": "${workspaceFolder}"
+    },
+    // Debugging Configuration
+    "cmake.debugConfig": {
+        "MIMode": "${command:cmake.launchTargetProgramPath.outputType}",
+        "stopAtEntry": false,
+        "externalConsole": false,
+        "setupCommands": [
+            {
+                "description": "Enable pretty-printing for gdb/lldb",
+                "text": "-enable-pretty-printing",
+                "ignoreFailures": true
+            }
+        ],
+        "environment": [
+            {
+                "name": "DYLD_LIBRARY_PATH",
+                "value": "${workspaceFolder}/build/selforg:${workspaceFolder}/build/ode_robots:${workspaceFolder}/build/ga_tools"
+            }
+        ]
+    },
+    // Test Settings
+    "cmake.ctest.parallelJobs": 4,
+    // Search and File Exclusions
+    "files.exclude": {
+        "**/build": true,
+        "**/*.o": true,
+        "**/*.a": true,
+        "**/*.so": true,
+        "**/*.dylib": true,
+        "**/CMakeFiles": true,
+        "**/CMakeCache.txt": true,
+        "**/.DS_Store": true,
+        "**/moc_*.cpp": true,
+        "**/build_*/": true
+    },
+    "search.exclude": {
+        "**/build": true,
+        "**/node_modules": true,
+        "**/*.code-search": true,
+        "**/dist": true,
+        "**/opende": true
+    },
+    // Workspace Recommendations
+    "extensions.ignoreRecommendations": false,
+    "C_Cpp.suggestSnippets": true,
+    // Problem Matchers
+    "cmake.problemMatcher": "$gcc",
+    // Java Settings for Java Tools
+    "java.home": "${env:JAVA_HOME}",
+    "java.jdt.ls.vmargs": "-Xmx1G",
+    "java.configuration.updateBuildConfiguration": "automatic",
+    // Code Analysis
+    "C_Cpp.codeAnalysis.clangTidy.enabled": true,
+    "C_Cpp.codeAnalysis.runAutomatically": true,
+    "C_Cpp.codeAnalysis.clangTidy.checks": {
+        "enabled": [
+            "bugprone-*",
+            "performance-*",
+            "readability-*",
+            "modernize-*",
+            "cppcoreguidelines-*",
+            "clang-analyzer-*"
+        ],
+        "disabled": [
+            "modernize-use-trailing-return-type",
+            "readability-magic-numbers",
+            "cppcoreguidelines-avoid-magic-numbers",
+            "readability-identifier-length",
+            "cppcoreguidelines-pro-bounds-pointer-arithmetic"
+        ]
+    },
+    // Additional IntelliSense settings
+    "C_Cpp.intelliSenseEngine": "default",
+    "C_Cpp.enhancedColorization": "enabled",
+    "C_Cpp.intelliSenseCachePath": "${workspaceFolder}/.vscode/intellisense",
+    // Editor settings
+    "editor.rulers": [
+        100
+    ],
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false
+}
