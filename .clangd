@@ -1,5 +1,5 @@
-# Clangd configuration for LPZRobots
-# This file configures clangd for optimal performance with the project
+# Clangd configuration for LPZRobots - Optimized for M4 Max
+# This configuration leverages your 64GB RAM and 12 performance cores
 
 CompileFlags:
   # Compiler flags
@@ -10,15 +10,45 @@ CompileFlags:
     - -Wpedantic
     - -DMAC
     - -DMAC_ARM64
+    # Apple M4 Max optimizations
+    - -mcpu=apple-m4
+    - -O3
+    - -arch arm64
   Remove:
     - -W*  # Remove all other warning flags to avoid conflicts
+  # Use homebrew LLVM compiler for consistency
+  Compiler: /opt/homebrew/opt/llvm/bin/clang++
 
 Index:
   # Background indexing for better performance
   Background: Build
   
+  # Use all 12 performance cores for indexing
+  Threads: 12
+  
   # Standard library headers
   StandardLibrary: Yes
+  
+  # Priority normal - your M4 Max can handle it
+  Priority: Normal
+  
+  # Memory-based storage for fast access
+  PCHStorage: Memory
+  
+  # Heavy file threshold - with 64GB, we can handle large files
+  HeavyweightThreshold: 2097152  # 2MB
+  
+  # File watcher for automatic reindexing
+  FileWatcher: Yes
+  
+  # Build preambles on demand
+  BuildPreamble: Yes
+  
+  # Eager indexing of main files
+  MainFile: Yes
+  
+  # Cross-reference support
+  CrossReferences: Yes
 
 Diagnostics:
   # Use project's clang-tidy configuration
@@ -30,14 +60,24 @@ Diagnostics:
       - cppcoreguidelines-avoid-magic-numbers
       - readability-identifier-length
       - cppcoreguidelines-pro-bounds-pointer-arithmetic
+      - fuchsia-*
+      - google-readability-todo
+      - llvm-header-guard
+      - llvmlibc-*
   
-  # Limit diagnostic counts
-  Limit: 100
+  # No limit on diagnostic count with 64GB RAM
+  Limit: 0
   
   # Suppress specific warnings
   Suppress:
     - 'pp_including_mainfile_in_preamble'
     - 'undeclared_var_use_suggest'
+  
+  # Strict unused includes checking
+  UnusedIncludes: Strict
+  
+  # Enable all missing includes
+  MissingIncludes: Strict
 
 InlayHints:
   # Enable all inlay hints
@@ -45,6 +85,8 @@ InlayHints:
   ParameterNames: Yes
   DeducedTypes: Yes
   Designators: Yes
+  BlockEnd: Yes
+  TypeNameLimit: 64
 
 Hover:
   # Show documentation on hover
@@ -56,7 +98,35 @@ Completion:
   
   # All scopes completion
   AllScopes: Yes
+  
+  # No result limit with 64GB RAM
+  Limit: 0
 
-# Path mappings for remote development
+
+# Memory settings optimized for 64GB system
+MemoryCleanup:
+  # Allow up to 16GB for clangd (25% of total)
+  MemoryLimit: 16384  # MB
+  
+  # Cleanup threshold at 12GB
+  MemoryThreshold: 12288  # MB
+
+# Performance optimizations for M4 Max
+Performance:
+  # Use mmap for file reading
+  UseMemoryMapping: Yes
+  
+  # Batch size for indexing
+  BatchSize: 50
+  
+  # Parallel code completion
+  ParallelCodeCompletion: Yes
+
+# Path mappings for remote development (if needed)
 PathMappings:
   - /Users/jerry/simulator/lpz=/workspaces/lpzrobots
+
+# Format settings (using .clang-format)
+Format:
+  DisableFormat: No
+  BasedOnStyle: file
