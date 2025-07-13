@@ -2,66 +2,112 @@
     "configurations": [
         {
             "name": "Mac",
-            "includePath": [
-                "${workspaceFolder}/**",
-                "${workspaceFolder}/selforg",
-                "${workspaceFolder}/selforg/include",
-                "${workspaceFolder}/ode_robots",
-                "${workspaceFolder}/ode_robots/include", 
-                "${workspaceFolder}/ga_tools",
-                "${workspaceFolder}/ga_tools/include",
-                "${workspaceFolder}/include",
-                "${workspaceFolder}/include/ode-dbl",
-                "/opt/homebrew/include",
-                "/opt/homebrew/opt/qt@6/include",
-                "/opt/homebrew/opt/open-scene-graph/include",
-                "/opt/homebrew/opt/gsl/include"
+            "compileCommands": "${workspaceFolder}/compile_commands.json",
+            "configurationProvider": "ms-vscode.cmake-tools",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "${default}",
+            "defines": [],
+            "macFrameworkPath": [
+                "/System/Library/Frameworks",
+                "/Library/Frameworks"
             ],
+            "compilerPath": "${default}"
+        },
+        {
+            "name": "Linux",
+            "compileCommands": "${workspaceFolder}/compile_commands.json",
+            "configurationProvider": "ms-vscode.cmake-tools",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "${default}",
+            "defines": [],
+            "compilerPath": "${default}"
+        },
+        {
+            "name": "Mac Debug",
+            "compileCommands": "${workspaceFolder}/build/default/compile_commands.json",
+            "configurationProvider": "ms-vscode.cmake-tools",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "macos-clang-arm64",
             "defines": [
+                "_DEBUG",
+                "MAC",
+                "MAC_ARM64"
+            ],
+            "macFrameworkPath": [
+                "/System/Library/Frameworks",
+                "/Library/Frameworks"
+            ],
+            "compilerPath": "/usr/bin/clang++"
+        },
+        {
+            "name": "Mac Release",
+            "compileCommands": "${workspaceFolder}/build/release/compile_commands.json",
+            "configurationProvider": "ms-vscode.cmake-tools",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "macos-clang-arm64",
+            "defines": [
+                "NDEBUG",
+                "MAC",
+                "MAC_ARM64"
+            ],
+            "macFrameworkPath": [
+                "/System/Library/Frameworks",
+                "/Library/Frameworks"
+            ],
+            "compilerPath": "/usr/bin/clang++"
+        },
+        {
+            "name": "Mac Sanitizers",
+            "compileCommands": "${workspaceFolder}/build/dev/compile_commands.json",
+            "configurationProvider": "ms-vscode.cmake-tools",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "macos-clang-arm64",
+            "defines": [
+                "_DEBUG",
                 "MAC",
                 "MAC_ARM64",
-                "_DEBUG",
-                "UNICODE",
-                "_UNICODE"
+                "_LIBCPP_HAS_NO_ASAN"
             ],
             "macFrameworkPath": [
                 "/System/Library/Frameworks",
                 "/Library/Frameworks"
             ],
             "compilerPath": "/usr/bin/clang++",
-            "cStandard": "c11",
-            "cppStandard": "c++17",
-            "intelliSenseMode": "macos-clang-arm64",
-            "configurationProvider": "ms-vscode.cmake-tools",
-            "compileCommands": "${workspaceFolder}/build/compile_commands.json"
+            "compilerArgs": [
+                "-fsanitize=address",
+                "-fsanitize=undefined"
+            ]
         },
         {
-            "name": "Linux",
-            "includePath": [
-                "${workspaceFolder}/**",
-                "${workspaceFolder}/selforg",
-                "${workspaceFolder}/selforg/include",
-                "${workspaceFolder}/ode_robots",
-                "${workspaceFolder}/ode_robots/include",
-                "${workspaceFolder}/ga_tools", 
-                "${workspaceFolder}/ga_tools/include",
-                "${workspaceFolder}/include",
-                "${workspaceFolder}/include/ode-dbl",
-                "/usr/include",
-                "/usr/local/include"
-            ],
-            "defines": [
-                "LINUX",
-                "_DEBUG",
-                "UNICODE",
-                "_UNICODE"
-            ],
-            "compilerPath": "/usr/bin/g++",
+            "name": "Linux Debug",
+            "compileCommands": "${workspaceFolder}/build/debug/compile_commands.json",
+            "configurationProvider": "ms-vscode.cmake-tools",
             "cStandard": "c11",
             "cppStandard": "c++17",
             "intelliSenseMode": "linux-gcc-x64",
+            "defines": [
+                "_DEBUG",
+                "LINUX"
+            ],
+            "compilerPath": "/usr/bin/g++"
+        },
+        {
+            "name": "Linux Release",
+            "compileCommands": "${workspaceFolder}/build/release/compile_commands.json",
             "configurationProvider": "ms-vscode.cmake-tools",
-            "compileCommands": "${workspaceFolder}/build/compile_commands.json"
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "linux-gcc-x64",
+            "defines": [
+                "NDEBUG",
+                "LINUX"
+            ],
+            "compilerPath": "/usr/bin/g++"
         }
     ],
     "version": 4

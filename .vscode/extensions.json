@@ -1,38 +1,98 @@
 {
     // Recommended VS Code extensions for LPZRobots development
     "recommendations": [
-        // C++ Development
+        // ===== Core C++ Development =====
         "ms-vscode.cpptools",
         "ms-vscode.cpptools-extension-pack",
-        "ms-vscode.cmake-tools",
+        "ms-vscode.cpptools-themes",
         
-        // CMake Support
+        // ===== CMake Support =====
+        "ms-vscode.cmake-tools",
         "twxs.cmake",
         "josetr.cmake-language-support-vscode",
+        "cheshirekow.cmake-format",
         
-        // Code Quality
+        // ===== Code Quality & Analysis =====
         "jbenden.c-cpp-flylint",
         "notskm.clang-tidy",
+        "llvm-vs-code-extensions.vscode-clangd",
+        "xaver.clang-format",
         
-        // Debugging
+        // ===== Testing =====
+        "matepek.vscode-catch2-test-adapter",
+        "cschlosser.doxdocgen",
+        "ms-vscode.test-adapter-converter",
+        
+        // ===== Debugging & Profiling =====
         "vadimcn.vscode-lldb",
         "webfreak.debug",
+        "ms-vscode.hexeditor",
+        "fabiospampinato.vscode-memory-viewer",
         
-        // Documentation
+        // ===== Documentation =====
         "cschlosser.doxdocgen",
+        "yzhang.markdown-all-in-one",
+        "bierner.markdown-mermaid",
         
-        // Git
+        // ===== Git & Version Control =====
         "eamodio.gitlens",
         "mhutchie.git-graph",
+        "donjayamanne.githistory",
         
-        // Productivity
+        // ===== Productivity =====
         "streetsidesoftware.code-spell-checker",
         "gruntfuggly.todo-tree",
         "wayou.vscode-todo-highlight",
+        "aaron-bond.better-comments",
+        "usernamehw.errorlens",
         
-        // File Support
+        // ===== File Support =====
         "wolfram.m4",
-        "ms-vscode.makefile-tools"
+        "ms-vscode.makefile-tools",
+        "jeff-hykin.better-cpp-syntax",
+        "slevesque.shader",
+        
+        // ===== Qt Development =====
+        "bbenoist.qml",
+        "seanwu.vscode-qt-for-python",
+        
+        // ===== Java Support (for Java tools) =====
+        "redhat.java",
+        "vscjava.vscode-java-debug",
+        
+        // ===== Remote Development =====
+        "ms-vscode-remote.remote-ssh",
+        "ms-vscode-remote.remote-containers",
+        
+        // ===== Visualization =====
+        "hediet.vscode-drawio",
+        "shd101wyy.markdown-preview-enhanced",
+        
+        // ===== Performance Analysis =====
+        "ms-vscode.vscode-serial-monitor",
+        
+        // ===== Code Navigation =====
+        "alefragnani.bookmarks",
+        "hoovercj.vscode-power-mode",
+        
+        // ===== Formatting & Linting =====
+        "EditorConfig.EditorConfig",
+        "dbaeumer.vscode-eslint",
+        
+        // ===== Additional Utilities =====
+        "tyriar.sort-lines",
+        "dakara.transformer",
+        "rpinski.shebang-snippets",
+        "tomoki1207.pdf",
+        "formulahendry.code-runner",
+        "tamasfe.even-better-toml"
     ],
-    "unwantedRecommendations": []
+    
+    "unwantedRecommendations": [
+        // Extensions that might conflict or are unnecessary
+        "austin.code-gnu-global",  // Conflicts with clangd
+        "mitaki28.vscode-clang",   // Superseded by clangd
+        "ms-vscode.cpptools-extension-pack", // If already included above
+        "formulahendry.terminal"   // Can interfere with integrated terminal
+    ]
 }

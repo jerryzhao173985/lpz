@@ -1,73 +1,322 @@
 {
     "version": "2.0.0",
     "tasks": [
+        // ===== CMake Configuration Tasks =====
         {
-            "label": "Run All Tests",
+            "label": "CMake: Configure (Default)",
             "type": "shell",
-            "command": "./test.sh",
-            "group": {
-                "kind": "test",
-                "isDefault": true
-            },
-            "presentation": {
-                "reveal": "always",
-                "panel": "dedicated",
-                "clear": true
-            },
-            "problemMatcher": []
+            "command": "cmake",
+            "args": ["--preset=default"],
+            "group": "build",
+            "problemMatcher": [],
+            "detail": "Configure with default preset"
         },
         {
-            "label": "Run Quick Tests",
+            "label": "CMake: Configure (Debug)",
             "type": "shell",
-            "command": "./test.sh quick",
-            "group": "test",
-            "presentation": {
-                "reveal": "always",
-                "panel": "dedicated",
-                "clear": true
-            },
-            "problemMatcher": []
+            "command": "cmake",
+            "args": ["--preset=debug"],
+            "group": "build",
+            "problemMatcher": [],
+            "detail": "Configure with debug preset"
         },
         {
-            "label": "Run Unit Tests",
+            "label": "CMake: Configure (Release)",
             "type": "shell",
-            "command": "./test.sh unit",
-            "group": "test",
-            "presentation": {
-                "reveal": "always",
-                "panel": "dedicated",
-                "clear": true
-            },
-            "problemMatcher": []
+            "command": "cmake",
+            "args": ["--preset=release"],
+            "group": "build",
+            "problemMatcher": [],
+            "detail": "Configure with release preset"
         },
         {
-            "label": "Clean and Test",
+            "label": "CMake: Configure (macOS ARM64)",
             "type": "shell",
-            "command": "./test.sh clean && ./test.sh",
-            "group": "test",
-            "presentation": {
-                "reveal": "always",
-                "panel": "dedicated",
-                "clear": true
-            },
-            "problemMatcher": []
+            "command": "cmake",
+            "args": ["--preset=macos-arm64"],
+            "group": "build",
+            "problemMatcher": [],
+            "detail": "Configure for macOS ARM64 (Apple Silicon)"
         },
         {
-            "label": "Build Project",
+            "label": "CMake: Configure (Sanitizers)",
             "type": "shell",
-            "command": "make -C build -j8",
+            "command": "cmake",
+            "args": ["--preset=dev", "-DLPZROBOTS_ENABLE_SANITIZERS=ON", "-DLPZROBOTS_SANITIZER_ADDRESS=ON", "-DLPZROBOTS_SANITIZER_UNDEFINED=ON"],
+            "group": "build",
+            "problemMatcher": [],
+            "detail": "Configure with AddressSanitizer and UndefinedBehaviorSanitizer"
+        },
+        
+        // ===== Build Tasks =====
+        {
+            "label": "Build All",
+            "type": "cmake",
+            "command": "build",
+            "targets": ["all"],
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
-            "problemMatcher": ["$gcc"]
+            "problemMatcher": ["$gcc"],
+            "detail": "Build all targets"
         },
         {
-            "label": "Configure Project",
+            "label": "Build Current Target",
+            "type": "cmake",
+            "command": "build",
+            "problemMatcher": ["$gcc"],
+            "detail": "Build the currently selected target"
+        },
+        {
+            "label": "Build (Release)",
             "type": "shell",
-            "command": "mkdir -p build && cd build && cmake .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTS=ON",
+            "command": "cmake",
+            "args": ["--build", "${workspaceFolder}/build/release", "--parallel"],
             "group": "build",
-            "problemMatcher": []
+            "problemMatcher": ["$gcc"],
+            "dependsOn": "CMake: Configure (Release)",
+            "detail": "Build with release configuration"
+        },
+        
+        // ===== Component Build Tasks =====
+        {
+            "label": "Build: selforg",
+            "type": "cmake",
+            "command": "build",
+            "targets": ["selforg"],
+            "group": "build",
+            "problemMatcher": ["$gcc"],
+            "detail": "Build only the selforg library"
+        },
+        {
+            "label": "Build: ode_robots",
+            "type": "cmake",
+            "command": "build",
+            "targets": ["ode_robots"],
+            "group": "build",
+            "problemMatcher": ["$gcc"],
+            "detail": "Build only the ode_robots library"
+        },
+        {
+            "label": "Build: ga_tools",
+            "type": "cmake",
+            "command": "build",
+            "targets": ["ga_tools"],
+            "group": "build",
+            "problemMatcher": ["$gcc"],
+            "detail": "Build only the ga_tools library"
+        },
+        {
+            "label": "Build: guilogger",
+            "type": "cmake",
+            "command": "build",
+            "targets": ["guilogger"],
+            "group": "build",
+            "problemMatcher": ["$gcc"],
+            "detail": "Build the guilogger visualization tool"
+        },
+        {
+            "label": "Build: matrixviz",
+            "type": "cmake",
+            "command": "build",
+            "targets": ["matrixviz"],
+            "group": "build",
+            "problemMatcher": ["$gcc"],
+            "detail": "Build the matrix visualization tool"
+        },
+        
+        // ===== Clean Tasks =====
+        {
+            "label": "Clean All",
+            "type": "cmake",
+            "command": "clean",
+            "group": "build",
+            "problemMatcher": [],
+            "detail": "Clean all build artifacts"
+        },
+        {
+            "label": "Clean and Rebuild",
+            "type": "shell",
+            "command": "cmake",
+            "args": ["--build", "${workspaceFolder}/build/${command:cmake.buildKit}", "--target", "clean", "&&", "cmake", "--build", "${workspaceFolder}/build/${command:cmake.buildKit}", "--parallel"],
+            "group": "build",
+            "problemMatcher": ["$gcc"],
+            "detail": "Clean and rebuild everything"
+        },
+        
+        // ===== Test Tasks =====
+        {
+            "label": "Run All Tests",
+            "type": "cmake",
+            "command": "test",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "problemMatcher": [],
+            "detail": "Run all CTest tests"
+        },
+        {
+            "label": "Run Tests (Verbose)",
+            "type": "shell",
+            "command": "ctest",
+            "args": ["--test-dir", "${workspaceFolder}/build/${command:cmake.buildKit}", "--output-on-failure", "--verbose"],
+            "group": "test",
+            "problemMatcher": [],
+            "detail": "Run tests with verbose output"
+        },
+        {
+            "label": "Run Tests (Parallel)",
+            "type": "shell",
+            "command": "ctest",
+            "args": ["--test-dir", "${workspaceFolder}/build/${command:cmake.buildKit}", "--output-on-failure", "--parallel", "8"],
+            "group": "test",
+            "problemMatcher": [],
+            "detail": "Run tests in parallel"
+        },
+        
+        // ===== Code Analysis Tasks =====
+        {
+            "label": "Run clang-tidy (Current File)",
+            "type": "shell",
+            "command": "/opt/homebrew/opt/llvm/bin/clang-tidy",
+            "args": [
+                "${file}",
+                "--config-file=${workspaceFolder}/.clang-tidy",
+                "--",
+                "-std=c++17",
+                "-I${workspaceFolder}/include",
+                "-I${workspaceFolder}/selforg/include",
+                "-I${workspaceFolder}/ode_robots/include"
+            ],
+            "group": "build",
+            "problemMatcher": ["$gcc"],
+            "detail": "Run clang-tidy on the current file"
+        },
+        {
+            "label": "Run clang-tidy (All)",
+            "type": "shell",
+            "command": "/opt/homebrew/opt/llvm/bin/run-clang-tidy",
+            "args": [
+                "-p", "${workspaceFolder}/build/${command:cmake.buildKit}",
+                "-config-file=${workspaceFolder}/.clang-tidy",
+                "-j", "8"
+            ],
+            "group": "build",
+            "problemMatcher": ["$gcc"],
+            "detail": "Run clang-tidy on all project files"
+        },
+        {
+            "label": "Format Code (Current File)",
+            "type": "shell",
+            "command": "/opt/homebrew/opt/llvm/bin/clang-format",
+            "args": ["-i", "${file}"],
+            "group": "build",
+            "problemMatcher": [],
+            "detail": "Format current file with clang-format"
+        },
+        {
+            "label": "Format Code (All Modified)",
+            "type": "shell",
+            "command": "git",
+            "args": ["diff", "--name-only", "--diff-filter=ACMRT", "HEAD", "|", "grep", "-E", "'\\.(cpp|h|hpp|cc|cxx)$'", "|", "xargs", "-I", "{}", "/opt/homebrew/opt/llvm/bin/clang-format", "-i", "{}"],
+            "group": "build",
+            "problemMatcher": [],
+            "detail": "Format all modified C++ files"
+        },
+        
+        // ===== Simulation Tasks =====
+        {
+            "label": "Run Sphererobot Simulation",
+            "type": "shell",
+            "command": "${workspaceFolder}/build/${command:cmake.buildKit}/ode_robots/simulations/template_sphererobot/start",
+            "args": ["-noshadow", "-g"],
+            "options": {
+                "cwd": "${workspaceFolder}/build/${command:cmake.buildKit}/ode_robots/simulations/template_sphererobot"
+            },
+            "group": "none",
+            "problemMatcher": [],
+            "detail": "Run the template sphererobot simulation with guilogger"
+        },
+        {
+            "label": "Run Simulation (No Graphics)",
+            "type": "shell",
+            "command": "${workspaceFolder}/build/${command:cmake.buildKit}/ode_robots/simulations/template_sphererobot/start",
+            "args": ["-nographics", "-noshadow"],
+            "options": {
+                "cwd": "${workspaceFolder}/build/${command:cmake.buildKit}/ode_robots/simulations/template_sphererobot"
+            },
+            "group": "none",
+            "problemMatcher": [],
+            "detail": "Run simulation without graphics (headless)"
+        },
+        
+        // ===== Install Tasks =====
+        {
+            "label": "Install",
+            "type": "cmake",
+            "command": "install",
+            "group": "build",
+            "problemMatcher": [],
+            "detail": "Install to CMAKE_INSTALL_PREFIX"
+        },
+        
+        // ===== Documentation Tasks =====
+        {
+            "label": "Generate Documentation",
+            "type": "shell",
+            "command": "doxygen",
+            "args": ["${workspaceFolder}/doc/Doxyfile"],
+            "group": "none",
+            "problemMatcher": [],
+            "detail": "Generate Doxygen documentation"
+        },
+        
+        // ===== Legacy Make Tasks =====
+        {
+            "label": "Legacy: Make All",
+            "type": "shell",
+            "command": "make",
+            "args": ["all"],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": "build",
+            "problemMatcher": ["$gcc"],
+            "detail": "Build using legacy Make system"
+        },
+        {
+            "label": "Legacy: Make Clean",
+            "type": "shell",
+            "command": "make",
+            "args": ["clean"],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": "build",
+            "problemMatcher": [],
+            "detail": "Clean using legacy Make system"
+        },
+        
+        // ===== Utility Tasks =====
+        {
+            "label": "Update compile_commands.json",
+            "type": "shell",
+            "command": "cmake",
+            "args": ["--build", "${workspaceFolder}/build/${command:cmake.buildKit}", "--target", "copy_compile_commands"],
+            "group": "none",
+            "problemMatcher": [],
+            "detail": "Update compile_commands.json in workspace root"
+        },
+        {
+            "label": "Check Dependencies",
+            "type": "shell",
+            "command": "cmake",
+            "args": ["--build", "${workspaceFolder}/build/${command:cmake.buildKit}", "--target", "print_dependencies"],
+            "group": "none",
+            "problemMatcher": [],
+            "detail": "Print all project dependencies"
         }
     ]
 }

@@ -1,0 +1,62 @@
+# Clangd configuration for LPZRobots
+# This file configures clangd for optimal performance with the project
+
+CompileFlags:
+  # Compiler flags
+  Add:
+    - -std=c++17
+    - -Wall
+    - -Wextra
+    - -Wpedantic
+    - -DMAC
+    - -DMAC_ARM64
+  Remove:
+    - -W*  # Remove all other warning flags to avoid conflicts
+
+Index:
+  # Background indexing for better performance
+  Background: Build
+  
+  # Standard library headers
+  StandardLibrary: Yes
+
+Diagnostics:
+  # Use project's clang-tidy configuration
+  ClangTidy:
+    Add: '*'
+    Remove:
+      - modernize-use-trailing-return-type
+      - readability-magic-numbers
+      - cppcoreguidelines-avoid-magic-numbers
+      - readability-identifier-length
+      - cppcoreguidelines-pro-bounds-pointer-arithmetic
+  
+  # Limit diagnostic counts
+  Limit: 100
+  
+  # Suppress specific warnings
+  Suppress:
+    - 'pp_including_mainfile_in_preamble'
+    - 'undeclared_var_use_suggest'
+
+InlayHints:
+  # Enable all inlay hints
+  Enabled: Yes
+  ParameterNames: Yes
+  DeducedTypes: Yes
+  Designators: Yes
+
+Hover:
+  # Show documentation on hover
+  ShowAKA: Yes
+
+Completion:
+  # Detailed completion
+  DetailedLabel: Yes
+  
+  # All scopes completion
+  AllScopes: Yes
+
+# Path mappings for remote development
+PathMappings:
+  - /Users/jerry/simulator/lpz=/workspaces/lpzrobots

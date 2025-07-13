@@ -1,13 +1,22 @@
 {
-    // LPZRobots VS Code Settings - Enhanced for CMake Build System
-    // CMake Configuration
+    // LPZRobots VS Code Settings - Enhanced for Modern CMake Build System
+    // =====================================================================
+    
+    // CMake Configuration - Optimized for LPZRobots
     "cmake.configureOnOpen": true,
     "cmake.sourceDirectory": "${workspaceFolder}",
-    "cmake.buildDirectory": "${workspaceFolder}/build",
-    // Force use of CMake presets
+    "cmake.buildDirectory": "${workspaceFolder}/build/${buildPresetName}",
+    
+    // Force use of CMake presets for consistent builds
     "cmake.useCMakePresets": "always",
     "cmake.defaultConfigure.configurePreset": "default",
-    // CMake Configure Settings (backup if presets fail)
+    "cmake.defaultBuild.buildPreset": "default",
+    "cmake.defaultTest.testPreset": "default",
+    
+    // Preferred presets for different scenarios
+    "cmake.preferredGenerators": ["Unix Makefiles", "Ninja"],
+    
+    // CMake Configure Settings (used only if presets fail)
     "cmake.configureSettings": {
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
@@ -16,85 +25,166 @@
         "BUILD_EXAMPLES": "ON",
         "BUILD_GUI_TOOLS": "ON",
         "BUILD_JAVA_TOOLS": "ON",
-        "BUILD_OPT_LIBRARIES": "ON",
-        "BUILD_DBG_LIBRARIES": "ON",
-        "BUILD_TESTS": "OFF",
+        "BUILD_OPT_LIBRARIES": "OFF",  // Modern CMake uses build types
+        "BUILD_DBG_LIBRARIES": "OFF",  // Modern CMake uses build types
+        "BUILD_TESTS": "ON",
+        "LPZROBOTS_USE_DOCTEST": "ON",
         "ENABLE_OPENMP": "OFF",
-        "CMAKE_INSTALL_PREFIX": "${workspaceFolder}/local",
+        "CMAKE_INSTALL_PREFIX": "${workspaceFolder}/install/${buildPresetName}",
         "CMAKE_PREFIX_PATH": "/opt/homebrew",
         "CMAKE_OSX_ARCHITECTURES": "arm64",
-        "ENABLE_SIMD": "ON"
+        "ENABLE_SIMD": "ON",
+        "LPZROBOTS_USE_SYSTEM_ODE": "ON"
     },
-    // CMake Tools Extension
+    
+    // CMake Tools Extension Settings
     "cmake.generator": "Unix Makefiles",
-    "cmake.parallelJobs": 0,
+    "cmake.parallelJobs": 0,  // Use all available cores
     "cmake.saveBeforeBuild": true,
     "cmake.clearOutputBeforeBuild": false,
     "cmake.autoSelectActiveFolder": false,
     "cmake.configureOnEdit": false,
     "cmake.options.statusBarVisibility": "visible",
     "cmake.showOptionsMovedNotification": false,
+    
+    // Copy compile_commands.json to workspace root for IntelliSense
     "cmake.copyCompileCommands": "${workspaceFolder}/compile_commands.json",
+    
+    // Enable CMake tasks in VS Code
     "cmake.buildTask": true,
-    "cmake.defaultVariants": {
-        "buildType": {
-            "default": "debug"
-        }
-    },
+    "cmake.cleanTask": true,
+    "cmake.testTask": true,
+    
+    // Test settings
     "cmake.ctestDefaultArgs": [
-        "--output-on-failure"
+        "--output-on-failure",
+        "--parallel",
+        "8"
     ],
+    
+    // Output settings
     "cmake.outputLogLevel": "info",
-    // IntelliSense Configuration
+    "cmake.loggingLevel": "info",
+    // IntelliSense Configuration - Optimized for LPZRobots
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
     "C_Cpp.default.cppStandard": "c++17",
     "C_Cpp.default.intelliSenseMode": "${default}",
     "C_Cpp.errorSquiggles": "enabled",
     "C_Cpp.intelliSenseEngineFallback": "enabled",
     "C_Cpp.autocompleteAddParentheses": true,
-    // File Associations
+    "C_Cpp.enhancedColorization": "enabled",
+    "C_Cpp.intelliSenseEngine": "default",
+    "C_Cpp.intelliSenseCachePath": "${workspaceFolder}/.vscode/intellisense",
+    "C_Cpp.intelliSenseCacheSize": 5120,  // 5GB cache for large codebase
+    "C_Cpp.intelliSenseUpdateDelay": 2000,
+    
+    // Use project's clang-format configuration
+    "C_Cpp.formatting": "clangFormat",
+    "C_Cpp.clang_format_style": "file",
+    "C_Cpp.clang_format_path": "/opt/homebrew/opt/llvm/bin/clang-format",
+    "C_Cpp.clang_format_sortIncludes": true,
+    
+    // Code Analysis with project's clang-tidy
+    "C_Cpp.codeAnalysis.clangTidy.enabled": true,
+    "C_Cpp.codeAnalysis.runAutomatically": true,
+    "C_Cpp.codeAnalysis.clangTidy.path": "/opt/homebrew/opt/llvm/bin/clang-tidy",
+    "C_Cpp.codeAnalysis.clangTidy.args": [
+        "--config-file=${workspaceFolder}/.clang-tidy",
+        "--header-filter=^${workspaceFolder}/(selforg|ode_robots|ga_tools|guilogger|matrixviz|configurator)/.*\\.(h|hpp)$"
+    ],
+    "C_Cpp.codeAnalysis.exclude": {
+        "**/build*/**": true,
+        "**/opende/**": true,  // External dependency
+        "**/.vscode/**": true
+    },
+    // File Associations - Extended for LPZRobots
     "files.associations": {
+        // Qt types
         "qwidget": "cpp",
+        "qapplication": "cpp",
+        "qmainwindow": "cpp",
+        "qopenglwidget": "cpp",
+        
+        // Standard library
         "iostream": "cpp",
         "string": "cpp",
         "cstring": "cpp",
-        "*.m4": "m4",
-        "*.xjava": "java",
-        "Makefile.*": "makefile",
-        "*.h": "cpp",
-        "*.hpp": "cpp",
-        "*.cpp": "cpp",
-        "*.cc": "cpp",
-        "*.tcc": "cpp",
-        "matrix": "cpp",
-        "configurable": "cpp",
-        "abstractcontroller": "cpp",
-        "oderobot": "cpp",
-        "list": "cpp",
         "algorithm": "cpp",
         "cmath": "cpp",
         "sstream": "cpp",
         "vector": "cpp",
-        "random": "cpp"
+        "random": "cpp",
+        "memory": "cpp",
+        "array": "cpp",
+        "chrono": "cpp",
+        "functional": "cpp",
+        "optional": "cpp",
+        "variant": "cpp",
+        
+        // LPZRobots specific headers (no extension)
+        "matrix": "cpp",
+        "configurable": "cpp",
+        "abstractcontroller": "cpp",
+        "oderobot": "cpp",
+        "abstractrobot": "cpp",
+        "agent": "cpp",
+        "wiredcontroller": "cpp",
+        "osghandle": "cpp",
+        "odehandle": "cpp",
+        "osgprimitive": "cpp",
+        "primitive": "cpp",
+        "joint": "cpp",
+        "sensor": "cpp",
+        "motor": "cpp",
+        "trackable": "cpp",
+        
+        // Build files
+        "*.m4": "m4",
+        "*.xjava": "java",
+        "Makefile.*": "makefile",
+        "*.mk": "makefile",
+        "*-config": "shellscript",
+        "*-config.m4": "m4",
+        
+        // Source files
+        "*.h": "cpp",
+        "*.hpp": "cpp",
+        "*.cpp": "cpp",
+        "*.cc": "cpp",
+        "*.cxx": "cpp",
+        "*.tcc": "cpp",
+        "*.ipp": "cpp",
+        
+        // OpenSceneGraph shader files
+        "*.vert": "glsl",
+        "*.frag": "glsl",
+        "*.geom": "glsl"
     },
     // Code Formatting
     "editor.formatOnSave": true,
-    "C_Cpp.formatting": "clangFormat",
-    "C_Cpp.clang_format_style": "file",
-    // Terminal Environment (macOS specific)
+    "editor.formatOnSaveMode": "modificationsIfAvailable",
+    "[cpp]": {
+        "editor.defaultFormatter": "ms-vscode.cpptools"
+    },
+    
+    // Terminal Environment (macOS specific) - Enhanced for simulations
     "terminal.integrated.env.osx": {
-        "PATH": "/opt/homebrew/bin:${env:PATH}",
+        "PATH": "/opt/homebrew/bin:/opt/homebrew/opt/llvm/bin:${env:PATH}",
         "JAVA_HOME": "${env:JAVA_HOME}",
-        "DYLD_LIBRARY_PATH": "${workspaceFolder}/build/selforg:${workspaceFolder}/build/ode_robots:${workspaceFolder}/build/ga_tools",
+        "DYLD_LIBRARY_PATH": "${workspaceFolder}/build/${buildPresetName}/selforg:${workspaceFolder}/build/${buildPresetName}/ode_robots:${workspaceFolder}/build/${buildPresetName}/ga_tools:${workspaceFolder}/build/${buildPresetName}/configurator",
         "DYLD_FALLBACK_LIBRARY_PATH": "/opt/homebrew/lib",
-        "LPZROBOTS_ROOT": "${workspaceFolder}"
+        "LPZROBOTS_ROOT": "${workspaceFolder}",
+        "LPZROBOTS_DEBUG_EVENTS": "0",  // Set to 1 for event debugging
+        "CMAKE_PREFIX_PATH": "/opt/homebrew/opt/qt@6:/opt/homebrew"
     },
-    // Terminal Environment (Linux specific)
+    
+    // Terminal Environment (Linux specific) - Enhanced for simulations
     "terminal.integrated.env.linux": {
-        "LD_LIBRARY_PATH": "${workspaceFolder}/build/selforg:${workspaceFolder}/build/ode_robots:${workspaceFolder}/build/ga_tools:${env:LD_LIBRARY_PATH}",
-        "LPZROBOTS_ROOT": "${workspaceFolder}"
+        "LD_LIBRARY_PATH": "${workspaceFolder}/build/${buildPresetName}/selforg:${workspaceFolder}/build/${buildPresetName}/ode_robots:${workspaceFolder}/build/${buildPresetName}/ga_tools:${workspaceFolder}/build/${buildPresetName}/configurator:${env:LD_LIBRARY_PATH}",
+        "LPZROBOTS_ROOT": "${workspaceFolder}",
+        "LPZROBOTS_DEBUG_EVENTS": "0"
     },
-    // Debugging Configuration
+    // Debugging Configuration - Enhanced with sanitizer support
     "cmake.debugConfig": {
         "MIMode": "${command:cmake.launchTargetProgramPath.outputType}",
         "stopAtEntry": false,
@@ -104,75 +194,160 @@
                 "description": "Enable pretty-printing for gdb/lldb",
                 "text": "-enable-pretty-printing",
                 "ignoreFailures": true
+            },
+            {
+                "description": "Set print elements limit",
+                "text": "set print elements 200",
+                "ignoreFailures": true
+            },
+            {
+                "description": "Set print array on",
+                "text": "set print array on",
+                "ignoreFailures": true
             }
         ],
         "environment": [
             {
                 "name": "DYLD_LIBRARY_PATH",
-                "value": "${workspaceFolder}/build/selforg:${workspaceFolder}/build/ode_robots:${workspaceFolder}/build/ga_tools"
+                "value": "${workspaceFolder}/build/${buildPresetName}/selforg:${workspaceFolder}/build/${buildPresetName}/ode_robots:${workspaceFolder}/build/${buildPresetName}/ga_tools"
+            },
+            {
+                "name": "ASAN_OPTIONS",
+                "value": "detect_leaks=1:check_initialization_order=1:strict_init_order=1:print_stats=1"
+            },
+            {
+                "name": "UBSAN_OPTIONS",
+                "value": "print_stacktrace=1:halt_on_error=0"
+            },
+            {
+                "name": "TSAN_OPTIONS",
+                "value": "halt_on_error=0:history_size=7"
             }
-        ]
+        ],
+        "logging": {
+            "engineLogging": false,
+            "trace": false,
+            "traceResponse": false
+        }
     },
-    // Test Settings
-    "cmake.ctest.parallelJobs": 4,
-    // Search and File Exclusions
+    
+    // Test Settings - Optimized for doctest
+    "cmake.ctest.parallelJobs": 0,  // Use all available cores
+    "cmake.ctest.outputOnFailure": true,
+    "testing.automaticallyOpenPeekView": "failureInVisibleDocument",
+    "testExplorer.codeLens": true,
+    "testExplorer.gutterDecoration": true,
+    "testExplorer.onStart": "retire",
+    "testExplorer.onReload": "retire",
+    // Search and File Exclusions - Optimized for LPZRobots
     "files.exclude": {
-        "**/build": true,
+        "**/build": false,  // Show build directory for debugging
+        "**/build_*": true,
         "**/*.o": true,
-        "**/*.a": true,
+        "**/*.a": false,  // Show library files
         "**/*.so": true,
         "**/*.dylib": true,
         "**/CMakeFiles": true,
         "**/CMakeCache.txt": true,
         "**/.DS_Store": true,
         "**/moc_*.cpp": true,
-        "**/build_*/": true
+        "**/*_automoc.cpp": true,
+        "**/*.d": true,
+        "**/Makefile.conf": true,
+        "**/.vscode/intellisense": true
     },
+    
     "search.exclude": {
-        "**/build": true,
+        "**/build*": true,
         "**/node_modules": true,
         "**/*.code-search": true,
         "**/dist": true,
-        "**/opende": true
+        "**/opende/ode": true,  // External ODE source
+        "**/.vscode/intellisense": true,
+        "**/include/ode-dbl": true,  // Generated symlinks
+        "**/*.d": true,
+        "**/moc_*.cpp": true
     },
+    
+    // Files to watch for changes
+    "files.watcherExclude": {
+        "**/build*/**": true,
+        "**/.vscode/intellisense/**": true,
+        "**/include/**": true  // Generated symlinks
+    },
+    
     // Workspace Recommendations
     "extensions.ignoreRecommendations": false,
     "C_Cpp.suggestSnippets": true,
+    
     // Problem Matchers
     "cmake.problemMatcher": "$gcc",
+    
     // Java Settings for Java Tools
     "java.home": "${env:JAVA_HOME}",
     "java.jdt.ls.vmargs": "-Xmx1G",
     "java.configuration.updateBuildConfiguration": "automatic",
-    // Code Analysis
-    "C_Cpp.codeAnalysis.clangTidy.enabled": true,
-    "C_Cpp.codeAnalysis.runAutomatically": true,
-    "C_Cpp.codeAnalysis.clangTidy.checks": {
-        "enabled": [
-            "bugprone-*",
-            "performance-*",
-            "readability-*",
-            "modernize-*",
-            "cppcoreguidelines-*",
-            "clang-analyzer-*"
-        ],
-        "disabled": [
-            "modernize-use-trailing-return-type",
-            "readability-magic-numbers",
-            "cppcoreguidelines-avoid-magic-numbers",
-            "readability-identifier-length",
-            "cppcoreguidelines-pro-bounds-pointer-arithmetic"
-        ]
-    },
-    // Additional IntelliSense settings
-    "C_Cpp.intelliSenseEngine": "default",
-    "C_Cpp.enhancedColorization": "enabled",
-    "C_Cpp.intelliSenseCachePath": "${workspaceFolder}/.vscode/intellisense",
-    // Editor settings
-    "editor.rulers": [
-        100
-    ],
+    
+    // Editor settings - Following project's .editorconfig
+    "editor.rulers": [100],
     "editor.tabSize": 4,
     "editor.insertSpaces": true,
-    "editor.detectIndentation": false
+    "editor.detectIndentation": false,
+    "editor.trimAutoWhitespace": true,
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+    
+    // Terminal settings
+    "terminal.integrated.defaultProfile.osx": "zsh",
+    "terminal.integrated.defaultProfile.linux": "bash",
+    "terminal.integrated.scrollback": 10000,
+    
+    // Git settings
+    "git.ignoreLimitWarning": true,
+    
+    // Quick suggestions for LPZRobots types
+    "editor.quickSuggestions": {
+        "other": true,
+        "comments": false,
+        "strings": false
+    },
+    
+    // Bracket pair colorization
+    "editor.bracketPairColorization.enabled": true,
+    "editor.guides.bracketPairs": true,
+    
+    // File nesting for cleaner explorer
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.patterns": {
+        "*.cpp": "${capture}.h,${capture}.hpp",
+        "*.h": "${capture}.cpp,${capture}.cc",
+        "CMakeLists.txt": "*.cmake,CMakePresets.json,CMakeUserPresets.json",
+        "Makefile": "Makefile.*,*.mk"
+    },
+    
+    // Performance optimizations
+    "files.maxMemoryForLargeFilesMB": 4096,
+    "editor.largeFileOptimizations": false,  // Keep features for large files
+    
+    // Remote development settings (if using)
+    "remote.autoForwardPortsSource": "hybrid",
+    
+    // Makefile support (for legacy build system)
+    "makefile.extensionOutputFolder": "./.vscode",
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "${workspaceFolder}",
+            "binaryPath": "${workspaceFolder}/ode_robots/simulations/template_sphererobot/start",
+            "binaryArgs": ["-noshadow", "-g"]
+        }
+    ],
+    
+    // Additional language-specific settings
+    "[makefile]": {
+        "editor.insertSpaces": false,
+        "editor.detectIndentation": false
+    },
+    "[m4]": {
+        "editor.tabSize": 2
+    }
 }

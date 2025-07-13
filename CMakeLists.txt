@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 
 # Read version from VERSION file for single source of truth
-file(READ "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" VERSION_CONTENTS)
+file(READ "${CMAKE_CURRENT_SOURCE_DIR}/VERSION.txt" VERSION_CONTENTS)
 string(STRIP "${VERSION_CONTENTS}" VERSION_CONTENTS)
 
 project(lpzrobots VERSION ${VERSION_CONTENTS} LANGUAGES CXX C)
@@ -57,7 +57,7 @@ endif()
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
     add_compile_options(
         -Wall -Wextra -Wpedantic
-        -Wcast-align -Wcast-qual 
+        -Wcast-align -Wcast-qual
         -Wformat=2 -Wuninitialized
         -Wunused -Wunused-function
         -Wunused-label -Wunused-value
@@ -66,13 +66,13 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
         -Wredundant-decls -Woverloaded-virtual
         -Wsign-promo -Wformat-security
         -Wnon-virtual-dtor -Wold-style-cast
-        -Wno-unused-parameter  # Too many false positives
-        -Wno-sign-conversion   # Too noisy for now
-        -Wno-conversion        # Too many warnings, suppress for cleaner CI output
-        -Wno-zero-as-null-pointer-constant  # Too many warnings, suppress for cleaner CI output
-        -Wno-float-conversion  # Too many warnings, suppress for cleaner CI output
+        -Wno-unused-parameter # Too many false positives
+        -Wno-sign-conversion # Too noisy for now
+        -Wno-conversion # Too many warnings, suppress for cleaner CI output
+        -Wno-zero-as-null-pointer-constant # Too many warnings, suppress for cleaner CI output
+        -Wno-float-conversion # Too many warnings, suppress for cleaner CI output
     )
-    
+
     if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
         add_compile_options(-Wlogical-op -Wnoexcept)
     endif()
@@ -84,11 +84,11 @@ if(LPZROBOTS_ENABLE_COVERAGE)
         message(STATUS "Enabling code coverage collection")
         add_compile_options(-fprofile-arcs -ftest-coverage)
         add_link_options(-fprofile-arcs -ftest-coverage)
-        
+
         # Find required programs
         find_program(LCOV lcov)
         find_program(GENHTML genhtml)
-        
+
         if(LCOV AND GENHTML)
             message(STATUS "Found lcov and genhtml for coverage reports")
         else()
@@ -104,40 +104,42 @@ endif()
 if(LPZROBOTS_ENABLE_SANITIZERS)
     if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
         set(SANITIZER_FLAGS "")
-        
+
         # Auto-enable individual sanitizers if main option is ON
-        if(NOT LPZROBOTS_SANITIZER_ADDRESS AND NOT LPZROBOTS_SANITIZER_THREAD 
-           AND NOT LPZROBOTS_SANITIZER_UNDEFINED AND NOT LPZROBOTS_SANITIZER_MEMORY)
+        if(NOT LPZROBOTS_SANITIZER_ADDRESS AND NOT LPZROBOTS_SANITIZER_THREAD
+            AND NOT LPZROBOTS_SANITIZER_UNDEFINED AND NOT LPZROBOTS_SANITIZER_MEMORY)
             set(LPZROBOTS_SANITIZER_ADDRESS ON)
             set(LPZROBOTS_SANITIZER_UNDEFINED ON)
         endif()
-        
+
         if(LPZROBOTS_SANITIZER_ADDRESS)
             message(STATUS "Enabling AddressSanitizer")
             list(APPEND SANITIZER_FLAGS "address")
         endif()
-        
+
         if(LPZROBOTS_SANITIZER_THREAD)
             if(LPZROBOTS_SANITIZER_ADDRESS OR LPZROBOTS_SANITIZER_MEMORY)
                 message(FATAL_ERROR "ThreadSanitizer cannot be used with Address or Memory sanitizers")
             endif()
+
             message(STATUS "Enabling ThreadSanitizer")
             list(APPEND SANITIZER_FLAGS "thread")
         endif()
-        
+
         if(LPZROBOTS_SANITIZER_UNDEFINED)
             message(STATUS "Enabling UndefinedBehaviorSanitizer")
             list(APPEND SANITIZER_FLAGS "undefined")
         endif()
-        
+
         if(LPZROBOTS_SANITIZER_MEMORY)
             if(LPZROBOTS_SANITIZER_ADDRESS OR LPZROBOTS_SANITIZER_THREAD)
                 message(FATAL_ERROR "MemorySanitizer cannot be used with Address or Thread sanitizers")
             endif()
+
             message(STATUS "Enabling MemorySanitizer")
             list(APPEND SANITIZER_FLAGS "memory")
         endif()
-        
+
         if(SANITIZER_FLAGS)
             string(JOIN "," SANITIZER_FLAGS_STR ${SANITIZER_FLAGS})
             add_compile_options(-fsanitize=${SANITIZER_FLAGS_STR} -fno-omit-frame-pointer)
@@ -152,8 +154,10 @@ endif()
 # Benchmark configuration
 if(LPZROBOTS_ENABLE_BENCHMARKS)
     message(STATUS "Enabling benchmark tests")
+
     # Find Google Benchmark
     find_package(benchmark QUIET)
+
     if(NOT benchmark_FOUND)
         message(STATUS "Google Benchmark not found - will fetch during build if needed")
     endif()
@@ -162,6 +166,7 @@ endif()
 # Static Analysis configuration
 if(LPZROBOTS_ENABLE_CLANG_TIDY)
     find_program(CLANG_TIDY_EXE NAMES "clang-tidy" "clang-tidy-15" "clang-tidy-14")
+
     if(CLANG_TIDY_EXE)
         message(STATUS "Found clang-tidy: ${CLANG_TIDY_EXE}")
         set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXE}")
@@ -173,6 +178,7 @@ endif()
 
 if(LPZROBOTS_ENABLE_CPPCHECK)
     find_program(CPPCHECK_EXE NAMES "cppcheck")
+
     if(CPPCHECK_EXE)
         message(STATUS "Found cppcheck: ${CPPCHECK_EXE}")
         set(CMAKE_CXX_CPPCHECK "${CPPCHECK_EXE};--enable=warning,style,performance,portability;--inline-suppr;--quiet")
@@ -184,6 +190,7 @@ endif()
 
 if(LPZROBOTS_ENABLE_IWYU)
     find_program(IWYU_EXE NAMES "include-what-you-use" "iwyu")
+
     if(IWYU_EXE)
         message(STATUS "Found include-what-you-use: ${IWYU_EXE}")
         set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${IWYU_EXE}")
@@ -205,6 +212,7 @@ lpzrobots_find_dependencies()
 # OpenGL (needed for graphics)
 if(APPLE)
     find_library(OPENGL_LIBRARY OpenGL)
+
     if(NOT OPENGL_LIBRARY)
         message(WARNING "OpenGL framework not found on macOS - graphics disabled")
         set(LPZROBOTS_HAS_OPENGL FALSE)
@@ -213,6 +221,7 @@ if(APPLE)
     endif()
 else()
     find_package(OpenGL)
+
     if(OpenGL_FOUND)
         set(LPZROBOTS_HAS_OPENGL TRUE)
     else()
@@ -249,7 +258,7 @@ set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 # Add the unified include directory for all components
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/include        # Unified include directory
+    ${CMAKE_CURRENT_SOURCE_DIR}/include # Unified include directory
 )
 
 add_subdirectory(selforg)
@@ -294,8 +303,8 @@ write_basic_package_version_file(
 # Install package configuration
 install(
     FILES
-        "${CMAKE_CURRENT_BINARY_DIR}/lpzrobotsConfig.cmake"
-        "${CMAKE_CURRENT_BINARY_DIR}/lpzrobotsConfigVersion.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/lpzrobotsConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/lpzrobotsConfigVersion.cmake"
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/lpzrobots
 )
 

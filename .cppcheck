@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<project version="1">
+    <!-- LPZRobots Cppcheck Configuration -->
+    
+    <!-- Build directory with compile commands -->
+    <importproject>build/compile_commands.json</importproject>
+    
+    <!-- Include paths -->
+    <includedir>
+        <dir name="include"/>
+        <dir name="selforg/include"/>
+        <dir name="ode_robots/include"/>
+        <dir name="ga_tools/include"/>
+    </includedir>
+    
+    <!-- Defines -->
+    <define name="MAC"/>
+    <define name="MAC_ARM64"/>
+    <define name="NDEBUG"/>
+    
+    <!-- Paths to check -->
+    <paths>
+        <dir name="selforg"/>
+        <dir name="ode_robots"/>
+        <dir name="ga_tools"/>
+        <dir name="guilogger"/>
+        <dir name="matrixviz"/>
+    </paths>
+    
+    <!-- Exclude paths -->
+    <exclude>
+        <path name="build/"/>
+        <path name="opende/ode/"/>
+        <path name="*/tests/"/>
+        <path name="*/examples/"/>
+    </exclude>
+    
+    <!-- Libraries -->
+    <libraries>
+        <library>qt</library>
+        <library>std</library>
+        <library>posix</library>
+    </libraries>
+    
+    <!-- Suppressions -->
+    <suppressions>
+        <suppression>missingInclude</suppression>
+        <suppression>unmatchedSuppression</suppression>
+        <suppression>unusedFunction</suppression>
+        <suppression>missingIncludeSystem</suppression>
+    </suppressions>
+    
+    <!-- Platform -->
+    <platform>unix64</platform>
+    
+    <!-- C++ Standard -->
+    <standards>
+        <standard>c++17</standard>
+    </standards>
+    
+    <!-- Check level -->
+    <check-level>exhaustive</check-level>
+    
+    <!-- Enable additional checks -->
+    <addon>cert.py</addon>
+    <addon>misra.py</addon>
+    
+    <!-- Max configs -->
+    <max-configs>20</max-configs>
+    
+    <!-- Enable all checks -->
+    <enable>all</enable>
+    
+    <!-- Inline suppressions -->
+    <inline-suppr>true</inline-suppr>
+</project>
