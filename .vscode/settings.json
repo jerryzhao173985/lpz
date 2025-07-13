@@ -318,13 +318,13 @@
     "editor.minimap.maxColumn": 100,
     // Language-specific settings
     "[cpp]": {
-        "editor.defaultFormatter": "ms-vscode.cpptools",
+        // Formatter will be handled by C_Cpp.formatting setting
         "editor.suggest.insertMode": "replace",
         "editor.wordBasedSuggestions": "off",
         "editor.formatOnSave": true
     },
     "[c]": {
-        "editor.defaultFormatter": "ms-vscode.cpptools",
+        // Formatter will be handled by C_Cpp.formatting setting
         "editor.formatOnSave": true
     },
     "[makefile]": {

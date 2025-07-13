@@ -1,0 +1,149 @@
+{
+    "folders": [
+        {
+            "name": "🏗️ LPZRobots - Full Project",
+            "path": "."
+        },
+        {
+            "name": "🧠 selforg - Controllers",
+            "path": "selforg"
+        },
+        {
+            "name": "🤖 ode_robots - Simulations",
+            "path": "ode_robots"
+        },
+        {
+            "name": "🧬 ga_tools - Genetic Algorithms",
+            "path": "ga_tools"
+        },
+        {
+            "name": "📊 GUI Tools",
+            "path": ".",
+            "folders": ["guilogger", "matrixviz", "configurator"]
+        },
+        {
+            "name": "🧪 Tests",
+            "path": "tests"
+        },
+        {
+            "name": "📚 Documentation",
+            "path": "doc"
+        }
+    ],
+    "settings": {
+        // Workspace-specific settings that override user settings
+        "files.exclude": {
+            "**/build*": false,
+            "**/.git": true,
+            "**/.DS_Store": true,
+            "**/CMakeFiles": true,
+            "**/CMakeCache.txt": true,
+            "**/*.o": true,
+            "**/*.d": true,
+            "**/moc_*.cpp": true,
+            "**/*_automoc.cpp": true
+        },
+        
+        // Search configuration
+        "search.exclude": {
+            "**/build*/**": true,
+            "**/opende/ode/**": true,
+            "**/.vscode/intellisense/**": true,
+            "**/include/ode-dbl/**": true
+        },
+        
+        // Terminal configuration for workspace
+        "terminal.integrated.cwd": "${workspaceFolder:LPZRobots - Full Project}",
+        
+        // Default build preset for this workspace
+        "cmake.defaultConfigure.configurePreset": "macos-arm64",
+        "cmake.defaultBuild.buildPreset": "macos-arm64",
+        
+        // Workspace recommendations
+        "recommendations": [
+            "ms-vscode.cpptools",
+            "ms-vscode.cmake-tools",
+            "llvm-vs-code-extensions.vscode-clangd",
+            "vadimcn.vscode-lldb",
+            "jeff-hykin.better-cpp-syntax"
+        ]
+    },
+    "tasks": {
+        "version": "2.0.0",
+        "tasks": [
+            {
+                "label": "🎯 Quick Build: Current Component",
+                "type": "shell",
+                "command": "bash",
+                "args": [
+                    "-c",
+                    "component=$(echo '${relativeFile}' | cut -d'/' -f1); cmake --build build/macos-arm64 --target $component"
+                ],
+                "group": {
+                    "kind": "build",
+                    "isDefault": true
+                },
+                "problemMatcher": ["$gcc"],
+                "presentation": {
+                    "reveal": "always",
+                    "panel": "shared"
+                }
+            }
+        ]
+    },
+    "launch": {
+        "version": "0.2.0",
+        "configurations": [],
+        "compounds": [
+            {
+                "name": "🚀 Quick Debug: Simulation + Tools",
+                "configurations": [
+                    "🌐 Debug: Simulation + GUI Tools"
+                ],
+                "stopAll": true
+            }
+        ]
+    },
+    "extensions": {
+        "recommendations": [
+            // Essential C++ Development
+            "ms-vscode.cpptools",
+            "ms-vscode.cpptools-extension-pack",
+            "ms-vscode.cmake-tools",
+            "llvm-vs-code-extensions.vscode-clangd",
+            
+            // Debugging
+            "vadimcn.vscode-lldb",
+            "webfreak.debug",
+            
+            // Code Quality
+            "jbenden.c-cpp-flylint",
+            "notskm.clang-tidy",
+            
+            // Productivity
+            "jeff-hykin.better-cpp-syntax",
+            "cschlosser.doxdocgen",
+            "streetsidesoftware.code-spell-checker",
+            
+            // Git Integration
+            "eamodio.gitlens",
+            "mhutchie.git-graph",
+            
+            // Documentation
+            "yzhang.markdown-all-in-one",
+            "davidanson.vscode-markdownlint",
+            
+            // Visualization
+            "tintinweb.graphviz-interactive-preview",
+            
+            // Testing
+            "matepek.vscode-catch2-test-adapter",
+            "ms-vscode.test-adapter-converter"
+        ],
+        "unwantedRecommendations": [
+            "ms-vscode.cpptools-themes",
+            "austin.code-gnu-global",
+            "mitaki28.vscode-clang"
+        ]
+    }
+}

@@ -1,0 +1,25 @@
+# LPZRobots LLDB initialization file
+# This file is automatically loaded by VSCode debug configurations
+
+# Load the LPZRobots debug formatters
+command script import ~/.vscode/debugvis/lpzrobots_lldb.py
+
+# Enable pretty printing
+settings set target.max-children-count 256
+settings set target.max-string-summary-length 1024
+
+# Set up expression evaluation options
+settings set target.prefer-dynamic-value run-target
+settings set target.enable-synthetic-value true
+
+# Useful aliases for debugging
+command alias m thread step-in
+command alias n thread step-over
+command alias c thread continue
+command alias f thread step-out
+
+# Matrix inspection commands
+command alias matrix expression -T -- 
+command alias showmatrix expression -O --
+
+echo "LPZRobots LLDB formatters loaded. Use 'matrix' command to inspect Matrix objects.\n"
