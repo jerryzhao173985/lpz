@@ -1,48 +1,79 @@
 [
   {
-    "name": "Clang 14.0.0 arm64-apple-darwin",
+    "name": "Use CMake Presets",
+    "description": "Use CMakePresets.json for configuration",
+    "preferredGenerator": {
+      "name": "Ninja"
+    },
+    "toolchainFile": "",
+    "isTrusted": true
+  },
+  {
+    "name": "macOS System Compiler (Auto)",
     "compilers": {
       "C": "/usr/bin/clang",
       "CXX": "/usr/bin/clang++"
     },
-    "isTrusted": true,
     "preferredGenerator": {
       "name": "Unix Makefiles"
-    }
-  },
-  {
-    "name": "Homebrew GCC",
-    "compilers": {
-      "C": "/opt/homebrew/bin/gcc-13",
-      "CXX": "/opt/homebrew/bin/g++-13"
     },
-    "isTrusted": true,
-    "preferredGenerator": {
-      "name": "Unix Makefiles"
-    }
-  },
-  {
-    "name": "Debug Build",
-    "compilers": {
-      "C": "/usr/bin/clang",
-      "CXX": "/usr/bin/clang++"
-    },
-    "cmakeSettings": {
-      "CMAKE_BUILD_TYPE": "Debug",
-      "CMAKE_CXX_FLAGS": "-g -O0 -Wall -Wextra"
+    "environmentVariables": {
+      "CMAKE_PREFIX_PATH": "${env:HOMEBREW_PREFIX:/opt/homebrew}",
+      "DYLD_LIBRARY_PATH": "${workspaceFolder}/lib"
     },
     "isTrusted": true
   },
   {
-    "name": "Release Build",
+    "name": "Homebrew LLVM/Clang",
     "compilers": {
-      "C": "/usr/bin/clang",
-      "CXX": "/usr/bin/clang++"
+      "C": "${env:HOMEBREW_PREFIX:/opt/homebrew}/opt/llvm/bin/clang",
+      "CXX": "${env:HOMEBREW_PREFIX:/opt/homebrew}/opt/llvm/bin/clang++"
     },
-    "cmakeSettings": {
-      "CMAKE_BUILD_TYPE": "Release",
-      "CMAKE_CXX_FLAGS": "-O3 -DNDEBUG"
+    "preferredGenerator": {
+      "name": "Ninja"
+    },
+    "environmentVariables": {
+      "CMAKE_PREFIX_PATH": "${env:HOMEBREW_PREFIX:/opt/homebrew}",
+      "CC": "${env:HOMEBREW_PREFIX:/opt/homebrew}/opt/llvm/bin/clang",
+      "CXX": "${env:HOMEBREW_PREFIX:/opt/homebrew}/opt/llvm/bin/clang++",
+      "LDFLAGS": "-L${env:HOMEBREW_PREFIX:/opt/homebrew}/opt/llvm/lib -Wl,-rpath,${env:HOMEBREW_PREFIX:/opt/homebrew}/opt/llvm/lib",
+      "CPPFLAGS": "-I${env:HOMEBREW_PREFIX:/opt/homebrew}/opt/llvm/include"
     },
     "isTrusted": true
+  },
+  {
+    "name": "Homebrew GCC 13",
+    "compilers": {
+      "C": "${env:HOMEBREW_PREFIX:/opt/homebrew}/bin/gcc-13",
+      "CXX": "${env:HOMEBREW_PREFIX:/opt/homebrew}/bin/g++-13"
+    },
+    "preferredGenerator": {
+      "name": "Unix Makefiles"
+    },
+    "environmentVariables": {
+      "CMAKE_PREFIX_PATH": "${env:HOMEBREW_PREFIX:/opt/homebrew}",
+      "CC": "${env:HOMEBREW_PREFIX:/opt/homebrew}/bin/gcc-13",
+      "CXX": "${env:HOMEBREW_PREFIX:/opt/homebrew}/bin/g++-13"
+    },
+    "isTrusted": true
+  },
+  {
+    "name": "Linux System GCC",
+    "compilers": {
+      "C": "/usr/bin/gcc",
+      "CXX": "/usr/bin/g++"
+    },
+    "preferredGenerator": {
+      "name": "Unix Makefiles"
+    },
+    "environmentVariables": {
+      "LD_LIBRARY_PATH": "${workspaceFolder}/lib:${env:LD_LIBRARY_PATH}"
+    },
+    "isTrusted": true
+  },
+  {
+    "name": "Scan for compilers",
+    "description": "Scan for compilers on the system",
+    "isTrusted": false
   }
 ]

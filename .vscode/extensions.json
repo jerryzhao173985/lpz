@@ -92,7 +92,6 @@
         // Extensions that might conflict or are unnecessary
         "austin.code-gnu-global",  // Conflicts with clangd
         "mitaki28.vscode-clang",   // Superseded by clangd
-        "ms-vscode.cpptools-extension-pack", // If already included above
         "formulahendry.terminal"   // Can interfere with integrated terminal
     ]
 }

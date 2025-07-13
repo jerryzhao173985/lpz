@@ -1,77 +1,217 @@
 {
     "configurations": [
         {
-            "name": "Mac",
-            "compileCommands": "${workspaceFolder}/compile_commands.json",
+            "name": "Mac - Auto",
+            "compileCommands": "${workspaceFolder}/build/${config:cmake.buildDirectory}/compile_commands.json",
             "configurationProvider": "ms-vscode.cmake-tools",
-            "cStandard": "c11",
+            "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "${default}",
-            "defines": [],
+            "defines": [
+                "MAC",
+                "${config:lpzrobots.platformDefines}"
+            ],
+            "includePath": [
+                "${workspaceFolder}/include",
+                "${workspaceFolder}/selforg/include",
+                "${workspaceFolder}/ode_robots/include",
+                "${workspaceFolder}/ga_tools/include",
+                "${workspaceFolder}/opende/include",
+                "${workspaceFolder}/guilogger/include",
+                "${workspaceFolder}/matrixviz/include",
+                "${workspaceFolder}/configurator/include",
+                "${workspaceFolder}/build/include",
+                "/opt/homebrew/include",
+                "/usr/local/include"
+            ],
             "macFrameworkPath": [
                 "/System/Library/Frameworks",
                 "/Library/Frameworks"
             ],
-            "compilerPath": "${default}"
+            "compilerPath": "${default}",
+            "browse": {
+                "path": [
+                    "${workspaceFolder}/**",
+                    "/opt/homebrew/include",
+                    "/usr/local/include"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": "${workspaceFolder}/.vscode/browse.vc.db"
+            }
         },
         {
-            "name": "Linux",
-            "compileCommands": "${workspaceFolder}/compile_commands.json",
+            "name": "Linux - Auto",
+            "compileCommands": "${workspaceFolder}/build/${config:cmake.buildDirectory}/compile_commands.json",
             "configurationProvider": "ms-vscode.cmake-tools",
-            "cStandard": "c11",
+            "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "${default}",
-            "defines": [],
-            "compilerPath": "${default}"
-        },
-        {
-            "name": "Mac Debug",
-            "compileCommands": "${workspaceFolder}/build/default/compile_commands.json",
-            "configurationProvider": "ms-vscode.cmake-tools",
-            "cStandard": "c11",
-            "cppStandard": "c++17",
-            "intelliSenseMode": "macos-clang-arm64",
             "defines": [
-                "_DEBUG",
-                "MAC",
-                "MAC_ARM64"
+                "LINUX"
             ],
-            "macFrameworkPath": [
-                "/System/Library/Frameworks",
-                "/Library/Frameworks"
+            "includePath": [
+                "${workspaceFolder}/include",
+                "${workspaceFolder}/selforg/include",
+                "${workspaceFolder}/ode_robots/include",
+                "${workspaceFolder}/ga_tools/include",
+                "${workspaceFolder}/opende/include",
+                "${workspaceFolder}/guilogger/include",
+                "${workspaceFolder}/matrixviz/include",
+                "${workspaceFolder}/configurator/include",
+                "${workspaceFolder}/build/include",
+                "/usr/include",
+                "/usr/local/include"
             ],
-            "compilerPath": "/usr/bin/clang++"
+            "compilerPath": "${default}",
+            "browse": {
+                "path": [
+                    "${workspaceFolder}/**",
+                    "/usr/include",
+                    "/usr/local/include"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": "${workspaceFolder}/.vscode/browse.vc.db"
+            }
         },
         {
-            "name": "Mac Release",
-            "compileCommands": "${workspaceFolder}/build/release/compile_commands.json",
+            "name": "Mac ARM64 Debug",
+            "compileCommands": "${workspaceFolder}/build/macos-arm64/compile_commands.json",
             "configurationProvider": "ms-vscode.cmake-tools",
-            "cStandard": "c11",
-            "cppStandard": "c++17",
-            "intelliSenseMode": "macos-clang-arm64",
-            "defines": [
-                "NDEBUG",
-                "MAC",
-                "MAC_ARM64"
-            ],
-            "macFrameworkPath": [
-                "/System/Library/Frameworks",
-                "/Library/Frameworks"
-            ],
-            "compilerPath": "/usr/bin/clang++"
-        },
-        {
-            "name": "Mac Sanitizers",
-            "compileCommands": "${workspaceFolder}/build/dev/compile_commands.json",
-            "configurationProvider": "ms-vscode.cmake-tools",
-            "cStandard": "c11",
+            "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "macos-clang-arm64",
             "defines": [
                 "_DEBUG",
                 "MAC",
                 "MAC_ARM64",
-                "_LIBCPP_HAS_NO_ASAN"
+                "__ARM_NEON",
+                "LPZROBOTS_VERSION=\"${config:lpzrobots.version}\"",
+                "BUILD_SHARED_LIBS=${config:lpzrobots.sharedLibs:OFF}"
+            ],
+            "includePath": [
+                "${workspaceFolder}/include/**",
+                "${workspaceFolder}/selforg/include/**",
+                "${workspaceFolder}/ode_robots/include/**",
+                "${workspaceFolder}/ga_tools/include/**",
+                "${workspaceFolder}/opende/ode/src",
+                "${workspaceFolder}/opende/include",
+                "${workspaceFolder}/guilogger/include/**",
+                "${workspaceFolder}/matrixviz/include/**",
+                "${workspaceFolder}/configurator/include/**",
+                "${workspaceFolder}/build/macos-arm64/include/**",
+                "/opt/homebrew/include",
+                "/opt/homebrew/opt/qt@6/include",
+                "/opt/homebrew/opt/gsl/include",
+                "/opt/homebrew/opt/openscenegraph/include"
+            ],
+            "macFrameworkPath": [
+                "/System/Library/Frameworks",
+                "/Library/Frameworks"
+            ],
+            "compilerPath": "/usr/bin/clang++",
+            "compilerArgs": [
+                "-arch",
+                "arm64"
+            ]
+        },
+        {
+            "name": "Mac ARM64 Release",
+            "compileCommands": "${workspaceFolder}/build/release/compile_commands.json",
+            "configurationProvider": "ms-vscode.cmake-tools",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "macos-clang-arm64",
+            "defines": [
+                "NDEBUG",
+                "MAC",
+                "MAC_ARM64",
+                "__ARM_NEON",
+                "LPZROBOTS_VERSION=\"${config:lpzrobots.version}\"",
+                "BUILD_SHARED_LIBS=${config:lpzrobots.sharedLibs:OFF}"
+            ],
+            "includePath": [
+                "${workspaceFolder}/include/**",
+                "${workspaceFolder}/selforg/include/**",
+                "${workspaceFolder}/ode_robots/include/**",
+                "${workspaceFolder}/ga_tools/include/**",
+                "${workspaceFolder}/opende/ode/src",
+                "${workspaceFolder}/opende/include",
+                "${workspaceFolder}/guilogger/include/**",
+                "${workspaceFolder}/matrixviz/include/**",
+                "${workspaceFolder}/configurator/include/**",
+                "${workspaceFolder}/build/release/include/**",
+                "/opt/homebrew/include",
+                "/opt/homebrew/opt/qt@6/include",
+                "/opt/homebrew/opt/gsl/include",
+                "/opt/homebrew/opt/openscenegraph/include"
+            ],
+            "macFrameworkPath": [
+                "/System/Library/Frameworks",
+                "/Library/Frameworks"
+            ],
+            "compilerPath": "/usr/bin/clang++",
+            "compilerArgs": [
+                "-arch",
+                "arm64",
+                "-O3"
+            ]
+        },
+        {
+            "name": "Mac x64 Debug",
+            "compileCommands": "${workspaceFolder}/build/macos-x64/compile_commands.json",
+            "configurationProvider": "ms-vscode.cmake-tools",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "macos-clang-x64",
+            "defines": [
+                "_DEBUG",
+                "MAC",
+                "MAC_X64",
+                "LPZROBOTS_VERSION=\"${config:lpzrobots.version}\""
+            ],
+            "includePath": [
+                "${workspaceFolder}/include/**",
+                "${workspaceFolder}/selforg/include/**",
+                "${workspaceFolder}/ode_robots/include/**",
+                "${workspaceFolder}/ga_tools/include/**",
+                "${workspaceFolder}/opende/ode/src",
+                "${workspaceFolder}/opende/include",
+                "${workspaceFolder}/build/macos-x64/include/**",
+                "/usr/local/include"
+            ],
+            "macFrameworkPath": [
+                "/System/Library/Frameworks",
+                "/Library/Frameworks"
+            ],
+            "compilerPath": "/usr/bin/clang++",
+            "compilerArgs": [
+                "-arch",
+                "x86_64"
+            ]
+        },
+        {
+            "name": "Mac Sanitizers",
+            "compileCommands": "${workspaceFolder}/build/dev/compile_commands.json",
+            "configurationProvider": "ms-vscode.cmake-tools",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "macos-clang-arm64",
+            "defines": [
+                "_DEBUG",
+                "MAC",
+                "MAC_ARM64",
+                "_LIBCPP_HAS_NO_ASAN",
+                "_FORTIFY_SOURCE=0"
+            ],
+            "includePath": [
+                "${workspaceFolder}/include/**",
+                "${workspaceFolder}/selforg/include/**",
+                "${workspaceFolder}/ode_robots/include/**",
+                "${workspaceFolder}/ga_tools/include/**",
+                "${workspaceFolder}/opende/ode/src",
+                "${workspaceFolder}/opende/include",
+                "${workspaceFolder}/build/dev/include/**",
+                "/opt/homebrew/include"
             ],
             "macFrameworkPath": [
                 "/System/Library/Frameworks",
@@ -80,19 +220,35 @@
             "compilerPath": "/usr/bin/clang++",
             "compilerArgs": [
                 "-fsanitize=address",
-                "-fsanitize=undefined"
+                "-fsanitize=undefined",
+                "-fno-omit-frame-pointer"
             ]
         },
         {
             "name": "Linux Debug",
-            "compileCommands": "${workspaceFolder}/build/debug/compile_commands.json",
+            "compileCommands": "${workspaceFolder}/build/linux/compile_commands.json",
             "configurationProvider": "ms-vscode.cmake-tools",
-            "cStandard": "c11",
+            "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "linux-gcc-x64",
             "defines": [
                 "_DEBUG",
-                "LINUX"
+                "LINUX",
+                "LPZROBOTS_VERSION=\"${config:lpzrobots.version}\""
+            ],
+            "includePath": [
+                "${workspaceFolder}/include/**",
+                "${workspaceFolder}/selforg/include/**",
+                "${workspaceFolder}/ode_robots/include/**",
+                "${workspaceFolder}/ga_tools/include/**",
+                "${workspaceFolder}/opende/ode/src",
+                "${workspaceFolder}/opende/include",
+                "${workspaceFolder}/guilogger/include/**",
+                "${workspaceFolder}/matrixviz/include/**",
+                "${workspaceFolder}/configurator/include/**",
+                "${workspaceFolder}/build/linux/include/**",
+                "/usr/include",
+                "/usr/local/include"
             ],
             "compilerPath": "/usr/bin/g++"
         },
@@ -100,15 +256,92 @@
             "name": "Linux Release",
             "compileCommands": "${workspaceFolder}/build/release/compile_commands.json",
             "configurationProvider": "ms-vscode.cmake-tools",
-            "cStandard": "c11",
+            "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "linux-gcc-x64",
             "defines": [
                 "NDEBUG",
-                "LINUX"
+                "LINUX",
+                "LPZROBOTS_VERSION=\"${config:lpzrobots.version}\""
             ],
-            "compilerPath": "/usr/bin/g++"
+            "includePath": [
+                "${workspaceFolder}/include/**",
+                "${workspaceFolder}/selforg/include/**",
+                "${workspaceFolder}/ode_robots/include/**",
+                "${workspaceFolder}/ga_tools/include/**",
+                "${workspaceFolder}/opende/ode/src",
+                "${workspaceFolder}/opende/include",
+                "${workspaceFolder}/guilogger/include/**",
+                "${workspaceFolder}/matrixviz/include/**",
+                "${workspaceFolder}/configurator/include/**",
+                "${workspaceFolder}/build/release/include/**",
+                "/usr/include",
+                "/usr/local/include"
+            ],
+            "compilerPath": "/usr/bin/g++",
+            "compilerArgs": [
+                "-O3"
+            ]
+        },
+        {
+            "name": "Component: selforg",
+            "compileCommands": "${workspaceFolder}/build/${config:cmake.buildDirectory}/compile_commands.json",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "${default}",
+            "defines": [
+                "${config:lpzrobots.platformDefines}",
+                "SELFORG_COMPONENT"
+            ],
+            "includePath": [
+                "${workspaceFolder}/selforg/include/**",
+                "${workspaceFolder}/include/selforg/**",
+                "${workspaceFolder}/build/include/selforg/**",
+                "/opt/homebrew/include"
+            ],
+            "compilerPath": "${default}"
+        },
+        {
+            "name": "Component: ode_robots",
+            "compileCommands": "${workspaceFolder}/build/${config:cmake.buildDirectory}/compile_commands.json",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "${default}",
+            "defines": [
+                "${config:lpzrobots.platformDefines}",
+                "ODE_ROBOTS_COMPONENT"
+            ],
+            "includePath": [
+                "${workspaceFolder}/ode_robots/include/**",
+                "${workspaceFolder}/selforg/include/**",
+                "${workspaceFolder}/opende/include/**",
+                "${workspaceFolder}/include/**",
+                "${workspaceFolder}/build/include/**",
+                "/opt/homebrew/include",
+                "/opt/homebrew/opt/openscenegraph/include"
+            ],
+            "compilerPath": "${default}"
+        },
+        {
+            "name": "Simulation Development",
+            "compileCommands": "${workspaceFolder}/build/${config:cmake.buildDirectory}/compile_commands.json",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "${default}",
+            "defines": [
+                "${config:lpzrobots.platformDefines}",
+                "SIMULATION_MODE"
+            ],
+            "includePath": [
+                "${workspaceFolder}/include/**",
+                "${workspaceFolder}/ode_robots/simulations/${fileBasenameNoExtension}/**",
+                "/opt/homebrew/include",
+                "/opt/homebrew/opt/openscenegraph/include",
+                "/opt/homebrew/opt/qt@6/include"
+            ],
+            "compilerPath": "${default}"
         }
     ],
-    "version": 4
+    "version": 4,
+    "enableConfigurationSquiggles": true
 }
