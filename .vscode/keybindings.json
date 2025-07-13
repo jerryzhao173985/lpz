@@ -1,270 +1,34 @@
-// ╔══════════════════════════════════════════════════════════════════╗
-// ║           LPZRobots Custom Keyboard Shortcuts                     ║
-// ╚══════════════════════════════════════════════════════════════════╝
-//
-// Add these to your User keybindings.json or copy to workspace
-// File → Preferences → Keyboard Shortcuts → Open Keyboard Shortcuts (JSON)
+// LPZRobots Custom Keyboard Shortcuts
 [
-    // ═══════════════════════════════════════════════════════════════════
-    // Build & Compile Shortcuts
-    // ═══════════════════════════════════════════════════════════════════
-    
+    // Build shortcuts
     {
         "key": "cmd+shift+b",
-        "command": "workbench.action.tasks.runTask",
-        "args": "🔨 Build: All",
+        "command": "cmake.build",
         "when": "!inDebugMode"
-    },
-    {
-        "key": "cmd+alt+b",
-        "command": "workbench.action.tasks.runTask",
-        "args": "🔨 Build: Current Component",
-        "when": "resourceExtname == '.cpp' || resourceExtname == '.h'"
     },
     {
         "key": "cmd+shift+alt+b",
-        "command": "workbench.action.tasks.runTask",
-        "args": "🚀 Workflow: Clean Build"
+        "command": "cmake.cleanRebuild"
     },
     
-    // ═══════════════════════════════════════════════════════════════════
-    // Simulation Shortcuts
-    // ═══════════════════════════════════════════════════════════════════
-    
-    {
-        "key": "cmd+r",
-        "command": "workbench.action.tasks.runTask",
-        "args": "🤖 Simulation: Run Current",
-        "when": "resourceDirname =~ /simulations/"
-    },
-    {
-        "key": "cmd+shift+r",
-        "command": "workbench.action.tasks.runTask",
-        "args": "🤖 Simulation: Run with GUI",
-        "when": "resourceDirname =~ /simulations/"
-    },
-    {
-        "key": "cmd+alt+r",
-        "command": "workbench.action.tasks.runTask",
-        "args": "🤖 Simulation: Run Headless",
-        "when": "resourceDirname =~ /simulations/"
-    },
-    
-    // ═══════════════════════════════════════════════════════════════════
-    // Testing Shortcuts
-    // ═══════════════════════════════════════════════════════════════════
-    
-    {
-        "key": "cmd+t",
-        "command": "workbench.action.tasks.runTask",
-        "args": "🧪 Test: All Components",
-        "when": "!inDebugMode"
-    },
-    {
-        "key": "cmd+shift+t",
-        "command": "workbench.action.tasks.runTask",
-        "args": "🧪 Test: Current Component",
-        "when": "resourceDirname =~ /selforg|ode_robots|ga_tools/"
-    },
-    {
-        "key": "cmd+alt+t",
-        "command": "workbench.action.tasks.runTask",
-        "args": "🚀 Workflow: Build and Test"
-    },
-    
-    // ═══════════════════════════════════════════════════════════════════
-    // Code Quality Shortcuts
-    // ═══════════════════════════════════════════════════════════════════
-    
-    {
-        "key": "shift+alt+f",
-        "command": "workbench.action.tasks.runTask",
-        "args": "🎨 Format: Current File",
-        "when": "resourceExtname == '.cpp' || resourceExtname == '.h'"
-    },
-    {
-        "key": "cmd+shift+alt+f",
-        "command": "workbench.action.tasks.runTask",
-        "args": "🚀 Workflow: Format and Analyze"
-    },
-    {
-        "key": "cmd+shift+a",
-        "command": "workbench.action.tasks.runTask",
-        "args": "🔍 Analyze: Run clang-tidy",
-        "when": "resourceExtname == '.cpp' || resourceExtname == '.h'"
-    },
-    
-    // ═══════════════════════════════════════════════════════════════════
-    // Navigation Shortcuts
-    // ═══════════════════════════════════════════════════════════════════
-    
-    {
-        "key": "cmd+shift+o",
-        "command": "workbench.action.gotoSymbol",
-        "when": "editorTextFocus"
-    },
-    {
-        "key": "cmd+shift+p",
-        "command": "workbench.action.showCommands"
-    },
-    {
-        "key": "f12",
-        "command": "editor.action.revealDefinition",
-        "when": "editorHasDefinitionProvider && editorTextFocus"
-    },
-    {
-        "key": "shift+f12",
-        "command": "editor.action.goToReferences",
-        "when": "editorHasReferenceProvider && editorTextFocus"
-    },
-    {
-        "key": "alt+f12",
-        "command": "editor.action.peekDefinition",
-        "when": "editorHasDefinitionProvider && editorTextFocus"
-    },
-    
-    // ═══════════════════════════════════════════════════════════════════
-    // Debug Shortcuts
-    // ═══════════════════════════════════════════════════════════════════
-    
+    // Debug shortcuts
     {
         "key": "f5",
-        "command": "workbench.action.debug.start",
-        "when": "!inDebugMode"
-    },
-    {
-        "key": "shift+f5",
-        "command": "workbench.action.debug.stop",
-        "when": "inDebugMode"
-    },
-    {
-        "key": "cmd+shift+f5",
-        "command": "workbench.action.debug.restart",
-        "when": "inDebugMode"
-    },
-    {
-        "key": "f9",
-        "command": "editor.debug.action.toggleBreakpoint",
-        "when": "editorTextFocus"
-    },
-    {
-        "key": "shift+f9",
-        "command": "editor.debug.action.conditionalBreakpoint",
-        "when": "editorTextFocus"
+        "command": "cmake.debugTarget",
+        "when": "!inDebugMode && cmake.buildKit && cmake.status != 'building' && cmake.status != 'configuring'"
     },
     
-    // ═══════════════════════════════════════════════════════════════════
-    // Component-Specific Shortcuts
-    // ═══════════════════════════════════════════════════════════════════
-    
+    // Navigation
     {
-        "key": "cmd+1",
-        "command": "workbench.action.tasks.runTask",
-        "args": "📦 Component: Build selforg"
-    },
-    {
-        "key": "cmd+2",
-        "command": "workbench.action.tasks.runTask",
-        "args": "📦 Component: Build ode_robots"
-    },
-    {
-        "key": "cmd+3",
-        "command": "workbench.action.tasks.runTask",
-        "args": "📦 Component: Build ga_tools"
-    },
-    {
-        "key": "cmd+4",
-        "command": "workbench.action.tasks.runTask",
-        "args": "📦 Component: Build GUI Tools"
+        "key": "cmd+alt+o",
+        "command": "C_Cpp.SwitchHeaderSource",
+        "when": "editorTextFocus && resourceExtname =~ /\\.(cpp|c|cc|cxx|hpp|h)$/"
     },
     
-    // ═══════════════════════════════════════════════════════════════════
-    // Workflow Shortcuts
-    // ═══════════════════════════════════════════════════════════════════
-    
-    {
-        "key": "cmd+shift+1",
-        "command": "workbench.action.tasks.runTask",
-        "args": "🚀 Workflow: Clean Build"
-    },
-    {
-        "key": "cmd+shift+2",
-        "command": "workbench.action.tasks.runTask",
-        "args": "🚀 Workflow: Build and Test"
-    },
-    {
-        "key": "cmd+shift+3",
-        "command": "workbench.action.tasks.runTask",
-        "args": "🚀 Workflow: Simulation Development"
-    },
-    {
-        "key": "cmd+shift+4",
-        "command": "workbench.action.tasks.runTask",
-        "args": "🚀 Workflow: Format and Analyze"
-    },
-    
-    // ═══════════════════════════════════════════════════════════════════
-    // Terminal Shortcuts
-    // ═══════════════════════════════════════════════════════════════════
-    
-    {
-        "key": "ctrl+`",
-        "command": "workbench.action.terminal.toggleTerminal"
-    },
-    {
-        "key": "cmd+shift+`",
-        "command": "workbench.action.terminal.new"
-    },
-    {
-        "key": "cmd+alt+`",
-        "command": "workbench.action.terminal.split",
-        "when": "terminalFocus"
-    },
-    
-    // ═══════════════════════════════════════════════════════════════════
-    // CMake Shortcuts
-    // ═══════════════════════════════════════════════════════════════════
-    
-    {
-        "key": "cmd+shift+c",
-        "command": "cmake.configure"
-    },
-    {
-        "key": "cmd+alt+c",
-        "command": "cmake.clean"
-    },
-    {
-        "key": "cmd+shift+alt+c",
-        "command": "cmake.cleanConfigure"
-    },
-    
-    // ═══════════════════════════════════════════════════════════════════
-    // Quick Actions
-    // ═══════════════════════════════════════════════════════════════════
-    
+    // Quick actions
     {
         "key": "cmd+.",
         "command": "editor.action.quickFix",
-        "when": "editorHasCodeActionsProvider && editorTextFocus"
-    },
-    {
-        "key": "f2",
-        "command": "editor.action.rename",
-        "when": "editorHasRenameProvider && editorTextFocus"
-    },
-    {
-        "key": "cmd+k cmd+i",
-        "command": "editor.action.showHover",
         "when": "editorTextFocus"
-    },
-    
-    // ═══════════════════════════════════════════════════════════════════
-    // Linux/Windows Alternative Bindings (replace cmd with ctrl)
-    // ═══════════════════════════════════════════════════════════════════
-    
-    // For Linux/Windows users, duplicate the above bindings and replace:
-    // - "cmd+" with "ctrl+"
-    // - "cmd+shift+" with "ctrl+shift+"
-    // - "cmd+alt+" with "ctrl+alt+"
-    // - "cmd+shift+alt+" with "ctrl+shift+alt+"
+    }
 ]
