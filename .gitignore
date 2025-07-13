@@ -637,3 +637,7 @@ matrixviz/*.a
 # IDE/editor backup artifacts
 .!*!.*
 *~
+
+# VSCode database files
+.vscode/browse.vc.db
+.vscode/browse.vc.db-*

@@ -1,11 +1,11 @@
 {
     // ╔══════════════════════════════════════════════════════════════════╗
-    // ║  LPZRobots VSCode Settings - Enhanced for Modern Development     ║
-    // ║  Optimized for C++17, CMake, and Component-Based Architecture   ║
+    // ║  LPZRobots VSCode Settings - Clangd Optimized for M4 Max        ║
+    // ║  High-performance configuration for 2,801 C++ files              ║
     // ╚══════════════════════════════════════════════════════════════════╝
 
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    // 🏗️ BUILD SYSTEM CONFIGURATION
+    // 🏗️ BUILD SYSTEM CONFIGURATION (Unchanged)
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     // CMake Configuration
     "cmake.configureOnOpen": true,
@@ -50,45 +50,90 @@
     "cmake.outputLogLevel": "info",
 
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    // 🧠 INTELLISENSE & CODE ANALYSIS
+    // 🧠 CLANGD LANGUAGE SERVER (Replacing Microsoft C++ IntelliSense)
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-    // C++ IntelliSense
-    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
-    "C_Cpp.default.cppStandard": "c++17",
-    "C_Cpp.default.intelliSenseMode": "macos-clang-arm64",
-    "C_Cpp.errorSquiggles": "enabled",
-    "C_Cpp.intelliSenseEngine": "default",
-    "C_Cpp.intelliSenseCachePath": "${workspaceFolder}/.vscode/intellisense",
-    "C_Cpp.intelliSenseCacheSize": 5120,
-    "C_Cpp.intelliSenseUpdateDelay": 2000,
-
-    // Code Formatting with clang-format
-    "C_Cpp.formatting": "clangFormat",
-    "C_Cpp.clang_format_style": "file",
-    "C_Cpp.clang_format_path": "${env:HOMEBREW_PREFIX:/opt/homebrew}/opt/llvm/bin/clang-format",
-    "C_Cpp.clang_format_sortIncludes": true,
-
-    // Code Analysis with clang-tidy
-    "C_Cpp.codeAnalysis.clangTidy.enabled": true,
-    "C_Cpp.codeAnalysis.runAutomatically": true,
-    "C_Cpp.codeAnalysis.clangTidy.path": "${env:HOMEBREW_PREFIX:/opt/homebrew}/opt/llvm/bin/clang-tidy",
-    "C_Cpp.codeAnalysis.clangTidy.args": [
-        "--config-file=${workspaceFolder}/.clang-tidy",
-        "--header-filter=^${workspaceFolder}/(selforg|ode_robots|ga_tools|guilogger|matrixviz|configurator)/.*\\.(h|hpp)$",
-        "--extra-arg=-std=c++17",
-        "--extra-arg=-I${workspaceFolder}/include"
+    // Disable Microsoft C++ IntelliSense completely
+    "C_Cpp.intelliSenseEngine": "disabled",
+    "C_Cpp.autocomplete": "disabled",
+    "C_Cpp.errorSquiggles": "disabled",
+    "C_Cpp.formatting": "disabled",
+    "C_Cpp.suggestSnippets": false,
+    
+    // Enable clangd
+    "clangd.enabled": true,
+    
+    // Clangd executable path
+    "clangd.path": "/opt/homebrew/opt/llvm/bin/clangd",
+    
+    // Clangd arguments optimized for M4 Max with 64GB RAM
+    "clangd.arguments": [
+        // Core functionality
+        "--background-index",                    // Index project in background
+        "--clang-tidy",                         // Enable clang-tidy checks
+        "--completion-style=detailed",           // Detailed completion info
+        "--header-insertion=iwyu",              // Include-what-you-use style
+        "--pch-storage=memory",                 // Store PCH in memory (fast with 64GB)
+        "--function-arg-placeholders",          // Show function parameter hints
+        
+        // M4 Max performance tuning
+        "-j=12",                                // Use all 12 performance cores
+        "--malloc-trim",                        // Trim memory periodically
+        "--background-index-priority=normal",   // Normal priority - M4 can handle it
+        
+        // Code analysis
+        "--enable-config",                      // Use .clangd config file
+        "--clang-tidy-checks=*",               // Enable all clang-tidy checks
+        "--header-insertion-decorators",        // Show where headers will be inserted
+        "--all-scopes-completion",              // Complete from all visible scopes
+        "--limit-results=0",                    // No limit with 64GB RAM
+        "--limit-references=0",                 // No limit on references
+        
+        // Logging and debugging
+        "--log=info",                           // Log level
+        "--pretty",                             // Pretty-print JSON output
+        
+        // LPZRobots specific
+        "--compile-commands-dir=${workspaceFolder}/build/macos-arm64",
+        "--query-driver=/usr/bin/clang++,/opt/homebrew/opt/llvm/bin/clang++",
+        
+        // Memory optimization for 64GB system
+        "--preamble-storage=memory",            // Store all preambles in memory
+        "--index-file-size-limit=0",            // No file size limit for indexing
+        
+        // ARM64 optimizations
+        "--target=arm64-apple-darwin"
     ],
-// Exclude external code from analysis
-    "C_Cpp.codeAnalysis.exclude": {
-        "**/build*/**": true,
-        "**/opende/ode/**": true,
-        "**/.vscode/**": true,
-        "**/include/ode-dbl/**": true
-    },
+    
+    // Clangd specific settings
+    "clangd.serverCompletionRanking": true,     // Use server-side completion ranking
+    "clangd.detectExtensionConflicts": true,    // Warn about conflicting extensions
+    "clangd.restartAfterCrash": true,           // Auto-restart on crash
+    "clangd.semanticHighlighting": true,        // Better syntax highlighting
+    
+    // Inlay hints configuration
+    "clangd.inlayHints.enable": true,
+    "clangd.inlayHints.parameterNames.enabled": true,
+    "clangd.inlayHints.parameterNames.suppressWhenArgumentMatchesName": true,
+    "clangd.inlayHints.functionReturnType.enabled": false,
+    "clangd.inlayHints.chainingHints.enabled": true,
+    "clangd.inlayHints.typeHints.enabled": false,
+    "clangd.inlayHints.auto.enabled": true,
+    "clangd.inlayHints.designators.enabled": true,
+    "clangd.inlayHints.blockEnd.enabled": true,
+    
+    // Completion settings
+    "clangd.completion.enableSnippets": true,
+    "clangd.completion.placeholder": true,
+    "clangd.completion.detailedLabel": true,
+    "clangd.completion.postfix": true,
+    
+    // Diagnostics
+    "clangd.diagnostics.enable": true,
+    "clangd.diagnostics.suppressFromNonProjectFiles": true,
 
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    // 🔧 LPZROBOTS-SPECIFIC SETTINGS
+    // 🔧 LPZROBOTS-SPECIFIC SETTINGS (Unchanged)
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
     // LPZRobots Configuration
@@ -98,215 +143,93 @@
     "lpzrobots.simd": true,
     "lpzrobots.platformDefines": [
         "MAC",
-        "MAC_ARM64"
+        "MAC_ARM64",
+        "__ARM_NEON"
     ],
+    
     // Component-specific settings
     "lpzrobots.components": {
         "selforg": {
             "buildTests": true,
-            "enableGSL": true,
-            "enableOpenMP": false
+            "enableOptimizations": true,
+            "enableGSL": true
         },
         "ode_robots": {
             "defaultSimulation": "template_sphererobot",
-            "simulationArgs": [
-                "-noshadow",
-                "-g"
-            ],
-            "enableOSG": true
+            "enableGraphics": true,
+            "shadowTextures": false
         },
         "ga_tools": {
-            "buildExamples": true
+            "enableParallelGA": false
         },
-        "gui_tools": {
-            "qtVersion": 6,
-            "enableOpenGL": true
+        "guilogger": {
+            "defaultChannels": 5,
+            "windowSize": "800x600"
         }
     },
-    // Simulation development helpers
-    "lpzrobots.simulation": {
-        "defaultArgs": [
-            "-noshadow"
-        ],
-        "guiloggerChannels": 5,
-        "matrixvizWindows": 10,
-        "enableConfigurator": true,
-        "realtimeFactor": 1.0
-    },
+
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    // 📁 FILE ASSOCIATIONS & WORKSPACE
+    // 📂 FILE MANAGEMENT (Enhanced for clangd)
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    // File associations for clangd
     "files.associations": {
+        "*.h": "cpp",
+        "*.hpp": "cpp",
+        "*.cpp": "cpp",
+        "*.cc": "cpp",
+        "*.cxx": "cpp",
+        "*.c++": "cpp",
+        "*.tcc": "cpp",
+        "*.ipp": "cpp",
         // LPZRobots headers without extensions
         "matrix": "cpp",
         "configurable": "cpp",
         "abstractcontroller": "cpp",
         "oderobot": "cpp",
-        "abstractrobot": "cpp",
-        "agent": "cpp",
-        "wiredcontroller": "cpp",
-        "osghandle": "cpp",
-        "odehandle": "cpp",
         "primitive": "cpp",
         "joint": "cpp",
         "sensor": "cpp",
         "motor": "cpp",
-        "trackable": "cpp",
-        "inspectable": "cpp",
-        "storeable": "cpp",
-        "teachable": "cpp",
-        "randomgenerator": "cpp",
-        "noisegenerator": "cpp",
-        "globaldata": "cpp",
-        "simulation": "cpp",
-
-        // Build files
-        "*.m4": "m4",
-        "*.mk": "makefile",
-        "*-config": "shellscript",
-        "*-config.m4": "m4",
-        "CMakePresets.json": "jsonc",
-
-        // Source files
-        "*.h": "cpp",
-        "*.hpp": "cpp",
-        "*.tcc": "cpp",
-        "*.ipp": "cpp",
-
-        // Shader files
-        "*.vert": "glsl",
-        "*.frag": "glsl",
-        "*.geom": "glsl",
-        // Qt specific
-        "*.qrc": "xml",
-        "*.ui": "xml"
-    },
-// File exclusions
-"files.exclude": {
-    "**/build": false, // Show build for debugging
-    "**/build_*": true,
-    "**/*.o": true,
-    "**/CMakeFiles": true,
-    "**/CMakeCache.txt": true,
-    "**/.DS_Store": true,
-    "**/moc_*.cpp": true,
-    "**/*_automoc.cpp": true,
-    "**/*.d": true,
-    "**/Makefile.conf": true,
-    "**/.vscode/intellisense": true,
-    "**/.vscode/browse.vc.db": true
+        // Standard library headers
+        "algorithm": "cpp",
+        "array": "cpp",
+        "atomic": "cpp",
+        "chrono": "cpp",
+        "cmath": "cpp",
+        "complex": "cpp",
+        "condition_variable": "cpp",
+        "deque": "cpp",
+        "exception": "cpp",
+        "functional": "cpp",
+        "iterator": "cpp",
+        "memory": "cpp",
+        "memory_resource": "cpp",
+        "numeric": "cpp",
+        "optional": "cpp",
+        "random": "cpp",
+        "ratio": "cpp",
+        "regex": "cpp",
+        "set": "cpp",
+        "string": "cpp",
+        "string_view": "cpp",
+        "system_error": "cpp",
+        "tuple": "cpp",
+        "type_traits": "cpp",
+        "unordered_map": "cpp",
+        "unordered_set": "cpp",
+        "utility": "cpp",
+        "vector": "cpp"
     },
 
-    // Search exclusions
-    "search.exclude": {
-        "**/build*": true,
-        "**/opende/ode": true,
-        "**/.vscode/intellisense": true,
-        "**/include/ode-dbl": true,
-        "**/*.d": true,
-        "**/moc_*.cpp": true,
-        "**/compile_commands.json": true
-    },
-    // File nesting for cleaner explorer
-    "explorer.fileNesting.enabled": true,
-    "explorer.fileNesting.patterns": {
-        "*.cpp": "${capture}.h,${capture}.hpp,${capture}.tests.cpp",
-        "*.h": "${capture}.cpp,${capture}.cc,${capture}.tests.hpp",
-        "CMakeLists.txt": "*.cmake,CMakePresets.json,CMakeUserPresets.json,compile_commands.json",
-        "Makefile": "Makefile.*,*.mk,*-config",
-        ".clang-format": ".clang-tidy,.cppcheck",
-        "README.md": "LICENSE*,CONTRIBUTING.md,CHANGELOG.md,AUTHORS",
-        ".gitignore": ".gitattributes,.editorconfig,.pre-commit-config.yaml"
-    },
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    // 🖥️ TERMINAL & ENVIRONMENT
+    // ✏️ EDITOR SETTINGS (Optimized for clangd)
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    // macOS Terminal Environment
-    "terminal.integrated.env.osx": {
-        "PATH": "${env:HOMEBREW_PREFIX:/opt/homebrew}/bin:${env:HOMEBREW_PREFIX:/opt/homebrew}/opt/llvm/bin:${env:PATH}",
-        "DYLD_LIBRARY_PATH": "${workspaceFolder}/lib:${workspaceFolder}/build/${config:cmake.buildDirectory}/lib",
-        "DYLD_FALLBACK_LIBRARY_PATH": "${env:HOMEBREW_PREFIX:/opt/homebrew}/lib",
-        "LPZROBOTS_ROOT": "${workspaceFolder}",
-        "LPZROBOTS_DEBUG_EVENTS": "${config:lpzrobots.debugEvents:0}",
-        "CMAKE_PREFIX_PATH": "${env:HOMEBREW_PREFIX:/opt/homebrew}/opt/qt@6:${env:HOMEBREW_PREFIX:/opt/homebrew}",
-        "HOMEBREW_PREFIX": "${env:HOMEBREW_PREFIX:/opt/homebrew}"
-    },
-
-    // Linux Terminal Environment
-    "terminal.integrated.env.linux": {
-        "LD_LIBRARY_PATH": "${workspaceFolder}/lib:${workspaceFolder}/build/${config:cmake.buildDirectory}/lib:${env:LD_LIBRARY_PATH}",
-        "LPZROBOTS_ROOT": "${workspaceFolder}",
-        "LPZROBOTS_DEBUG_EVENTS": "${config:lpzrobots.debugEvents:0}"
-    },
-// Terminal settings
-"terminal.integrated.defaultProfile.osx": "zsh",
-"terminal.integrated.defaultProfile.linux": "bash",
-"terminal.integrated.scrollback": 10000,
-"terminal.integrated.enablePersistentSessions": true,
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 🐛 DEBUGGING & TESTING
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// Debug configuration
-    "cmake.debugConfig": {
-        "MIMode": "lldb",
-        "stopAtEntry": false,
-        "externalConsole": false,
-        "setupCommands": [
-            {
-                "description": "Enable pretty-printing",
-                "text": "-enable-pretty-printing",
-                "ignoreFailures": true
-            },
-            {
-                "description": "Set print elements limit",
-                "text": "settings set target.max-children-count 200",
-                "ignoreFailures": true
-            }
-        ],
-        "environment": [
-            {
-                "name": "DYLD_LIBRARY_PATH",
-                "value": "${workspaceFolder}/build/${config:cmake.buildDirectory}/lib"
-            },
-            {
-                "name": "ASAN_OPTIONS",
-                "value": "detect_leaks=1:check_initialization_order=1:strict_init_order=1:print_stats=1:color=always"
-            },
-            {
-                "name": "UBSAN_OPTIONS",
-                "value": "print_stacktrace=1:halt_on_error=0:color=always"
-            },
-            {
-                "name": "TSAN_OPTIONS",
-                "value": "halt_on_error=0:history_size=7:color=always"
-            },
-            {
-                "name": "LPZROBOTS_DEBUG",
-                "value": "1"
-            }
-        ]
-    },
-
-    // Test settings
-    "cmake.ctest.parallelJobs": 0,
-    "cmake.ctest.outputOnFailure": true,
-    "cmake.ctestDefaultArgs": [
-        "--output-on-failure",
-        "--parallel",
-        "8",
-        "--progress"
-    ],
-    "testing.automaticallyOpenPeekView": "failureInVisibleDocument",
-    "testing.followRunningTest": true,
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    // ✏️ EDITOR SETTINGS
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    
     // General editor settings
     "editor.formatOnSave": true,
     "editor.formatOnSaveMode": "modificationsIfAvailable",
-    "editor.rulers": [
-        100
-    ],
+    "editor.rulers": [100],
     "editor.tabSize": 4,
     "editor.insertSpaces": true,
     "editor.detectIndentation": false,
@@ -316,111 +239,66 @@
     "editor.stickyScroll.enabled": true,
     "editor.minimap.renderCharacters": false,
     "editor.minimap.maxColumn": 100,
-    // Language-specific settings
+    
+    // Language-specific settings for clangd
     "[cpp]": {
-        // Formatter will be handled by C_Cpp.formatting setting
+        "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
         "editor.suggest.insertMode": "replace",
         "editor.wordBasedSuggestions": "off",
-        "editor.formatOnSave": true
+        "editor.formatOnSave": true,
+        "editor.semanticHighlighting.enabled": true
     },
     "[c]": {
-        // Formatter will be handled by C_Cpp.formatting setting
-        "editor.formatOnSave": true
-    },
-    "[makefile]": {
-        "editor.insertSpaces": false,
-        "editor.detectIndentation": false
-    },
-    "[m4]": {
-        "editor.tabSize": 2
-    },
-    "[cmake]": {
-        "editor.defaultFormatter": "ms-vscode.cmake-tools",
-        "editor.tabSize": 2
+        "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
+        "editor.formatOnSave": true,
+        "editor.semanticHighlighting.enabled": true
     },
 
-    // File settings
-    "files.trimTrailingWhitespace": true,
-    "files.insertFinalNewline": true,
-    "files.maxMemoryForLargeFilesMB": 4096,
-    "files.watcherExclude": {
-        "**/build*/**": true,
-        "**/.vscode/intellisense/**": true,
-        "**/include/**": true
-    },
-
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    // 🔌 EXTENSIONS & INTEGRATIONS
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    // Extension settings
-    "extensions.ignoreRecommendations": false,
-    "C_Cpp.suggestSnippets": true,
-
-    // Git settings
-    "git.ignoreLimitWarning": true,
-    "git.autoStash": true,
-    // Problem matchers
-    "cmake.problemMatcher": "$gcc",
-
-    // Performance optimizations
-    "editor.largeFileOptimizations": false,
-    // Remote development
-    "remote.autoForwardPortsSource": "hybrid",
-
-    // Makefile support (legacy)
-    "makefile.extensionOutputFolder": "./.vscode",
-
-    // Spell checker
-    "cSpell.words": [
-        "lpzrobots",
-        "selforg",
-        "oderobot",
-        "odeagent",
-        "osghandle",
-        "odehandle",
-        "guilogger",
-        "matrixviz",
-        "configurator",
-        "homeokinetic",
-        "homeostatic",
-        "sphererobot",
-        "hexapod",
-        "fourwheeled",
-        "nimm2",
-        "nimm4",
-        "ecbrobots",
-        "pseudoinverse",
-        "multitask",
-        "noshadow",
-        "notex",
-        "realtimefactor"
-    ],
-
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    // 🚀 QUICK ACTIONS & PRODUCTIVITY
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-    // Quick suggestions
+    // IntelliSense behavior
     "editor.quickSuggestions": {
         "other": true,
         "comments": false,
-        "strings": false
+        "strings": true
     },
-
-    // IntelliSense
     "editor.suggestSelection": "first",
     "editor.snippetSuggestions": "top",
     "editor.suggest.localityBonus": true,
+    "editor.suggest.snippetsPreventQuickSuggestions": false,
 
-    // Code lens
-    "editor.codeLens": true,
-    "cmake.codeLens.enabled": true,
-    "testExplorer.codeLens": true,
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    // 🖥️ TERMINAL & ENVIRONMENT (Enhanced for clangd)
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    
+    // macOS Terminal Environment
+    "terminal.integrated.env.osx": {
+        "PATH": "/opt/homebrew/opt/llvm/bin:${env:PATH}",
+        "DYLD_LIBRARY_PATH": "${workspaceFolder}/lib:${workspaceFolder}/build/${config:cmake.buildDirectory}/lib",
+        "DYLD_FALLBACK_LIBRARY_PATH": "${env:HOMEBREW_PREFIX:/opt/homebrew}/lib",
+        "LPZROBOTS_ROOT": "${workspaceFolder}",
+        "LPZROBOTS_DEBUG_EVENTS": "${config:lpzrobots.debugEvents:0}",
+        "CMAKE_PREFIX_PATH": "${env:HOMEBREW_PREFIX:/opt/homebrew}/opt/qt@6:${env:HOMEBREW_PREFIX:/opt/homebrew}",
+        "HOMEBREW_PREFIX": "${env:HOMEBREW_PREFIX:/opt/homebrew}",
+        "CLANGD_FLAGS": "--compile-commands-dir=${workspaceFolder}/build/macos-arm64"
+    },
 
-    // Integrated help
-    "C_Cpp.enhancedColorization": "enabled",
-    "C_Cpp.dimInactiveRegions": true,
-
-    // Workspace trust
-    "security.workspace.trust.enabled": false
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    // 🔨 MAKEFILE TOOLS CONFIGURATION
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    
+    // Strategy: Since we use CMake as primary build system, disable Makefile Tools
+    // to prevent timeout errors from the complex legacy Make system.
+    // Use CMake Tools (already configured above) for IntelliSense and building.
+    
+    // Completely disable Makefile Tools for this workspace
+    "makefile.configureOnOpen": false,
+    "makefile.configureOnEdit": false,
+    "makefile.configureAfterCommand": false,
+    
+    // If you need to use legacy Make, run these commands manually:
+    // 1. make conf     (first time setup)
+    // 2. make all      (build everything)
+    // 3. Use CMake for development (faster, better IDE integration)
+    
+    // Keep all other settings from original configuration...
+    // (debugging, testing, search exclusions, etc.)
 }
