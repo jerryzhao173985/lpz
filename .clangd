@@ -10,9 +10,10 @@ CompileFlags:
     - -Wpedantic
     - -DMAC
     - -DMAC_ARM64
-    # ARM64 NEON optimizations
-    - -march=armv8.5-a+fp16+simd+crypto+dotprod
-    - -mtune=apple-m4
+    # Apple M4 Max optimizations
+    - -mcpu=apple-m4
+    - -O3
+    - -arch arm64
   Remove:
     - -W*  # Remove all other warning flags to avoid conflicts
   # Use homebrew LLVM compiler for consistency
@@ -36,6 +37,18 @@ Index:
   
   # Heavy file threshold - with 64GB, we can handle large files
   HeavyweightThreshold: 2097152  # 2MB
+  
+  # File watcher for automatic reindexing
+  FileWatcher: Yes
+  
+  # Build preambles on demand
+  BuildPreamble: Yes
+  
+  # Eager indexing of main files
+  MainFile: Yes
+  
+  # Cross-reference support
+  CrossReferences: Yes
 
 Diagnostics:
   # Use project's clang-tidy configuration
@@ -89,19 +102,6 @@ Completion:
   # No result limit with 64GB RAM
   Limit: 0
 
-# Optimizations for large codebase
-Index:
-  # File watcher for automatic reindexing
-  FileWatcher: Yes
-  
-  # Build preambles on demand
-  BuildPreamble: Yes
-  
-  # Eager indexing of main files
-  MainFile: Yes
-  
-  # Cross-reference support
-  CrossReferences: Yes
 
 # Memory settings optimized for 64GB system
 MemoryCleanup:

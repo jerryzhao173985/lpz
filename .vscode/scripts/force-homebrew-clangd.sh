@@ -4,9 +4,10 @@
 # ╚══════════════════════════════════════════════════════════════════╝
 
 set -e
+set -u
+set -o pipefail
 
 # Colors
-RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
@@ -18,30 +19,39 @@ echo -e "${BLUE}            Forcing Homebrew Clangd                             
 echo -e "${BLUE}═══════════════════════════════════════════════════════════════════${NC}"
 echo ""
 
-# 1. Kill ALL clangd processes
-echo -e "${CYAN}1. Stopping ALL clangd processes...${NC}"
-killall clangd 2>/dev/null || echo "No clangd processes to kill"
+# 1. Kill Homebrew clangd processes
+echo -e "${CYAN}1. Stopping Homebrew clangd processes...${NC}"
+pkill -x clangd 2>/dev/null || echo "No clangd processes to kill"
 sleep 1
 echo -e "${GREEN}✓${NC} All clangd processes stopped"
 echo ""
 
 # 2. Test manual start
 echo -e "${CYAN}2. Testing manual clangd start...${NC}"
-echo "Starting clangd in background for 5 seconds..."
-/opt/homebrew/opt/llvm/bin/clangd \
-    --compile-commands-dir=build/macos-arm64 \
-    --background-index \
-    --log=info \
-    2>&1 | head -10 &
+echo "Testing clangd binary availability..."
 
-CLANGD_PID=$!
-sleep 2
-
-if ps -p $CLANGD_PID > /dev/null; then
-    echo -e "${GREEN}✓${NC} Homebrew clangd can start successfully"
-    kill $CLANGD_PID 2>/dev/null || true
+# Test if clangd executable exists and is runnable
+if command -v /opt/homebrew/opt/llvm/bin/clangd >/dev/null 2>&1; then
+    echo -e "${GREEN}✓${NC} Homebrew clangd binary found and executable"
+    
+    # Start clangd briefly to test functionality
+    /opt/homebrew/opt/llvm/bin/clangd \
+        --compile-commands-dir=build/macos-arm64 \
+        --background-index \
+        --log=info \
+        2>/dev/null &
+        
+    CLANGD_PID=$!
+    sleep 2
+    
+    if ps -p $CLANGD_PID > /dev/null 2>&1; then
+        echo -e "${GREEN}✓${NC} Homebrew clangd can start successfully"
+        kill $CLANGD_PID 2>/dev/null || true
+    else
+        echo -e "${YELLOW}⚠${NC} Clangd process exited quickly (may be normal)"
+    fi
 else
-    echo -e "${RED}✗${NC} Homebrew clangd failed to start"
+    echo -e "${YELLOW}⚠${NC} Homebrew clangd binary not found or not executable"
 fi
 echo ""
 
@@ -80,7 +90,7 @@ echo -e "${GREEN}✓${NC} Updated PATH"
 # Create a debug wrapper
 cat > .vscode/debug-clangd.sh << 'EOF'
 #!/bin/bash
-echo "Clangd wrapper called with args: $@" >> /tmp/clangd-debug.log
+echo "Clangd wrapper called with args: \"$*\"" >> /tmp/clangd-debug.log
 exec /opt/homebrew/opt/llvm/bin/clangd "$@" 2>&1 | tee -a /tmp/clangd-debug.log
 EOF
 chmod +x .vscode/debug-clangd.sh

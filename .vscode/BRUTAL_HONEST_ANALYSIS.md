@@ -58,7 +58,7 @@ Answer: No evidence of any
 
 #### 2. We Violated Core Principles
 - **KISS (Keep It Simple)**: Made it complex
-- **YAGNI (You Aren't Gonna Need It)**: Added features nobody asked for
+- **YAGNI (You Are Not Going to Need It)**: Added features nobody asked for
 - **Measure First**: Never benchmarked the original
 - **User-Centric**: Solved our problem, not user's
 

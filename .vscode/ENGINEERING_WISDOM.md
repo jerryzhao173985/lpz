@@ -171,7 +171,7 @@ Net result:           -2 hours productivity
 
 ### For Engineering:
 1. **Premature optimization is evil**
-2. **YAGNI** - You Aren't Gonna Need It
+2. **YAGNI** - You Are Not Going to Need It
 3. **KISS** - Keep It Simple, Stupid
 4. **Measure twice, code once**
 

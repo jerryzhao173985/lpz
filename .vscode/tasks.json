@@ -15,8 +15,17 @@
                 "-j=12",
                 "--limit-results=100"
             ],
-            "problemMatcher": [],
             "isBackground": true,
+            "problemMatcher": [
+                {
+                    "owner": "clangd-startup",
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": ".",
+                        "endsPattern": "."
+                    }
+                }
+            ],
             "presentation": {
                 "reveal": "never",
                 "panel": "dedicated"
@@ -25,8 +34,8 @@
         {
             "label": "Kill All Clangd",
             "type": "shell",
-            "command": "killall",
-            "args": ["clangd"],
+            "command": "pkill",
+            "args": ["-f", "/opt/homebrew/opt/llvm/bin/clangd"],
             "problemMatcher": []
         }
     ]

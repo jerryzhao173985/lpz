@@ -33,7 +33,7 @@ This PR preserves a **FAILED** attempt to optimize VSCode for the LPZRobots code
 - We assumed 200-500ms was "slow" - it's actually industry standard
 - Never optimized without benchmarking first
 
-### 2. YAGNI (You Aren't Gonna Need It)
+### 2. YAGNI (You Are Not Going to Need It)
 - 15 scripts for tasks that could be one-liners
 - Multiple ways to do the same thing = confusion
 

@@ -4,6 +4,8 @@
 # ╚══════════════════════════════════════════════════════════════════╝
 
 set -e
+set -u
+set -o pipefail
 
 # Colors
 RED='\033[0;31m'
@@ -25,7 +27,7 @@ fi
 
 # List available backups
 echo -e "${YELLOW}Available backups:${NC}"
-backups=($(ls -1 .vscode/backups/settings.json.backup-* 2>/dev/null | sort -r))
+readarray -t backups < <(find .vscode/backups -maxdepth 1 -name 'settings.json.backup-*' 2>/dev/null | sed 's|.vscode/backups/||' | sort -r)
 
 if [ ${#backups[@]} -eq 0 ]; then
     echo -e "${RED}No backups found${NC}"

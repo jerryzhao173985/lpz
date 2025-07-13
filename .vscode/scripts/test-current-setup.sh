@@ -11,7 +11,6 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
-MAGENTA='\033[0;35m'
 CYAN='\033[0;36m'
 NC='\033[0m'
 
@@ -177,7 +176,7 @@ echo '```' >> "$RESULTS_FILE"
 
 # Test 5.2: System memory
 run_test "Available system memory" \
-    "vm_stat | grep 'Pages free' | awk '{print \$3 * 4096 / 1024 / 1024 / 1024 \" GB\"}'" \
+    "vm_stat | awk '/Pages free/ { gsub(/\\./,\"\",\$3); printf \"%.2f GB\", \$3 * 4096 / (1024*1024*1024) }'" \
     "Sufficient memory available"
 
 print_section "6. Extension Compatibility"
