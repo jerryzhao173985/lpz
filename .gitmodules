@@ -1,0 +1,3 @@
+[submodule "cppcheck-studio"]
+	path = cppcheck-studio
+	url = https://github.com/jerryzhao173985/cppcheck-studio.git
