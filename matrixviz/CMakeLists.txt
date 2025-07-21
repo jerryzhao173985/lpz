@@ -134,7 +134,7 @@ if(APPLE)
         MACOSX_BUNDLE TRUE
         MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in
     )
-    
+
     # Avoid deprecated OpenGL warnings on macOS
     target_compile_definitions(matrixviz PRIVATE GL_SILENCE_DEPRECATION)
 elseif(WIN32)
@@ -147,7 +147,9 @@ endif()
 target_compile_features(matrixviz PRIVATE cxx_std_17)
 
 # Apply comprehensive macOS Qt configuration
-lpzrobots_configure_qt_macos(matrixviz)
+if(APPLE AND COMMAND lpzrobots_configure_qt_macos)
+    lpzrobots_configure_qt_macos(matrixviz)
+endif()
 
 # Compiler options
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
@@ -179,12 +181,32 @@ install(TARGETS matrixviz
     BUNDLE DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
-# Install configuration files
-install(FILES
-    matrixVizConf.xml
-    DESTINATION ${LPZROBOTS_DATA_DIR}/config
-    RENAME matrixviz.conf
-)
+# ---------------------------------------------------------------------------
+# Install configuration file (matrixVizConf.xml)
+#
+# Resolution order:
+#   1) File located next to this CMakeLists.txt           (recommended)
+#   2) Fallback to project-root level copy
+# If neither copy is found we emit a warning so packagers/users
+# immediately know why the file is missing after installation.
+# ---------------------------------------------------------------------------
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/matrixVizConf.xml")
+    message(STATUS "matrixviz: installing local matrixVizConf.xml")
+    install(FILES
+        "${CMAKE_CURRENT_SOURCE_DIR}/matrixVizConf.xml"
+        DESTINATION ${LPZROBOTS_DATA_DIR}/config
+        RENAME matrixviz.conf
+    )
+elseif(EXISTS "${CMAKE_SOURCE_DIR}/matrixVizConf.xml")
+    message(STATUS "matrixviz: installing root-level matrixVizConf.xml")
+    install(FILES
+        "${CMAKE_SOURCE_DIR}/matrixVizConf.xml"
+        DESTINATION ${LPZROBOTS_DATA_DIR}/config
+        RENAME matrixviz.conf
+    )
+else()
+    message(WARNING "matrixviz: matrixVizConf.xml not found - default configuration will be used and no config file will be installed")
+endif()
 
 # Create wrapper script for non-bundle installations
 if(NOT APPLE)

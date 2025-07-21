@@ -23,6 +23,9 @@ set(SELFORG_SOURCES
 )
 
 
+# Create a dummy target for dependency tracking
+add_custom_target(selforg_headers)
+
 # Create library
 add_library(selforg ${SELFORG_SOURCES})
 add_library(lpzrobots::selforg ALIAS selforg)
@@ -116,9 +119,6 @@ set_target_properties(selforg PROPERTIES
 
 # Create header symlinks for development using unified function
 lpzrobots_create_header_symlinks(selforg)
-
-# Create a dummy target for dependency tracking
-add_custom_target(selforg_headers)
 
 # Dependency already added above after add_library
 

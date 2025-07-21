@@ -109,7 +109,9 @@ endif()
 target_compile_features(guilogger PRIVATE cxx_std_17)
 
 # Apply comprehensive macOS Qt configuration
-lpzrobots_configure_qt_macos(guilogger)
+if(APPLE AND COMMAND lpzrobots_configure_qt_macos)
+    lpzrobots_configure_qt_macos(guilogger)
+endif()
 
 # Compiler options
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")

@@ -20,6 +20,13 @@ include(LPZRobotsLibrary)
 include(LPZRobotsDependencies)
 include(LPZRobotsTargets)
 
+# ------------------------------------------------------------------
+# Initialise LPZRobots core (defines install paths, compiler flags,
+# platform fixes, dependency variables, etc.)
+# ------------------------------------------------------------------
+lpzrobots_configure()
+lpzrobots_print_summary()
+
 # Include platform-specific fixes
 if(APPLE)
     include(LPZRobotsMacOSFixes)
@@ -53,30 +60,9 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "RelWithDebInfo" "MinSizeRel")
 endif()
 
-# Compiler warnings
-if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
-    add_compile_options(
-        -Wall -Wextra -Wpedantic
-        -Wcast-align -Wcast-qual
-        -Wformat=2 -Wuninitialized
-        -Wunused -Wunused-function
-        -Wunused-label -Wunused-value
-        -Wunused-variable -Wunused-parameter
-        -Wwrite-strings -Wpointer-arith
-        -Wredundant-decls -Woverloaded-virtual
-        -Wsign-promo -Wformat-security
-        -Wnon-virtual-dtor -Wold-style-cast
-        -Wno-unused-parameter # Too many false positives
-        -Wno-sign-conversion # Too noisy for now
-        -Wno-conversion # Too many warnings, suppress for cleaner CI output
-        -Wno-zero-as-null-pointer-constant # Too many warnings, suppress for cleaner CI output
-        -Wno-float-conversion # Too many warnings, suppress for cleaner CI output
-    )
-
-    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-        add_compile_options(-Wlogical-op -Wnoexcept)
-    endif()
-endif()
+# Compiler warnings are handled centrally in cmake/LPZRobotsCompiler.cmake
+# Components receive warnings via lpzrobots_apply_compiler_settings()
+# This avoids duplicate/conflicting warning configurations
 
 # Coverage configuration
 if(LPZROBOTS_ENABLE_COVERAGE)
@@ -206,8 +192,11 @@ if(APPLE)
     set(CMAKE_INSTALL_RPATH "@loader_path/../lib")
 endif()
 
-# Find dependencies using unified function
-lpzrobots_find_dependencies()
+# Find dependencies using unified function with categorization
+lpzrobots_find_dependencies(
+    REQUIRED Threads ODE
+    OPTIONAL OpenSceneGraph Qt GSL
+)
 
 # OpenGL (needed for graphics)
 if(APPLE)
@@ -290,6 +279,23 @@ if(BUILD_TESTS)
     add_subdirectory(tests)
 endif()
 
+# Custom clean targets for safer cleanup
+add_custom_target(clean-all
+    COMMAND ${CMAKE_COMMAND} -E echo "Cleaning all build artifacts..."
+    COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_BINARY_DIR}"
+    COMMAND ${CMAKE_COMMAND} -E echo "Build directory cleaned. Run cmake again to rebuild."
+    COMMENT "Remove entire build directory"
+)
+
+# Add a target to show what would be cleaned
+add_custom_target(clean-check
+    COMMAND ${CMAKE_COMMAND} -E echo "Build directory: ${CMAKE_BINARY_DIR}"
+    COMMAND ${CMAKE_COMMAND} -E echo "Install prefix: ${CMAKE_INSTALL_PREFIX}"
+    COMMAND ${CMAKE_COMMAND} -E echo "Use 'make clean' to clean build artifacts"
+    COMMAND ${CMAKE_COMMAND} -E echo "Use 'make clean-all' to remove entire build directory"
+    COMMENT "Show what clean targets would affect"
+)
+
 # Package configuration
 include(CMakePackageConfigHelpers)
 
@@ -298,6 +304,15 @@ write_basic_package_version_file(
     "${CMAKE_CURRENT_BINARY_DIR}/lpzrobotsConfigVersion.cmake"
     VERSION ${PROJECT_VERSION}
     COMPATIBILITY SameMajorVersion
+)
+
+# ------------------------------------------------------------------
+# Generate lpzrobotsConfig.cmake so that install step can find it
+# ------------------------------------------------------------------
+configure_package_config_file(
+    "${CMAKE_SOURCE_DIR}/cmake/LPZRobotsConfig.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/lpzrobotsConfig.cmake"
+    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/lpzrobots
 )
 
 # Install package configuration

@@ -281,6 +281,21 @@ endfunction()
 # This function creates both hierarchical and flattened symlinks to support
 # both include styles: <component/subdir/header.h> and <component/header.h>
 function(lpzrobots_create_header_symlinks component)
+    # Use a lock file to prevent race conditions in parallel configuration
+    set(LOCK_FILE "${CMAKE_BINARY_DIR}/.header_symlink.lock")
+    set(LOCK_TIMEOUT 30)  # 30 second timeout
+    
+    # Lock to ensure only one process creates symlinks at a time
+    file(LOCK ${LOCK_FILE} TIMEOUT ${LOCK_TIMEOUT} RESULT_VARIABLE lock_result)
+    
+    # Check if lock was acquired successfully
+    if(NOT lock_result EQUAL 0)
+        message(FATAL_ERROR 
+            "Failed to acquire header symlink lock after ${LOCK_TIMEOUT} seconds. "
+            "Another CMake process may be stuck. Try removing ${LOCK_FILE} and reconfiguring. "
+            "Error code: ${lock_result}")
+    endif()
+    
     # Create component include directory in source tree's unified include dir
     set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include/${component})
     file(MAKE_DIRECTORY ${INCLUDE_DIR})
@@ -298,6 +313,9 @@ function(lpzrobots_create_header_symlinks component)
     list(FILTER HEADER_FILES EXCLUDE REGEX ".*/build.*/.*")
     list(FILTER HEADER_FILES EXCLUDE REGEX ".*/include/.*")  # Avoid recursion
     
+    # Track created symlinks to avoid conflicts
+    set(CREATED_FLATTENED_LINKS "" CACHE INTERNAL "List of created flattened symlinks")
+    
     # Create symlinks at configure time
     foreach(header ${HEADER_FILES})
         # Get relative path from component root
@@ -309,25 +327,31 @@ function(lpzrobots_create_header_symlinks component)
         if(NOT "${header_dir}" STREQUAL "")
             file(MAKE_DIRECTORY ${INCLUDE_DIR}/${header_dir})
             set(hierarchical_link ${INCLUDE_DIR}/${rel_path})
+            # Use file(CREATE_LINK) which is atomic and handles existing links better
             if(NOT EXISTS ${hierarchical_link})
-                execute_process(
-                    COMMAND ${CMAKE_COMMAND} -E create_symlink ${header} ${hierarchical_link}
-                    RESULT_VARIABLE result
-                    ERROR_QUIET
-                )
+                file(CREATE_LINK ${header} ${hierarchical_link} SYMBOLIC)
             endif()
         endif()
         
         # Create flattened symlink (just the filename in component root)
         set(flattened_link ${INCLUDE_DIR}/${header_name})
-        if(NOT EXISTS ${flattened_link})
-            execute_process(
-                COMMAND ${CMAKE_COMMAND} -E create_symlink ${header} ${flattened_link}
-                RESULT_VARIABLE result
-                ERROR_QUIET
-            )
+        # Check if another component already created this flattened link
+        list(FIND CREATED_FLATTENED_LINKS ${flattened_link} link_index)
+        if(${link_index} EQUAL -1 AND NOT EXISTS ${flattened_link})
+            file(CREATE_LINK ${header} ${flattened_link} SYMBOLIC)
+            list(APPEND CREATED_FLATTENED_LINKS ${flattened_link})
+            set(CREATED_FLATTENED_LINKS ${CREATED_FLATTENED_LINKS} CACHE INTERNAL "List of created flattened symlinks" FORCE)
+        elseif(EXISTS ${flattened_link})
+            # Warn if a different component is trying to create the same flattened link
+            file(READ_SYMLINK ${flattened_link} existing_target)
+            if(NOT "${existing_target}" STREQUAL "${header}")
+                message(WARNING "Flattened symlink conflict for ${header_name}: existing link points to ${existing_target}, skipping link from ${header}")
+            endif()
         endif()
     endforeach()
+    
+    # Release the lock
+    file(LOCK ${LOCK_FILE} RELEASE)
     
     # Add the unified include directory to this target's interface
     if(TARGET ${component})

@@ -10,5 +10,7 @@ if(BUILD_TESTS)
     )
     
     # Apply macOS Qt configuration to avoid AGL framework issues
-    lpzrobots_configure_qt_macos(configurator_test)
+    if(APPLE AND COMMAND lpzrobots_configure_qt_macos)
+        lpzrobots_configure_qt_macos(configurator_test)
+    endif()
 endif()
