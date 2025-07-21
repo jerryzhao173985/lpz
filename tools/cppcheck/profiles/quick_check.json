@@ -1,0 +1,46 @@
+{
+  "name": "Quick Check Profile",
+  "description": "Fast analysis for development - focuses on critical issues only",
+  "extends": "base",
+  "checks": {
+    "enable": [
+      "warning",
+      "style",
+      "performance"
+    ],
+    "disable": [
+      "portability",
+      "information"
+    ]
+  },
+  "settings": {
+    "check-level": "normal",
+    "max-configs": 1,
+    "max-ctu-depth": 2,
+    "performance-valueflow-max-iterations": 2
+  },
+  "suppressions": [
+    "missingInclude",
+    "missingIncludeSystem",
+    "unmatchedSuppression",
+    "unusedFunction",
+    "unknownMacro",
+    "toomanyconfigs",
+    "purgedConfiguration"
+  ],
+  "paths": {
+    "limit_to_changed": true,
+    "exclude_tests": true,
+    "exclude_examples": true
+  },
+  "output": {
+    "template": "{file}:{line}: {severity}: {message}",
+    "quiet": true,
+    "errors_only": false,
+    "xml": false
+  },
+  "cache": {
+    "enabled": true,
+    "incremental": true
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "name": "Comprehensive Analysis Profile",
+  "description": "Thorough analysis with all checks enabled - use for complete code review",
+  "extends": "base",
+  "checks": {
+    "enable": [
+      "all"
+    ]
+  },
+  "settings": {
+    "check-level": "exhaustive",
+    "max-ctu-depth": 30,
+    "max-configs": 30,
+    "performance-valueflow-max-iterations": 50,
+    "inconclusive": true
+  },
+  "addons": [
+    "cert.py",
+    "misra.py",
+    "threadsafety.py"
+  ],
+  "libraries": [
+    "std",
+    "posix",
+    "qt",
+    "opengl",
+    "gnu",
+    "googletest"
+  ],
+  "suppressions": [
+    "missingIncludeSystem",
+    "unmatchedSuppression"
+  ],
+  "output": {
+    "template": "{file}:{line}: {severity}: {message}",
+    "template-location": "{file}:{line}:{column}: {info}",
+    "xml": true,
+    "xml-version": 2,
+    "plist-output": true
+  },
+  "reports": {
+    "html": true,
+    "metrics": true,
+    "call-graph": true,
+    "statistics": true
+  },
+  "analysis": {
+    "check-headers": true,
+    "check-unused-templates": true,
+    "max-template-recursion": 200,
+    "analyze-all-vs-one": true
+  }
+}

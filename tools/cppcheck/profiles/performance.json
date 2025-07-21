@@ -1,0 +1,82 @@
+{
+  "name": "Performance Analysis Profile",
+  "description": "Identifies performance bottlenecks and optimization opportunities",
+  "extends": "base",
+  "checks": {
+    "enable": [
+      "performance",
+      "style"
+    ],
+    "specific": [
+      "passedByValue",
+      "postfixOperator",
+      "redundantAssignment",
+      "redundantCopy",
+      "redundantCopyInSwitch",
+      "redundantCopyLocalConst",
+      "inefficientAlgorithm",
+      "stlSize",
+      "uselessCallsCompare",
+      "uselessCallsEmpty",
+      "uselessCallsRemove",
+      "uselessCallsSubstr",
+      "uselessCallsSwap",
+      "containerOutOfBounds",
+      "eraseDereference",
+      "iterators1",
+      "iterators2",
+      "iterators3",
+      "mismatchingContainers",
+      "stlBoundaries",
+      "stlIfFind",
+      "stlIfStrFind",
+      "stlOutOfBounds",
+      "string_c_str",
+      "useInitializationList",
+      "functionConst",
+      "functionStatic",
+      "initializerList",
+      "knownConditionTrueFalse",
+      "multiCondition",
+      "oppositeExpression",
+      "duplicateExpression",
+      "duplicateExpressionTernary",
+      "assignmentInAssert",
+      "badBitmaskCheck",
+      "comparisonError",
+      "comparisonFunctionIsAlwaysTrueOrFalse",
+      "constStatement",
+      "redundantCondition",
+      "redundantIfRemove"
+    ]
+  },
+  "settings": {
+    "performance-valueflow-max-iterations": 20,
+    "check-level": "exhaustive",
+    "inline-suppr": true
+  },
+  "suppressions": [
+    "missingInclude",
+    "unusedFunction",
+    "unmatchedSuppression"
+  ],
+  "output": {
+    "template": "{file}:{line}: {severity}: {message}",
+    "custom_prefix": "[PERF]",
+    "metrics": {
+      "track": [
+        "passedByValue",
+        "redundantCopy",
+        "inefficientAlgorithm",
+        "useInitializationList"
+      ],
+      "report_threshold": 5
+    }
+  },
+  "optimizations": {
+    "suggest_constexpr": true,
+    "suggest_noexcept": true,
+    "suggest_inline": true,
+    "suggest_move_semantics": true
+  }
+}

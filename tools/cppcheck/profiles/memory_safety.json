@@ -1,0 +1,56 @@
+{
+  "name": "Memory Safety Profile",
+  "description": "Focuses on memory leaks, buffer overflows, and pointer issues",
+  "extends": "base",
+  "checks": {
+    "enable": [
+      "warning"
+    ],
+    "specific": [
+      "memleak",
+      "resourceLeak",
+      "doubleFree",
+      "invalidLifetime",
+      "danglingReference",
+      "danglingLifetime",
+      "nullPointer",
+      "nullPointerRedundantCheck",
+      "nullPointerArithmeticRedundantCheck",
+      "uninitvar",
+      "uninitMemberVar",
+      "uninitStructMember",
+      "arrayIndexOutOfBounds",
+      "bufferAccessOutOfBounds",
+      "negativeIndex",
+      "pointerOutOfBounds",
+      "deallocDealloc",
+      "deallocret",
+      "deallocuse",
+      "doubleFree",
+      "invalidFunctionArg",
+      "invalidFunctionArgBool",
+      "invalidFunctionArgStr",
+      "leakNoVarFunctionCall",
+      "leakReturnValNotUsed",
+      "leakUnsafeArgAlloc",
+      "memleakOnRealloc",
+      "resourceLeak",
+      "useAfterFree"
+    ]
+  },
+  "settings": {
+    "check-level": "exhaustive",
+    "max-ctu-depth": 20
+  },
+  "suppressions": [
+    "missingInclude",
+    "unmatchedSuppression",
+    "missingIncludeSystem"
+  ],
+  "output": {
+    "template": "{file}:{line}: {severity}: {message}",
+    "custom_prefix": "[MEMORY]",
+    "error_on": ["memleak", "doubleFree", "useAfterFree", "nullPointer"],
+    "warn_on": ["uninitvar", "resourceLeak", "danglingReference"]
+  }
+}

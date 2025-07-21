@@ -1,0 +1,101 @@
+#!/bin/bash
+# LPZRobots Cppcheck Wrapper
+# Convenient interface to the advanced cppcheck analysis system
+
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ANALYZE_SCRIPT="$SCRIPT_DIR/scripts/analyze.py"
+
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+# Check if Python 3 is available
+if ! command -v python3 &> /dev/null; then
+    echo -e "${RED}Error: Python 3 is required but not found${NC}"
+    exit 1
+fi
+
+# Check if cppcheck is installed
+if ! command -v cppcheck &> /dev/null; then
+    echo -e "${RED}Error: cppcheck is not installed${NC}"
+    echo "Install with: brew install cppcheck"
+    exit 1
+fi
+
+# Show help if no arguments
+if [ $# -eq 0 ]; then
+    echo -e "${BLUE}LPZRobots Cppcheck Analysis System${NC}"
+    echo ""
+    echo "Usage: $0 [command] [options]"
+    echo ""
+    echo "Commands:"
+    echo "  quick              Run quick analysis (default)"
+    echo "  full               Run comprehensive analysis"
+    echo "  cpp17              Run C++17 migration analysis"
+    echo "  memory             Run memory safety analysis"
+    echo "  performance        Run performance analysis"
+    echo "  incremental        Run incremental analysis on changed files"
+    echo "  list               List available profiles"
+    echo "  help               Show this help message"
+    echo ""
+    echo "Options:"
+    echo "  --files FILE...    Analyze specific files"
+    echo "  --format FORMAT    Output format (text, json, html)"
+    echo "  --verbose          Verbose output"
+    echo "  --threshold N      Error threshold for CI/CD"
+    echo ""
+    echo "Examples:"
+    echo "  $0 quick                    # Quick analysis"
+    echo "  $0 cpp17 --format html      # C++17 analysis with HTML report"
+    echo "  $0 incremental              # Analyze only changed files"
+    echo "  $0 full --threshold 10      # Full analysis with error threshold"
+    exit 0
+fi
+
+# Parse command
+COMMAND=$1
+shift
+
+# Map commands to profiles
+case "$COMMAND" in
+    quick)
+        PROFILE="quick_check"
+        ;;
+    full)
+        PROFILE="comprehensive"
+        ;;
+    cpp17)
+        PROFILE="cpp17_migration"
+        ;;
+    memory)
+        PROFILE="memory_safety"
+        ;;
+    performance)
+        PROFILE="performance"
+        ;;
+    incremental)
+        PROFILE="quick_check"
+        EXTRA_ARGS="--incremental"
+        ;;
+    list)
+        python3 "$ANALYZE_SCRIPT" --list-profiles
+        exit 0
+        ;;
+    help)
+        $0
+        exit 0
+        ;;
+    *)
+        echo -e "${RED}Unknown command: $COMMAND${NC}"
+        echo "Run '$0 help' for usage information"
+        exit 1
+        ;;
+esac
+
+# Run the analysis
+echo -e "${BLUE}Running $COMMAND analysis...${NC}"
+python3 "$ANALYZE_SCRIPT" --profile "$PROFILE" $EXTRA_ARGS "$@"

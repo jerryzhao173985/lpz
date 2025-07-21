@@ -1,0 +1,29 @@
+# Cppcheck suppressions for LPZRobots
+
+# Suppress warnings from external libraries
+*:/opt/homebrew/*
+*:/usr/include/*
+*:/usr/local/include/*
+*:/Applications/Xcode.app/*
+*:*/Qt/*
+*:*/qt/*
+*:*/OpenSceneGraph/*
+*:*/osg/*
+*:*/gsl/*
+
+# Suppress warnings from third-party code
+*:opende/OPCODE/*
+*:opende/ou/*
+*:opende/tests/*
+*:build/*
+*:build_*/*
+
+# Suppress specific checks that generate too many false positives
+unusedFunction
+missingIncludeSystem
+unmatchedSuppression
+
+# Suppress warnings from generated code
+*:moc_*
+*:ui_*
+*:qrc_*

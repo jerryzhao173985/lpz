@@ -1,0 +1,75 @@
+{
+  "name": "C++17 Migration Profile",
+  "description": "Focuses on identifying C++17 modernization opportunities",
+  "extends": "base",
+  "checks": {
+    "enable": [
+      "style",
+      "performance",
+      "portability"
+    ],
+    "specific": [
+      "useAuto",
+      "useStlAlgorithm",
+      "passedByValue",
+      "useInitializationList",
+      "modernize-use-nullptr",
+      "modernize-use-override",
+      "modernize-use-using",
+      "modernize-use-default-member-init",
+      "modernize-use-equals-default",
+      "modernize-use-equals-delete",
+      "modernize-avoid-bind",
+      "modernize-loop-convert",
+      "modernize-make-unique",
+      "modernize-make-shared",
+      "modernize-pass-by-value",
+      "modernize-raw-string-literal",
+      "modernize-return-braced-init-list",
+      "modernize-use-emplace",
+      "modernize-use-transparent-functors",
+      "modernize-use-nodiscard"
+    ]
+  },
+  "suppressions": [
+    "missingInclude",
+    "unusedFunction",
+    "unmatchedSuppression",
+    "missingIncludeSystem",
+    "unknownMacro"
+  ],
+  "output": {
+    "template": "{file}:{line}: {severity}: {message}",
+    "filter_patterns": [
+      "modernize",
+      "useAuto",
+      "useStlAlgorithm",
+      "passedByValue",
+      "nullptr",
+      "override",
+      "using",
+      "constexpr",
+      "emplace",
+      "unique_ptr",
+      "shared_ptr"
+    ]
+  },
+  "priority_rules": {
+    "high": [
+      "modernize-use-nullptr",
+      "modernize-use-override",
+      "modernize-use-using"
+    ],
+    "medium": [
+      "modernize-use-auto",
+      "modernize-loop-convert",
+      "modernize-make-unique",
+      "modernize-make-shared"
+    ],
+    "low": [
+      "modernize-use-emplace",
+      "modernize-raw-string-literal",
+      "modernize-use-nodiscard"
+    ]
+  }
+}

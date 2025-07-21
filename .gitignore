@@ -650,3 +650,14 @@ matrixviz/*.a
 # IDE/editor backup artifacts
 .!*!.*
 *~
+
+# Cppcheck analysis output and cache
+cppcheck_output/
+tools/cppcheck/reports/
+tools/cppcheck/cache/
+tools/cppcheck/metrics.db
+tools/cppcheck/*.log
+build/cppcheck_reports/
+# Temporary cppcheck files (but keep cppcheck_suppressions.txt)
+cppcheck_results.txt
+cppcheck_example.sh

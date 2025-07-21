@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<project version="1">
+    <!-- LPZRobots Base Cppcheck Configuration -->
+    <!-- This is the foundation configuration that all profiles extend -->
+    
+    <!-- Build configuration -->
+    <importproject>build/compile_commands.json</importproject>
+    
+    <!-- Include paths -->
+    <includedir>
+        <dir name="include"/>
+        <dir name="selforg/include"/>
+        <dir name="ode_robots/include"/>
+        <dir name="ga_tools/include"/>
+        <dir name="opende"/>
+        <dir name="opende/include"/>
+    </includedir>
+    
+    <!-- Platform and architecture defines -->
+    <define name="__cplusplus=201703L"/>
+    <define name="MAC"/>
+    <define name="MAC_ARM64"/>
+    <define name="__APPLE__"/>
+    <define name="__arm64__"/>
+    <define name="__clang__"/>
+    
+    <!-- Build configuration defines -->
+    <define name="NDEBUG"/>
+    <define name="DRAWSTUFF_TEXTURE_PATH=&quot;./drawstuff/textures&quot;"/>
+    
+    <!-- Paths to analyze -->
+    <paths>
+        <dir name="selforg"/>
+        <dir name="ode_robots"/>
+        <dir name="ga_tools"/>
+        <dir name="guilogger"/>
+        <dir name="matrixviz"/>
+        <dir name="configurator"/>
+    </paths>
+    
+    <!-- Exclude paths -->
+    <exclude>
+        <path name="build/"/>
+        <path name="build_*/"/>
+        <path name=".git/"/>
+        <path name="tools/cppcheck/cache/"/>
+        <path name="opende/ode/src/"/>
+        <path name="opende/OPCODE/"/>
+        <path name="opende/ou/"/>
+        <path name="*/tests/"/>
+        <path name="*/examples/"/>
+        <path name="*/simulations/"/>
+        <path name="*/obsolete/"/>
+        <path name="*/old/"/>
+        <path name="*/backup/"/>
+    </exclude>
+    
+    <!-- Libraries -->
+    <libraries>
+        <library>std</library>
+        <library>posix</library>
+        <library>qt</library>
+        <library>opengl</library>
+        <library>gnu</library>
+    </libraries>
+    
+    <!-- Platform -->
+    <platform>unix64</platform>
+    
+    <!-- C++ Standard -->
+    <standards>
+        <standard>c++17</standard>
+    </standards>
+    
+    <!-- Check level -->
+    <check-level>normal</check-level>
+    
+    <!-- Max configs for thorough analysis -->
+    <max-configs>12</max-configs>
+    
+    <!-- Enable checks -->
+    <enable>warning,style,performance,portability</enable>
+    
+    <!-- Inline suppressions -->
+    <inline-suppr>true</inline-suppr>
+    
+    <!-- Addons -->
+    <addon>cert.py</addon>
+    
+    <!-- Check headers -->
+    <check-headers>true</check-headers>
+    
+    <!-- Check unused templates -->
+    <check-unused-templates>true</check-unused-templates>
+    
+    <!-- Max template recursion -->
+    <max-template-recursion>100</max-template-recursion>
+</project>

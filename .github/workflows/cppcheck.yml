@@ -1,0 +1,176 @@
+name: Cppcheck Analysis
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Run comprehensive analysis weekly
+    - cron: '0 0 * * 0'
+
+jobs:
+  quick-check:
+    name: Quick Analysis
+    runs-on: ubuntu-latest
+    if: github.event_name != 'schedule'
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cppcheck python3 python3-pip
+        pip3 install pygments
+        
+    - name: Setup build environment
+      run: |
+        sudo apt-get install -y cmake ninja-build
+        cmake -B build -G Ninja -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+        
+    - name: Run quick cppcheck analysis
+      run: |
+        python3 tools/cppcheck/scripts/analyze.py \
+          --profile quick_check \
+          --format text \
+          --threshold 100
+          
+    - name: Upload results
+      if: failure()
+      uses: actions/upload-artifact@v3
+      with:
+        name: cppcheck-quick-results
+        path: tools/cppcheck/reports/
+        
+  comprehensive-check:
+    name: Comprehensive Analysis
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cppcheck python3 python3-pip
+        pip3 install pygments cppcheck-htmlreport
+        
+    - name: Setup build environment
+      run: |
+        sudo apt-get install -y cmake ninja-build libgsl-dev
+        cmake -B build -G Ninja -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+        
+    - name: Run comprehensive analysis
+      run: |
+        python3 tools/cppcheck/scripts/analyze.py \
+          --profile comprehensive \
+          --format html \
+          --verbose
+          
+    - name: Upload HTML report
+      uses: actions/upload-artifact@v3
+      with:
+        name: cppcheck-comprehensive-report
+        path: tools/cppcheck/reports/comprehensive/
+        
+  cpp17-migration:
+    name: C++17 Migration Analysis
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0  # Need full history for incremental analysis
+        
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cppcheck python3 python3-pip
+        
+    - name: Setup build environment
+      run: |
+        sudo apt-get install -y cmake ninja-build
+        cmake -B build -G Ninja -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+        
+    - name: Run C++17 migration analysis
+      run: |
+        python3 tools/cppcheck/scripts/analyze.py \
+          --profile cpp17_migration \
+          --incremental \
+          --format json
+          
+    - name: Comment PR with results
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          const report = JSON.parse(fs.readFileSync('tools/cppcheck/reports/cpp17_migration/latest/report.json'));
+          
+          const comment = `## C++17 Migration Analysis
+          
+          Found ${report.issues.length} modernization opportunities:
+          - nullptr conversions: ${report.issues.filter(i => i.message.includes('nullptr')).length}
+          - override specifiers: ${report.issues.filter(i => i.message.includes('override')).length}
+          - auto opportunities: ${report.issues.filter(i => i.message.includes('auto')).length}
+          
+          Run \`tools/cppcheck/cppcheck cpp17 --format html\` locally for detailed report.`;
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });
+          
+  autofix-dry-run:
+    name: Autofix Preview
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'autofix')
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cppcheck python3
+        
+    - name: Run autofix in dry-run mode
+      run: |
+        python3 tools/cppcheck/scripts/autofix.py \
+          --fix all \
+          --dry-run \
+          --verbose > autofix_preview.txt
+          
+    - name: Comment PR with autofix preview
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          const preview = fs.readFileSync('autofix_preview.txt', 'utf8');
+          
+          const comment = `## Autofix Preview
+          
+          The following changes would be applied:
+          
+          \`\`\`
+          ${preview.substring(0, 3000)}
+          \`\`\`
+          
+          ${preview.length > 3000 ? '... (truncated)' : ''}
+          
+          To apply these fixes, merge this PR and run:
+          \`\`\`
+          python3 tools/cppcheck/scripts/autofix.py --fix all --apply
+          \`\`\``;
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });

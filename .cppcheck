@@ -3,7 +3,7 @@
     <!-- LPZRobots Cppcheck Configuration -->
     
     <!-- Build directory with compile commands -->
-    <importproject>build/compile_commands.json</importproject>
+    <importproject>build/cppcheck/compile_commands.json</importproject>
     
     <!-- Include paths -->
     <includedir>
