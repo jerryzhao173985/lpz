@@ -17,6 +17,7 @@ lpzrobots_add_component_library(ga_tools
 )
 
 # Disable certain warnings for ga_tools due to legacy code
+# TODO: Fix these issues properly instead of suppressing warnings
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
     target_compile_options(ga_tools PRIVATE
         -Wno-old-style-cast

@@ -60,30 +60,9 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "RelWithDebInfo" "MinSizeRel")
 endif()
 
-# Compiler warnings
-if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
-    add_compile_options(
-        -Wall -Wextra -Wpedantic
-        -Wcast-align -Wcast-qual
-        -Wformat=2 -Wuninitialized
-        -Wunused -Wunused-function
-        -Wunused-label -Wunused-value
-        -Wunused-variable -Wunused-parameter
-        -Wwrite-strings -Wpointer-arith
-        -Wredundant-decls -Woverloaded-virtual
-        -Wsign-promo -Wformat-security
-        -Wnon-virtual-dtor -Wold-style-cast
-        -Wno-unused-parameter # Too many false positives
-        -Wno-sign-conversion # Too noisy for now
-        -Wno-conversion # Too many warnings, suppress for cleaner CI output
-        -Wno-zero-as-null-pointer-constant # Too many warnings, suppress for cleaner CI output
-        -Wno-float-conversion # Too many warnings, suppress for cleaner CI output
-    )
-
-    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-        add_compile_options(-Wlogical-op -Wnoexcept)
-    endif()
-endif()
+# Compiler warnings are handled centrally in cmake/LPZRobotsCompiler.cmake
+# Components receive warnings via lpzrobots_apply_compiler_settings()
+# This avoids duplicate/conflicting warning configurations
 
 # Coverage configuration
 if(LPZROBOTS_ENABLE_COVERAGE)
@@ -213,8 +192,11 @@ if(APPLE)
     set(CMAKE_INSTALL_RPATH "@loader_path/../lib")
 endif()
 
-# Find dependencies using unified function
-lpzrobots_find_dependencies()
+# Find dependencies using unified function with categorization
+lpzrobots_find_dependencies(
+    REQUIRED Threads ODE
+    OPTIONAL OpenSceneGraph Qt GSL
+)
 
 # OpenGL (needed for graphics)
 if(APPLE)

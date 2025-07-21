@@ -189,6 +189,16 @@
             }
         },
         {
+            "name": "ci-debug",
+            "displayName": "CI Debug Build",
+            "description": "Debug configuration for continuous integration",
+            "inherits": "ci",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/ci-debug"
+            }
+        },
+        {
             "name": "ninja",
             "displayName": "Ninja Build",
             "description": "Fast build using Ninja",

@@ -1,5 +1,8 @@
 # Configurator - Runtime parameter adjustment library
 
+# Optional Java bridge feature (disabled by default)
+option(ENABLE_JAVA_BRIDGE "Enable JNI-based Java bridge in configurator" OFF)
+
 # This is a Qt-based library
 # Require Qt - Try Qt6 first, fall back to Qt5
 find_package(Qt6 COMPONENTS Core Widgets Xml QUIET)
@@ -48,6 +51,14 @@ lpzrobots_add_component_library(configurator
         ${QT_LIBRARIES}
         lpzrobots::selforg
 )
+
+# Apply Java bridge compile definitions
+if(ENABLE_JAVA_BRIDGE)
+    target_compile_definitions(configurator PRIVATE USE_JAVA_BRIDGE)
+    message(STATUS "Configurator: Java bridge enabled (compile-time macro only)")
+else()
+    target_compile_definitions(configurator PRIVATE NO_JAVA_BRIDGE)
+endif()
 
 # Additional include directories for Qt widgets
 target_include_directories(configurator

@@ -3,6 +3,19 @@
 
 # Function to find all LPZRobots dependencies
 function(lpzrobots_find_dependencies)
+    # Parse REQUIRED/OPTIONAL argument lists for future enhancement
+    # Usage: lpzrobots_find_dependencies(REQUIRED Threads ODE OPTIONAL Qt OpenSceneGraph)
+    set(options)
+    set(oneValueArgs)
+    set(multiValueArgs REQUIRED OPTIONAL)
+    cmake_parse_arguments(FD "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+    
+    # Store lists for potential future enforcement
+    set(_REQUIRED_DEPS ${FD_REQUIRED})
+    set(_OPTIONAL_DEPS ${FD_OPTIONAL})
+    
+    # For now, we don't enforce but this prepares for future strict checking
+    
     # Required dependencies
     find_package(Threads REQUIRED)
     
@@ -13,7 +26,9 @@ function(lpzrobots_find_dependencies)
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}" PARENT_SCOPE)
             set(LPZROBOTS_HAS_OPENMP TRUE PARENT_SCOPE)
         else()
-            message(WARNING "OpenMP requested but not found")
+            message(WARNING "OpenMP requested but not found - automatically disabling")
+            # Auto-downgrade to avoid confusion
+            set(ENABLE_OPENMP OFF PARENT_SCOPE)
             set(LPZROBOTS_HAS_OPENMP FALSE PARENT_SCOPE)
         endif()
     endif()
