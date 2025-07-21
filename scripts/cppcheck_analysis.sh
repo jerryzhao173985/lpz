@@ -229,12 +229,12 @@ analyze_component() {
     fi
     
     # Analyze results
-    local ERRORS=$(grep -c "\[error\]" "$TEXT_REPORT" 2>/dev/null || echo 0)
-    local WARNINGS=$(grep -c "\[warning\]" "$TEXT_REPORT" 2>/dev/null || echo 0)
-    local STYLE=$(grep -c "\[style\]" "$TEXT_REPORT" 2>/dev/null || echo 0)
-    local PERFORMANCE=$(grep -c "\[performance\]" "$TEXT_REPORT" 2>/dev/null || echo 0)
-    local PORTABILITY=$(grep -c "\[portability\]" "$TEXT_REPORT" 2>/dev/null || echo 0)
-    local INFORMATION=$(grep -c "\[information\]" "$TEXT_REPORT" 2>/dev/null || echo 0)
+    local ERRORS=$(grep -c ": error:" "$TEXT_REPORT" 2>/dev/null || echo "0")
+    local WARNINGS=$(grep -c ": warning:" "$TEXT_REPORT" 2>/dev/null || echo "0")
+    local STYLE=$(grep -c ": style:" "$TEXT_REPORT" 2>/dev/null || echo "0")
+    local PERFORMANCE=$(grep -c ": performance:" "$TEXT_REPORT" 2>/dev/null || echo "0")
+    local PORTABILITY=$(grep -c ": portability:" "$TEXT_REPORT" 2>/dev/null || echo "0")
+    local INFORMATION=$(grep -c ": information:" "$TEXT_REPORT" 2>/dev/null || echo "0")
     
     # Display results with color coding
     echo -e "  ${RED}Errors: $ERRORS${NC}"

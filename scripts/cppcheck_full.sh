@@ -76,7 +76,7 @@ cppcheck \
     --force \
     --inconclusive \
     --inline-suppr \
-    --suppress-xml=$OUTPUT_DIR/suppressions.txt \
+    --suppressions-list=$OUTPUT_DIR/suppressions.txt \
     --max-ctu-depth=10 \
     --max-configs=20 \
     --check-level=exhaustive \
@@ -87,7 +87,7 @@ cppcheck \
     --performance-valueflow-max-iterations=10 \
     --template='{file}:{line}:{column}: [{severity}] ({id}) {message}' \
     --template-location='  --> {file}:{line}:{column}: {info}' \
-    --output-file=$OUTPUT_DIR/full_analysis.txt \
+    --output-file=$OUTPUT_DIR/full_analysis.xml \
     --xml --xml-version=2 \
     --report-progress \
     -j$(nproc) \
@@ -105,31 +105,22 @@ cppcheck \
     -I ga_tools/include \
     -I opende \
     -I /opt/homebrew/include \
-    selforg \
-    ode_robots \
-    ga_tools \
-    ecbrobots \
-    real_robots \
-    guilogger/src \
-    matrixviz/src \
-    configurator \
-    2> $OUTPUT_DIR/full_analysis.xml \
-    | tee $OUTPUT_DIR/progress.log
+    2>&1 | tee $OUTPUT_DIR/progress.log
 
 echo -e "\n${GREEN}Generating specialized reports...${NC}"
 
 # Extract specific issue categories
 echo "Extracting C++17 modernization opportunities..."
-grep -E "(modernize-|performance-|readability-)" $OUTPUT_DIR/full_analysis.txt > $OUTPUT_DIR/modernization.txt || true
+grep -E "(modernize-|performance-|readability-)" $OUTPUT_DIR/full_analysis.xml > $OUTPUT_DIR/modernization.txt || true
 
 echo "Extracting memory safety issues..."
-grep -E "(memleak|resourceLeak|doubleFree|invalidLifetime|danglingReference|nullPointer|uninitvar)" $OUTPUT_DIR/full_analysis.txt > $OUTPUT_DIR/memory_safety.txt || true
+grep -E "(memleak|resourceLeak|doubleFree|invalidLifetime|danglingReference|nullPointer|uninitvar)" $OUTPUT_DIR/full_analysis.xml > $OUTPUT_DIR/memory_safety.txt || true
 
 echo "Extracting performance issues..."
-grep -E "(performance:|passedByValue|postfixOperator|redundantCopy|inefficientAlgorithm)" $OUTPUT_DIR/full_analysis.txt > $OUTPUT_DIR/performance.txt || true
+grep -E "(performance:|passedByValue|postfixOperator|redundantCopy|inefficientAlgorithm)" $OUTPUT_DIR/full_analysis.xml > $OUTPUT_DIR/performance.txt || true
 
 echo "Extracting potential bugs..."
-grep -E "(error:|warning:|arrayIndexOutOfBounds|invalidContainer|wrongPrintfScanfArgNum)" $OUTPUT_DIR/full_analysis.txt > $OUTPUT_DIR/bugs.txt || true
+grep -E "(error:|warning:|arrayIndexOutOfBounds|invalidContainer|wrongPrintfScanfArgNum)" $OUTPUT_DIR/full_analysis.xml > $OUTPUT_DIR/bugs.txt || true
 
 # Generate statistics
 echo -e "\n${GREEN}Generating statistics...${NC}"
@@ -139,15 +130,15 @@ cat > $OUTPUT_DIR/STATISTICS.md << EOF
 Generated: $(date)
 
 ## Overall Summary
-Total issues: $(wc -l < $OUTPUT_DIR/full_analysis.txt)
+Total issues: $(wc -l < $OUTPUT_DIR/full_analysis.xml)
 
 ### By Severity
-- Errors: $(grep -c "\[error\]" $OUTPUT_DIR/full_analysis.txt || echo 0)
-- Warnings: $(grep -c "\[warning\]" $OUTPUT_DIR/full_analysis.txt || echo 0)
-- Style: $(grep -c "\[style\]" $OUTPUT_DIR/full_analysis.txt || echo 0)
-- Performance: $(grep -c "\[performance\]" $OUTPUT_DIR/full_analysis.txt || echo 0)
-- Portability: $(grep -c "\[portability\]" $OUTPUT_DIR/full_analysis.txt || echo 0)
-- Information: $(grep -c "\[information\]" $OUTPUT_DIR/full_analysis.txt || echo 0)
+- Errors: $(grep -c "\[error\]" $OUTPUT_DIR/full_analysis.xml || echo 0)
+- Warnings: $(grep -c "\[warning\]" $OUTPUT_DIR/full_analysis.xml || echo 0)
+- Style: $(grep -c "\[style\]" $OUTPUT_DIR/full_analysis.xml || echo 0)
+- Performance: $(grep -c "\[performance\]" $OUTPUT_DIR/full_analysis.xml || echo 0)
+- Portability: $(grep -c "\[portability\]" $OUTPUT_DIR/full_analysis.xml || echo 0)
+- Information: $(grep -c "\[information\]" $OUTPUT_DIR/full_analysis.xml || echo 0)
 
 ### By Category
 - C++17 Modernization: $(wc -l < $OUTPUT_DIR/modernization.txt || echo 0)
@@ -159,12 +150,12 @@ Total issues: $(wc -l < $OUTPUT_DIR/full_analysis.txt)
 EOF
 
 echo -e "\n### Most Common Issues" >> $OUTPUT_DIR/STATISTICS.md
-cat $OUTPUT_DIR/full_analysis.txt | \
+cat $OUTPUT_DIR/full_analysis.xml | \
     grep -oE '\([a-zA-Z0-9]+\)' | \
     sort | uniq -c | sort -nr | head -20 >> $OUTPUT_DIR/STATISTICS.md
 
 echo -e "\n### Files with Most Issues" >> $OUTPUT_DIR/STATISTICS.md
-cat $OUTPUT_DIR/full_analysis.txt | \
+cat $OUTPUT_DIR/full_analysis.xml | \
     grep -oE '^[^:]+\.cpp' | \
     sort | uniq -c | sort -nr | head -20 >> $OUTPUT_DIR/STATISTICS.md
 
@@ -186,28 +177,28 @@ cat > $OUTPUT_DIR/ACTION_ITEMS.md << EOF
 ## Critical Issues (Fix Immediately)
 EOF
 
-grep -E "\[error\]" $OUTPUT_DIR/full_analysis.txt | head -10 >> $OUTPUT_DIR/ACTION_ITEMS.md || echo "No critical errors found." >> $OUTPUT_DIR/ACTION_ITEMS.md
+grep -E "\[error\]" $OUTPUT_DIR/full_analysis.xml | head -10 >> $OUTPUT_DIR/ACTION_ITEMS.md || echo "No critical errors found." >> $OUTPUT_DIR/ACTION_ITEMS.md
 
 cat >> $OUTPUT_DIR/ACTION_ITEMS.md << EOF
 
 ## High Priority (Fix Soon)
 EOF
 
-grep -E "\[warning\]" $OUTPUT_DIR/full_analysis.txt | grep -E "(nullPointer|uninitvar|memleak)" | head -10 >> $OUTPUT_DIR/ACTION_ITEMS.md || echo "No high priority warnings found." >> $OUTPUT_DIR/ACTION_ITEMS.md
+grep -E "\[warning\]" $OUTPUT_DIR/full_analysis.xml | grep -E "(nullPointer|uninitvar|memleak)" | head -10 >> $OUTPUT_DIR/ACTION_ITEMS.md || echo "No high priority warnings found." >> $OUTPUT_DIR/ACTION_ITEMS.md
 
 cat >> $OUTPUT_DIR/ACTION_ITEMS.md << EOF
 
 ## C++17 Migration Opportunities
 EOF
 
-grep -E "(useAuto|passedByValue|useStlAlgorithm|modernize)" $OUTPUT_DIR/full_analysis.txt | head -10 >> $OUTPUT_DIR/ACTION_ITEMS.md || echo "No obvious modernization opportunities found." >> $OUTPUT_DIR/ACTION_ITEMS.md
+grep -E "(useAuto|passedByValue|useStlAlgorithm|modernize)" $OUTPUT_DIR/full_analysis.xml | head -10 >> $OUTPUT_DIR/ACTION_ITEMS.md || echo "No obvious modernization opportunities found." >> $OUTPUT_DIR/ACTION_ITEMS.md
 
 # Final summary
 echo -e "\n${GREEN}=== Analysis Complete ===${NC}"
 echo "Full report: $OUTPUT_DIR/"
 echo ""
 echo "Key files generated:"
-echo "  - full_analysis.txt: Complete text output"
+echo "  - full_analysis.xml: Complete text output"
 echo "  - full_analysis.xml: XML for further processing"
 echo "  - STATISTICS.md: Statistical summary"
 echo "  - ACTION_ITEMS.md: Prioritized fixes"

@@ -808,10 +808,30 @@ class EnhancedDashboardGenerator:
         // Global state
         let currentPage = 1;
         const itemsPerPage = 50;
-        let filteredIssues = [...issuesData];
+        let filteredIssues = [];  // Initialize empty, will be populated after issuesData is available
         let activeFilters = new Set();
         let expandedRows = new Set();
         let selectedRow = -1;
+        
+        // Helper function to shorten file paths
+        function shortenPath(fullPath) {
+            if (!fullPath) return 'unknown';
+            // Remove common prefixes
+            const prefixes = [
+                '/Users/jerry/simulator/lpz/',
+                '/home/jerry/lpz/',
+                process.cwd() + '/'
+            ];
+            
+            let shortPath = fullPath;
+            for (const prefix of prefixes) {
+                if (fullPath.startsWith(prefix)) {
+                    shortPath = fullPath.substring(prefix.length);
+                    break;
+                }
+            }
+            return shortPath;
+        }
         
         // Severity badges
         const severityBadges = {
@@ -819,22 +839,40 @@ class EnhancedDashboardGenerator:
             'warning': 'background: #fef6e7; color: #c05621;',
             'style': 'background: #e0e7ff; color: #3730a3;',
             'performance': 'background: #d1fae5; color: #065f46;',
-            'information': 'background: #f3f4f6; color: #374151;'
+            'information': 'background: #f3f4f6; color: #374151;',
+            'portability': 'background: #fef3c7; color: #92400e;',
+            'unknown': 'background: #e5e7eb; color: #6b7280;'
         };
         
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOMContentLoaded - initializing dashboard');
+            console.log('issuesData length:', issuesData.length);
+            console.log('First issue:', issuesData[0]);
+            
+            // Initialize filteredIssues after issuesData is available
+            filteredIssues = [...issuesData];
+            
             renderIssues();
             setupKeyboardShortcuts();
         });
         
         // Render issues
         function renderIssues() {
+            console.log('renderIssues called');
+            console.log('filteredIssues length:', filteredIssues.length);
+            
             const start = (currentPage - 1) * itemsPerPage;
             const end = start + itemsPerPage;
             const pageIssues = filteredIssues.slice(start, end);
             
+            console.log('Rendering issues', start, 'to', end, '- total on page:', pageIssues.length);
+            
             const listElement = document.getElementById('issueList');
+            if (!listElement) {
+                console.error('issueList element not found!');
+                return;
+            }
             listElement.innerHTML = '';
             
             pageIssues.forEach((issue, index) => {
@@ -861,7 +899,7 @@ class EnhancedDashboardGenerator:
                 <div class="issue-main" onclick="toggleRow(${index})">
                     <div class="issue-info">
                         <div class="issue-location">
-                            <i class="fas fa-file-code"></i> ${issue.file}:${issue.line}
+                            <i class="fas fa-file-code"></i> ${shortenPath(issue.file)}:${issue.line}
                         </div>
                         <div class="issue-message">${issue.message || 'No message'}</div>
                         <div class="issue-meta">
@@ -1120,6 +1158,9 @@ class EnhancedDashboardGenerator:
                     case '?':
                         showHelp();
                         break;
+                    case 'Escape':
+                        closeModal();
+                        break;
                 }
             });
         }
@@ -1256,6 +1297,123 @@ Click on any issue to see code context and fix suggestions!`);
             });
         }
         
+        // Show fix for selected row
+        function showFix(index) {
+            const issue = filteredIssues[index];
+            if (!issue || !issue.fix_suggestion) {
+                alert('No fix suggestion available for this issue');
+                return;
+            }
+            
+            // Expand the row if not already expanded
+            if (!expandedRows.has(index)) {
+                toggleRow(index);
+            }
+            
+            // Scroll to the fix preview
+            setTimeout(() => {
+                const fixPreview = document.querySelector('.issue-row.expanded .fix-preview');
+                if (fixPreview) {
+                    fixPreview.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }, 300);
+        }
+        
+        // View full code in modal
+        function viewFullCode(index) {
+            const issue = filteredIssues[index];
+            if (!issue || !issue.code_context) {
+                alert('No code context available for this issue');
+                return;
+            }
+            
+            const modal = document.getElementById('codeModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const codeContent = document.getElementById('codeContent');
+            
+            // Set modal title
+            modalTitle.textContent = `${issue.file}:${issue.line} - ${issue.message}`;
+            
+            // Build code content
+            const context = issue.code_context;
+            let html = `
+                <div class="code-context">
+                    <div class="code-header">
+                        <div class="code-breadcrumb">
+                            ${issue.file} • Line ${issue.line}
+                            ${context.class ? ` • ${context.class.name}` : ''}
+                            ${context.function ? ` • ${context.function}()` : ''}
+                        </div>
+                        <div class="code-actions">
+                            <button class="code-action" onclick="copyFullCode()">
+                                <i class="fas fa-copy"></i> Copy All
+                            </button>
+                        </div>
+                    </div>
+                    <div class="code-content">
+                        <div class="code-with-lines">
+                            <div class="line-numbers">`;
+            
+            // Add line numbers
+            context.lines.forEach(line => {
+                html += `<span class="line-number ${line.is_target ? 'target' : ''}">${line.number}</span>`;
+            });
+            
+            html += `</div>
+                            <pre><code class="language-cpp">`;
+            
+            // Add code
+            const codeText = context.lines.map(line => line.content).join('\n');
+            html += escapeHtml(codeText);
+            
+            html += `</code></pre>
+                        </div>
+                    </div>
+                </div>`;
+            
+            // Add issue details
+            html += `
+                <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                    <h3 style="margin-bottom: 10px;">Issue Details</h3>
+                    <p><strong>Type:</strong> ${issue.id || 'Unknown'}</p>
+                    <p><strong>Severity:</strong> <span class="issue-badge" style="${severityBadges[issue.severity] || ''}">${issue.severity}</span></p>
+                    <p><strong>Message:</strong> ${issue.message}</p>
+                </div>`;
+            
+            // Add fix if available
+            if (issue.fix_suggestion && issue.fix_suggestion.success) {
+                html += createFixPreview(issue.fix_suggestion);
+            }
+            
+            codeContent.innerHTML = html;
+            
+            // Apply syntax highlighting
+            codeContent.querySelectorAll('pre code').forEach(block => {
+                hljs.highlightElement(block);
+            });
+            
+            // Show modal
+            modal.style.display = 'block';
+            
+            // Store current code for copy function
+            window.currentModalCode = codeText;
+        }
+        
+        // Copy full code from modal
+        function copyFullCode() {
+            if (window.currentModalCode) {
+                navigator.clipboard.writeText(window.currentModalCode).then(() => {
+                    // Show feedback
+                    const btn = event.target.closest('button');
+                    const originalHTML = btn.innerHTML;
+                    btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    setTimeout(() => {
+                        btn.innerHTML = originalHTML;
+                    }, 2000);
+                });
+            }
+        }
+        
         // Apply fix (placeholder for now)
         function applyFix(button, diffId) {
             // This would send an AJAX request to apply the fix
@@ -1341,4 +1499,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())

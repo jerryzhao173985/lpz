@@ -201,4 +201,4 @@ def main():
         validate_report(report_path)
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())

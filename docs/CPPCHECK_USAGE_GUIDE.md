@@ -248,3 +248,18 @@ Add to tasks.json:
 3. Use automated tools where possible (clang-tidy fix-it)
 4. Verify fixes don't break functionality
 5. Update this guide with new patterns found
+
+## Enhanced Dashboard Features
+
+The new infrastructure includes an interactive dashboard with:
+- **Click-to-expand code preview** - See full function/class context
+- **Fix suggestions with diffs** - GitHub-style diff visualization
+- **Confidence scoring** - Know which fixes are safe to apply
+- **Keyboard shortcuts** - j/k navigation, space to expand, f for fix
+- **One-click application** - Apply fixes directly from dashboard
+
+Generate the enhanced dashboard:
+```bash
+./tools/cppcheck/cppcheck cpp17 --format html
+# Dashboard will be in tools/cppcheck/reports/{profile}/latest/report.html
+```

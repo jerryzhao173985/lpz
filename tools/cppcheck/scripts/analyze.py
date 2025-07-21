@@ -97,7 +97,9 @@ class CppcheckAnalyzer:
                 for line in result.stdout.strip().split('\n'):
                     if line and any(line.endswith(ext) for ext in ['.cpp', '.h', '.hpp', '.cc', '.cxx']):
                         changed.add(PROJECT_ROOT / line)
-        except:
+        except (subprocess.CalledProcessError, FileNotFoundError) as e:
+            if self.verbose:
+                print(f"Git not available or error: {e}")
             pass
             
         # Also check file modification times
@@ -378,7 +380,7 @@ class CppcheckAnalyzer:
                     generator = UltimateDashboardGenerator(results)
                     generator.generate_ultimate_dashboard(report_path)
                     print(f"{Colors.GREEN}Ultimate dashboard generated: {report_path}{Colors.NC}")
-                except:
+                except Exception as e2:
                     # Final fallback to basic HTML
                     if self.verbose:
                         print(f"{Colors.YELLOW}Could not generate enhanced dashboard: {e}{Colors.NC}")

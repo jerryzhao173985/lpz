@@ -167,8 +167,9 @@ class FixGenerator:
         
         # Extract the parameter that should be passed by reference
         # Look for common patterns: function(Type param) -> function(const Type& param)
+        # Handle namespaced types like std::string
         fixed = re.sub(
-            r'(\w+)\s+(\w+)(\s*[,)])',
+            r'((?:std::)?\w+(?:::\w+)*)\s+(\w+)(\s*[,)])',
             r'const \1& \2\3',
             original
         )
@@ -415,4 +416,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())

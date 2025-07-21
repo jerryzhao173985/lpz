@@ -5,6 +5,7 @@ Extracts code context around issues with function/class boundaries
 """
 
 import re
+import sys
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional
 import json
@@ -70,28 +71,33 @@ class CodeContextExtractor:
             
     def _find_function_boundaries(self, lines: List[str], target_line: int) -> Tuple[Optional[int], Optional[int]]:
         """Find the start and end of the function containing the target line"""
-        # Simple heuristic: look for { and } with proper nesting
-        brace_count = 0
         func_start = None
-        in_function = False
+        func_end = None
         
-        # Search backwards for function start
+        # Simple approach: find nearest function declaration before target
         for i in range(target_line, -1, -1):
             line = lines[i].strip()
             
-            # Skip comments and preprocessor directives
-            if line.startswith('//') or line.startswith('#'):
+            # Skip empty lines and comments
+            if not line or line.startswith('//'):
                 continue
                 
-            # Count braces
-            brace_count += line.count('}') - line.count('{')
-            
-            # Function signature patterns
-            if (re.match(r'^\s*(\w+\s+)*\w+\s*\(.*\)\s*(const)?\s*(override)?\s*{?\s*$', line) or
-                re.match(r'^\s*(\w+::)*\w+\s*\(.*\)\s*(const)?\s*{?\s*$', line)):
-                if brace_count <= 0:
-                    func_start = i
-                    break
+            # Look for function pattern with opening brace on same or next line
+            if re.search(r'\b\w+\s*\([^)]*\)\s*(const)?\s*(override)?\s*{?\s*$', line):
+                # Make sure it's not a control structure
+                if not any(line.startswith(kw) for kw in ['if', 'while', 'for', 'switch', 'catch']):
+                    # Check if this line or next lines have opening brace
+                    found_brace = '{' in line
+                    if not found_brace:
+                        # Check next few lines for opening brace
+                        for j in range(i+1, min(i+4, len(lines))):
+                            if '{' in lines[j]:
+                                found_brace = True
+                                break
+                    
+                    if found_brace:
+                        func_start = i
+                        break
                     
         # Search forward for function end
         if func_start is not None:
@@ -120,6 +126,9 @@ class CodeContextExtractor:
         
     def _extract_function_signature(self, lines: List[str], func_start: int) -> str:
         """Extract clean function signature"""
+        if func_start is None:
+            return None
+            
         signature = []
         i = func_start
         
@@ -228,4 +237,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())

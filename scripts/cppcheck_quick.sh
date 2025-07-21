@@ -36,7 +36,7 @@ case "$FOCUS" in
             --suppress=unusedFunction \
             --template='{file}:{line}: Use {message}' \
             --quiet \
-            $COMPONENT 2>&1 | grep -E "(useAuto|useStlAlgorithm|passedByValue|useInitializationList|modernize)" || true
+            2>&1 | grep -E "(useAuto|useStlAlgorithm|passedByValue|useInitializationList|modernize)" || true
         ;;
     
     "memory")
@@ -48,7 +48,7 @@ case "$FOCUS" in
             --suppress=missingInclude \
             --template='{file}:{line}: [{severity}] {message}' \
             --quiet \
-            $COMPONENT 2>&1 | grep -E "(leak|delete|free|malloc|new\[|nullPointer|uninit)" || true
+            2>&1 | grep -E "(leak|delete|free|malloc|new\[|nullPointer|uninit)" || true
         ;;
     
     "safety")
@@ -68,8 +68,7 @@ case "$FOCUS" in
         <summary>Unsafe C function used</summary>
     </rule>
 </rules>' \
-            --template='{file}:{line}: [{severity}] {message}' \
-            $COMPONENT
+            --template='{file}:{line}: [{severity}] {message}'
         ;;
     
     "perf")
@@ -81,7 +80,7 @@ case "$FOCUS" in
             --suppress=missingInclude \
             --template='{file}:{line}: {message}' \
             --quiet \
-            $COMPONENT 2>&1 | grep -v "missingInclude"
+            2>&1 | grep -v "missingInclude"
         ;;
     
     *)
@@ -94,8 +93,7 @@ case "$FOCUS" in
             --suppress=unusedFunction \
             --suppress=missingIncludeSystem \
             --template='{file}:{line}: [{severity}] ({id}) {message}' \
-            --quiet \
-            $COMPONENT
+            --quiet
         ;;
 esac
 

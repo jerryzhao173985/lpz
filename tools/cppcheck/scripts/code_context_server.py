@@ -66,7 +66,8 @@ class CodeContextHandler(BaseHTTPRequestHandler):
                         'author': author,
                         'date': date
                     }
-            except:
+            except (subprocess.CalledProcessError, ValueError) as e:
+                print(f"Git blame error: {e}")
                 pass
                 
             self.send_response(200)

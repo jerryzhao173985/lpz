@@ -75,17 +75,6 @@ class FixApplicator:
                 result['success'] = True
                 return result
                 
-            # Get the diff
-            diff_text = fix_data.get('diff', '')
-            if not diff_text:
-                result['message'] = 'No diff provided'
-                return result
-                
-            # Parse the unified diff to extract changes
-            original_lines = []
-            fixed_lines = []
-            target_line = int(fix_data.get('line', 0))
-            
             # Read current file content
             with open(file_path, 'r', encoding='utf-8') as f:
                 current_lines = f.readlines()
@@ -93,6 +82,7 @@ class FixApplicator:
             # Apply the fix based on fix data
             if 'fixed_lines' in fix_data:
                 # We have the specific fixed lines
+                target_line = int(fix_data.get('line', 0))
                 fixed_content = self._apply_fixed_lines(
                     current_lines, 
                     fix_data['fixed_lines'],
@@ -100,6 +90,10 @@ class FixApplicator:
                 )
             else:
                 # Apply diff patch
+                diff_text = fix_data.get('diff', '')
+                if not diff_text:
+                    result['message'] = 'No diff or fixed_lines provided'
+                    return result
                 fixed_content = self._apply_diff_patch(current_lines, diff_text)
                 
             if not fixed_content:
@@ -312,4 +306,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())

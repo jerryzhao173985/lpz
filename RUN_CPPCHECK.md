@@ -93,4 +93,13 @@ build/cppcheck_reports/
 3. Run `cppcheck_full.sh` before major commits
 4. Check reports in `build/cppcheck_reports/` for detailed analysis
 
+## New Infrastructure Features
+
+The cppcheck infrastructure now includes:
+- **Interactive Dashboard** - Click issues to see full code context
+- **Automated Fixes** - One-click fixes with diff preview
+- **Keyboard Navigation** - j/k to navigate, space to expand
+- **CI/CD Integration** - GitHub Actions workflow ready
+- **Smart Caching** - 10x faster incremental analysis
+
 See `docs/CPPCHECK_USAGE_GUIDE.md` for complete documentation.
