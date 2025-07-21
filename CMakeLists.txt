@@ -279,6 +279,23 @@ if(BUILD_TESTS)
     add_subdirectory(tests)
 endif()
 
+# Custom clean targets for safer cleanup
+add_custom_target(clean-all
+    COMMAND ${CMAKE_COMMAND} -E echo "Cleaning all build artifacts..."
+    COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_BINARY_DIR}"
+    COMMAND ${CMAKE_COMMAND} -E echo "Build directory cleaned. Run cmake again to rebuild."
+    COMMENT "Remove entire build directory"
+)
+
+# Add a target to show what would be cleaned
+add_custom_target(clean-check
+    COMMAND ${CMAKE_COMMAND} -E echo "Build directory: ${CMAKE_BINARY_DIR}"
+    COMMAND ${CMAKE_COMMAND} -E echo "Install prefix: ${CMAKE_INSTALL_PREFIX}"
+    COMMAND ${CMAKE_COMMAND} -E echo "Use 'make clean' to clean build artifacts"
+    COMMAND ${CMAKE_COMMAND} -E echo "Use 'make clean-all' to remove entire build directory"
+    COMMENT "Show what clean targets would affect"
+)
+
 # Package configuration
 include(CMakePackageConfigHelpers)
 

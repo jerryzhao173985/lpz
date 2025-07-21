@@ -36,14 +36,20 @@ function(lpzrobots_configure)
     # Set up installation directories
     include(GNUInstallDirs)
 
-    # --- compute once locally then propagate to parent scope ---
+    # Set up installation directories
     # Allow override: -DLPZROBOTS_DATA_DIR=/custom/path
-    set(LPZROBOTS_DATA_DIR "${CMAKE_INSTALL_DATADIR}/lpzrobots"
-        CACHE PATH "Install location for LPZRobots runtime assets")
-    set(LPZROBOTS_EXAMPLES_DIR "${LPZROBOTS_DATA_DIR}/examples")
-    set(LPZROBOTS_SIMULATIONS_DIR "${LPZROBOTS_DATA_DIR}/simulations")
+    if(NOT DEFINED LPZROBOTS_DATA_DIR)
+        set(LPZROBOTS_DATA_DIR "${CMAKE_INSTALL_DATADIR}/lpzrobots"
+            CACHE PATH "Install location for LPZRobots runtime assets")
+    endif()
+    
+    # Set derived directories based on LPZROBOTS_DATA_DIR
+    set(LPZROBOTS_EXAMPLES_DIR "${LPZROBOTS_DATA_DIR}/examples"
+        CACHE PATH "Install location for examples" FORCE)
+    set(LPZROBOTS_SIMULATIONS_DIR "${LPZROBOTS_DATA_DIR}/simulations"
+        CACHE PATH "Install location for simulations" FORCE)
 
-    # make variables visible in the calling (top-level) directory
+    # Also make variables visible in the calling (top-level) directory
     set(LPZROBOTS_DATA_DIR        "${LPZROBOTS_DATA_DIR}"        PARENT_SCOPE)
     set(LPZROBOTS_EXAMPLES_DIR    "${LPZROBOTS_EXAMPLES_DIR}"    PARENT_SCOPE)
     set(LPZROBOTS_SIMULATIONS_DIR "${LPZROBOTS_SIMULATIONS_DIR}" PARENT_SCOPE)

@@ -147,7 +147,9 @@ endif()
 target_compile_features(matrixviz PRIVATE cxx_std_17)
 
 # Apply comprehensive macOS Qt configuration
-lpzrobots_configure_qt_macos(matrixviz)
+if(APPLE AND COMMAND lpzrobots_configure_qt_macos)
+    lpzrobots_configure_qt_macos(matrixviz)
+endif()
 
 # Compiler options
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
