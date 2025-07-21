@@ -20,6 +20,13 @@ include(LPZRobotsLibrary)
 include(LPZRobotsDependencies)
 include(LPZRobotsTargets)
 
+# ------------------------------------------------------------------
+# Initialise LPZRobots core (defines install paths, compiler flags,
+# platform fixes, dependency variables, etc.)
+# ------------------------------------------------------------------
+lpzrobots_configure()
+lpzrobots_print_summary()
+
 # Include platform-specific fixes
 if(APPLE)
     include(LPZRobotsMacOSFixes)
@@ -298,6 +305,15 @@ write_basic_package_version_file(
     "${CMAKE_CURRENT_BINARY_DIR}/lpzrobotsConfigVersion.cmake"
     VERSION ${PROJECT_VERSION}
     COMPATIBILITY SameMajorVersion
+)
+
+# ------------------------------------------------------------------
+# Generate lpzrobotsConfig.cmake so that install step can find it
+# ------------------------------------------------------------------
+configure_package_config_file(
+    "${CMAKE_SOURCE_DIR}/cmake/LPZRobotsConfig.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/lpzrobotsConfig.cmake"
+    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/lpzrobots
 )
 
 # Install package configuration
