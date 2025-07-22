@@ -10,7 +10,6 @@ import json
 import sqlite3
 from datetime import datetime, timedelta
 from pathlib import Path
-import subprocess
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -140,8 +139,8 @@ class DashboardEnhancer:
                             "files_analyzed": data.get("files_analyzed", 0),
                             "timestamp": data.get("timestamp", "")
                         }
-                except:
-                    pass
+                except (json.JSONDecodeError, IOError) as e:
+                    print(f"  Warning: Failed to load report for {profile}: {e}")
         
         return comparison
     
@@ -335,8 +334,15 @@ class DashboardEnhancer:
     </div>
     
     <script>
-        // Embed data
-        const dashboardData = {json.dumps(data)};
+        // Embed data safely
+        const dashboardDataElement = document.createElement('script');
+        dashboardDataElement.type = 'application/json';
+        dashboardDataElement.id = 'dashboard-data';
+        dashboardDataElement.textContent = {json.dumps(json.dumps(data))};
+        document.head.appendChild(dashboardDataElement);
+        
+        // Parse the data safely
+        const dashboardData = JSON.parse(document.getElementById('dashboard-data').textContent);
         
         // Plot trends
         if (dashboardData.trends && dashboardData.trends.issue_trend.length > 0) {{

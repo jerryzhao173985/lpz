@@ -8,12 +8,9 @@ import os
 import sys
 import json
 import argparse
-import shutil
 import subprocess
 from datetime import datetime
 from pathlib import Path
-import sqlite3
-import tempfile
 
 # Add parent directory to path for imports
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -23,7 +20,17 @@ class DashboardDeployer:
     
     def __init__(self, args):
         self.args = args
-        self.repo_root = Path(__file__).parent.parent.parent.parent
+        # More robust path resolution
+        current_path = Path(__file__).resolve()
+        # Look for repository root by searching for key files
+        self.repo_root = current_path
+        for _ in range(5):  # Max 5 levels up
+            if (self.repo_root / "Makefile").exists() or (self.repo_root / "CMakeLists.txt").exists():
+                break
+            self.repo_root = self.repo_root.parent
+        else:
+            # Fallback to 4 levels up
+            self.repo_root = current_path.parent.parent.parent.parent
         self.cppcheck_dir = self.repo_root / "tools" / "cppcheck"
         self.scripts_dir = self.cppcheck_dir / "scripts"
         self.reports_dir = self.cppcheck_dir / "reports"
@@ -67,31 +74,31 @@ class DashboardDeployer:
             {
                 "name": "Quick Analysis",
                 "profile": "quick_check",
-                "script": "generate_enhanced_dashboard.py",
+                "script": "enhance_dashboard_metrics.py",
                 "output": "quick/index.html"
             },
             {
                 "name": "Comprehensive Analysis",
                 "profile": "comprehensive",
-                "script": "generate_enhanced_dashboard.py",
+                "script": "enhance_dashboard_metrics.py",
                 "output": "comprehensive/index.html"
             },
             {
                 "name": "C++17 Migration",
                 "profile": "cpp17_migration",
-                "script": "generate_enhanced_dashboard.py",
+                "script": "enhance_dashboard_metrics.py",
                 "output": "cpp17/index.html"
             },
             {
                 "name": "Memory Safety",
                 "profile": "memory_safety",
-                "script": "generate_enhanced_dashboard.py",
+                "script": "enhance_dashboard_metrics.py",
                 "output": "memory/index.html"
             },
             {
                 "name": "Performance",
                 "profile": "performance",
-                "script": "generate_enhanced_dashboard.py",
+                "script": "enhance_dashboard_metrics.py",
                 "output": "performance/index.html"
             }
         ]
@@ -114,8 +121,7 @@ class DashboardDeployer:
                     sys.executable,
                     str(script_path),
                     "--profile", config['profile'],
-                    "--output", str(output_path),
-                    "--standalone" if self.args.standalone else "--cdn"
+                    "--output", str(output_path)
                 ]
                 
                 result = subprocess.run(cmd, capture_output=True, text=True)
@@ -144,7 +150,10 @@ class DashboardDeployer:
             "--quiet"
         ]
         
-        subprocess.run(cmd, capture_output=True)
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        if result.returncode != 0:
+            print(f"  ✗ Analysis failed: {result.stderr}")
+            raise RuntimeError(f"Analysis failed for profile {profile}")
     
     def create_index_page(self, dashboards):
         """Create main index page with navigation"""
@@ -426,8 +435,8 @@ class DashboardDeployer:
                     total_files = data.get('total_files', 1)
                     if total_files > 0:
                         metrics['code_coverage'] = (metrics['files_analyzed'] / total_files) * 100
-            except:
-                pass
+            except (json.JSONDecodeError, IOError, KeyError) as e:
+                print(f"Warning: Failed to load metrics from report: {e}")
         
         return metrics
     

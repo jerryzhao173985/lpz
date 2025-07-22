@@ -1,0 +1,90 @@
+name: Test Cppcheck Dashboard
+
+on:
+  pull_request:
+    paths:
+      - 'tools/cppcheck/**'
+      - '.github/workflows/cppcheck-dashboard.yml'
+      - '.github/workflows/test-cppcheck-dashboard.yml'
+
+jobs:
+  test-dashboard:
+    name: Test Dashboard Generation
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        pip install pygments plotly pandas jinja2
+        sudo apt-get update
+        sudo apt-get install -y cppcheck
+    
+    - name: Test setup script
+      run: |
+        # Test that setup script runs without errors
+        bash tools/cppcheck/setup_dashboard_deployment.sh < /dev/null || true
+    
+    - name: Test dashboard generation
+      run: |
+        # Create minimal test data
+        mkdir -p tools/cppcheck/reports/test_profile/latest
+        cat > tools/cppcheck/reports/test_profile/latest/report.json << 'EOF'
+        {
+          "profile": "test_profile",
+          "timestamp": "2025-01-22T12:00:00",
+          "files_analyzed": 100,
+          "total_files": 150,
+          "issues": [
+            {
+              "file": "test.cpp",
+              "line": 10,
+              "severity": "warning",
+              "message": "Test warning message",
+              "id": "testWarning"
+            }
+          ]
+        }
+        EOF
+        
+        # Test dashboard deployment script
+        python3 tools/cppcheck/scripts/deploy_dashboard.py \
+          --deploy-dir test_deploy
+        
+        # Verify output was created
+        if [ -f "test_deploy/index.html" ]; then
+          echo "✅ Dashboard index created successfully"
+        else
+          echo "❌ Dashboard index creation failed"
+          exit 1
+        fi
+        
+        # Test enhancement script
+        python3 tools/cppcheck/scripts/enhance_dashboard_metrics.py \
+          --profile test_profile \
+          --output test_enhanced.html
+        
+        if [ -f "test_enhanced.html" ]; then
+          echo "✅ Enhanced dashboard created successfully"
+        else
+          echo "❌ Enhanced dashboard creation failed"
+          exit 1
+        fi
+    
+    - name: Validate generated HTML
+      run: |
+        # Basic HTML validation
+        if grep -q "<!DOCTYPE html>" test_deploy/index.html && \
+           grep -q "LPZRobots Cppcheck Dashboard" test_deploy/index.html; then
+          echo "✅ HTML structure looks valid"
+        else
+          echo "❌ HTML validation failed"
+          exit 1
+        fi

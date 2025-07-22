@@ -95,10 +95,16 @@ echo "---------------------"
 # Get repository information
 if git remote get-url origin &> /dev/null; then
     REPO_URL=$(git remote get-url origin)
-    REPO_URL=${REPO_URL#*github.com[/:]}
-    REPO_URL=${REPO_URL%.git}
     
-    IFS='/' read -r OWNER REPO <<< "$REPO_URL"
+    # Handle both SSH (git@github.com:owner/repo.git) and HTTPS formats
+    if [[ "$REPO_URL" =~ github\.com[:/]([^/]+)/([^/.]+)(\.git)?$ ]]; then
+        OWNER="${BASH_REMATCH[1]}"
+        REPO="${BASH_REMATCH[2]}"
+    else
+        echo -e "${YELLOW}Could not parse repository information from URL: $REPO_URL${NC}"
+        OWNER=""
+        REPO=""
+    fi
     
     echo "Repository: $OWNER/$REPO"
     echo
@@ -124,7 +130,9 @@ echo "--------------"
 
 # Test analysis
 echo "Running quick test analysis..."
-if python3 tools/cppcheck/scripts/analyze.py --profile quick_check --format json --quiet; then
+# Validate script path exists before execution
+if [ -f "tools/cppcheck/scripts/analyze.py" ]; then
+    if python3 tools/cppcheck/scripts/analyze.py --profile quick_check --format json --quiet; then
     echo -e "${GREEN}✅ Analysis successful${NC}"
     
     # Test dashboard generation
@@ -136,7 +144,10 @@ if python3 tools/cppcheck/scripts/analyze.py --profile quick_check --format json
         echo -e "${RED}❌ Dashboard generation failed${NC}"
     fi
 else
-    echo -e "${RED}❌ Analysis failed${NC}"
+        echo -e "${RED}❌ Analysis failed${NC}"
+    fi
+else
+    echo -e "${RED}❌ analyze.py script not found${NC}"
 fi
 
 echo -e "\n📊 Optional: Initialize Metrics Database"
