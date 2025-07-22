@@ -1,0 +1,325 @@
+name: Cppcheck Dashboard Deployment
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Run comprehensive analysis daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      analysis_type:
+        description: 'Type of analysis to run'
+        required: true
+        default: 'comprehensive'
+        type: choice
+        options:
+          - quick
+          - comprehensive
+          - cpp17
+          - all
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  analyze:
+    name: Run Cppcheck Analysis
+    runs-on: ubuntu-latest
+    outputs:
+      has-results: ${{ steps.check-results.outputs.has-results }}
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Full history for metrics tracking
+    
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Cache cppcheck
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cache/cppcheck
+          tools/cppcheck/cache
+        key: ${{ runner.os }}-cppcheck-${{ hashFiles('**/*.cpp', '**/*.h') }}
+        restore-keys: |
+          ${{ runner.os }}-cppcheck-
+    
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cppcheck
+        pip install pygments plotly pandas
+        
+        # Install latest cppcheck if needed
+        if ! command -v cppcheck &> /dev/null || [[ $(cppcheck --version | grep -oP '\d+\.\d+' | head -1) < "2.10" ]]; then
+          echo "Installing latest cppcheck..."
+          sudo apt-get remove -y cppcheck
+          wget https://github.com/danmar/cppcheck/archive/2.13.0.tar.gz
+          tar xzf 2.13.0.tar.gz
+          cd cppcheck-2.13.0
+          mkdir build && cd build
+          cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local
+          make -j$(nproc)
+          sudo make install
+          cd ../..
+        fi
+    
+    - name: Setup build environment
+      run: |
+        sudo apt-get install -y cmake ninja-build libgsl-dev
+        cmake -B build -G Ninja -DCMAKE_EXPORT_COMPILE_COMMANDS=ON || true
+    
+    - name: Run quick analysis
+      if: github.event_name == 'pull_request' || inputs.analysis_type == 'quick' || inputs.analysis_type == 'all'
+      run: |
+        python3 tools/cppcheck/scripts/analyze.py \
+          --profile quick_check \
+          --format json \
+          --incremental
+    
+    - name: Run comprehensive analysis
+      if: github.event_name == 'schedule' || github.event_name == 'push' || inputs.analysis_type == 'comprehensive' || inputs.analysis_type == 'all'
+      run: |
+        python3 tools/cppcheck/scripts/analyze.py \
+          --profile comprehensive \
+          --format json \
+          --verbose
+    
+    - name: Run C++17 migration analysis
+      if: inputs.analysis_type == 'cpp17' || inputs.analysis_type == 'all'
+      run: |
+        python3 tools/cppcheck/scripts/analyze.py \
+          --profile cpp17_migration \
+          --format json
+    
+    - name: Run memory safety analysis
+      if: inputs.analysis_type == 'all'
+      run: |
+        python3 tools/cppcheck/scripts/analyze.py \
+          --profile memory_safety \
+          --format json
+    
+    - name: Run performance analysis
+      if: inputs.analysis_type == 'all'
+      run: |
+        python3 tools/cppcheck/scripts/analyze.py \
+          --profile performance \
+          --format json
+    
+    - name: Check for results
+      id: check-results
+      run: |
+        if find tools/cppcheck/reports -name "report.json" -type f | grep -q .; then
+          echo "has-results=true" >> $GITHUB_OUTPUT
+        else
+          echo "has-results=false" >> $GITHUB_OUTPUT
+        fi
+    
+    - name: Upload analysis results
+      if: steps.check-results.outputs.has-results == 'true'
+      uses: actions/upload-artifact@v3
+      with:
+        name: cppcheck-results
+        path: tools/cppcheck/reports/
+        retention-days: 30
+
+  generate-dashboard:
+    name: Generate Dashboard
+    needs: analyze
+    runs-on: ubuntu-latest
+    if: needs.analyze.outputs.has-results == 'true'
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Download analysis results
+      uses: actions/download-artifact@v3
+      with:
+        name: cppcheck-results
+        path: tools/cppcheck/reports/
+    
+    - name: Install dependencies
+      run: |
+        pip install pygments plotly pandas jinja2
+    
+    - name: Generate dashboards
+      run: |
+        python3 tools/cppcheck/scripts/deploy_dashboard.py \
+          --deploy-dir _site \
+          --update-metrics
+    
+    - name: Upload dashboard artifact
+      uses: actions/upload-pages-artifact@v2
+      with:
+        path: _site
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: generate-dashboard
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    steps:
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v3
+
+  comment-pr:
+    name: Comment on PR
+    needs: analyze
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && needs.analyze.outputs.has-results == 'true'
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Download analysis results
+      uses: actions/download-artifact@v3
+      with:
+        name: cppcheck-results
+        path: tools/cppcheck/reports/
+    
+    - name: Generate PR comment
+      id: generate-comment
+      run: |
+        # Parse results and generate comment
+        python3 -c "
+import json
+import os
+
+# Find all report.json files
+reports = []
+for root, dirs, files in os.walk('tools/cppcheck/reports'):
+    for file in files:
+        if file == 'report.json':
+            profile = os.path.basename(os.path.dirname(os.path.dirname(os.path.join(root, file))))
+            with open(os.path.join(root, file)) as f:
+                data = json.load(f)
+                reports.append({
+                    'profile': profile,
+                    'issues': len(data.get('issues', [])),
+                    'files': data.get('files_analyzed', 0)
+                })
+
+# Generate comment
+comment = '## 🔍 Cppcheck Analysis Results\\n\\n'
+
+if reports:
+    comment += '| Profile | Issues | Files Analyzed |\\n'
+    comment += '|---------|--------|----------------|\\n'
+    
+    for report in reports:
+        comment += f\"| {report['profile'].replace('_', ' ').title()} | {report['issues']} | {report['files']} |\\n\"
+    
+    total_issues = sum(r['issues'] for r in reports)
+    
+    if total_issues > 0:
+        comment += f'\\n⚠️ **Total issues found: {total_issues}**\\n'
+        comment += '\\nView detailed results in the [workflow artifacts](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).'
+    else:
+        comment += '\\n✅ **No issues found!**'
+else:
+    comment = '## 🔍 Cppcheck Analysis\\n\\n❌ No analysis results found.'
+
+# Save comment to file
+with open('pr-comment.txt', 'w') as f:
+    f.write(comment)
+"
+        
+        # Read comment into output
+        echo "comment<<EOF" >> $GITHUB_OUTPUT
+        cat pr-comment.txt >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+    
+    - name: Comment PR
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const comment = `${{ steps.generate-comment.outputs.comment }}`;
+          
+          // Find existing comment
+          const { data: comments } = await github.rest.issues.listComments({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+          });
+          
+          const botComment = comments.find(comment => 
+            comment.user.type === 'Bot' && 
+            comment.body.includes('🔍 Cppcheck Analysis Results')
+          );
+          
+          if (botComment) {
+            // Update existing comment
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: botComment.id,
+              body: comment
+            });
+          } else {
+            // Create new comment
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: comment
+            });
+          }
+
+  update-metrics:
+    name: Update Metrics Database
+    needs: analyze
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Download analysis results
+      uses: actions/download-artifact@v3
+      with:
+        name: cppcheck-results
+        path: tools/cppcheck/reports/
+    
+    - name: Update metrics
+      run: |
+        python3 tools/cppcheck/scripts/metrics.py record --all-profiles
+    
+    - name: Commit metrics
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add tools/cppcheck/metrics/
+        git diff --quiet && git diff --staged --quiet || git commit -m "Update cppcheck metrics [skip ci]"
+        git push
